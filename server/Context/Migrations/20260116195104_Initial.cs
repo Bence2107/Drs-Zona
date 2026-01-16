@@ -70,8 +70,8 @@ namespace Context.Migrations
                     name = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     governing_body = table.Column<string>(type: "text", nullable: false),
-                    first_year = table.Column<int>(name: "first_year ", type: "integer", nullable: false),
-                    last_year = table.Column<int>(name: "last_year ", type: "integer", nullable: false)
+                    first_year = table.Column<int>(type: "integer", nullable: false),
+                    last_year = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,7 +87,7 @@ namespace Context.Migrations
                     username = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
-                    role = table.Column<string>(type: "text", nullable: false),
+                    role = table.Column<string>(type: "text", nullable: false, defaultValue: "user"),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     last_login = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -322,7 +322,7 @@ namespace Context.Migrations
                     constructors_championship_id = table.Column<int>(type: "integer", nullable: false),
                     start_position = table.Column<int>(type: "integer", nullable: false),
                     finish_position = table.Column<int>(type: "integer", nullable: false),
-                    type = table.Column<string>(type: "text", nullable: false),
+                    session = table.Column<string>(type: "text", nullable: false),
                     race_time = table.Column<long>(type: "bigint", nullable: false),
                     driver_points = table.Column<int>(type: "integer", nullable: false),
                     constructor_points = table.Column<int>(type: "integer", nullable: false)
@@ -387,8 +387,8 @@ namespace Context.Migrations
                     article_id = table.Column<int>(type: "integer", nullable: false),
                     reply_id = table.Column<int>(type: "integer", nullable: false),
                     content = table.Column<string>(type: "text", nullable: false),
-                    upvotes = table.Column<int>(type: "integer", nullable: false),
-                    downvotes = table.Column<int>(type: "integer", nullable: false),
+                    upvotes = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
+                    downvotes = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },

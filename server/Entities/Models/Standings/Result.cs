@@ -48,8 +48,8 @@ public class Result
     public int FinishPosition {get; set;}
 
     [Required]
-    [Column("type")]
-    public required string Type {get; set;}
+    [Column("session")]
+    public required string Session {get; set;}
     
     [Required]
     [Column("race_time")]

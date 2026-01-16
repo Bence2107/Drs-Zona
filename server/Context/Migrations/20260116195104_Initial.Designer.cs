@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Context.Migrations
 {
     [DbContext(typeof(EfContext))]
-    [Migration("20260116191119_Initial")]
+    [Migration("20260116195104_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -101,7 +101,9 @@ namespace Context.Migrations
                         .HasColumnName("updated_at");
 
                     b.Property<int>("DownVotes")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasDefaultValue(0)
                         .HasColumnName("downvotes");
 
                     b.Property<int>("ReplyToCommentId")
@@ -109,7 +111,9 @@ namespace Context.Migrations
                         .HasColumnName("reply_id");
 
                     b.Property<int>("UpVotes")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasDefaultValue(0)
                         .HasColumnName("upvotes");
 
                     b.Property<int>("UserId")
@@ -578,14 +582,14 @@ namespace Context.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("race_time");
 
+                    b.Property<string>("Session")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("session");
+
                     b.Property<int>("StartPosition")
                         .HasColumnType("integer")
                         .HasColumnName("start_position");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("type");
 
                     b.HasKey("Id");
 
@@ -618,7 +622,7 @@ namespace Context.Migrations
 
                     b.Property<int>("FirstYear")
                         .HasColumnType("integer")
-                        .HasColumnName("first_year ");
+                        .HasColumnName("first_year");
 
                     b.Property<string>("GoverningBody")
                         .IsRequired()
@@ -627,7 +631,7 @@ namespace Context.Migrations
 
                     b.Property<int>("LastYear")
                         .HasColumnType("integer")
-                        .HasColumnName("last_year ");
+                        .HasColumnName("last_year");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -668,7 +672,9 @@ namespace Context.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("text")
+                        .HasDefaultValue("user")
                         .HasColumnName("role");
 
                     b.Property<string>("Username")

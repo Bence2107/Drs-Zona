@@ -64,6 +64,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                     .IsRequired(false);
                 
                 options.Property(a => a.GrandPrixId).HasDefaultValue(null);
+                options.Property(a => a.DateUpdated).HasDefaultValue(null);
 
             }
         );
@@ -91,6 +92,11 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .WithMany()
                 .HasForeignKey(c => c.ReplyToCommentId)
                 .OnDelete(DeleteBehavior.NoAction);
+            
+            options.Property(c => c.ReplyToCommentId).HasDefaultValue(null);
+            options.Property(c => c.UpVotes).HasDefaultValue(0);
+            options.Property(c => c.DownVotes).HasDefaultValue(0);
+            options.Property(c => c.DateUpdated).HasDefaultValue(null);
         });
         
         //------------POLL------------
@@ -234,6 +240,11 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .WithMany()
                 .HasForeignKey(tc => tc.ConstChampId)
                 .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<User>(options =>
+        {
+            options.Property(u => u.Role).HasDefaultValue("user");
         });
     }
 }

@@ -23,10 +23,10 @@ public class Series
     public required string GoverningBody { get; set; }
     
     [Required]
-    [Column("first_year ")]
+    [Column("first_year")]
     public int FirstYear {get; set;}
     
     [Required]
-    [Column("last_year ")]
+    [Column("last_year")]
     public int LastYear {get; set;}
 }
