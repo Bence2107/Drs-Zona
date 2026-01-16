@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Entities.Models.Standings;
 
+[Table("constructor_competitions")]
 public class ConstructorCompetition
 {
     [Column("constructors_id")]

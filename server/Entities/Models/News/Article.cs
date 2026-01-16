@@ -5,6 +5,7 @@ using Entities.Models.RaceTracks;
 
 namespace Entities.Models.News;
 
+[Table("articles")]
 public class Article
 {
     [Key]

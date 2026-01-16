@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Entities.Models.Standings;
 
+[Table("driver_participations")]
 public class DriverParticipation
 {
     [Column("driver_id")]

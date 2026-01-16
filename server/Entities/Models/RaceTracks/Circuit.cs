@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Models.RaceTracks;
 
+[Table("circuits")]
 public class Circuit
 {
     [Key]

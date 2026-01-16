@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Entities.Models.Standings;
 
+[Table("constructor_champions")]
 public class ConstructorsChampionship
 {
     [Key]

@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Entities.Models.Poll;
 
+[Table("votes")]
 public class Vote
 {
     [Column("user_id")]

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Models.Standings;
 
+[Table("brands")]
 public class Brand
 {
     [Key]

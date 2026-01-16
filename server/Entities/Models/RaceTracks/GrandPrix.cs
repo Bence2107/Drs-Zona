@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Entities.Models.RaceTracks;
 
+[Table("grands_prix")]
 public class GrandPrix
 {
     [Key]

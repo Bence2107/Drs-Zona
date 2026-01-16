@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Entities.Models.News;
 
+[Table("comments")]
 public class Comment
 {
     [Key]

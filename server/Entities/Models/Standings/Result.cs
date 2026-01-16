@@ -5,6 +5,7 @@ using Entities.Models.RaceTracks;
 
 namespace Entities.Models.Standings;
 
+[Table("results")]
 public class Result
 {
     [Key]
