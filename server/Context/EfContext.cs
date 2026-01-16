@@ -9,8 +9,6 @@ namespace Context;
 
 public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
 {
-    public DbSet<Employee> Employees { get; set; }
-    
     public DbSet<User> Users { get; set; }
     
     public DbSet<Article> Articles { get; set; }
