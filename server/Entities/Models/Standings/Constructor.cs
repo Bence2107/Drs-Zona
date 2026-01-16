@@ -1,0 +1,37 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
+namespace Entities.Models.Standings;
+
+public class Constructor
+{
+    [Key]
+    [Column("id")]
+    public int Id { get; set; }
+    
+    [Column("brand_id")]
+    public int BrandId { get; set; }
+    [JsonIgnore]
+    public virtual Brand? Brand { get; set; }
+    
+    [Required]
+    [Column("name")]
+    public required string Name { get; set; }
+    
+    [Required]
+    [Column("founded_year")]
+    public int FoundedYear { get; set; }
+    
+    [Required]
+    [Column("headquarters")]
+    public required string HeadQuarters { get; set; }
+    
+    [Required]
+    [Column("team_chief")]
+    public required string TeamChief { get; set; }
+    
+    [Required]
+    [Column("technical_chief")]
+    public required string TechnicalChief { get; set; }
+}

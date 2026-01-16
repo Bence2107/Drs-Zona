@@ -39,9 +39,9 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
 
     public DbSet<Series> Series { get; set; }
 
-    public DbSet<Team> Teams { get; set; }
+    public DbSet<Constructor> Teams { get; set; }
 
-    public DbSet<TeamCompetition> TeamCompetitions { get; set; }
+    public DbSet<ConstructorCompetition> TeamCompetitions { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         //------------NEWS------------
@@ -97,9 +97,9 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
         // Poll -> User (Many-to-One)
         modelBuilder.Entity<Poll>(options =>
             options
-                .HasOne(p => p.Creator)
+                .HasOne(p => p.Author)
                 .WithMany()
-                .HasForeignKey(p => p.CreatorId)
+                .HasForeignKey(p => p.AuthorId)
                 .OnDelete(DeleteBehavior.NoAction)
         );
 
@@ -152,9 +152,9 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .OnDelete(DeleteBehavior.Cascade);
 
             options
-                .HasOne(c => c.Team)
+                .HasOne(c => c.Constructor)
                 .WithMany()
-                .HasForeignKey(c => c.TeamId)
+                .HasForeignKey(c => c.ConstructorId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -191,9 +191,9 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .OnDelete(DeleteBehavior.NoAction);
 
             options
-                .HasOne(r => r.Team)
+                .HasOne(r => r.Constructor)
                 .WithMany()
-                .HasForeignKey(r => r.TeamId)
+                .HasForeignKey(r => r.ConstructorId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             options
@@ -209,26 +209,8 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .OnDelete(DeleteBehavior.NoAction);
         });
 
-        // Series <-> DriversChampionship (One-to-One)
-        modelBuilder.Entity<DriversChampionship>(options =>
-            options
-                .HasOne(dc => dc.Series)
-                .WithOne(s => s.DriversChampionship)
-                .HasForeignKey<DriversChampionship>(dc => dc.SeriesId)
-                .OnDelete(DeleteBehavior.NoAction)
-        );
-
-        // Series <-> ConstructorsChampionship (One-to-One)
-        modelBuilder.Entity<ConstructorsChampionship>(options =>
-            options
-                .HasOne(cc => cc.Series)
-                .WithOne(s => s.ConstructorsChampionship)
-                .HasForeignKey<ConstructorsChampionship>(cc => cc.SeriesId)
-                .OnDelete(DeleteBehavior.NoAction)
-        );
-
         // Team -> Brand (Many-to-One)
-        modelBuilder.Entity<Team>(options =>
+        modelBuilder.Entity<Constructor>(options =>
             options
                 .HasOne(t => t.Brand)
                 .WithMany()
@@ -237,14 +219,14 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
         );
 
         // TeamCompetition relationships
-        modelBuilder.Entity<TeamCompetition>(options =>
+        modelBuilder.Entity<ConstructorCompetition>(options =>
         {
-            options.HasKey(tc => new { tc.TeamId, tc.ConstChampId });
+            options.HasKey(tc => new { TeamId = tc.ConstructorId, tc.ConstChampId });
             
             options
-                .HasOne(tc => tc.Team)
+                .HasOne(tc => tc.Constructor)
                 .WithMany()
-                .HasForeignKey(tc => tc.TeamId)
+                .HasForeignKey(tc => tc.ConstructorId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             options

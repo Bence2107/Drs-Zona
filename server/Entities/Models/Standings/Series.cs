@@ -1,22 +1,31 @@
-﻿namespace Entities.Models.Standings;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Entities.Models.Standings;
 
 public class Series
 {
+    [Key]
+    [Column("id")]
     public int Id { get; set; }
     
-    public int DriversChampId {get; set;}
-    public virtual DriversChampionship? DriversChampionship {get; set;}
-    
-    public int ConstructorsChampId {get; set;}
-    public virtual ConstructorsChampionship? ConstructorsChampionship {get; set;}
-    
+    [Required]
+    [Column("name")]
     public required string Name { get; set; }
     
+    [Required]
+    [Column("description")]
     public required string Description { get; set; }
     
+    [Required]
+    [Column("governing_body")]
     public required string GoverningBody { get; set; }
     
+    [Required]
+    [Column("first_year ")]
     public int FirstYear {get; set;}
     
+    [Required]
+    [Column("last_year ")]
     public int LastYear {get; set;}
 }
