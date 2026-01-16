@@ -20,9 +20,16 @@ public class Result
     
     public int ConsChampId {get; set;}
     public virtual ConstructorsChampionship? ConsChampionship { get; set; }
+    
+    public int StartPosition {get; set;}
+    
+    public int FinishPosition {get; set;}
 
     public required string Type {get; set;}
+    
     public long RaceTime {get; set;}
+    
     public int DriverPoints {get; set;}
+    
     public int TeamPoints {get; set;}
 }

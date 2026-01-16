@@ -2,8 +2,6 @@
 
 public class DriverParticipation
 {
-    public int Id { get; set; }
-    
     public int DriverId { get; set; }
     public virtual Driver? Driver { get; set; }
     

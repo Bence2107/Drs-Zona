@@ -2,8 +2,6 @@
 
 public class TeamCompetition
 {
-    public int Id { get; set; }
-    
     public int TeamId { get; set; }
     public virtual Team? Team { get; set; }
     
