@@ -1,0 +1,64 @@
+﻿using Context;
+using Entities.Models.News;
+using Microsoft.EntityFrameworkCore;
+using Repositories.Interfaces.News;
+
+namespace Repositories.Implementations.News;
+
+public class CommentsRepository(EfContext context) : ICommentsRepository
+{
+    private readonly DbSet<Comment> _comments = context.Comments;
+    
+    public Comment? GetCommentById(int id) => _comments.FirstOrDefault(comment => comment.Id == id);
+    
+    public List<Comment> GetAllComments(int id) => _comments.ToList();
+    
+    public void Add(Comment comment)
+    {
+        _comments.Add(comment);
+        context.SaveChanges();
+    }
+
+    public void Update(Comment comment)
+    {
+        _comments.Update(comment);
+        context.SaveChanges();
+    }
+
+    public void Delete(int id)
+    {
+        var comment = GetCommentById(id);
+        if(comment == null) return;
+        _comments.Remove(comment);
+        context.SaveChanges();
+    }
+
+    public Comment? GetByIdWithUser(int id) => _comments
+        .Include(comment => comment.User)
+        .FirstOrDefault(comment => comment.Id == id);
+    
+
+    public Comment? GetByIdWithArticle(int id) => _comments
+        .Include(comment => comment.Article)
+        .FirstOrDefault(comment => comment.Id == id);
+
+    public Comment? GetByIdWithAll(int id) => _comments
+        .Include(comment => comment.User)
+        .Include(comment => comment.Article)
+        .FirstOrDefault(comment => comment.Id == id);
+
+    public List<Comment> GetByArticleId(int articleId) => _comments
+        .Where(comment => comment.ArticleId == articleId)
+        .ToList();
+    
+    public List<Comment> GetByUserId(int userId) => _comments
+        .Where(comment => comment.UserId == userId)
+        .ToList();
+    
+
+    public List<Comment> GetReplies(int replyCommentId) => _comments
+        .Where(comment => comment.ReplyToCommentId == replyCommentId)
+        .ToList();
+
+    public bool CheckIfIdExists(int id) => _comments.Any(comment => comment.Id == id);
+}
