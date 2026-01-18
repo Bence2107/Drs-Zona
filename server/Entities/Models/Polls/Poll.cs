@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace Entities.Models.Poll;
+namespace Entities.Models.Polls;
 
 [Table("polls")]
 public class Poll

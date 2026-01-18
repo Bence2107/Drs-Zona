@@ -1,6 +1,6 @@
 ﻿using Entities.Models;
 using Entities.Models.News;
-using Entities.Models.Poll;
+using Entities.Models.Polls;
 using Entities.Models.RaceTracks;
 using Entities.Models.Standings;
 using Microsoft.EntityFrameworkCore;
@@ -25,8 +25,12 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
 
     public DbSet<Brand> Brands { get; set; }
 
+    public DbSet<Constructor> Constructors { get; set; }
+    
+    public DbSet<ConstructorCompetition> ConstructorCompetitions { get; set; }
+    
     public DbSet<ConstructorsChampionship> ConstructorsChampionships { get; set; }
-
+    
     public DbSet<Contract> Contracts { get; set; }
 
     public DbSet<Driver> Drivers { get; set; }
@@ -38,10 +42,8 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
     public DbSet<Result> Results { get; set; }
 
     public DbSet<Series> Series { get; set; }
-
-    public DbSet<Constructor> Teams { get; set; }
-
-    public DbSet<ConstructorCompetition> TeamCompetitions { get; set; }
+    public DbSet<Vote> Votes { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         //------------NEWS------------
@@ -136,7 +138,6 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .HasForeignKey(v => v.PollOptionId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
-
         //------------RACETRACKS------------
         // GrandPrix -> Circuit (Many-to-One)
         modelBuilder.Entity<GrandPrix>(options =>
