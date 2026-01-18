@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Implementations\" />
+        <Folder Include="Implementations\" />
+        <Folder Include="Interfaces\" />
     </ItemGroup>
-
 </Project>
