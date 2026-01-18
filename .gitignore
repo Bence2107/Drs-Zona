@@ -11,3 +11,6 @@
 **/.vs/
 **/bin/
 **/obj/
+
+#IDE files
+*.DotSettings.user
