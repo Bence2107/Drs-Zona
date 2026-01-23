@@ -1,16 +1,84 @@
-#Database
+# ==========================================
+# 1. OS & System files
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# 2. .NET (Server) - ASP.NET Core
+# ==========================================
+**/bin/
+**/obj/
+**/publish/
+**/TestResults/
+
+# .NET User Secrets & Local Config
+**/appsettings.Development.json
+**/appsettings.local.json
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ==========================================
+# 3. Angular (Client) - Angular 19+
+# ==========================================
+**/node_modules/
+**/dist/
+**/.angular/cache/
+**/.sass-cache/
+**/tmp/
+**/out-tsc/
+**/bazel-out/
+
+# Tesztelés
+**/coverage/
+/testem.log
+/typings
+
+# Angular 19 SSR / Prerender specifikus
+.server/
+.client/
+
+# Log fájlok
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==========================================
+# 4. Database 
+# ==========================================
 *.db
 *.db-shm
 *.db-wal
 *.mdf
 *.ldf
-*.env
+*.sqlite
+*.localdb
 
-#Folders
-**/.idea/
-**/.vs/
-**/bin/
-**/obj/
-
-#IDE files
+# ==========================================
+# 5. IDEs & Editors (VS, VS Code, JetBrains)
+# ==========================================
+.idea/
+.vs/
+*.sln.icu
 *.DotSettings.user
+
+# Visual Studio Code beállítások
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+
+# ==========================================
+# 6. Environment & Secrets 
+# ==========================================
+.env
+.env.*
+!.env.example
+secrets.json
+client/src/environments/environment.development.ts
