@@ -12,6 +12,8 @@ using Repositories.Interfaces.News;
 using Repositories.Interfaces.Polls;
 using Repositories.Interfaces.RaceTracks;
 using Repositories.Interfaces.Standings;
+using Services.Implementations;
+using Services.Interfaces;
 
 Env.Load();
 
@@ -52,6 +54,15 @@ builder.Services.AddScoped<IDriversRepository, DriversRepository>();
 builder.Services.AddScoped<IResultsRepository, ResultsRepository>();
 builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
 builder.Services.AddScoped<IVotesRepository, VotesRepository>();
+
+builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<IConstructorsService, ConstructorsService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IGrandPrixService, GrandPrixService>();
+builder.Services.AddScoped<IDriverService, DriverService>();
+builder.Services.AddScoped<IPollService, PollService>();
+builder.Services.AddScoped<ISeriesService, SeriesService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
