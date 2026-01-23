@@ -32,7 +32,6 @@ desktop.ini
 **/out-tsc/
 **/bazel-out/
 
-# Tesztelés
 **/coverage/
 /testem.log
 /typings
@@ -66,8 +65,7 @@ pnpm-debug.log*
 *.sln.icu
 *.DotSettings.user
 
-# Visual Studio Code beállítások
-.vscode/*
+**/.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
