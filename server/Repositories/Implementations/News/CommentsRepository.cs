@@ -51,14 +51,16 @@ public class CommentsRepository(EfContext context) : ICommentsRepository
         .Where(comment => comment.ArticleId == articleId)
         .ToList();
     
-    public List<Comment> GetByUserId(int userId) => _comments
+    public List<Comment> GetUsersComments(int userId) => _comments
         .Where(comment => comment.UserId == userId)
         .ToList();
-    
 
-    public List<Comment> GetReplies(int replyCommentId) => _comments
-        .Where(comment => comment.ReplyToCommentId == replyCommentId)
+    public List<Comment> GetCommentsWithoutReplies(int articleId) => _comments
+        .Where(comment => comment.ArticleId == articleId && comment.ReplyToCommentId == null)
         .ToList();
 
+    public List<Comment> GetRepliesToAComment(int replyCommentId) => _comments
+        .Where(comment => comment.ReplyToCommentId == replyCommentId)
+        .ToList();
     public bool CheckIfIdExists(int id) => _comments.Any(comment => comment.Id == id);
 }

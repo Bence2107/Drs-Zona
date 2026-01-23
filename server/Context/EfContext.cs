@@ -42,6 +42,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
     public DbSet<Result> Results { get; set; }
 
     public DbSet<Series> Series { get; set; }
+    
     public DbSet<Vote> Votes { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

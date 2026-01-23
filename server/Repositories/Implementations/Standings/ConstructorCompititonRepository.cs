@@ -43,6 +43,12 @@ public class ConstructorCompetitionRepository(EfContext context) : IConstructorC
         .Where(cc => cc.ConstChampId == champId)
         .ToList();
 
+    public List<Constructor?> GetConstructorsByChampionshipId(int championshipId) => _constructorCompetitions
+        .Where(p => p.ConstChampId == championshipId)
+        .Select(p => p.Constructor)
+        .OrderBy(c => c!.Name)
+        .ToList();
+
     public bool CheckIfExists(int constructorId, int champId) => _constructorCompetitions
         .Any(cc => cc.ConstructorId == constructorId && cc.ConstChampId == champId);
 }

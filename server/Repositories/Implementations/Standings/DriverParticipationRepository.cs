@@ -43,6 +43,11 @@ public class DriverParticipationRepository(EfContext context) : IDriverParticipa
         .Where(d => d.DriverChampId == champId)
         .ToList();
     
+    public List<Driver?> GetDriversByChampionship(int driversChampionshipId) => _driverParticipates
+            .Where(p => p.DriverChampId == driversChampionshipId)
+            .Select(p => p.Driver)
+            .ToList();
+    
 
     public bool CheckIfExists(int driverId, int champId) =>  _driverParticipates
         .Any(d => d.DriverId == driverId && d.DriverChampId == champId);

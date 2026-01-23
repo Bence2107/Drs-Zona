@@ -57,6 +57,7 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
         .ToList();
 
     public List<Article> GetRecent(int count) => _articles
+        .Include(a => a.Author)
         .OrderByDescending(a => a.DatePublished)
         .Take(count)
         .ToList();

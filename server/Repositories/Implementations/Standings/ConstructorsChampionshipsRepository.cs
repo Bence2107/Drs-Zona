@@ -13,6 +13,8 @@ public class ConstructorsChampionshipsRepository(EfContext context) : IConstruct
         .FirstOrDefault(cc => cc.Id == id);
 
     public List<ConstructorsChampionship> GetAllConstructorsChampionships() => _constructorsChampionships.ToList();
+    public List<ConstructorsChampionship> GetBySeriesId(int seriesId) =>
+        _constructorsChampionships.Where(c => c.SeriesId == seriesId).ToList();
 
     public void Create(ConstructorsChampionship constructorsChampionship)
     {

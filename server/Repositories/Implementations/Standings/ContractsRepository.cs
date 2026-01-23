@@ -10,6 +10,8 @@ public class ContractsRepository(EfContext context) : IContractsRepository
     private readonly DbSet<Contract> _contracts = context.Contracts;
     
     public Contract? GetContractById(int id) => _contracts.FirstOrDefault(c => c.Id == id);
+    public Contract? GetContractByDriverAndTConstructorId(int driverId, int constructorId)=> _contracts 
+        .FirstOrDefault(c => c.DriverId == driverId && c.ConstructorId == constructorId);
 
     public List<Contract> GetContracts() => _contracts.ToList();
 
@@ -44,6 +46,7 @@ public class ContractsRepository(EfContext context) : IContractsRepository
         .ToList();
 
     public List<Contract> GetByTeamId(int teamId) => _contracts
+        .Include(c => c.Driver)
         .Where(c => c.ConstructorId == teamId)
         .ToList();
 

@@ -35,7 +35,7 @@ public class BrandsRepository(EfContext context): IBrandsRepository
         context.SaveChanges();
     }
 
-    public Brand? GetByName(string name) => _brands.FirstOrDefault(b => b.Name == name);
+    public Brand? GetByName(string name) => _brands.FirstOrDefault(b => b.Name.ToLower().Contains(name.ToLower()));
 
     public bool CheckIfIdExists(int id) => _brands.Any(c => c.Id == id);
 }

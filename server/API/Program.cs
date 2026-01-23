@@ -1,11 +1,23 @@
 using Context;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Repositories.Implementations;
+using Repositories.Implementations.News;
+using Repositories.Implementations.Polls;
+using Repositories.Implementations.RaceTracks;
+using Repositories.Implementations.Standings;
+using Repositories.Interfaces;
+using Repositories.Interfaces.News;
+using Repositories.Interfaces.Polls;
+using Repositories.Interfaces.RaceTracks;
+using Repositories.Interfaces.Standings;
 
 Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Database connection
 var connectionString = $"Host={Environment.GetEnvironmentVariable("DB_HOST")};" +
                        $"Port={Environment.GetEnvironmentVariable("DB_PORT")};" +
                        $"Database={Environment.GetEnvironmentVariable("DB_NAME")};" +
@@ -16,10 +28,43 @@ builder.Services.AddDbContext<EfContext>(options =>
     options.UseNpgsql(connectionString)    
 );
 
+//Repositories:
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+
+builder.Services.AddScoped<IArticlesRepository, ArticlesRepository>();
+builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
+
+builder.Services.AddScoped<IPollOptionsRepository, PollOptionsRepository>();
+builder.Services.AddScoped<IPollsRepository, PollsRepository>();
+builder.Services.AddScoped<IVotesRepository, VotesRepository>();
+
+builder.Services.AddScoped<ICircuitsRepository, CircuitsRepository>();
+builder.Services.AddScoped<IGrandsPrixRepository, GrandsPrixRepository>();
+
+builder.Services.AddScoped<IBrandsRepository, BrandsRepository>();
+builder.Services.AddScoped<IConstructorCompetitionRepository, ConstructorCompetitionRepository>();
+builder.Services.AddScoped<IConstructorsChampionshipsRepository, ConstructorsChampionshipsRepository>();
+builder.Services.AddScoped<IConstructorsRepository, ConstructorsRepository>();
+builder.Services.AddScoped<IContractsRepository, ContractsRepository>();
+builder.Services.AddScoped<IDriverParticipationRepository, DriverParticipationRepository>();
+builder.Services.AddScoped<IDriversChampionshipsRepository, DriversChampionshipsRepository>();
+builder.Services.AddScoped<IDriversRepository, DriversRepository>();
+builder.Services.AddScoped<IResultsRepository, ResultsRepository>();
+builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
+builder.Services.AddScoped<IVotesRepository, VotesRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "DRS Zona - API",
+
+        Version = "1.0"
+    });
+});
+    
 builder.Services.AddOpenApi();
 
 

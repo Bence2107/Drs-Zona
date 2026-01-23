@@ -12,7 +12,10 @@ public class DriversChampionshipsRepository(EfContext context) : IDriversChampio
     public DriversChampionship? GetById(int id) => _driversChampionships.FirstOrDefault(d => d.Id == id);
     
     public List<DriversChampionship> GetAll() => _driversChampionships.ToList();
-    
+
+    public List<DriversChampionship> GetBySeriesId(int seriesId) =>
+        _driversChampionships.Where(c => c.SeriesId == seriesId).ToList();
+
     public void Add(DriversChampionship championship)
     {
         _driversChampionships.Add(championship);

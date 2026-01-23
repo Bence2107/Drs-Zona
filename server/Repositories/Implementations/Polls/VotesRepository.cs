@@ -42,7 +42,11 @@ public class VotesRepository(EfContext context) : IVotesRepository
     public List<Vote> GetByPollOptionId(int pollOptionId) => _votes
         .Where(vote => vote.PollOptionId == pollOptionId)
         .ToList();
-    
+
+    public Vote? GetUserVoteForPoll(int userId, int pollId) => _votes
+        .Include(v => v.PollOption) 
+        .FirstOrDefault(v => v.UserId == userId && v.PollOption!.PollId == pollId);
+
     public int GetVoteCount(int pollOptionId) => _votes.Count(v => v.PollOptionId == pollOptionId);
     
     public bool CheckIfExists(int userId, int pollOptionId) => _votes.Any(v => v.UserId == userId && v.PollOptionId == pollOptionId);

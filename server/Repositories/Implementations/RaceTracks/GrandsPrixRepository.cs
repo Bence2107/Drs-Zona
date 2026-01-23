@@ -1,5 +1,6 @@
 ﻿using Context;
 using Entities.Models.RaceTracks;
+using Entities.Models.Standings;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces.RaceTracks;
 
@@ -38,6 +39,11 @@ public class GrandsPrixRepository(EfContext context) : IGrandsPrixRepository
         .Include(c => c.Circuit)
         .FirstOrDefault(c => c.Id == id);
 
+    public GrandPrix? GetWithAll(int id) => _grandsPrix
+        .Include(c => c.Circuit)
+        .Include(c => c.Series)
+        .FirstOrDefault(c => c.Id == id);
+
     public List<GrandPrix> GetBySeason(int year) => _grandsPrix
         .Where(gp => gp.SeasonYear == year)
         .ToList();
@@ -46,7 +52,10 @@ public class GrandsPrixRepository(EfContext context) : IGrandsPrixRepository
         .Where(gp => gp.CircuitId == circuitId)
         .ToList();
 
-
+    public List<GrandPrix> GetBySeriesAndYear(int seriesId, int year) => _grandsPrix
+        .Where(gp => gp.SeriesId == seriesId && gp.SeasonYear == year)
+        .ToList();
+    
     public GrandPrix? GetByRoundAndSeason(int round, int season) => _grandsPrix
         .FirstOrDefault(gp => gp.RoundNumber == round && gp.SeasonYear == season);
 
