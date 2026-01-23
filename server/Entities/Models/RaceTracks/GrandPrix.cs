@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Entities.Models.Standings;
 
 namespace Entities.Models.RaceTracks;
 
@@ -15,6 +16,11 @@ public class GrandPrix
     public int CircuitId { get; set; }
     [JsonIgnore]
     public virtual Circuit? Circuit { get; set; }
+    
+    [Column("series_id")]
+    public int SeriesId { get; set; }
+    [JsonIgnore]
+    public virtual Series? Series { get; set; } 
     
     [Required]
     [Column("name")]

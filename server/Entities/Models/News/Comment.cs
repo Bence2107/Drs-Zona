@@ -22,7 +22,7 @@ public class Comment
     public virtual Article? Article { get; set; }
     
     [Column("reply_id")]
-    public int ReplyToCommentId { get; set; }
+    public int? ReplyToCommentId { get; set; }
     [JsonIgnore]
     public virtual Comment? ReplyToComment { get; set; }
     

@@ -17,6 +17,10 @@ public class Poll
     public virtual User? Author { get; set; }
     
     [Required]
+    [Column("title")]
+    public required string Title { get; set; }
+    
+    [Required]
     [Column("description")]
     public required string Description { get; set; }
     

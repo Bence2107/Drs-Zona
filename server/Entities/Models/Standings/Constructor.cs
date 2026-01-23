@@ -18,7 +18,7 @@ public class Constructor
     
     [Required]
     [Column("name")]
-    public required string Name { get; set; }
+    public required string? Name { get; set; }
     
     [Required]
     [Column("founded_year")]
@@ -26,13 +26,29 @@ public class Constructor
     
     [Required]
     [Column("headquarters")]
-    public required string HeadQuarters { get; set; }
+    public required string? HeadQuarters { get; set; }
     
     [Required]
     [Column("team_chief")]
-    public required string TeamChief { get; set; }
+    public required string? TeamChief { get; set; }
     
     [Required]
     [Column("technical_chief")]
-    public required string TechnicalChief { get; set; }
+    public required string? TechnicalChief { get; set; }
+    
+    [Required]
+    [Column("seasons")]
+    public int Seasons { get; set; }
+    
+    [Required]
+    [Column("championships")]
+    public int Championships { get; set; }
+    
+    [Required]
+    [Column("wins")]
+    public int Wins { get; set; }
+    
+    [Required]
+    [Column("podiums")]
+    public int Podiums { get; set; }
 }
