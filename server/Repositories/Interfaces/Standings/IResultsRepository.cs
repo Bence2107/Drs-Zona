@@ -14,5 +14,7 @@ public interface IResultsRepository
     List<Result> GetByDriverId(int driverId);
     List<Result> GetByConstructorId(int constructorId);
     List<Result> GetBySession(string session);
+    List<Result> GetByDriversChampionshipId(int championshipId);
+    List<Result> GetByConstructorsChampionshipId(int championshipId);
     bool CheckIfIdExists(int id);
 }

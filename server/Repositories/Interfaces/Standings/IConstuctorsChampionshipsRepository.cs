@@ -6,6 +6,7 @@ public interface IConstructorsChampionshipsRepository
 {
     ConstructorsChampionship? GetAllConstructorsChampionshipById(int id);
     List<ConstructorsChampionship> GetAllConstructorsChampionships();
+    List<ConstructorsChampionship> GetBySeriesId(int seriesId);
     void Create(ConstructorsChampionship constructorsChampionship);
     void Update(ConstructorsChampionship constructorsChampionship);
     void Delete(int id);

@@ -11,5 +11,6 @@ public interface IDriverParticipationRepository
     void Delete(int driverId, int championshipId);
     List<DriverParticipation> GetByDriverId(int driverId);
     List<DriverParticipation> GetByChampionshipId(int champId);
+    List<Driver?> GetDriversByChampionship(int driversChampionshipId);
     bool CheckIfExists(int driverId, int champId);
 }

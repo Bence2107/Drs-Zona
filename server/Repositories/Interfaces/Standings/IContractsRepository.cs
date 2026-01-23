@@ -5,6 +5,7 @@ namespace Repositories.Interfaces.Standings;
 public interface IContractsRepository
 {
     Contract? GetContractById(int id);
+    Contract? GetContractByDriverAndTConstructorId(int driverId, int constructorId);
     List<Contract> GetContracts();
     void Create(Contract contract);
     void Update(Contract contract);

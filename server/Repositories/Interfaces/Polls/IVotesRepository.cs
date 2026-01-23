@@ -11,6 +11,7 @@ public interface IVotesRepository
     void Delete(int userId, int pollOptionId);
     List<Vote> GetByUserId(int userId);
     List<Vote> GetByPollOptionId(int pollOptionId);
+    Vote? GetUserVoteForPoll(int userId, int pollId);
     int GetVoteCount(int pollOptionId);
     bool CheckIfExists(int userId, int pollOptionId);
 }

@@ -13,7 +13,8 @@ public interface ICommentsRepository
     Comment? GetByIdWithArticle(int id);
     Comment? GetByIdWithAll(int id);
     List<Comment> GetByArticleId(int articleId);
-    List<Comment> GetByUserId(int userId);
-    List<Comment> GetReplies(int replyCommentId);
+    List<Comment> GetUsersComments(int userId);
+    List<Comment> GetCommentsWithoutReplies(int articleId);
+    List<Comment> GetRepliesToAComment(int replyCommentId);
     bool CheckIfIdExists(int id);
 }

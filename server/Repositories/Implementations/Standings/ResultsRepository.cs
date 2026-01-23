@@ -56,6 +56,14 @@ public class ResultsRepository(EfContext context) : IResultsRepository
     public List<Result> GetBySession(string session) => _results
         .Where(r => r.Session == session)
         .ToList();
+    
+    public List<Result> GetByDriversChampionshipId(int championshipId) => _results
+        .Where(r=> r.DriversChampId == championshipId)
+        .ToList();
+    
+    public List<Result> GetByConstructorsChampionshipId(int championshipId) => _results
+        .Where(r=> r.ConsChampId == championshipId)
+        .ToList();
 
     public bool CheckIfIdExists(int id) => _results.Any(d => d.Id == id);
 }

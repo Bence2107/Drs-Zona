@@ -6,6 +6,7 @@ public interface IDriversChampionshipsRepository
 {
     DriversChampionship? GetById(int id);
     List<DriversChampionship> GetAll();
+    List<DriversChampionship> GetBySeriesId(int seriesId);
     void Add(DriversChampionship championship);
     void Modify(DriversChampionship championship);
     void Delete(int id);

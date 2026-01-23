@@ -11,5 +11,6 @@ public interface IConstructorCompetitionRepository
     void Delete(int constructorId, int championshipId);
     List<ConstructorCompetition> GetByConstructorId(int constructorId);
     List<ConstructorCompetition> GetByChampionshipId(int champId);
+    List<Constructor?> GetConstructorsByChampionshipId(int championshipId);
     bool CheckIfExists(int constructorId, int champId);
 }
