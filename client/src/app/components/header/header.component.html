@@ -1,0 +1,34 @@
+<meta charset="UTF-8">
+<header>
+  <img [src]="'img/header/logo.png'" alt="Drs Zone" class="logo">
+  <nav *ngIf="!isScreenSmall">
+    <ul class="nav_links">
+      <li routerLinkActive="activeLink" [routerLink]="'home'">
+        <a  routerLinkActive="activeLink" >Főoldal</a>
+        <mat-icon>home</mat-icon>
+      </li>
+      <li routerLinkActive="activeLink" [routerLink]="'news'">
+        <a routerLinkActive="activeLink">Hírek</a>
+        <mat-icon>newspaper</mat-icon>
+      </li>
+      <li routerLinkActive="activeLink" [routerLink]="'reviews'">
+
+        <a routerLinkActive="activeLink">Összefoglalók</a>
+        <mat-icon>rate_review</mat-icon>
+      </li>
+      <li routerLinkActive="activeLink" [routerLink]="'reviews'">
+        <a routerLinkActive="activeLink">Eredmények</a>
+        <mat-icon>rate_review</mat-icon>
+      </li>
+    </ul>
+  </nav>
+  <ng-container *ngIf="!isLoggedIn; else loggedInTemplate">
+    <button matTooltip="Jelentkezz be!" class="login-button" routerLink="/login" mat-flat-button>Bejelentkezés</button>
+    <mat-icon [routerLink]="'/login'" class="login-icon">login</mat-icon>
+  </ng-container>
+
+  <ng-template #loggedInTemplate>
+    <mat-icon routerLinkActive="activeLink" [routerLink]="['/profile', loggedId]" class="account-icon">person</mat-icon>
+  </ng-template>
+  <mat-slide-toggle (click)="toggleTheme()"></mat-slide-toggle>
+</header>

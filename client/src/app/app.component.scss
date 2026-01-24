@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.activeLink {
+  color: #f8274f !important;
+  font-weight: bold;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.menu-button {
+  display: none;
+
+  @media (max-width: 370px) {
+    display: flex;
+    width: 100px;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.app-container {
+  height: calc(100vh - 70px);
+  background-color: #f8f4f4;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 10px;
+}
+
+.nav-list li {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: background 0.2s;
+}
+
+.nav-list li:hover {
+  background-color: #f0f0f0;
+}
+
+.nav-list li mat-icon {
+  font-size: 22px;
+  color: #606060;
+}
+
+.nav-list li a {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.activeLink {
+  background-color: #ffebee !important;
+  color: #f8274f !important;
+}
+
+.activeLink mat-icon {
+  color: #f8274f !important;
+}
+
+.content-padding {
+  padding: 20px;
+}
+
+.activeLink {
+  color: #f8274f !important;
+  font-weight: bold;
+}
+
+.menu-panel {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.panel-title {
+  font-family: 'Kanit', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #878a8c;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+::ng-deep .menu-panel .mat-expansion-panel-body {
+  padding: 0 !important;
+}
+
+::ng-deep .menu-panel .mat-expansion-panel-header {
+  height: 40px !important;
+  padding: 0 15px !important;
+}
+
+::ng-deep .menu-panel .mat-expansion-panel-header:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+.inner-list {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.inner-list li {
+  padding-left: 25px !important;
+}
+
+/* --- MÓDOSÍTOTT RÉSZEK INNENTŐL --- */
+
+.sidebar {
+  width: 210px;
+  background-color: #ffffff !important;
+  /* Ez a Reddites szürke elválasztó csík */
+  border-right: 1px solid #d7dade !important;
+  box-shadow: none !important;
+  z-index: 5 !important;
+  overflow: visible !important;
+}
+
+.sidenav_icon {
+  width: 25% !important;
+}
+
+.nav-list a {
+  text-decoration: none;
+  color: #000000 !important;
+  font-weight: bold;
+}
+
+.main-content {
+  overflow: visible !important;
+  position: relative;
+  z-index: 10 !important;
+  /* Ez biztosítja, hogy a tartalom oldalán is legyen csík, ha kell */
+  border-left: 1px solid #d7dade;
+  margin-left: -1px; /* Hogy fedésben legyen a sidebar csíkjával */
+}
+
+.toggle-anchor {
+  position: absolute;
+  left: 0;
+  top: 15px;
+  z-index: 1001;
+  background-color: #ffffff !important;
+  border: 1px solid #d7dade !important;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+
+  /* Ez teszi a vonal közepére nyitott állapotban */
+  transform: translateX(-50%);
+
+  transition: left 0.3s ease, transform 0.3s ease, background-color 0.2s;
+  cursor: pointer;
+}
+
+.toggle-anchor:hover {
+  background-color: #f6f7f8 !important;
+  border-color: #878a8c !important;
+}
+
+.toggle-anchor mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  color: #1a1a1b;
+}
+
+/* Itt növeltem a távolságot 20px-ről 50px-re */
+.toggle-anchor.closed-pos {
+  left: 50px;
+  transform: translateX(0); /* Kikapcsoljuk a felezést */
+}

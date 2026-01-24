@@ -1,1 +1,84 @@
-<router-outlet />
+<app-header (toggleSidenav)="sidenav.toggle()"></app-header>
+
+
+<mat-sidenav-container class="app-container" [hasBackdrop]="isScreenSmall">
+
+  <mat-sidenav #sidenav
+               [mode]="isScreenSmall ? 'over' : 'side'"
+               [opened]="!isScreenSmall"
+               class="sidebar">
+
+
+    <ul class="nav-list">
+      <li routerLink="home" routerLinkActive="activeLink" *ngIf="isScreenSmall">
+        <mat-icon>home</mat-icon>
+        <a>Főoldal</a>
+      </li>
+      <li routerLink="news" routerLinkActive="activeLink" *ngIf="isScreenSmall">
+        <mat-icon>newspaper</mat-icon>
+        <a>Hírek</a>
+      </li>
+      <li routerLink="reviews" routerLinkActive="activeLink" *ngIf="isScreenSmall">
+        <mat-icon>rate_review</mat-icon>
+        <a>Összefoglalók</a>
+      </li>
+
+
+
+      <mat-divider *ngIf="isScreenSmall"></mat-divider>
+      <mat-accordion multi="true" class="menu-accordion">
+        <mat-expansion-panel expanded="true" class="menu-panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="panel-title">KATEGÓRIÁK</mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <ul class="nav-list inner-list">
+            <li routerLink="f1" routerLinkActive="activeLink" (click)="isScreenSmall ? sidenav.close() : null">
+              <img [src]="'img/header/icons/f1.png'" class="sidenav_icon">
+              <a>F1</a>
+            </li>
+            <li routerLink="f2" routerLinkActive="activeLink" (click)="isScreenSmall ? sidenav.close() : null">
+              <img [src]="'img/header/icons/f2.png'" class="sidenav_icon">
+              <a>F2</a>
+            </li>
+            <li routerLink="wec" routerLinkActive="activeLink" (click)="isScreenSmall ? sidenav.close() : null">
+              <img [src]="'img/header/icons/wec.png'" class="sidenav_icon">
+              <a>WEC</a>
+            </li>
+          </ul>
+        </mat-expansion-panel>
+        <mat-expansion-panel expanded="true" class="menu-panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="panel-title">HIVATALOS OLDALAK</mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <ul class="nav-list inner-list">
+            <li (click)="isScreenSmall ? sidenav.close() : null">
+              <a href="https://www.formula1.com/" class="sidebar_links">F1&reg;</a>
+            </li>
+            <li (click)="isScreenSmall ? sidenav.close() : null">
+              <a href="https://www.fiaformula2.com/">F2&reg;</a>
+            </li>
+            <li (click)="isScreenSmall ? sidenav.close() : null">
+              <a href="https://www.fiawec.com/">WEC&reg;</a>
+            </li>
+          </ul>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </ul>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <button mat-icon-button
+            class="toggle-anchor"
+            [class.closed-pos]="!sidenav.opened"
+            (click)="sidenav.toggle()"
+            *ngIf="!isScreenSmall">
+      <mat-icon>{{ sidenav.opened ? 'menu_open' : 'menu' }}</mat-icon>
+    </button>
+    <main class="content-padding">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

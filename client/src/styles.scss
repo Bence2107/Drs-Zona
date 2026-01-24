@@ -14,3 +14,38 @@ html {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+:root {
+  --primary-background: #21212e;
+  --primary-text: #bbb;
+  --secondary-background: #15161d;
+  --secondary-text: #c3c3c3;
+  --news-secondary-text: #ed2449;
+
+  --dark-primary-background: #15161d;
+  --dark-primary-text: #bbb;
+  --dark-secondary-background: #21212e;
+  --dark-secondary-text: #bbb;
+
+  --gray-text: #c3c3c3;
+  --red-text: #ed2449;
+}
+
+.light-mode {
+  --primary-background: #f1f1f1;
+  --primary-text: #15161d;
+  --secondary-background: #d1caca;
+  --secondary-text: #555;
+  --news-secondary-text: #aa0c25;
+}
+
+.dark-mode {
+  background-color: var(--dark-primary-background);
+  color: var(--dark-primary-text);
+}
+
+@include mat.button-overrides((
+  filled-container-color: #f8274f,
+  filled-label-text-color: white,
+  outlined-ripple-color: rgba(165, 0, 0, 0.2),
+));
