@@ -1,0 +1,17 @@
+.error-container {
+  padding: 15px;
+  text-align: center;
+  background-color: var(--primary-bg);
+  border-radius: 20px !important;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+.error-msg {
+  font-size: 15px;
+  font-weight: bold;
+  color: #d32f2f;
+  margin: 0;
+}

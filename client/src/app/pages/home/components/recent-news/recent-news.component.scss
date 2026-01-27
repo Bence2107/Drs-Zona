@@ -1,0 +1,52 @@
+.news-card {
+  background-color: var(--secondary-bg);
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 15px;
+  margin: 20px auto;
+  box-sizing: border-box;
+  border-radius: 20px !important;
+}
+
+mat-progress-bar,
+mat-card-content {
+  width: 70%;
+}
+
+.article-card {
+  background-color: var(--primary-bg);
+  border-radius: 20px !important;
+}
+
+.error-container {
+  padding: 15px;
+  text-align: center;
+  color: #d32f2f;
+  background-color: var(--primary-bg);
+  border-radius: 20px !important;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.error-msg {
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+  color: #d32f2f;
+}
+
+.empty-msg {
+  text-align: center;
+  font-size: 15px;
+  padding: 20px;
+}
+
+mat-progress-bar {
+  height: 4px;
+}
