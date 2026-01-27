@@ -1,31 +1,32 @@
 <app-header (toggleSidenav)="sidenav.toggle()"></app-header>
 
-
-<mat-sidenav-container class="app-container" [hasBackdrop]="isScreenSmall">
+<mat-sidenav-container class="app-container" [hasBackdrop]="isMobileOverlay">
 
   <mat-sidenav #sidenav
-               [mode]="isScreenSmall ? 'over' : 'side'"
-               [opened]="!isScreenSmall"
+               [mode]="isMobileOverlay ? 'over' : 'side'"
+               [opened]="!isMobileOverlay"
                class="sidebar">
 
-
     <ul class="nav-list">
-      <li routerLink="home" routerLinkActive="activeLink" *ngIf="isScreenSmall">
+      <li routerLink="home" routerLinkActive="activeLink" *ngIf="isMobileOverlay">
         <mat-icon>home</mat-icon>
         <a>Főoldal</a>
       </li>
-      <li routerLink="news" routerLinkActive="activeLink" *ngIf="isScreenSmall">
+      <li routerLink="news" routerLinkActive="activeLink" *ngIf="isMobileOverlay">
         <mat-icon>newspaper</mat-icon>
         <a>Hírek</a>
       </li>
-      <li routerLink="reviews" routerLinkActive="activeLink" *ngIf="isScreenSmall">
+      <li routerLink="reviews" routerLinkActive="activeLink" *ngIf="isMobileOverlay">
         <mat-icon>rate_review</mat-icon>
         <a>Összefoglalók</a>
       </li>
 
+      <li routerLink="reviews" routerLinkActive="activeLink" *ngIf="isSmallScreen">
+        <mat-icon>person</mat-icon>
+        <a>Bejelentkezés</a>
+      </li>
+      <mat-divider *ngIf="isMobileOverlay"></mat-divider>
 
-
-      <mat-divider *ngIf="isScreenSmall"></mat-divider>
       <mat-accordion multi="true" class="menu-accordion">
         <mat-expansion-panel expanded="true" class="menu-panel">
           <mat-expansion-panel-header>
@@ -33,16 +34,16 @@
           </mat-expansion-panel-header>
 
           <ul class="nav-list inner-list">
-            <li routerLink="f1" routerLinkActive="activeLink" (click)="isScreenSmall ? sidenav.close() : null">
-              <img [src]="'img/header/icons/f1.png'" class="sidenav_icon">
+            <li routerLink="f1" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+              <img [src]="'img/header/icons/f1.png'" class="sidenav_icon" alt="f1">
               <a>F1</a>
             </li>
-            <li routerLink="f2" routerLinkActive="activeLink" (click)="isScreenSmall ? sidenav.close() : null">
-              <img [src]="'img/header/icons/f2.png'" class="sidenav_icon">
+            <li routerLink="f2" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+              <img [src]="'img/header/icons/f2.png'" class="sidenav_icon" alt="f2">
               <a>F2</a>
             </li>
-            <li routerLink="wec" routerLinkActive="activeLink" (click)="isScreenSmall ? sidenav.close() : null">
-              <img [src]="'img/header/icons/wec.png'" class="sidenav_icon">
+            <li routerLink="wec" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+              <img [src]="'img/header/icons/wec.png'" class="sidenav_icon" alt="wec">
               <a>WEC</a>
             </li>
           </ul>
@@ -53,14 +54,16 @@
           </mat-expansion-panel-header>
 
           <ul class="nav-list inner-list">
-            <li (click)="isScreenSmall ? sidenav.close() : null">
-              <a href="https://www.formula1.com/" class="sidebar_links">F1&reg;</a>
+            <li (click)="isMobileOverlay ? sidenav.close() : null">
+              <a href="https://www.formula1.com/" target="_blank">
+                F1&reg;
+              </a>
             </li>
-            <li (click)="isScreenSmall ? sidenav.close() : null">
-              <a href="https://www.fiaformula2.com/">F2&reg;</a>
+            <li (click)="isMobileOverlay ? sidenav.close() : null">
+              <a href="https://www.fiaformula2.com/" target="_blank">F2&reg;</a>
             </li>
-            <li (click)="isScreenSmall ? sidenav.close() : null">
-              <a href="https://www.fiawec.com/">WEC&reg;</a>
+            <li (click)="isMobileOverlay ? sidenav.close() : null">
+              <a href="https://www.fiawec.com/" target="_blank">WEC&reg;</a>
             </li>
           </ul>
         </mat-expansion-panel>
@@ -68,17 +71,19 @@
     </ul>
   </mat-sidenav>
 
-  <mat-sidenav-content>
+  <mat-sidenav-content class="main-content-host" [class.menu-closed]="!sidenav.opened">
     <button mat-icon-button
             class="toggle-anchor"
             [class.closed-pos]="!sidenav.opened"
             (click)="sidenav.toggle()"
-            *ngIf="!isScreenSmall">
+            *ngIf="!isSmallScreen">
       <mat-icon>{{ sidenav.opened ? 'menu_open' : 'menu' }}</mat-icon>
     </button>
-    <main class="content-padding">
-      <router-outlet></router-outlet>
-    </main>
+    <div class="content-scroll-wrapper">
+      <main class="content-padding">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
   </mat-sidenav-content>
 
 </mat-sidenav-container>

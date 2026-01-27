@@ -4,7 +4,6 @@
 export type { ArticleCreateDto } from './models/article-create-dto';
 export type { ArticleDetailDto } from './models/article-detail-dto';
 export type { ArticleListDto } from './models/article-list-dto';
-export type { ArticleRecentDto } from './models/article-recent-dto';
 export type { ArticleUpdateDto } from './models/article-update-dto';
 export type { BrandCreateDto } from './models/brand-create-dto';
 export type { BrandDetailDto } from './models/brand-detail-dto';

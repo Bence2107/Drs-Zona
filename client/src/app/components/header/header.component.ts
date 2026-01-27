@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {NgIf} from '@angular/common';
@@ -16,14 +16,14 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
     RouterLinkActive,
     MatButton,
     MatTooltip,
-    MatSlideToggle
+    MatSlideToggle,
+    MatIconButton
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   isDarkMode: boolean = true;
-  loggedId: any;
   isLoggedIn: boolean = false;
 
   @Output() toggleSidenav = new EventEmitter<void>();
@@ -37,6 +37,10 @@ export class HeaderComponent {
 
   ngOnInit(): void {
     this.initializeTheme();
+  }
+
+  toggleSidebar() {
+    this.toggleSidenav.emit();
   }
 
   private initializeTheme(): void {

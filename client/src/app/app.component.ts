@@ -22,14 +22,19 @@ import {MatIconButton} from '@angular/material/button';
 })
 export class AppComponent implements OnInit{
   title = 'drs-zona';
-  isScreenSmall = false;
-
+  isSmallScreen = false;
+  isMobileOverlay = false;
   constructor(private breakpointObserver: BreakpointObserver) {}
 
   ngOnInit() {
-    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet])
+    this.breakpointObserver.observe(['(max-width: 1280px)'])
       .subscribe(result => {
-        this.isScreenSmall = result.matches;
+        this.isSmallScreen = result.matches;
+      });
+
+    this.breakpointObserver.observe(['(max-width: 990px)'])
+      .subscribe(result => {
+        this.isMobileOverlay = result.matches;
       });
   }
 }

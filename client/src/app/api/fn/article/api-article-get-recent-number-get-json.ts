@@ -7,13 +7,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ArticleRecentDto } from '../../models/article-recent-dto';
+import { ArticleListDto } from '../../models/article-list-dto';
 
 export interface ApiArticleGetRecentNumberGet$Json$Params {
   number: number;
 }
 
-export function apiArticleGetRecentNumberGet$Json(http: HttpClient, rootUrl: string, params: ApiArticleGetRecentNumberGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ArticleRecentDto>>> {
+export function apiArticleGetRecentNumberGet$Json(http: HttpClient, rootUrl: string, params: ApiArticleGetRecentNumberGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ArticleListDto>>> {
   const rb = new RequestBuilder(rootUrl, apiArticleGetRecentNumberGet$Json.PATH, 'get');
   if (params) {
     rb.path('number', params.number, {});
@@ -24,7 +24,7 @@ export function apiArticleGetRecentNumberGet$Json(http: HttpClient, rootUrl: str
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<ArticleRecentDto>>;
+      return r as StrictHttpResponse<Array<ArticleListDto>>;
     })
   );
 }

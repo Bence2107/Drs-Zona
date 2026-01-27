@@ -7,7 +7,6 @@ html {
       primary: mat.$azure-palette,
       tertiary: mat.$blue-palette,
     ),
-    typography: Roboto,
     density: 0,
   ));
 }
@@ -16,36 +15,67 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 :root {
-  --primary-background: #21212e;
-  --primary-text: #bbb;
-  --secondary-background: #15161d;
-  --secondary-text: #c3c3c3;
-  --news-secondary-text: #ed2449;
-
-  --dark-primary-background: #15161d;
-  --dark-primary-text: #bbb;
-  --dark-secondary-background: #21212e;
-  --dark-secondary-text: #bbb;
-
-  --gray-text: #c3c3c3;
-  --red-text: #ed2449;
-}
-
-.light-mode {
-  --primary-background: #f1f1f1;
-  --primary-text: #15161d;
-  --secondary-background: #d1caca;
-  --secondary-text: #555;
-  --news-secondary-text: #aa0c25;
+  --primary-bg: #f8f4f4;
+  --secondary-bg: #d1caca;
+  --header-bg: #ffffff;
+  --sidebar-bg: #ffffff;
+  --text-main: #000000;
+  --text-secondary: #606060;
+  --border-color: #d7dade;
+  --accent-color: #f8274f;
+  --hover-bg: #f0f0f0;
 }
 
 .dark-mode {
-  background-color: var(--dark-primary-background);
-  color: var(--dark-primary-text);
+  --primary-bg: #21212e;
+  --secondary-bg: #15161d;
+  --header-bg: #1c1c27;
+  --sidebar-bg: #1c1c27;
+  --text-main: #bbbbbb;
+  --text-secondary: #878a8c;
+  --border-color: #333333;
+  --accent-color: #f8274f;
+  --hover-bg: #2d2d3a;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 @include mat.button-overrides((
   filled-container-color: #f8274f,
   filled-label-text-color: white,
   outlined-ripple-color: rgba(165, 0, 0, 0.2),
+));
+
+@include mat.progress-bar-overrides((
+  active-indicator-color: #f8274f,
+  track-color: black,
+  track-height: 8px
+));
+
+@include mat.slide-toggle-overrides((
+  selected-handle-color: #ffffff,
+  selected-track-color: #15161d,
+  selected-icon-color: #15161d,
+  selected-pressed-handle-color: #ffffff,
+
+  selected-hover-track-color: #15161d,
+  selected-focus-track-color: #15161d,
+  selected-pressed-track-color: #15161d,
+
+  unselected-handle-color: #15161d,
+  unselected-track-color: #e0e0e0,
+  unselected-icon-color: #ffffff,
+
+  unselected-hover-track-color: #e0e0e0,
+  unselected-focus-track-color: #e0e0e0,
+  unselected-pressed-track-color: #e0e0e0,
+
+  selected-hover-state-layer-color: rgba(0, 0, 0, 0.05),
+  selected-focus-state-layer-color: rgba(0, 0, 0, 0.1),
+  unselected-hover-state-layer-color: rgba(0, 0, 0, 0.05),
+  unselected-focus-state-layer-color: rgba(0, 0, 0, 0.1),
 ));

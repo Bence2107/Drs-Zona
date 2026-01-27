@@ -97,6 +97,8 @@ export type { ApiGrandPrixUpdatePost$Params as ApiGrandPrixUpdatePost$Params } f
 export { apiGrandPrixUpdatePost as apiGrandPrixUpdatePost } from './fn/grand-prix/api-grand-prix-update-post';
 export type { ApiGrandPrixDeleteIdDelete$Params as ApiGrandPrixDeleteIdDelete$Params } from './fn/grand-prix/api-grand-prix-delete-id-delete';
 export { apiGrandPrixDeleteIdDelete as apiGrandPrixDeleteIdDelete } from './fn/grand-prix/api-grand-prix-delete-id-delete';
+export type { ApiHealthCheckPingGet$Params as ApiHealthCheckPingGet$Params } from './fn/health-check/api-health-check-ping-get';
+export { apiHealthCheckPingGet as apiHealthCheckPingGet } from './fn/health-check/api-health-check-ping-get';
 export type { ApiPollGetIdGet$Plain$Params as ApiPollGetIdGet$Plain$Params } from './fn/poll/api-poll-get-id-get-plain';
 export { apiPollGetIdGet$Plain as apiPollGetIdGet$Plain } from './fn/poll/api-poll-get-id-get-plain';
 export type { ApiPollGetIdGet$Json$Params as ApiPollGetIdGet$Json$Params } from './fn/poll/api-poll-get-id-get-json';

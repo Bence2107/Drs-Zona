@@ -1,13 +1,66 @@
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-.activeLink {
-  color: #f8274f !important;
-  font-weight: bold;
-}
 
 html, body {
   height: 100%;
   margin: 0;
+  font-family: 'Kanit', sans-serif;
+  background-color: var(--primary-bg);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow: hidden;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 10px;
+  background-color: var(--sidebar-bg) !important;
+}
+
+.nav-list li {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: background 0.2s;
+  color: var(--text-main) !important;
+}
+
+.nav-list li a {
+  font-size: 18px;
+  color: var(--text-main) !important;
+  font-weight: 400;
+}
+
+.nav-list li mat-icon {
+  font-size: 22px;
+  color: #606060;
+}
+
+.activeLink {
+  background-color: #d5213b !important;
+  color: #f8274f !important;
+}
+
+.activeLink mat-icon {
+  color: var(--text-main) !important;
+}
+
+.app-container {
+  height: calc(100vh - 70px);
+  background-color: var(--primary-bg);
+}
+
+.content-padding {
+  padding: 20px;
+}
+
+.activeLink {
+  color: #f8274f !important;
+  font-weight: bold;
 }
 
 .menu-button {
@@ -21,61 +74,8 @@ html, body {
   }
 }
 
-.app-container {
-  height: calc(100vh - 70px);
-  background-color: #f8f4f4;
-}
-
-.nav-list {
-  list-style: none;
-  padding: 10px;
-}
-
-.nav-list li {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 12px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 5px;
-  transition: background 0.2s;
-}
-
-.nav-list li:hover {
-  background-color: #f0f0f0;
-}
-
-.nav-list li mat-icon {
-  font-size: 22px;
-  color: #606060;
-}
-
-.nav-list li a {
-  font-size: 18px;
-  font-weight: 400;
-}
-
-.activeLink {
-  background-color: #ffebee !important;
-  color: #f8274f !important;
-}
-
-.activeLink mat-icon {
-  color: #f8274f !important;
-}
-
-.content-padding {
-  padding: 20px;
-}
-
-.activeLink {
-  color: #f8274f !important;
-  font-weight: bold;
-}
-
 .menu-panel {
-  background: transparent !important;
+  background-color: transparent;
   box-shadow: none !important;
 }
 
@@ -98,7 +98,7 @@ html, body {
 }
 
 ::ng-deep .menu-panel .mat-expansion-panel-header:hover {
-  background-color: rgba(0, 0, 0, 0.04) !important;
+  background-color: var(--hover-bg);
 }
 
 .inner-list {
@@ -110,16 +110,16 @@ html, body {
   padding-left: 25px !important;
 }
 
-/* --- MÓDOSÍTOTT RÉSZEK INNENTŐL --- */
+.inner-list li:hover {
+  background-color: var(--hover-bg);
+}
 
 .sidebar {
   width: 210px;
-  background-color: #ffffff !important;
-  /* Ez a Reddites szürke elválasztó csík */
-  border-right: 1px solid #d7dade !important;
+  background-color: var(--sidebar-bg);
+  border-right: var(--border-color);
   box-shadow: none !important;
-  z-index: 5 !important;
-  overflow: visible !important;
+  z-index: 1 !important;
 }
 
 .sidenav_icon {
@@ -127,45 +127,71 @@ html, body {
 }
 
 .nav-list a {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: background 0.2s;
   text-decoration: none;
-  color: #000000 !important;
   font-weight: bold;
 }
 
-.main-content {
+.nav-list li a {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  height: 100%;
+  font-size: 18px;
+  color: var(--text-main) !important;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.nav-list li a img,
+.nav-list li a mat-icon {
+  margin-right: 0;
+}
+
+.main-content-host {
+  z-index: 10 !important;
   overflow: visible !important;
   position: relative;
-  z-index: 10 !important;
-  /* Ez biztosítja, hogy a tartalom oldalán is legyen csík, ha kell */
-  border-left: 1px solid #d7dade;
-  margin-left: -1px; /* Hogy fedésben legyen a sidebar csíkjával */
+  display: flex;
+  flex-direction: column;
+}
+
+.content-scroll-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  position: relative;
 }
 
 .toggle-anchor {
   position: absolute;
-  left: 0;
   top: 15px;
-  z-index: 1001;
-  background-color: #ffffff !important;
-  border: 1px solid #d7dade !important;
+  left: 0;
+  z-index: 9999 !important;
+  background-color: var(--primary-bg);
+  border: 1px solid var(--border-color);
   border-radius: 50%;
   width: 32px;
   height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-
-  /* Ez teszi a vonal közepére nyitott állapotban */
   transform: translateX(-50%);
-
-  transition: left 0.3s ease, transform 0.3s ease, background-color 0.2s;
+  transition: left 0.1s ease, transform 0.1s ease;
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .toggle-anchor:hover {
-  background-color: #f6f7f8 !important;
-  border-color: #878a8c !important;
+  background-color: var(--hover-bg);
 }
 
 .toggle-anchor mat-icon {
@@ -173,11 +199,70 @@ html, body {
   width: 18px;
   height: 18px;
   line-height: 18px;
-  color: #1a1a1b;
+  color: var(--text-main);
 }
 
-/* Itt növeltem a távolságot 20px-ről 50px-re */
 .toggle-anchor.closed-pos {
-  left: 50px;
-  transform: translateX(0); /* Kikapcsoljuk a felezést */
+  left: 30px;
+  transform: translateX(0);
+}
+
+.main-content-host.menu-closed {
+  border: none;
+  position: relative;
+}
+
+.main-content-host.menu-closed::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 46px;
+  width: 1px;
+  background-color: var(--border-color);
+  z-index: 5;
+}
+
+@media (max-width: 1280px) {
+  .toggle-anchor {
+    display: none !important;
+  }
+
+  .main-content-host.menu-closed::before,
+  .main-content-host::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  ::ng-deep .mat-sidenav {
+    z-index: 1001 !important;
+  }
+
+  ::ng-deep .mat-drawer-backdrop {
+    z-index: 1000 !important;
+  }
+}
+
+@media (max-width: 990px) {
+  .main-content-host {
+    width: 100% !important;
+    margin-left: 0 !important;
+    z-index: 1 !important;
+  }
+
+  .sidebar {
+    z-index: 10000 !important;
+  }
+
+  ::ng-deep .mat-drawer-backdrop {
+    z-index: 1000 !important;
+  }
+
+  ::ng-deep .mat-sidenav {
+    z-index: 1001 !important;
+  }
+
+  .nav_links {
+    display: none;
+  }
 }
