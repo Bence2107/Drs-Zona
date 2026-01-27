@@ -72,7 +72,7 @@ public class ArticleService(
         if (!userRepo.CheckIfIdExists(authorId))
             return ResponseResult<bool>.Failure("AuthorId", "Author not found");
 
-        if (!gpRepo.CheckIfIdExists(dto.GrandPrixId))
+        if (dto.GrandPrixId != null && !gpRepo.CheckIfIdExists(dto.GrandPrixId.Value))
             return ResponseResult<bool>.Failure("GrandPrixId", "Grand Prix not found");
         
         var article = new Article
