@@ -4,14 +4,14 @@ namespace Repositories.Interfaces.Polls;
 
 public interface IPollsRepository
 {
-    Poll? GetPollById(int id);
+    Poll? GetPollById(Guid id);
     List<Poll> GetAll();
     void Add(Poll poll);
     void Modify(Poll poll);
-    void Delete(int id);
-    Poll? GetByIdWithAuthor(int id);
+    void Delete(Guid id);
+    Poll? GetByIdWithAuthor(Guid id);
     List<Poll> GetActive();
-    List<Poll> GetByCreatorId(int authorId);
+    List<Poll> GetByCreatorId(Guid authorId);
     List<Poll> GetExpired();
-    bool CheckIfIdExists(int id);
+    bool CheckIfIdExists(Guid id);
 }

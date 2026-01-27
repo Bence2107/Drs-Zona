@@ -9,10 +9,10 @@ public class PollOption
 {
     [Key]
     [Column("id")]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     
     [Column("poll_id")]
-    public int PollId { get; set; }
+    public Guid PollId { get; set; }
     [JsonIgnore]
     public virtual Poll? Poll { get; set; }
     

@@ -8,10 +8,10 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class BrandController(IBrandService brandService) : ControllerBase
 {
-    [HttpGet("get/{id:int}")]
+    [HttpGet("get/{id:guid}")]
     [ProducesResponseType(typeof(BrandDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Get([FromRoute] int id)
+    public IActionResult Get([FromRoute] Guid id)
     {
         var response = brandService.GetBrandById(id);
         if (!response.IsSuccess)
@@ -87,9 +87,9 @@ public class BrandController(IBrandService brandService) : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpDelete("delete/{id:int}")]
+    [HttpDelete("delete/{id:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Delete([FromRoute]int id)
+    public IActionResult Delete([FromRoute]Guid id)
     {
         var response = brandService.DeleteBrand(id);
         if (!response.IsSuccess) return NotFound(response.Message);

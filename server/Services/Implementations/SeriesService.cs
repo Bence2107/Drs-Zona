@@ -11,7 +11,7 @@ public class SeriesService(
     IConstructorsChampionshipsRepository constructorsChampRepo
 ) : ISeriesService
 {
-    public ResponseResult<SeriesDetailDto> GetSeriesById(int seriesId)
+    public ResponseResult<SeriesDetailDto> GetSeriesById(Guid seriesId)
     {
         var series = seriesRepo.GetSeriesById(seriesId);
         if (series == null) return ResponseResult<SeriesDetailDto>.Failure("Series not exist");
@@ -116,7 +116,7 @@ public class SeriesService(
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> Delete(int id)
+    public ResponseResult<bool> Delete(Guid id)
     {
         var series = seriesRepo.GetSeriesById(id);
         if (series is null) return ResponseResult<bool>.Failure("Series not exist");

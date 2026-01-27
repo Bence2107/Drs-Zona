@@ -9,9 +9,9 @@ public class CommentsRepository(EfContext context) : ICommentsRepository
 {
     private readonly DbSet<Comment> _comments = context.Comments;
     
-    public Comment? GetCommentById(int id) => _comments.FirstOrDefault(comment => comment.Id == id);
+    public Comment? GetCommentById(Guid id) => _comments.FirstOrDefault(comment => comment.Id == id);
     
-    public List<Comment> GetAllComments(int id) => _comments.ToList();
+    public List<Comment> GetAllComments(Guid id) => _comments.ToList();
     
     public void Add(Comment comment)
     {
@@ -25,7 +25,7 @@ public class CommentsRepository(EfContext context) : ICommentsRepository
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var comment = GetCommentById(id);
         if(comment == null) return;
@@ -33,34 +33,34 @@ public class CommentsRepository(EfContext context) : ICommentsRepository
         context.SaveChanges();
     }
 
-    public Comment? GetByIdWithUser(int id) => _comments
+    public Comment? GetByIdWithUser(Guid id) => _comments
         .Include(comment => comment.User)
         .FirstOrDefault(comment => comment.Id == id);
     
 
-    public Comment? GetByIdWithArticle(int id) => _comments
+    public Comment? GetByIdWithArticle(Guid id) => _comments
         .Include(comment => comment.Article)
         .FirstOrDefault(comment => comment.Id == id);
 
-    public Comment? GetByIdWithAll(int id) => _comments
+    public Comment? GetByIdWithAll(Guid id) => _comments
         .Include(comment => comment.User)
         .Include(comment => comment.Article)
         .FirstOrDefault(comment => comment.Id == id);
 
-    public List<Comment> GetByArticleId(int articleId) => _comments
+    public List<Comment> GetByArticleId(Guid articleId) => _comments
         .Where(comment => comment.ArticleId == articleId)
         .ToList();
     
-    public List<Comment> GetUsersComments(int userId) => _comments
+    public List<Comment> GetUsersComments(Guid userId) => _comments
         .Where(comment => comment.UserId == userId)
         .ToList();
 
-    public List<Comment> GetCommentsWithoutReplies(int articleId) => _comments
+    public List<Comment> GetCommentsWithoutReplies(Guid articleId) => _comments
         .Where(comment => comment.ArticleId == articleId && comment.ReplyToCommentId == null)
         .ToList();
 
-    public List<Comment> GetRepliesToAComment(int replyCommentId) => _comments
+    public List<Comment> GetRepliesToAComment(Guid replyCommentId) => _comments
         .Where(comment => comment.ReplyToCommentId == replyCommentId)
         .ToList();
-    public bool CheckIfIdExists(int id) => _comments.Any(comment => comment.Id == id);
+    public bool CheckIfIdExists(Guid id) => _comments.Any(comment => comment.Id == id);
 }

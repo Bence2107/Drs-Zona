@@ -12,7 +12,7 @@ public class GrandPrixService (
     ISeriesRepository seriesRepository)
 : IGrandPrixService
 {
-    public ResponseResult<GrandPrixDetailDto> GetGrandPrixById(int id)
+    public ResponseResult<GrandPrixDetailDto> GetGrandPrixById(Guid id)
     {
         var grandPrix = grandsPrixRepository.GetWithAll(id);
         if (grandPrix == null) return ResponseResult<GrandPrixDetailDto>.Failure("Grand Prix not found");
@@ -50,7 +50,7 @@ public class GrandPrixService (
         return ResponseResult<GrandPrixDetailDto>.Success(detailDto);
     }
 
-    public ResponseResult<List<GrandPrixListDto>> GetSeasonGrandPrixList(int seriesId, int year)
+    public ResponseResult<List<GrandPrixListDto>> GetSeasonGrandPrixList(Guid seriesId, int year)
     {
         var grandsPrix = grandsPrixRepository.GetBySeriesAndYear(seriesId, year).Select(gp => new GrandPrixListDto(
             Id: gp.Id,
@@ -105,7 +105,7 @@ public class GrandPrixService (
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> DeleteGrandPrix(int id)
+    public ResponseResult<bool> DeleteGrandPrix(Guid id)
     {
         var existing = grandsPrixRepository.GetGrandPrixById(id);
         if (existing == null) return ResponseResult<bool>.Failure("Grand Prix not found");

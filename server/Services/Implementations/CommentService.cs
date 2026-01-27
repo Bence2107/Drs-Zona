@@ -8,7 +8,7 @@ namespace Services.Implementations;
 
 public class CommentService(ICommentsRepository commentsRepo, IUsersRepository usersRepo) : ICommentService
 {
-    public ResponseResult<List<CommentDetailDto>> GetArticleCommentsWithoutReplies(int articleId)
+    public ResponseResult<List<CommentDetailDto>> GetArticleCommentsWithoutReplies(Guid articleId)
     {
         var comments = commentsRepo.GetCommentsWithoutReplies(articleId).Select(c => new CommentDetailDto(
             Id: c.Id,
@@ -25,7 +25,7 @@ public class CommentService(ICommentsRepository commentsRepo, IUsersRepository u
         return ResponseResult<List<CommentDetailDto>>.Success(comments);
     }
 
-    public ResponseResult<List<CommentDetailDto>> GetCommentReplies(int commentId)
+    public ResponseResult<List<CommentDetailDto>> GetCommentReplies(Guid commentId)
     {
         var repliesToComment = commentsRepo.GetRepliesToAComment(commentId).Select(c=> new CommentDetailDto(
             Id: c.Id,
@@ -41,7 +41,7 @@ public class CommentService(ICommentsRepository commentsRepo, IUsersRepository u
         return ResponseResult<List<CommentDetailDto>>.Success(repliesToComment);
     }
 
-    public ResponseResult<List<CommentDetailDto>> GetUsersComments(int userId)
+    public ResponseResult<List<CommentDetailDto>> GetUsersComments(Guid userId)
     {
         var repliesToComment = commentsRepo.GetUsersComments(userId).Select(c=> new CommentDetailDto(
             Id: c.Id,
@@ -57,7 +57,7 @@ public class CommentService(ICommentsRepository commentsRepo, IUsersRepository u
         return ResponseResult<List<CommentDetailDto>>.Success(repliesToComment);
     }
 
-    public ResponseResult<bool> AddComment(CommentCreateDto commentCreateDto, int userId)
+    public ResponseResult<bool> AddComment(CommentCreateDto commentCreateDto, Guid userId)
     {
         var articleToComment = commentsRepo.GetByIdWithArticle(commentCreateDto.ArticleId);
         if (articleToComment == null) return ResponseResult<bool>.Failure("Article not found");
@@ -137,7 +137,7 @@ public class CommentService(ICommentsRepository commentsRepo, IUsersRepository u
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> DeleteComment(int commentId)
+    public ResponseResult<bool> DeleteComment(Guid commentId)
     {
         var comment = commentsRepo.GetCommentById(commentId);
         if (comment == null) return ResponseResult<bool>.Failure("Comment not found");

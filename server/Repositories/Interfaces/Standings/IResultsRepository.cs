@@ -4,17 +4,17 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IResultsRepository
 {
-    Result? GetResultById(int id);
+    Result? GetResultById(Guid id);
     List<Result> GetAllResults();
     void Create(Result result);
     void Update(Result result);
-    void Delete(int id);
-    Result? GetResultWithAll(int id);
-    List<Result> GetByGrandPrixId(int grandPrixId);
-    List<Result> GetByDriverId(int driverId);
-    List<Result> GetByConstructorId(int constructorId);
+    void Delete(Guid id);
+    Result? GetResultWithAll(Guid id);
+    List<Result> GetByGrandPrixId(Guid grandPrixId);
+    List<Result> GetByDriverId(Guid driverId);
+    List<Result> GetByConstructorId(Guid constructorId);
     List<Result> GetBySession(string session);
-    List<Result> GetByDriversChampionshipId(int championshipId);
-    List<Result> GetByConstructorsChampionshipId(int championshipId);
-    bool CheckIfIdExists(int id);
+    List<Result> GetByDriversChampionshipId(Guid championshipId);
+    List<Result> GetByConstructorsChampionshipId(Guid championshipId);
+    bool CheckIfIdExists(Guid id);
 }

@@ -1,6 +1,5 @@
 ﻿using Context;
 using Entities.Models.RaceTracks;
-using Entities.Models.Standings;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces.RaceTracks;
 
@@ -10,7 +9,7 @@ public class GrandsPrixRepository(EfContext context) : IGrandsPrixRepository
 {
     private readonly DbSet<GrandPrix> _grandsPrix = context.GrandsPrix;
     
-    public GrandPrix? GetGrandPrixById(int id) => _grandsPrix.FirstOrDefault(c => c.Id == id);
+    public GrandPrix? GetGrandPrixById(Guid id) => _grandsPrix.FirstOrDefault(c => c.Id == id);
     
     public List<GrandPrix> GetAllGrandPrix() => _grandsPrix.ToList();
     
@@ -26,7 +25,7 @@ public class GrandsPrixRepository(EfContext context) : IGrandsPrixRepository
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var grandPrix = GetGrandPrixById(id);
         if(grandPrix == null) return;
@@ -35,11 +34,11 @@ public class GrandsPrixRepository(EfContext context) : IGrandsPrixRepository
         context.SaveChanges();
     }
 
-    public GrandPrix? GetByIdWithCircuit(int id) => _grandsPrix
+    public GrandPrix? GetByIdWithCircuit(Guid id) => _grandsPrix
         .Include(c => c.Circuit)
         .FirstOrDefault(c => c.Id == id);
 
-    public GrandPrix? GetWithAll(int id) => _grandsPrix
+    public GrandPrix? GetWithAll(Guid id) => _grandsPrix
         .Include(c => c.Circuit)
         .Include(c => c.Series)
         .FirstOrDefault(c => c.Id == id);
@@ -48,16 +47,16 @@ public class GrandsPrixRepository(EfContext context) : IGrandsPrixRepository
         .Where(gp => gp.SeasonYear == year)
         .ToList();
     
-    public List<GrandPrix> GetByCircuitId(int circuitId) => _grandsPrix
+    public List<GrandPrix> GetByCircuitId(Guid circuitId) => _grandsPrix
         .Where(gp => gp.CircuitId == circuitId)
         .ToList();
 
-    public List<GrandPrix> GetBySeriesAndYear(int seriesId, int year) => _grandsPrix
+    public List<GrandPrix> GetBySeriesAndYear(Guid seriesId, int year) => _grandsPrix
         .Where(gp => gp.SeriesId == seriesId && gp.SeasonYear == year)
         .ToList();
     
     public GrandPrix? GetByRoundAndSeason(int round, int season) => _grandsPrix
         .FirstOrDefault(gp => gp.RoundNumber == round && gp.SeasonYear == season);
 
-    public bool CheckIfIdExists(int id) => _grandsPrix.Any(c => c.Id == id);
+    public bool CheckIfIdExists(Guid id) => _grandsPrix.Any(c => c.Id == id);
 }

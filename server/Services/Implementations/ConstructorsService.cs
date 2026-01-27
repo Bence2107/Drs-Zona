@@ -12,7 +12,7 @@ public class ConstructorsService(
     IContractsRepository contractsRepo
 ) : IConstructorsService
 {
-    public ResponseResult<ConstructorDetailDto> GetById(int id)
+    public ResponseResult<ConstructorDetailDto> GetById(Guid id)
     {
         if (constructorRepo.CheckIfIdExists(id)) return ResponseResult<ConstructorDetailDto>.Failure("Constructor not found");
 
@@ -46,7 +46,7 @@ public class ConstructorsService(
         return ResponseResult<ConstructorDetailDto>.Success(dto);
     }
 
-    public ResponseResult<List<ConstructorListDto>> ListAllConstructorsByChampionship(int championshipId)
+    public ResponseResult<List<ConstructorListDto>> ListAllConstructorsByChampionship(Guid championshipId)
     {
         var constructors = constructorCompetitionRepo.GetConstructorsByChampionshipId(championshipId);
         if (constructors.Count == 0) return ResponseResult<List<ConstructorListDto>>.Failure("Championship does not have any constructors");

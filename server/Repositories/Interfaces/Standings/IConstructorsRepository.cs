@@ -4,13 +4,13 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IConstructorsRepository
 {
-    Constructor? GetConstructorById(int id);
+    Constructor? GetConstructorById(Guid id);
     List<Constructor> GetAllConstructor();
     void Create(Constructor constructor);
     void Update(Constructor constructor);
-    void Delete(int id);
-    Constructor? GetByIdWithBrand(int id);
-    List<Constructor> GetByBrandId(int brandId);
+    void Delete(Guid id);
+    Constructor? GetByIdWithBrand(Guid id);
+    List<Constructor> GetByBrandId(Guid brandId);
     Constructor? GetByName(string name);
-    bool CheckIfIdExists(int id);
+    bool CheckIfIdExists(Guid id);
 }

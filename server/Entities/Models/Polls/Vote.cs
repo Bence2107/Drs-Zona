@@ -7,12 +7,12 @@ namespace Entities.Models.Polls;
 public class Vote
 {
     [Column("user_id")]
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     [JsonIgnore]
     public virtual User? User { get; set; }
     
     [Column("poll_option_id")]
-    public int PollOptionId { get; set; }
+    public Guid PollOptionId { get; set; }
     [JsonIgnore]
     public virtual PollOption? PollOption { get; set; }
 }

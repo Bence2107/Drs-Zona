@@ -4,13 +4,13 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IConstructorCompetitionRepository
 {
-    ConstructorCompetition? GetConstructorCompetitionById(int constructorId, int championshipId);
+    ConstructorCompetition? GetConstructorCompetitionById(Guid constructorId, Guid championshipId);
     List<ConstructorCompetition> GetAllConstructorCompetitions();
     void Create(ConstructorCompetition constructorCompetition);
     void Update(ConstructorCompetition constructorCompetition);
-    void Delete(int constructorId, int championshipId);
-    List<ConstructorCompetition> GetByConstructorId(int constructorId);
-    List<ConstructorCompetition> GetByChampionshipId(int champId);
-    List<Constructor?> GetConstructorsByChampionshipId(int championshipId);
-    bool CheckIfExists(int constructorId, int champId);
+    void Delete(Guid constructorId, Guid championshipId);
+    List<ConstructorCompetition> GetByConstructorId(Guid constructorId);
+    List<ConstructorCompetition> GetByChampionshipId(Guid champId);
+    List<Constructor?> GetConstructorsByChampionshipId(Guid championshipId);
+    bool CheckIfExists(Guid constructorId, Guid champId);
 }

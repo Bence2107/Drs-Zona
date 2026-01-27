@@ -8,7 +8,7 @@ public class Circuit
 {
     [Key]
     [Column("id")]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     
     [Required]
     [Column("name")]

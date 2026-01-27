@@ -4,9 +4,9 @@ namespace Services.Interfaces;
 
 public interface IConstructorsService
 {
-    ResponseResult<ConstructorDetailDto> GetById(int id);
+    ResponseResult<ConstructorDetailDto> GetById(Guid id);
     
-    ResponseResult<List<ConstructorListDto>> ListAllConstructorsByChampionship(int championshipId);
+    ResponseResult<List<ConstructorListDto>> ListAllConstructorsByChampionship(Guid championshipId);
     
     ResponseResult<bool> CreateConstructor(ConstructorCreateDto constructorCreateDto);
     

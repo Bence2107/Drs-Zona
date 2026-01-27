@@ -38,13 +38,13 @@ public record PollCreateDto(
 }
 
 public record PollListDto(
-    int Id,
+    Guid Id,
     string Title
 );
 
 public record PollDto(
-    int Id,
-    int AuthorId,
+    Guid Id,
+    Guid AuthorId,
     string AuthorName,
     string Description,
     DateTime CreatedAt,
@@ -53,13 +53,13 @@ public record PollDto(
     List<PollOptionDto> PollOptions,
     bool IsExpired,
     int TotalVotes,
-    int? UserVoteOptionId
+    Guid? UserVoteOptionId
 ){
     public bool HasVoted => UserVoteOptionId.HasValue;
 }
 
 public record PollOptionDto(
-    int Id,
+    Guid Id,
     string Text,
     int VoteCount,
     double VotePercentage,

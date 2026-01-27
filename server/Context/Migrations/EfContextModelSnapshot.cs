@@ -24,15 +24,14 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.News.Article", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid")
                         .HasColumnName("author_id");
 
                     b.Property<DateTime>("DatePublished")
@@ -53,8 +52,8 @@ namespace Context.Migrations
                         .HasColumnType("text")
                         .HasColumnName("fourth_section");
 
-                    b.Property<int?>("GrandPrixId")
-                        .HasColumnType("integer")
+                    b.Property<Guid?>("GrandPrixId")
+                        .HasColumnType("uuid")
                         .HasColumnName("grand_prix_id");
 
                     b.Property<string>("LastSection")
@@ -98,15 +97,14 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.News.Comment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ArticleId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uuid")
                         .HasColumnName("article_id");
 
                     b.Property<string>("Content")
@@ -128,8 +126,8 @@ namespace Context.Migrations
                         .HasDefaultValue(0)
                         .HasColumnName("downvotes");
 
-                    b.Property<int?>("ReplyToCommentId")
-                        .HasColumnType("integer")
+                    b.Property<Guid?>("ReplyToCommentId")
+                        .HasColumnType("uuid")
                         .HasColumnName("reply_id");
 
                     b.Property<int>("UpVotes")
@@ -138,8 +136,8 @@ namespace Context.Migrations
                         .HasDefaultValue(0)
                         .HasColumnName("upvotes");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id");
@@ -155,15 +153,14 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.Polls.Poll", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid")
                         .HasColumnName("author_id");
 
                     b.Property<DateTime>("CreatedAt")
@@ -197,15 +194,14 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.Polls.PollOption", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("PollId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("PollId")
+                        .HasColumnType("uuid")
                         .HasColumnName("poll_id");
 
                     b.Property<string>("Text")
@@ -222,12 +218,12 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.Polls.Vote", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
-                    b.Property<int>("PollOptionId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("PollOptionId")
+                        .HasColumnType("uuid")
                         .HasColumnName("poll_option_id");
 
                     b.HasKey("UserId", "PollOptionId");
@@ -239,12 +235,11 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.RaceTracks.Circuit", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("FastestLap")
                         .IsRequired()
@@ -277,15 +272,14 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.RaceTracks.GrandPrix", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CircuitId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("CircuitId")
+                        .HasColumnType("uuid")
                         .HasColumnName("circuit_id");
 
                     b.Property<DateTime>("EndTime")
@@ -313,8 +307,8 @@ namespace Context.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("season_year");
 
-                    b.Property<int>("SeriesId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("SeriesId")
+                        .HasColumnType("uuid")
                         .HasColumnName("series_id");
 
                     b.Property<DateTime>("StartTime")
@@ -332,12 +326,11 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.Standings.Brand", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -366,15 +359,14 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.Standings.Constructor", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BrandId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("BrandId")
+                        .HasColumnType("uuid")
                         .HasColumnName("brand_id");
 
                     b.Property<int>("Championships")
@@ -426,12 +418,12 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.Standings.ConstructorCompetition", b =>
                 {
-                    b.Property<int>("ConstructorId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("ConstructorId")
+                        .HasColumnType("uuid")
                         .HasColumnName("constructors_id");
 
-                    b.Property<int>("ConstChampId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("ConstChampId")
+                        .HasColumnType("uuid")
                         .HasColumnName("constructors_championship_id");
 
                     b.HasKey("ConstructorId", "ConstChampId");
@@ -443,12 +435,11 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.Standings.ConstructorsChampionship", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -460,8 +451,8 @@ namespace Context.Migrations
                         .HasColumnType("text")
                         .HasColumnName("season");
 
-                    b.Property<int>("SeriesId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("SeriesId")
+                        .HasColumnType("uuid")
                         .HasColumnName("series_id");
 
                     b.Property<string>("Status")
@@ -478,19 +469,18 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.Standings.Contract", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ConstructorId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("ConstructorId")
+                        .HasColumnType("uuid")
                         .HasColumnName("constructor_id");
 
-                    b.Property<int>("DriverId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("DriverId")
+                        .HasColumnType("uuid")
                         .HasColumnName("driver_id");
 
                     b.HasKey("Id");
@@ -504,12 +494,11 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.Standings.Driver", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("timestamp with time zone")
@@ -560,12 +549,12 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.Standings.DriverParticipation", b =>
                 {
-                    b.Property<int>("DriverId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("DriverId")
+                        .HasColumnType("uuid")
                         .HasColumnName("driver_id");
 
-                    b.Property<int>("DriverChampId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("DriverChampId")
+                        .HasColumnType("uuid")
                         .HasColumnName("drivers_championship_id");
 
                     b.HasKey("DriverId", "DriverChampId");
@@ -577,12 +566,11 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.Standings.DriversChampionship", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -594,8 +582,8 @@ namespace Context.Migrations
                         .HasColumnType("text")
                         .HasColumnName("season");
 
-                    b.Property<int>("SeriesId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("SeriesId")
+                        .HasColumnType("uuid")
                         .HasColumnName("series_id");
 
                     b.Property<string>("Status")
@@ -612,43 +600,42 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.Standings.Result", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ConsChampId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("ConsChampId")
+                        .HasColumnType("uuid")
                         .HasColumnName("constructors_championship_id");
 
-                    b.Property<int>("ConstructorId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("ConstructorId")
+                        .HasColumnType("uuid")
                         .HasColumnName("constructor_id");
 
                     b.Property<int>("ConstructorPoints")
                         .HasColumnType("integer")
                         .HasColumnName("constructor_points");
 
-                    b.Property<int>("DriverId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("DriverId")
+                        .HasColumnType("uuid")
                         .HasColumnName("driver_id");
 
                     b.Property<int>("DriverPoints")
                         .HasColumnType("integer")
                         .HasColumnName("driver_points");
 
-                    b.Property<int>("DriversChampId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("DriversChampId")
+                        .HasColumnType("uuid")
                         .HasColumnName("drivers_championship_id");
 
                     b.Property<int>("FinishPosition")
                         .HasColumnType("integer")
                         .HasColumnName("finish_position");
 
-                    b.Property<int>("GrandPrixId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("GrandPrixId")
+                        .HasColumnType("uuid")
                         .HasColumnName("grand_prix_id");
 
                     b.Property<long>("RaceTime")
@@ -681,12 +668,11 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.Standings.Series", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -718,12 +704,11 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone")

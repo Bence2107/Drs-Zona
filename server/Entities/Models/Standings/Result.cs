@@ -10,32 +10,32 @@ public class Result
 {
     [Key]
     [Column("id")]
-    public int Id {get; set;}
+    public Guid Id {get; set;}
     
     [Required]
     [Column("grand_prix_id")]
-    public int GrandPrixId {get; set;}
+    public Guid GrandPrixId {get; set;}
     [JsonIgnore]
     public virtual GrandPrix? GrandPrix {get; set;}
     
     [Required]
     [Column("driver_id")]
-    public int DriverId {get; set;}
+    public Guid DriverId {get; set;}
     [JsonIgnore]
     public virtual Driver? Driver {get; set;}
     
     [Column("constructor_id")]
-    public int ConstructorId {get; set;}
+    public Guid ConstructorId {get; set;}
     [JsonIgnore]
     public virtual Constructor? Constructor {get; set;}
     
     [Column("drivers_championship_id")]
-    public int DriversChampId {get; set;}
+    public Guid DriversChampId {get; set;}
     [JsonIgnore]
     public virtual DriversChampionship? DriversChampionship {get; set;}
     
     [Column("constructors_championship_id")]
-    public int ConsChampId {get; set;}
+    public Guid ConsChampId {get; set;}
     [JsonIgnore]
     public virtual ConstructorsChampionship? ConsChampionship { get; set; }
     

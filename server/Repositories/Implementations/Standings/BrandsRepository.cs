@@ -9,7 +9,7 @@ public class BrandsRepository(EfContext context): IBrandsRepository
 {
     private readonly DbSet<Brand> _brands = context.Brands;
     
-    public Brand? GetBrandById(int id) => _brands.FirstOrDefault(b => b.Id == id);
+    public Brand? GetBrandById(Guid id) => _brands.FirstOrDefault(b => b.Id == id);
     
 
     public List<Brand> GetAllBrands() => _brands.ToList();
@@ -26,7 +26,7 @@ public class BrandsRepository(EfContext context): IBrandsRepository
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var brand = GetBrandById(id);
         if(brand == null) return;
@@ -37,5 +37,5 @@ public class BrandsRepository(EfContext context): IBrandsRepository
 
     public Brand? GetByName(string name) => _brands.FirstOrDefault(b => b.Name.ToLower().Contains(name.ToLower()));
 
-    public bool CheckIfIdExists(int id) => _brands.Any(c => c.Id == id);
+    public bool CheckIfIdExists(Guid id) => _brands.Any(c => c.Id == id);
 }

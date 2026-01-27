@@ -3,7 +3,7 @@
 namespace DTOs.News;
 
 public record ArticleCreateDto(
-    [Range(1, int.MaxValue, ErrorMessage = "Érvénytelen Nagydíj azonosító")] int? GrandPrixId,
+    Guid GrandPrixId,
     [Required(ErrorMessage = "A cím kitöltése kötelező")]
     [StringLength(200, MinimumLength = 5, ErrorMessage = "A cím hossza nem megfelelő (5-200 karakter)")]
     string Title,
@@ -32,8 +32,8 @@ public record ArticleCreateDto(
 
 public record ArticleUpdateDto(
     [Required(ErrorMessage = "Az azonosító kötelező")]
-    [Range(1, int.MaxValue)] int Id,
-    [Range(1, int.MaxValue, ErrorMessage = "Érvénytelen Nagydíj azonosító")] int? GrandPrixId,
+    Guid Id,
+    Guid? GrandPrixId,
     [Required(ErrorMessage = "A cím kitöltése kötelező")]
     [StringLength(200, MinimumLength = 5, ErrorMessage = "A cím hossza nem megfelelő (5-200 karakter)")]
     string Title,
@@ -61,7 +61,7 @@ public record ArticleUpdateDto(
 }
 
 public record ArticleListDto(
-    [Range(1, int.MaxValue)] int Id,
+    Guid Id,
     [StringLength(200, MinimumLength = 5)] string Title,
     [StringLength(500, MinimumLength = 20)]
     string Lead,
@@ -75,15 +75,15 @@ public record SummaryDto(
 );
 
 public record ArticleDetailDto(
-    [Range(1, int.MaxValue)] int Id,
+    Guid Id,
     [StringLength(200, MinimumLength = 5)] string Title,
     [StringLength(500, MinimumLength = 20)] string Lead,
     [MinLength(100)] [MaxLength(524288)] string FirstSection,
     [MinLength(100)] [MaxLength(524288)] string LastSection,
     List<string> MiddleSections,
-    [Range(1, int.MaxValue)] int AuthorId,
+    Guid AuthorId,
     [StringLength(50, MinimumLength = 3)] string AuthorName,
-    [Range(1, int.MaxValue)] int? GrandPrixId,
+    Guid? GrandPrixId,
     [StringLength(100)] string? GrandPrixName,
     DateTime DatePublished,
     DateTime DateUpdated

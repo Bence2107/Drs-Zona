@@ -9,7 +9,7 @@ public class CircuitsRepository(EfContext context) : ICircuitsRepository
 {
     private readonly DbSet<Circuit> _circuits = context.Circuits;
     
-    public Circuit? GetCircuitById(int id) => _circuits.FirstOrDefault(p => p.Id == id);
+    public Circuit? GetCircuitById(Guid id) => _circuits.FirstOrDefault(p => p.Id == id);
     
     public List<Circuit> GetAllCircuits() =>_circuits.ToList();
 
@@ -25,7 +25,7 @@ public class CircuitsRepository(EfContext context) : ICircuitsRepository
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var circuit = GetCircuitById(id);
         if(circuit == null) return;
@@ -45,5 +45,5 @@ public class CircuitsRepository(EfContext context) : ICircuitsRepository
         .Where(p => p.Type == type)
         .ToList();
 
-    public bool CheckIfIdExists(int id) =>_circuits.Any(p => p.Id == id);
+    public bool CheckIfIdExists(Guid id) =>_circuits.Any(p => p.Id == id);
 }

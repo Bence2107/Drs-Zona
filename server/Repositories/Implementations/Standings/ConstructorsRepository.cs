@@ -9,7 +9,7 @@ public class ConstructorsRepository(EfContext context) : IConstructorsRepository
 {
     private readonly DbSet<Constructor> _constructors = context.Constructors;
     
-    public Constructor? GetConstructorById(int id) => _constructors.FirstOrDefault(c => c.Id == id);
+    public Constructor? GetConstructorById(Guid id) => _constructors.FirstOrDefault(c => c.Id == id);
 
     public List<Constructor> GetAllConstructor() => _constructors.ToList();
 
@@ -25,7 +25,7 @@ public class ConstructorsRepository(EfContext context) : IConstructorsRepository
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var  constructor = GetConstructorById(id);
         if(constructor == null) return;
@@ -34,15 +34,15 @@ public class ConstructorsRepository(EfContext context) : IConstructorsRepository
         context.SaveChanges();
     }
 
-    public Constructor? GetByIdWithBrand(int id) => _constructors
+    public Constructor? GetByIdWithBrand(Guid id) => _constructors
         .Include(c => c.Brand)
         .FirstOrDefault(c => c.Id == id);
 
-    public List<Constructor> GetByBrandId(int brandId) => _constructors
+    public List<Constructor> GetByBrandId(Guid brandId) => _constructors
         .Where(c => c.BrandId == brandId)
         .ToList();
 
     public Constructor? GetByName(string name) => _constructors.FirstOrDefault(c => c.Name == name);
 
-    public bool CheckIfIdExists(int id) => _constructors.Any(c => c.Id == id);
+    public bool CheckIfIdExists(Guid id) => _constructors.Any(c => c.Id == id);
 }

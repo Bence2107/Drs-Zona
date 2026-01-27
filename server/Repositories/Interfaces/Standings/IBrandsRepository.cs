@@ -4,11 +4,11 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IBrandsRepository
 {
-    Brand? GetBrandById(int id);
+    Brand? GetBrandById(Guid id);
     List<Brand> GetAllBrands();
     void Create(Brand brand);
     void Update(Brand brand);
-    void Delete(int id);
+    void Delete(Guid id);
     Brand? GetByName(string name);
-    bool CheckIfIdExists(int id);
+    bool CheckIfIdExists(Guid id);
 }

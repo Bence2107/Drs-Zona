@@ -252,5 +252,15 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
         {
             options.Property(u => u.Role).HasDefaultValue("user");
         });
+        
+        
+        foreach (var entity in modelBuilder.Model.GetEntityTypes())
+        {
+            var idProperty = entity.FindProperty("Id");
+            if (idProperty != null && idProperty.ClrType == typeof(Guid))
+            {
+                idProperty.SetDefaultValueSql("gen_random_uuid()");
+            }
+        }
     }
 }

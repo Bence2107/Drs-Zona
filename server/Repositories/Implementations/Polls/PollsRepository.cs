@@ -9,7 +9,7 @@ public class PollsRepository(EfContext context) : IPollsRepository
 {
     private readonly DbSet<Poll> _polls = context.Polls;
     
-    public Poll? GetPollById(int id)
+    public Poll? GetPollById(Guid id)
     {
         return _polls.FirstOrDefault(p => p.Id == id);
     }
@@ -31,7 +31,7 @@ public class PollsRepository(EfContext context) : IPollsRepository
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var poll = GetPollById(id);
         if(poll == null) return;
@@ -40,7 +40,7 @@ public class PollsRepository(EfContext context) : IPollsRepository
         context.SaveChanges();
     }
 
-    public Poll? GetByIdWithAuthor(int id) => _polls
+    public Poll? GetByIdWithAuthor(Guid id) => _polls
         .Include(p => p.Author)
         .FirstOrDefault(p => p.Id == id);
 
@@ -49,7 +49,7 @@ public class PollsRepository(EfContext context) : IPollsRepository
         .ToList();
     
 
-    public List<Poll> GetByCreatorId(int authorId) => _polls
+    public List<Poll> GetByCreatorId(Guid authorId) => _polls
         .Where(poll => poll.AuthorId == authorId)
         .ToList();
     
@@ -58,5 +58,5 @@ public class PollsRepository(EfContext context) : IPollsRepository
         .Where(poll => poll.ExpiresAt < DateTime.Now)
         .ToList();
     
-    public bool CheckIfIdExists(int id) => _polls.Any(p => p.Id == id);
+    public bool CheckIfIdExists(Guid id) => _polls.Any(p => p.Id == id);
 }

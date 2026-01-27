@@ -3,7 +3,7 @@
 namespace DTOs.RaceTracks;
 
 public record CircuitDetailDto(
-    int Id,
+    Guid Id,
     string Name,
     int Length,
     string Type,
@@ -13,9 +13,9 @@ public record CircuitDetailDto(
 
 public record GrandPrixCreateDto(
     [Required(ErrorMessage = "A pálya kiválasztása kötelező")] 
-    [Range(1, int.MaxValue)] int CircuitId,
+    Guid CircuitId,
     [Required(ErrorMessage = "A sorozat kiválasztása kötelező")] 
-    [Range(1, int.MaxValue)] int SeriesId,
+    Guid SeriesId,
     [Required(ErrorMessage = "A név megadása kötelező")] 
     [StringLength(100, ErrorMessage = "A név maximum 100 karakter lehet")] 
     string Name,
@@ -45,7 +45,7 @@ public record GrandPrixCreateDto(
 
 public record GrandPrixUpdateDto(
     [Required(ErrorMessage = "Az azonosító kötelező")]
-    int Id,
+    Guid Id,
     [Required(ErrorMessage = "A kezdési idő kötelező")]
     DateTime StartTime,
     [Required(ErrorMessage = "A befejezési idő kötelező")]
@@ -62,7 +62,7 @@ public record GrandPrixUpdateDto(
 }
 
 public record GrandPrixListDto(
-    int Id,
+    Guid Id,
     string Name,
     int RoundNumber,
     int SeasonYear,
@@ -71,9 +71,9 @@ public record GrandPrixListDto(
 );
 
 public record GrandPrixDetailDto(
-    int Id,
-    int SeriesId,
-    int CircuitId,
+    Guid Id,
+    Guid SeriesId,
+    Guid CircuitId,
     string Name,
     string SeriesName,
     int RoundNumber,

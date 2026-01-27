@@ -9,7 +9,7 @@ public class DriversRepository(EfContext context) : IDriversRepository
 {
     private readonly DbSet<Driver> _drivers = context.Drivers;
     
-    public Driver? GetDriverById(int id) => _drivers.FirstOrDefault(d => d.Id == id);
+    public Driver? GetDriverById(Guid id) => _drivers.FirstOrDefault(d => d.Id == id);
 
     public List<Driver> GetAllDrivers() => _drivers.ToList();
     
@@ -25,7 +25,7 @@ public class DriversRepository(EfContext context) : IDriversRepository
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var driver = GetDriverById(id);
         if(driver == null) return;
@@ -42,5 +42,5 @@ public class DriversRepository(EfContext context) : IDriversRepository
 
     public Driver? GetByName(string name) => _drivers.FirstOrDefault(d => d.Name == name);
 
-    public bool CheckIfIdExists(int id) => _drivers.Any(d => d.Id == id);
+    public bool CheckIfIdExists(Guid id) => _drivers.Any(d => d.Id == id);
 }

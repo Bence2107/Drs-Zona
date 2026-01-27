@@ -8,10 +8,10 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class GrandPrixController (IGrandPrixService grandPrixService): ControllerBase
 {
-    [HttpGet("get/{grandPrixId:int}")]
+    [HttpGet("get/{grandPrixId:guid}")]
     [ProducesResponseType(typeof(GrandPrixDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetGrandPrixById([FromRoute] int grandPrixId)
+    public IActionResult GetGrandPrixById([FromRoute] Guid grandPrixId)
     {
         var response = grandPrixService.GetGrandPrixById(grandPrixId);
         if (!response.IsSuccess)
@@ -26,10 +26,10 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
         return Ok(response.Value);
     }
     
-    [HttpGet("getSeasonGrandsPrix/{seriesId:int}/{year:int}")]
+    [HttpGet("getSeasonGrandsPrix/{seriesId:guid}/{year:int}")]
     [ProducesResponseType(typeof(GrandPrixDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetSeasonGrandsPrix([FromRoute] int seriesId, [FromRoute] int year)
+    public IActionResult GetSeasonGrandsPrix([FromRoute] Guid seriesId, [FromRoute] int year)
     {
         var response = grandPrixService.GetSeasonGrandPrixList(seriesId, year);
         if (!response.IsSuccess)
@@ -79,9 +79,9 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
         return Ok(result.Value);
     }
     
-    [HttpDelete("delete/{id:int}")]
+    [HttpDelete("delete/{id:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Delete([FromRoute]int id)
+    public IActionResult Delete([FromRoute]Guid id)
     {
         var response = grandPrixService.DeleteGrandPrix(id);
         if (!response.IsSuccess) return NotFound(response.Message);

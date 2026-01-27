@@ -4,13 +4,13 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IDriversRepository
 {
-    Driver? GetDriverById(int id);
+    Driver? GetDriverById(Guid id);
     List<Driver> GetAllDrivers();
     void Create(Driver driver);
     void Update(Driver driver);
-    void Delete(int id);
+    void Delete(Guid id);
     List<Driver> GetByNationality(string nationality);
     Driver? GetByDriverNumber(int number);
     Driver? GetByName(string name);
-    bool CheckIfIdExists(int id);
+    bool CheckIfIdExists(Guid id);
 }

@@ -18,7 +18,7 @@ public record BrandCreateDto(
 );
 
 public record BrandUpdateDto(
-    [Required] [Range(1, int.MaxValue)] int Id,
+    [Required] Guid Id,
     [StringLength(100, ErrorMessage = "Brand neve nem lehet 100 karakternél több")]
     string Name,
     [Required(ErrorMessage = "Brand leírása kötelező")]
@@ -33,12 +33,12 @@ public record BrandUpdateDto(
 );
 
 public record BrandListDto(
-    [Range(1, int.MaxValue)] int Id,
+    Guid Id,
     [StringLength(100)] string? Name
 );
 
 public record BrandDetailDto(
-    [Range(1, int.MaxValue)] int Id,
+    Guid Id,
     [StringLength(100)] string Name,
     [StringLength(1000)] string Description,
     [StringLength(100)] string Principal,
@@ -47,7 +47,7 @@ public record BrandDetailDto(
 
 public record ConstructorCreateDto(
     [Required(ErrorMessage = "A márka azonosítója kötelező")] 
-    [Range(1, int.MaxValue)] int BrandId,
+    Guid BrandId,
     [Required(ErrorMessage = "A név megadása kötelező")] 
     [StringLength(100, ErrorMessage = "A név max 100 karakter")] 
     string Name,
@@ -68,9 +68,9 @@ public record ConstructorCreateDto(
 
 public record ConstructorUpdateDto(
     [Required(ErrorMessage = "A csapat azonosítója kötelező")] 
-    [Range(1, int.MaxValue)] int Id,
+    Guid Id,
     [Required(ErrorMessage = "A márka azonosítója kötelező")] 
-    [Range(1, int.MaxValue)] int BrandId,
+    Guid BrandId,
     [Required(ErrorMessage = "A név megadása kötelező")] 
     [StringLength(100, ErrorMessage = "A név max 100 karakter")] 
     string Name,
@@ -90,13 +90,13 @@ public record ConstructorUpdateDto(
 );
 
 public record ConstructorListDto(
-    int Id, 
+    Guid Id, 
     string Name
 );
 
 public record ConstructorDetailDto(
-    int Id,
-    int BrandId,
+    Guid Id,
+    Guid BrandId,
     string BrandName,
     string BrandDescription,
     string? Name,
@@ -139,7 +139,7 @@ public record DriverCreateDto(
 
 public record DriverUpdateDto(
     [Required(ErrorMessage = "Az azonosító megadása kötelező")] 
-    [Range(1, int.MaxValue)] int Id,
+    Guid Id,
     [Required(ErrorMessage = "A név megadása kötelező")] 
     [StringLength(100, MinimumLength = 2, ErrorMessage = "A név hossza 2 és 100 karakter között lehet")] 
     string Name,
@@ -166,7 +166,7 @@ public record DriverUpdateDto(
 }
 
 public record DriverListDto(
-    [Range(0, int.MaxValue)] int Id,
+    Guid Id,
     [StringLength(100)] string Name,
     [StringLength(50)] string Nationality,
     [Range(1, 99)] int DriverNumber,
@@ -175,17 +175,17 @@ public record DriverListDto(
 );
 
 public record DriverNameRecord(
-    [Range(0, int.MaxValue)] int Id,
+    Guid Id,
     [StringLength(100)] string Name
 );
 
 public record DriverDetailDto(
-    [Required] [Range(1, int.MaxValue)] int Id,
+    Guid Id,
     [Required] [StringLength(100)] string Name,
     [Required] [StringLength(50)] string Nationality,
     [Required] DateTime BirthDate,
     [Required] [Range(1, 99)] int DriverNumber,
-    List<int>? ConstructorIds,
+    List<Guid>? ConstructorIds,
     [Required] [Range(1, 500)] int TotalRaces,
     [Required] [Range(1, 500)] int TotalWins,
     [Required] [Range(1, 1000)] int TotalPodiums,
@@ -195,21 +195,21 @@ public record DriverDetailDto(
 );
 
 public record ContractCreateDto(
-    [Required] [Range(1, int.MaxValue)] int DriverId,
-    [Required] [Range(1, int.MaxValue)] int TeamId
+    Guid DriverId,
+    Guid TeamId
 );
 
 public record ContractDto(int Id, int DriverId, string DriverName, int TeamId, string TeamName);
 
 public record ResultCreateDto(
     [Required(ErrorMessage = "Nagydíj azonosító kötelező")] 
-    [Range(1, int.MaxValue)] int GrandPrixId,
+    Guid GrandPrixId,
     [Required(ErrorMessage = "Versenyző azonosító kötelező")] 
-    [Range(1, int.MaxValue)] int DriverId,
+    Guid DriverId,
     [Required(ErrorMessage = "Konstruktőr azonosító kötelező")] 
-    [Range(1, int.MaxValue)] int ConstructorId,
-    [Required] [Range(1, int.MaxValue)] int DriversChampId,
-    [Required] [Range(1, int.MaxValue)] int ConsChampId,
+    Guid ConstructorId,
+    Guid DriversChampId,
+    Guid ConsChampId,
     [Required(ErrorMessage = "Rajthely kötelező")] 
     [Range(1, 30, ErrorMessage = "A rajthely 1-30 között lehet")] int StartPosition,
     [Required(ErrorMessage = "Helyezés kötelező")] 
@@ -239,13 +239,13 @@ public record ResultUpdateDto(
 );
 
 public record ResultDto(
-    int Id,
-    int GrandPrixId,
+    Guid Id,
+    Guid GrandPrixId,
     string GrandPrixName,
-    int DriverId,
+    Guid DriverId,
     string DriverName,
     int DriverNumber,
-    int ConstructorId,
+    Guid ConstructorId,
     string ConstructorName,
     int StartPosition,
     int FinishPosition,
@@ -257,11 +257,11 @@ public record ResultDto(
 
 public record DriversStandingsDto(
     int Position,
-    int DriverId,
+    Guid DriverId,
     string DriverName,
     int DriverNumber,
     string Nationality,
-    int TeamId,
+    Guid TeamId,
     string TeamName,
     int Points,
     int Wins,
@@ -272,7 +272,7 @@ public record DriversStandingsDto(
 
 public record ConstructorsStandingsDto(
     int Position,
-    int ConstructorId,
+    Guid ConstructorId,
     string ConstructorName,
     string BrandName,
     int Points,

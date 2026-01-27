@@ -9,7 +9,7 @@ public class ResultsRepository(EfContext context) : IResultsRepository
 {
     private readonly DbSet<Result> _results = context.Results;
     
-    public Result? GetResultById(int id) => _results.FirstOrDefault(r => r.Id == id);
+    public Result? GetResultById(Guid id) => _results.FirstOrDefault(r => r.Id == id);
 
     public List<Result> GetAllResults() => _results.ToList();
 
@@ -25,7 +25,7 @@ public class ResultsRepository(EfContext context) : IResultsRepository
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var result = GetResultById(id);
         if(result == null) return;
@@ -34,22 +34,22 @@ public class ResultsRepository(EfContext context) : IResultsRepository
         context.SaveChanges();
     }
     
-    public Result? GetResultWithAll(int id) => _results
+    public Result? GetResultWithAll(Guid id) => _results
         .Include(r => r.Driver)
         .Include(r => r.Constructor)
         .Include(r => r.DriversChampionship)
         .Include(r => r.ConsChampionship)
         .FirstOrDefault(r => r.Id == id);
 
-    public List<Result> GetByGrandPrixId(int grandPrixId) => _results
+    public List<Result> GetByGrandPrixId(Guid grandPrixId) => _results
         .Where(r => r.GrandPrixId == grandPrixId)
         .ToList();
 
-    public List<Result> GetByDriverId(int driverId) => _results
+    public List<Result> GetByDriverId(Guid driverId) => _results
         .Where(r => r.DriverId == driverId)
         .ToList();
 
-    public List<Result> GetByConstructorId(int constructorId) => _results
+    public List<Result> GetByConstructorId(Guid constructorId) => _results
         .Where(r => r.ConstructorId == constructorId)
         .ToList();
 
@@ -57,13 +57,13 @@ public class ResultsRepository(EfContext context) : IResultsRepository
         .Where(r => r.Session == session)
         .ToList();
     
-    public List<Result> GetByDriversChampionshipId(int championshipId) => _results
+    public List<Result> GetByDriversChampionshipId(Guid championshipId) => _results
         .Where(r=> r.DriversChampId == championshipId)
         .ToList();
     
-    public List<Result> GetByConstructorsChampionshipId(int championshipId) => _results
+    public List<Result> GetByConstructorsChampionshipId(Guid championshipId) => _results
         .Where(r=> r.ConsChampId == championshipId)
         .ToList();
 
-    public bool CheckIfIdExists(int id) => _results.Any(d => d.Id == id);
+    public bool CheckIfIdExists(Guid id) => _results.Any(d => d.Id == id);
 }

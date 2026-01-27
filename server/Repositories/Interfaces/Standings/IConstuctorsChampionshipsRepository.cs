@@ -4,14 +4,14 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IConstructorsChampionshipsRepository
 {
-    ConstructorsChampionship? GetAllConstructorsChampionshipById(int id);
+    ConstructorsChampionship? GetAllConstructorsChampionshipById(Guid id);
     List<ConstructorsChampionship> GetAllConstructorsChampionships();
-    List<ConstructorsChampionship> GetBySeriesId(int seriesId);
+    List<ConstructorsChampionship> GetBySeriesId(Guid seriesId);
     void Create(ConstructorsChampionship constructorsChampionship);
     void Update(ConstructorsChampionship constructorsChampionship);
-    void Delete(int id);
-    ConstructorsChampionship? GetByIdWithSeries(int id);
+    void Delete(Guid id);
+    ConstructorsChampionship? GetByIdWithSeries(Guid id);
     List<ConstructorsChampionship> GetBySeason(string season);
     List<ConstructorsChampionship> GetByStatus(string status);
-    bool CheckIfIdExists(int id);
+    bool CheckIfIdExists(Guid id);
 }

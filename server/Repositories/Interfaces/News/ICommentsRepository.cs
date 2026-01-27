@@ -4,17 +4,17 @@ namespace Repositories.Interfaces.News;
 
 public interface ICommentsRepository
 {
-    Comment? GetCommentById(int id);
-    List<Comment> GetAllComments(int id);
+    Comment? GetCommentById(Guid id);
+    List<Comment> GetAllComments(Guid id);
     void Add(Comment comment);
     void Update(Comment comment);
-    void Delete(int id);
-    Comment? GetByIdWithUser(int id);
-    Comment? GetByIdWithArticle(int id);
-    Comment? GetByIdWithAll(int id);
-    List<Comment> GetByArticleId(int articleId);
-    List<Comment> GetUsersComments(int userId);
-    List<Comment> GetCommentsWithoutReplies(int articleId);
-    List<Comment> GetRepliesToAComment(int replyCommentId);
-    bool CheckIfIdExists(int id);
+    void Delete(Guid id);
+    Comment? GetByIdWithUser(Guid id);
+    Comment? GetByIdWithArticle(Guid id);
+    Comment? GetByIdWithAll(Guid id);
+    List<Comment> GetByArticleId(Guid articleId);
+    List<Comment> GetUsersComments(Guid userId);
+    List<Comment> GetCommentsWithoutReplies(Guid articleId);
+    List<Comment> GetRepliesToAComment(Guid replyCommentId);
+    bool CheckIfIdExists(Guid id);
 }

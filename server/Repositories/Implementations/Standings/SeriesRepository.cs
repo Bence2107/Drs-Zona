@@ -9,7 +9,7 @@ public class SeriesRepository(EfContext context) : ISeriesRepository
 {
     private readonly DbSet<Series> _series = context.Series;
     
-    public Series? GetSeriesById(int id) => _series.FirstOrDefault(d => d.Id == id);
+    public Series? GetSeriesById(Guid id) => _series.FirstOrDefault(d => d.Id == id);
 
     public List<Series> GetAllSeries() => _series.ToList();
 
@@ -25,7 +25,7 @@ public class SeriesRepository(EfContext context) : ISeriesRepository
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var series = GetSeriesById(id);
         if (series == null) return;
@@ -36,5 +36,5 @@ public class SeriesRepository(EfContext context) : ISeriesRepository
 
     public Series? GetByName(string name) => _series.FirstOrDefault(d => d.Name == name);
 
-    public bool CheckIfIdExists(int id) => _series.Any(d => d.Id == id);
+    public bool CheckIfIdExists(Guid id) => _series.Any(d => d.Id == id);
 }

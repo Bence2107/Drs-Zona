@@ -4,13 +4,13 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IDriverParticipationRepository
 {
-    DriverParticipation? GetDriverParticipationById(int driverId, int championshipId);
-    List<DriverParticipation> GetAllDriverParticipation(int id);
+    DriverParticipation? GetDriverParticipationById(Guid driverId, Guid championshipId);
+    List<DriverParticipation> GetAllDriverParticipation(Guid id);
     void Create(DriverParticipation driverParticipation);
     void Update(DriverParticipation driverParticipation);
-    void Delete(int driverId, int championshipId);
-    List<DriverParticipation> GetByDriverId(int driverId);
-    List<DriverParticipation> GetByChampionshipId(int champId);
-    List<Driver?> GetDriversByChampionship(int driversChampionshipId);
-    bool CheckIfExists(int driverId, int champId);
+    void Delete(Guid driverId, Guid championshipId);
+    List<DriverParticipation> GetByDriverId(Guid driverId);
+    List<DriverParticipation> GetByChampionshipId(Guid champId);
+    List<Driver?> GetDriversByChampionship(Guid driversChampionshipId);
+    bool CheckIfExists(Guid driverId, Guid champId);
 }

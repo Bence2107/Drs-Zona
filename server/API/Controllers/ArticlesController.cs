@@ -8,10 +8,10 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class ArticleController(IArticleService articleService): ControllerBase
 {
-    [HttpGet("get/{id:int}")]
+    [HttpGet("get/{id:guid}")]
     [ProducesResponseType(typeof(ArticleDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Get([FromRoute]int id)
+    public IActionResult Get([FromRoute]Guid id)
     {
         var response = articleService.GetArticleById(id);
         if (!response.IsSuccess)
@@ -42,9 +42,9 @@ public class ArticleController(IArticleService articleService): ControllerBase
         return Ok(response);
     }
     
-    [HttpPost("create")]
+    [HttpPost("create/{authorId:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Create([FromBody]ArticleCreateDto dto, int authorId)
+    public IActionResult Create([FromBody]ArticleCreateDto dto, [FromRoute]Guid authorId)
     {
         var result = articleService.CreateArticle(dto, authorId);
 
@@ -77,9 +77,9 @@ public class ArticleController(IArticleService articleService): ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpDelete("delete/{id:int}")]
+    [HttpDelete("delete/{id:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Delete([FromRoute]int id)
+    public IActionResult Delete([FromRoute]Guid id)
     {
         var articleResponse = articleService.GetArticleById(id);
         if (!articleResponse.IsSuccess)

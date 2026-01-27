@@ -8,9 +8,9 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class SeriesController(ISeriesService seriesService) : ControllerBase
 {
-    [HttpGet("{id:int}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult GetSeriesById([FromRoute]int id)
+    public IActionResult GetSeriesById([FromRoute]Guid id)
     {
         var response = seriesService.GetSeriesById(id);
         if (!response.IsSuccess)
@@ -81,9 +81,9 @@ public class SeriesController(ISeriesService seriesService) : ControllerBase
         return Ok(); 
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Delete(int id)
+    public IActionResult Delete(Guid id)
     {
         var response = seriesService.Delete(id);
         if (!response.IsSuccess) return NotFound(response.Message);

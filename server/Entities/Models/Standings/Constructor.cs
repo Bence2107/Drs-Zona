@@ -9,10 +9,10 @@ public class Constructor
 {
     [Key]
     [Column("id")]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     
     [Column("brand_id")]
-    public int BrandId { get; set; }
+    public Guid BrandId { get; set; }
     [JsonIgnore]
     public virtual Brand? Brand { get; set; }
     

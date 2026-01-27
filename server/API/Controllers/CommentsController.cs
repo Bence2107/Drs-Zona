@@ -8,10 +8,10 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class CommentsController(ICommentService commentService): ControllerBase
 {
-    [HttpGet("getCommentsWithoutReplies/{articleId:int}")]
+    [HttpGet("getCommentsWithoutReplies/{articleId:guid}")]
     [ProducesResponseType(typeof(List<CommentDetailDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetCommentsWithoutReplies([FromRoute] int articleId)
+    public IActionResult GetCommentsWithoutReplies([FromRoute] Guid articleId)
     {
         var response = commentService.GetArticleCommentsWithoutReplies(articleId);
         if (!response.IsSuccess)
@@ -26,10 +26,10 @@ public class CommentsController(ICommentService commentService): ControllerBase
         return Ok(response.Value);
     }
     
-    [HttpGet("getCommentReplies/{commentId:int}")]
+    [HttpGet("getCommentReplies/{commentId:guid}")]
     [ProducesResponseType(typeof(List<CommentDetailDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetCommentReplies([FromRoute] int commentId)
+    public IActionResult GetCommentReplies([FromRoute] Guid commentId)
     {
         var response = commentService.GetCommentReplies(commentId);
         if (!response.IsSuccess)
@@ -44,10 +44,10 @@ public class CommentsController(ICommentService commentService): ControllerBase
         return Ok(response.Value);
     }
     
-    [HttpGet("getUsersComments/{userId:int}")]
+    [HttpGet("getUsersComments/{userId:guid}")]
     [ProducesResponseType(typeof(List<CommentDetailDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetUsersComments([FromRoute] int userId)
+    public IActionResult GetUsersComments([FromRoute] Guid userId)
     {
         var response = commentService.GetUsersComments(userId);
         if (!response.IsSuccess)
@@ -62,9 +62,9 @@ public class CommentsController(ICommentService commentService): ControllerBase
         return Ok(response.Value);
     }
     
-    [HttpPost("create/{userId:int}")]
+    [HttpPost("create/{userId:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Create([FromBody]CommentCreateDto dto, [FromRoute]int userId)
+    public IActionResult Create([FromBody]CommentCreateDto dto, [FromRoute]Guid userId)
     {
         var result = commentService.AddComment(dto, userId);
 
@@ -114,9 +114,9 @@ public class CommentsController(ICommentService commentService): ControllerBase
         return Ok(result.Value);
     }
     
-    [HttpDelete("delete/{id:int}")]
+    [HttpDelete("delete/{id:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Delete([FromRoute]int id)
+    public IActionResult Delete([FromRoute]Guid id)
     {
         var response = commentService.DeleteComment(id);
         if (!response.IsSuccess) return NotFound(response.Message);

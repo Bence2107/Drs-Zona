@@ -4,14 +4,14 @@ namespace Repositories.Interfaces.Polls;
 
 public interface IVotesRepository
 {
-    Vote? GetVoteById(int userId, int pollOptionId);
+    Vote? GetVoteById(Guid userId, Guid pollOptionId);
     List<Vote> GetAllVotes();
     void Create(Vote vote);
     void Update(Vote vote);
-    void Delete(int userId, int pollOptionId);
-    List<Vote> GetByUserId(int userId);
-    List<Vote> GetByPollOptionId(int pollOptionId);
-    Vote? GetUserVoteForPoll(int userId, int pollId);
-    int GetVoteCount(int pollOptionId);
-    bool CheckIfExists(int userId, int pollOptionId);
+    void Delete(Guid userId, Guid pollOptionId);
+    List<Vote> GetByUserId(Guid userId);
+    List<Vote> GetByPollOptionId(Guid pollOptionId);
+    Vote? GetUserVoteForPoll(Guid userId, Guid pollId);
+    int GetVoteCount(Guid pollOptionId);
+    bool CheckIfExists(Guid userId, Guid pollOptionId);
 }

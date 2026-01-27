@@ -9,11 +9,11 @@ public class DriversChampionshipsRepository(EfContext context) : IDriversChampio
 {
     private readonly DbSet<DriversChampionship> _driversChampionships = context.DriversChampionships;
     
-    public DriversChampionship? GetById(int id) => _driversChampionships.FirstOrDefault(d => d.Id == id);
+    public DriversChampionship? GetById(Guid id) => _driversChampionships.FirstOrDefault(d => d.Id == id);
     
     public List<DriversChampionship> GetAll() => _driversChampionships.ToList();
 
-    public List<DriversChampionship> GetBySeriesId(int seriesId) =>
+    public List<DriversChampionship> GetBySeriesId(Guid seriesId) =>
         _driversChampionships.Where(c => c.SeriesId == seriesId).ToList();
 
     public void Add(DriversChampionship championship)
@@ -28,7 +28,7 @@ public class DriversChampionshipsRepository(EfContext context) : IDriversChampio
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var driversChampionship = GetById(id);
         if(driversChampionship == null) return;
@@ -37,7 +37,7 @@ public class DriversChampionshipsRepository(EfContext context) : IDriversChampio
         context.SaveChanges();
     }
 
-    public DriversChampionship? GetByIdWithSeries(int id) => _driversChampionships
+    public DriversChampionship? GetByIdWithSeries(Guid id) => _driversChampionships
         .Include(d => d.Series)
         .FirstOrDefault(d => d.Id == id);
 
@@ -49,5 +49,5 @@ public class DriversChampionshipsRepository(EfContext context) : IDriversChampio
         Where(dc => dc.Status == status)
         .ToList();
 
-    public bool CheckIfIdExists(int id) => _driversChampionships.Any(d => d.Id == id);
+    public bool CheckIfIdExists(Guid id) => _driversChampionships.Any(d => d.Id == id);
 }

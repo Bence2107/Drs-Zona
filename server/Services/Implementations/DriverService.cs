@@ -11,7 +11,7 @@ public class DriverService(
     IContractsRepository contractsDepo
 ): IDriverService
 {
-    public ResponseResult<DriverDetailDto> GetDriverById(int id)
+    public ResponseResult<DriverDetailDto> GetDriverById(Guid id)
     {
         var driver = driverRepo.GetDriverById(id);
         if (driver == null) return ResponseResult<DriverDetailDto>.Failure("Driver not found.");
@@ -34,7 +34,7 @@ public class DriverService(
         ));
     }
 
-    public ResponseResult<List<DriverListDto>> ListAllDriversByChampionships(int championshipId)
+    public ResponseResult<List<DriverListDto>> ListAllDriversByChampionships(Guid championshipId)
     {
         var drivers = driverParticipationRepo.GetDriversByChampionship(championshipId);
         if (drivers.Count == 0)
@@ -134,7 +134,7 @@ public class DriverService(
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> DeleteDriver(int id)
+    public ResponseResult<bool> DeleteDriver(Guid id)
     {
         var driver = driverRepo.GetDriverById(id);
         if (driver == null) return ResponseResult<bool>.Failure("Driver not found.");

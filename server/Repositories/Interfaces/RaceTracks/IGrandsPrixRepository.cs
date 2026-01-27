@@ -5,16 +5,16 @@ namespace Repositories.Interfaces.RaceTracks;
 
 public interface IGrandsPrixRepository
 {
-    GrandPrix? GetGrandPrixById(int id);
+    GrandPrix? GetGrandPrixById(Guid id);
     List<GrandPrix> GetAllGrandPrix();
     void Create(GrandPrix grandPrix);
     void Update(GrandPrix grandPrix);
-    void Delete(int id);
-    GrandPrix? GetByIdWithCircuit(int id);
-    GrandPrix? GetWithAll(int id);
+    void Delete(Guid id);
+    GrandPrix? GetByIdWithCircuit(Guid id);
+    GrandPrix? GetWithAll(Guid id);
     List<GrandPrix> GetBySeason(int year);
-    List<GrandPrix> GetByCircuitId(int circuitId);
-    List<GrandPrix> GetBySeriesAndYear(int seriesId, int year);
+    List<GrandPrix> GetByCircuitId(Guid circuitId);
+    List<GrandPrix> GetBySeriesAndYear(Guid seriesId, int year);
     GrandPrix? GetByRoundAndSeason(int round, int season);
-    bool CheckIfIdExists(int id);   
+    bool CheckIfIdExists(Guid id);   
 }

@@ -9,7 +9,7 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
 {
     private readonly DbSet<Article> _articles = context.Articles;
     
-    public Article? GetArticleById(int id) => _articles.FirstOrDefault(article => article.Id == id);
+    public Article? GetArticleById(Guid id) => _articles.FirstOrDefault(article => article.Id == id);
     
     public List<Article> GetAllArticles() => _articles.ToList();
     
@@ -25,7 +25,7 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var article = GetArticleById(id);
         if(article == null) return;
@@ -34,25 +34,25 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
         context.SaveChanges();
     }
 
-    public Article? GetByIdWithAuthor(int id) => _articles
+    public Article? GetByIdWithAuthor(Guid id) => _articles
             .Include(article => article.Author)
             .FirstOrDefault(article => article.Id == id);
 
-    public Article? GetByIdWithGrandPrix(int id) => _articles
+    public Article? GetByIdWithGrandPrix(Guid id) => _articles
         .Include(article => article.GrandPrix)
         .FirstOrDefault(article => article.Id == id);
 
-    public Article? GetByIdWithAll(int id) => _articles
+    public Article? GetByIdWithAll(Guid id) => _articles
         .Include(article => article.Author)
         .Include(article => article.GrandPrix)
         .FirstOrDefault(article => article.Id == id);
 
 
-    public List<Article> GetByAuthorId(int authorId)  => _articles
+    public List<Article> GetByAuthorId(Guid authorId)  => _articles
         .Where(article => article.AuthorId == authorId)
         .ToList();
 
-    public List<Article> GetByGrandPrixId(int grandPrixId) => _articles
+    public List<Article> GetByGrandPrixId(Guid grandPrixId) => _articles
         .Where(article => article.GrandPrixId == grandPrixId)
         .ToList();
 
@@ -62,5 +62,5 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
         .Take(count)
         .ToList();
     
-    public bool CheckIfIdExists(int id)  => _articles.Any(article => article.Id == id);
+    public bool CheckIfIdExists(Guid id)  => _articles.Any(article => article.Id == id);
 }

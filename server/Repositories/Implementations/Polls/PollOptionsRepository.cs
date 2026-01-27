@@ -9,7 +9,7 @@ public class PollOptionsRepository(EfContext context) : IPollOptionsRepository
 {
     private readonly DbSet<PollOption> _pollOptions = context.PollOptions;
     
-    public PollOption? GetPollOptionById(int id) => _pollOptions.FirstOrDefault(x => x.Id == id);
+    public PollOption? GetPollOptionById(Guid id) => _pollOptions.FirstOrDefault(x => x.Id == id);
     
     public List<PollOption> GetAllPollOptions() =>_pollOptions.ToList();
     
@@ -25,7 +25,7 @@ public class PollOptionsRepository(EfContext context) : IPollOptionsRepository
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var pollOption =  GetPollOptionById(id);
         if(pollOption == null) return;
@@ -34,13 +34,13 @@ public class PollOptionsRepository(EfContext context) : IPollOptionsRepository
         context.SaveChanges();
     }
 
-    public PollOption? GetByIdWithPoll(int id) =>_pollOptions
+    public PollOption? GetByIdWithPoll(Guid id) =>_pollOptions
         .Include(po => po.Poll)
         .FirstOrDefault(po => po.Id == id);
 
-    public List<PollOption> GetByPollId(int pollId) => _pollOptions
+    public List<PollOption> GetByPollId(Guid pollId) => _pollOptions
         .Where(poll => poll.PollId == pollId)
         .ToList();
     
-    public bool CheckIfIdExists(int id) => _pollOptions.Any(po => po.Id == id);
+    public bool CheckIfIdExists(Guid id) => _pollOptions.Any(po => po.Id == id);
 }

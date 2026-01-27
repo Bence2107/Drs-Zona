@@ -8,10 +8,10 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class PollController(IPollService pollService): ControllerBase
 {
-    [HttpGet("get/{id:int}")]
+    [HttpGet("get/{id:guid}")]
     [ProducesResponseType(typeof(PollDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetById([FromRoute] int id)
+    public IActionResult GetById([FromRoute] Guid id)
     {
         var response = pollService.GetPollById(id);
         if (!response.IsSuccess)
@@ -26,10 +26,10 @@ public class PollController(IPollService pollService): ControllerBase
         return Ok(response.Value);
     }
     
-    [HttpGet("getByCreatorId/{id:int}")]
+    [HttpGet("getByCreatorId/{id:guid}")]
     [ProducesResponseType(typeof(List<PollListDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetByCreatorId([FromRoute] int id)
+    public IActionResult GetByCreatorId([FromRoute] Guid id)
     {
         var response = pollService.GetPollByCreatorId(id);
         if (!response.IsSuccess)
@@ -68,9 +68,9 @@ public class PollController(IPollService pollService): ControllerBase
         return Ok(response);
     }
     
-    [HttpPost("create")]
+    [HttpPost("create/{userId:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Create([FromBody]PollCreateDto dto, int userId)
+    public IActionResult Create([FromBody]PollCreateDto dto, Guid userId)
     {
         var result = pollService.Create(dto, userId);
 
@@ -86,9 +86,9 @@ public class PollController(IPollService pollService): ControllerBase
         return Ok(result.Value);
     }
     
-    [HttpPost("vote/{pollId:int}")]
+    [HttpPost("vote/{pollId:guid}/{pollOptionId:guid}/{userId:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Vote([FromRoute]int pollId, [FromRoute]int pollOptionId, [FromRoute] int userId)
+    public IActionResult Vote([FromRoute]Guid pollId, [FromRoute]Guid pollOptionId, [FromRoute] Guid userId)
     {
         var result = pollService.Vote(pollId, pollOptionId, userId);
 
@@ -104,9 +104,9 @@ public class PollController(IPollService pollService): ControllerBase
         return Ok(result.Value);
     }
     
-    [HttpPost("removeVote/{pollId:int}")]
+    [HttpPost("removeVote/{pollId:guid}/{pollOptionId:guid}/{userId:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult RemoveVote([FromRoute]int pollId, [FromRoute]int pollOptionId, [FromRoute] int userId)
+    public IActionResult RemoveVote([FromRoute]Guid pollId, [FromRoute]Guid pollOptionId, [FromRoute] Guid userId)
     {
         var result = pollService.RemoveVote(pollId, pollOptionId, userId);
 
@@ -122,9 +122,9 @@ public class PollController(IPollService pollService): ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpDelete("delete/{id:int}")]
+    [HttpDelete("delete/{id:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Delete([FromRoute]int id, [FromQuery]int userId)
+    public IActionResult Delete([FromRoute]Guid id, [FromQuery]Guid userId)
     {
         var response = pollService.Delete(id, userId);
         if (!response.IsSuccess) return NotFound(response.Message);

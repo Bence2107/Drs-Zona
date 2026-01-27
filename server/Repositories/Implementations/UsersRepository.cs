@@ -9,7 +9,7 @@ public class UsersRepository(EfContext context) : IUsersRepository
 {
     private readonly DbSet<User> _users = context.Users;
 
-    public User? GetUserById(int id) => _users.FirstOrDefault(u => u.Id == id);
+    public User? GetUserById(Guid id) => _users.FirstOrDefault(u => u.Id == id);
 
     public List<User> GetAllUsers() => _users.ToList();
 
@@ -25,7 +25,7 @@ public class UsersRepository(EfContext context) : IUsersRepository
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var user = GetUserById(id);
         if (user == null) return;
@@ -42,7 +42,7 @@ public class UsersRepository(EfContext context) : IUsersRepository
         .Where(u => u.Role == role)
         .ToList();
 
-    public bool CheckIfIdExists(int id) => _users.Any(u => u.Id == id);
+    public bool CheckIfIdExists(Guid id) => _users.Any(u => u.Id == id);
 
     public bool CheckIfUsernameExists(string username) => _users.Any(u => u.Username == username);
 

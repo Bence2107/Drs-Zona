@@ -8,10 +8,10 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class DriversController(IDriverService driverService): ControllerBase
 {
-    [HttpGet("get/{id:int}")]
+    [HttpGet("get/{id:guid}")]
     [ProducesResponseType(typeof(DriverDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Get([FromRoute]int id)
+    public IActionResult Get([FromRoute]Guid id)
     {
         var response = driverService.GetDriverById(id);
         if (!response.IsSuccess)
@@ -26,10 +26,10 @@ public class DriversController(IDriverService driverService): ControllerBase
         return Ok(response.Value);
     }
     
-    [HttpGet("getAllByChampionship/{championshipId:int}")]
+    [HttpGet("getAllByChampionship/{championshipId:guid}")]
     [ProducesResponseType(typeof(List<DriverDetailDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetAll(int championshipId)
+    public IActionResult GetAll(Guid championshipId)
     {
         var response = driverService.ListAllDriversByChampionships(championshipId);
         return Ok(response.Value);
@@ -73,9 +73,9 @@ public class DriversController(IDriverService driverService): ControllerBase
     }
     
     
-    [HttpDelete("delete/{id:int}")]
+    [HttpDelete("delete/{id:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Delete([FromRoute]int id)
+    public IActionResult Delete([FromRoute]Guid id)
     {
         var driverResponse = driverService.GetDriverById(id);
         if (!driverResponse.IsSuccess)

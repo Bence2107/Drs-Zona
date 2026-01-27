@@ -9,7 +9,7 @@ public class ConstructorCompetitionRepository(EfContext context) : IConstructorC
 {
     private readonly DbSet<ConstructorCompetition> _constructorCompetitions = context.ConstructorCompetitions;
 
-    public ConstructorCompetition? GetConstructorCompetitionById(int constructorId, int championshipId) => _constructorCompetitions
+    public ConstructorCompetition? GetConstructorCompetitionById(Guid constructorId, Guid championshipId) => _constructorCompetitions
         .FirstOrDefault(cc => cc.ConstructorId == constructorId && cc.ConstructorId == championshipId);
 
     public List<ConstructorCompetition> GetAllConstructorCompetitions() => _constructorCompetitions.ToList();
@@ -26,7 +26,7 @@ public class ConstructorCompetitionRepository(EfContext context) : IConstructorC
         context.SaveChanges();
     }
 
-    public void Delete(int constructorId, int championshipId)
+    public void Delete(Guid constructorId, Guid championshipId)
     {
         var constCompetition = GetConstructorCompetitionById(constructorId, championshipId);
         if(constCompetition == null) return;
@@ -35,20 +35,20 @@ public class ConstructorCompetitionRepository(EfContext context) : IConstructorC
         context.SaveChanges();
     }
 
-    public List<ConstructorCompetition> GetByConstructorId(int constructorId) => _constructorCompetitions
+    public List<ConstructorCompetition> GetByConstructorId(Guid constructorId) => _constructorCompetitions
         .Where(cc => cc.ConstructorId == constructorId)
         .ToList();
 
-    public List<ConstructorCompetition> GetByChampionshipId(int champId) => _constructorCompetitions
+    public List<ConstructorCompetition> GetByChampionshipId(Guid champId) => _constructorCompetitions
         .Where(cc => cc.ConstChampId == champId)
         .ToList();
 
-    public List<Constructor?> GetConstructorsByChampionshipId(int championshipId) => _constructorCompetitions
+    public List<Constructor?> GetConstructorsByChampionshipId(Guid championshipId) => _constructorCompetitions
         .Where(p => p.ConstChampId == championshipId)
         .Select(p => p.Constructor)
         .OrderBy(c => c!.Name)
         .ToList();
 
-    public bool CheckIfExists(int constructorId, int champId) => _constructorCompetitions
+    public bool CheckIfExists(Guid constructorId, Guid champId) => _constructorCompetitions
         .Any(cc => cc.ConstructorId == constructorId && cc.ConstChampId == champId);
 }

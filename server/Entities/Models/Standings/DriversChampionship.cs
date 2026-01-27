@@ -9,10 +9,10 @@ public class DriversChampionship
 {
     [Key]
     [Column("id")]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     
     [Column("series_id")]
-    public int SeriesId { get; set; }
+    public Guid SeriesId { get; set; }
     [JsonIgnore]
     public virtual Series? Series { get; set; }
     

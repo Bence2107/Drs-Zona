@@ -7,7 +7,7 @@ namespace Services.Implementations;
 
 public class BrandService(IBrandsRepository brandsRepo) : IBrandService
 {
-    public ResponseResult<BrandDetailDto> GetBrandById(int id)
+    public ResponseResult<BrandDetailDto> GetBrandById(Guid id)
     {
         var brand = brandsRepo.GetBrandById(id);
         if (brand == null) return ResponseResult<BrandDetailDto>.Failure("Brand not exist");
@@ -82,7 +82,7 @@ public class BrandService(IBrandsRepository brandsRepo) : IBrandService
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> DeleteBrand(int id)
+    public ResponseResult<bool> DeleteBrand(Guid id)
     {
         var brand = brandsRepo.GetBrandById(id);
         if (brand is null) return ResponseResult<bool>.Failure("Series not exist");

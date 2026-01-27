@@ -13,7 +13,7 @@ public class ArticleService(
     IGrandsPrixRepository gpRepo
 ) : IArticleService
 {
-    public ResponseResult<ArticleDetailDto> GetArticleById(int id)
+    public ResponseResult<ArticleDetailDto> GetArticleById(Guid id)
     {
         var article = articleRepo.GetByIdWithAll(id);
         if (article == null) return ResponseResult<ArticleDetailDto>.Failure("Article not found.");
@@ -67,14 +67,14 @@ public class ArticleService(
         return ResponseResult<List<ArticleListDto>>.Success(articles);
     }
 
-    public ResponseResult<bool> CreateArticle(ArticleCreateDto dto, int authorId)
+    public ResponseResult<bool> CreateArticle(ArticleCreateDto dto, Guid authorId)
     {
         if (!userRepo.CheckIfIdExists(authorId))
             return ResponseResult<bool>.Failure("AuthorId", "Author not found");
 
-        if (dto.GrandPrixId.HasValue && !gpRepo.CheckIfIdExists(dto.GrandPrixId.Value))
+        if (!gpRepo.CheckIfIdExists(dto.GrandPrixId))
             return ResponseResult<bool>.Failure("GrandPrixId", "Grand Prix not found");
-
+        
         var article = new Article
         {
             Title = dto.Title,
@@ -125,7 +125,7 @@ public class ArticleService(
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> DeleteArticle(int id)
+    public ResponseResult<bool> DeleteArticle(Guid id)
     {
         var article = articleRepo.GetArticleById(id);
         if (article == null)

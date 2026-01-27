@@ -9,10 +9,10 @@ public class Poll
 {
     [Key]
     [Column("id")]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     
     [Column("author_id")]
-    public int AuthorId { get; set; }
+    public Guid AuthorId { get; set; }
     [JsonIgnore]
     public virtual User? Author { get; set; }
     

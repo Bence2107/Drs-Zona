@@ -33,7 +33,7 @@ public record UserLoginDto(
 );
 
 public record UserResponseDto(
-    int Id,
+    Guid Id,
     string Username,
     string Email,
     string Role,
@@ -43,7 +43,7 @@ public record UserResponseDto(
 );
 
 public record UserProfileDto(
-    int Id,
+    Guid Id,
     string Username,
     string Email,
     string Role,
@@ -78,7 +78,7 @@ public class UserUpdateDto : IValidatableObject
 }
 
 public record UserListDto(
-    int Id,
+    Guid Id,
     string Username,
     string Email,
     string Role,

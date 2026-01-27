@@ -9,11 +9,11 @@ public class ConstructorsChampionshipsRepository(EfContext context) : IConstruct
 {
     private readonly DbSet<ConstructorsChampionship> _constructorsChampionships = context.ConstructorsChampionships;
 
-    public ConstructorsChampionship? GetAllConstructorsChampionshipById(int id) => _constructorsChampionships
+    public ConstructorsChampionship? GetAllConstructorsChampionshipById(Guid id) => _constructorsChampionships
         .FirstOrDefault(cc => cc.Id == id);
 
     public List<ConstructorsChampionship> GetAllConstructorsChampionships() => _constructorsChampionships.ToList();
-    public List<ConstructorsChampionship> GetBySeriesId(int seriesId) =>
+    public List<ConstructorsChampionship> GetBySeriesId(Guid seriesId) =>
         _constructorsChampionships.Where(c => c.SeriesId == seriesId).ToList();
 
     public void Create(ConstructorsChampionship constructorsChampionship)
@@ -28,7 +28,7 @@ public class ConstructorsChampionshipsRepository(EfContext context) : IConstruct
         context.SaveChanges();
     }
 
-    public void Delete(int id)
+    public void Delete(Guid id)
     {
         var constructorsChampionship = GetAllConstructorsChampionshipById(id);
         if (constructorsChampionship == null) return;
@@ -37,7 +37,7 @@ public class ConstructorsChampionshipsRepository(EfContext context) : IConstruct
         context.SaveChanges();
     }
 
-    public ConstructorsChampionship? GetByIdWithSeries(int id) => _constructorsChampionships
+    public ConstructorsChampionship? GetByIdWithSeries(Guid id) => _constructorsChampionships
         .Include(cc => cc.Series)
         .FirstOrDefault(cc => cc.Id == id);
 
@@ -49,5 +49,5 @@ public class ConstructorsChampionshipsRepository(EfContext context) : IConstruct
         .Where(cc => cc.Status == status)
         .ToList();
 
-    public bool CheckIfIdExists(int id) => _constructorsChampionships.Any(cc => cc.Id == id);
+    public bool CheckIfIdExists(Guid id) => _constructorsChampionships.Any(cc => cc.Id == id);
 }

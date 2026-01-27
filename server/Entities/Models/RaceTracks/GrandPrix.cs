@@ -10,15 +10,15 @@ public class GrandPrix
 {
     [Key]
     [Column("id")]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     
     [Column("circuit_id")]
-    public int CircuitId { get; set; }
+    public Guid CircuitId { get; set; }
     [JsonIgnore]
     public virtual Circuit? Circuit { get; set; }
     
     [Column("series_id")]
-    public int SeriesId { get; set; }
+    public Guid SeriesId { get; set; }
     [JsonIgnore]
     public virtual Series? Series { get; set; } 
     

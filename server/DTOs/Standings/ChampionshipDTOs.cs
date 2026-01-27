@@ -3,7 +3,7 @@
 namespace DTOs.Standings;
 
 public record SeriesListDto(
-    [Required] [Range(1, int.MaxValue)] int Id,
+    [Required] Guid Id,
     [Required] [StringLength(100)] string Name
 );
 
@@ -38,7 +38,7 @@ public record SeriesCreateDto(
 }
 
 public record SeriesUpdateDto(
-    [Required] [Range(1, int.MaxValue)] int Id,
+    [Required] Guid Id,
     [Required(ErrorMessage = "Név megadása kötelező")]
     [StringLength(100, ErrorMessage = "A név max 100 karakter")]
     string Name,
@@ -69,7 +69,7 @@ public record SeriesUpdateDto(
 }
 
 public record SeriesDetailDto(
-    [Required] [Range(1, int.MaxValue)] int Id,
+    [Required]  Guid Id,
     [Required] [StringLength(100)] string Name,
     [Required] [StringLength(200)] string Description,
     [Required] [StringLength(100)] string GoverningBody,

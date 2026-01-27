@@ -8,10 +8,10 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class ConstructorsController(IConstructorsService constructorsService): ControllerBase
 {
-    [HttpGet("get/{id:int}")]
+    [HttpGet("get/{id:guid}")]
     [ProducesResponseType(typeof(ConstructorDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Get([FromRoute]int id)
+    public IActionResult Get([FromRoute]Guid id)
     {
         var response = constructorsService.GetById(id);
         if (!response.IsSuccess)
@@ -26,9 +26,9 @@ public class ConstructorsController(IConstructorsService constructorsService): C
         return Ok(response.Value);
     }
     
-    [HttpGet("getAllByChampionship/{championshipId:int}")]
+    [HttpGet("getAllByChampionship/{championshipId:guid}")]
     [ProducesResponseType(typeof(List<ConstructorListDto>), StatusCodes.Status201Created)]
-    public IActionResult GetAll([FromRoute]int championshipId)
+    public IActionResult GetAll([FromRoute]Guid championshipId)
     {
         var response = constructorsService.ListAllConstructorsByChampionship(championshipId);
         return Ok(response.Value);

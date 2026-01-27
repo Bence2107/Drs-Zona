@@ -5,8 +5,8 @@ namespace DTOs.News;
 public record CommentCreateDto(
     [Required(ErrorMessage = "A cikk azonosítója kötelező")] 
     [Range(1, int.MaxValue, ErrorMessage = "Érvénytelen cikk azonosító")] 
-    int ArticleId,
-    int? ReplyToCommentId,
+    Guid ArticleId,
+    Guid? ReplyToCommentId,
     [Required(ErrorMessage = "A komment tartalma nem lehet üres")]
     [StringLength(1000, MinimumLength = 1, ErrorMessage = "A komment hossza 1 és 1000 karakter között lehet")]
     string Content
@@ -21,25 +21,25 @@ public record CommentCreateDto(
 
 public record CommentContentUpdateDto(
     [Required(ErrorMessage = "Az azonosító kötelező")]
-    int Id,
+    Guid Id,
     [Required(ErrorMessage = "A cikk azonosítója kötelező")]
-    int ArticleId,
+    Guid ArticleId,
     [Required(ErrorMessage = "A tartalom nem lehet üres")]
     [StringLength(1000, MinimumLength = 1, ErrorMessage = "A tartalom hossza 1 és 1000 karakter között lehet")]
     string Content
 );
 
 public record CommentUpdateVoteDto(
-    int Id,
-    int ArticleId,
+    Guid Id,
+    Guid ArticleId,
     int UpVotes,
     int DownVotes
 );
 
 public record CommentDetailDto(
-    int Id,
-    int UserId,
-    int? ReplyToCommentId,
+    Guid Id,
+    Guid UserId,
+    Guid? ReplyToCommentId,
     string Username,
     string Content,
     int UpVotes,
