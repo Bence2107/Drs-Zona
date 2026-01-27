@@ -1,0 +1,72 @@
+@use '@angular/material' as mat;
+
+* {
+  box-sizing: border-box;
+}
+
+main {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px 5%;
+  min-height: 85vh;
+}
+
+.content-container {
+  max-width: 1200px;
+}
+
+.outer-card {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  background-color: var(--secondary-bg);
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.inner-card {
+  background-color: var(--primary-bg);
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 20px;
+
+h1, h2, h3, p {
+    color: var(--text-main);
+  }
+
+  h1, h2 {
+    margin-top: 15px;
+  }
+
+  p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    text-align: justify;
+    padding: 10px 0;
+  }
+
+  img[mat-card-image] {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    margin-top: 0;
+  }
+}
+
+.join-us {
+  text-align: center;
+  margin-top: 20px;
+  padding: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 600px) {
+  .inner-card {
+    padding: 10px;
+  }
+}

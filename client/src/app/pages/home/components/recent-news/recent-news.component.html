@@ -1,0 +1,28 @@
+<mat-card class="news-card">
+  <mat-card-header *ngIf="isLoading">
+    <mat-card-title>Betöltés</mat-card-title>
+  </mat-card-header>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+  <mat-card-content>
+    <app-error-display
+      *ngIf="errorOccurred"
+      (retry)="fetchArticles()">
+    </app-error-display>
+
+    <mat-list *ngIf="!isLoading && !errorOccurred">
+      <mat-list-item *ngFor="let article of articles$">
+        <mat-card class="article-card">
+          <mat-card-content>
+            <h3 matListItemTitle>{{ article.title }}</h3>
+            <a matListItemMeta [routerLink]="['/article', article.id]">View</a>
+          </mat-card-content>
+        </mat-card>
+      </mat-list-item>
+    </mat-list>
+
+    <p *ngIf="!isLoading && !errorOccurred && articles$.length === 0" class="empty-msg">
+      Nem találtunk híreket
+    </p>
+  </mat-card-content>
+</mat-card>
