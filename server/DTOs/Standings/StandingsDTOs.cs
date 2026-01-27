@@ -33,12 +33,12 @@ public record BrandUpdateDto(
 );
 
 public record BrandListDto(
-    Guid Id,
+    [Required] Guid Id,
     [StringLength(100)] string? Name
 );
 
 public record BrandDetailDto(
-    Guid Id,
+    [Required] Guid Id,
     [StringLength(100)] string Name,
     [StringLength(1000)] string Description,
     [StringLength(100)] string Principal,
@@ -90,13 +90,14 @@ public record ConstructorUpdateDto(
 );
 
 public record ConstructorListDto(
-    Guid Id, 
+    [Required] Guid Id, 
+    [StringLength(100, ErrorMessage = "A név max 100 karakter")] 
     string Name
 );
 
 public record ConstructorDetailDto(
-    Guid Id,
-    Guid BrandId,
+    [Required] Guid Id,
+    [Required] Guid BrandId,
     string BrandName,
     string BrandDescription,
     string? Name,
@@ -166,7 +167,7 @@ public record DriverUpdateDto(
 }
 
 public record DriverListDto(
-    Guid Id,
+    [Required] Guid Id,
     [StringLength(100)] string Name,
     [StringLength(50)] string Nationality,
     [Range(1, 99)] int DriverNumber,
@@ -175,7 +176,7 @@ public record DriverListDto(
 );
 
 public record DriverNameRecord(
-    Guid Id,
+    [Required] Guid Id,
     [StringLength(100)] string Name
 );
 

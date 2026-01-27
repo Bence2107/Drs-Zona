@@ -3,7 +3,8 @@
 namespace DTOs.News;
 
 public record ArticleCreateDto(
-    Guid GrandPrixId,
+    
+    Guid? GrandPrixId,
     [Required(ErrorMessage = "A cím kitöltése kötelező")]
     [StringLength(200, MinimumLength = 5, ErrorMessage = "A cím hossza nem megfelelő (5-200 karakter)")]
     string Title,
@@ -61,7 +62,7 @@ public record ArticleUpdateDto(
 }
 
 public record ArticleListDto(
-    Guid Id,
+    [Required] Guid Id,
     [StringLength(200, MinimumLength = 5)] string Title,
     [StringLength(500, MinimumLength = 20)]
     string Lead,
@@ -75,7 +76,7 @@ public record SummaryDto(
 );
 
 public record ArticleDetailDto(
-    Guid Id,
+    [Required] Guid Id,
     [StringLength(200, MinimumLength = 5)] string Title,
     [StringLength(500, MinimumLength = 20)] string Lead,
     [MinLength(100)] [MaxLength(524288)] string FirstSection,

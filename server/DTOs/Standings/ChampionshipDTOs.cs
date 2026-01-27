@@ -38,7 +38,8 @@ public record SeriesCreateDto(
 }
 
 public record SeriesUpdateDto(
-    [Required] Guid Id,
+    [Required(ErrorMessage = "Az azonosító megadása kötelező")]
+    Guid Id,
     [Required(ErrorMessage = "Név megadása kötelező")]
     [StringLength(100, ErrorMessage = "A név max 100 karakter")]
     string Name,
@@ -69,7 +70,7 @@ public record SeriesUpdateDto(
 }
 
 public record SeriesDetailDto(
-    [Required]  Guid Id,
+    [Required] Guid Id,
     [Required] [StringLength(100)] string Name,
     [Required] [StringLength(200)] string Description,
     [Required] [StringLength(100)] string GoverningBody,

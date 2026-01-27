@@ -30,20 +30,20 @@ public record CommentContentUpdateDto(
 );
 
 public record CommentUpdateVoteDto(
-    Guid Id,
-    Guid ArticleId,
-    int UpVotes,
-    int DownVotes
+    [Required] Guid Id,
+    [Required] Guid ArticleId,
+    [Range(0, int.MaxValue)] int UpVotes,
+    [Range(0, int.MaxValue)] int DownVotes
 );
 
 public record CommentDetailDto(
-    Guid Id,
-    Guid UserId,
+    [Required] Guid Id,
+    [Required] Guid UserId,
     Guid? ReplyToCommentId,
     string Username,
-    string Content,
-    int UpVotes,
-    int DownVotes,
+    [StringLength(1000, MinimumLength = 1)] string Content,
+    [Range(0, int.MaxValue)]int UpVotes,
+    [Range(0, int.MaxValue)]int DownVotes,
     DateTime DateCreated,
     DateTime DateUpdated
 );
