@@ -66,7 +66,11 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired(false);
                 
+                
                 options.Property(a => a.GrandPrixId).HasDefaultValue(null);
+                options.Property(a => a.SecondSection).HasDefaultValue(null);
+                options.Property(a => a.ThirdSection).HasDefaultValue(null);
+                options.Property(a => a.FourthSection).HasDefaultValue(null);
                 options.Property(a => a.DateUpdated).HasDefaultValue(null);
 
             }

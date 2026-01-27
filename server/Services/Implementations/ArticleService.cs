@@ -17,12 +17,23 @@ public class ArticleService(
     {
         var article = articleRepo.GetByIdWithAll(id);
         if (article == null) return ResponseResult<ArticleDetailDto>.Failure("Article not found.");
+
+        var s2 = article.SecondSection;
+        var s3 = article.ThirdSection;
+        var s4 = article.FourthSection;
         
-        return ResponseResult<ArticleDetailDto>.Success(new ArticleDetailDto(
+        var middleSections = new List<string?> { s2, s3, s4 }
+            .Where(s => !string.IsNullOrWhiteSpace(s))
+            .Cast<string>()
+            .ToList();
+        
+        return ResponseResult<ArticleDetailDto>.Success( new ArticleDetailDto(
             Id: article.Id,
             Title: article.Title,
             Lead: article.Lead,
-            Content: article.Content,
+            FirstSection: article.FirstSection,
+            LastSection: article.LastSection,
+            MiddleSections: middleSections,
             AuthorId: article.AuthorId,
             AuthorName: article.Author!.Username,
             GrandPrixId: article.GrandPrixId,
@@ -30,7 +41,6 @@ public class ArticleService(
             DatePublished: article.DatePublished,
             DateUpdated: article.DateUpdated
         ));
-
     }
 
     public ResponseResult<List<ArticleListDto>> ListArticles()
@@ -45,17 +55,16 @@ public class ArticleService(
         return ResponseResult<List<ArticleListDto>>.Success(articles);
     }
 
-    public ResponseResult<List<ArticleRecentDto>> GetRecentArticles(int count)
+    public ResponseResult<List<ArticleListDto>> GetRecentArticles(int count)
     {
-        var articles = articleRepo.GetRecent(count).Select(a => new ArticleRecentDto(
+        var articles = articleRepo.GetRecent(count).Select(a => new ArticleListDto(
             Id: a.Id,
             Title: a.Title,
             Lead: a.Lead,
-            AuthorName: a.Author!.Username,
             DatePublished: a.DatePublished
         )).ToList();
         
-        return ResponseResult<List<ArticleRecentDto>>.Success(articles);
+        return ResponseResult<List<ArticleListDto>>.Success(articles);
     }
 
     public ResponseResult<bool> CreateArticle(ArticleCreateDto dto, int authorId)
@@ -70,12 +79,21 @@ public class ArticleService(
         {
             Title = dto.Title,
             Lead = dto.Lead,
-            Content = dto.Content,
+            Slug = dto.Slug,
+            FirstSection = dto.FirstSection,
+            LastSection = dto.LastSection,
             AuthorId = authorId,
             GrandPrixId = dto.GrandPrixId,
             DatePublished = DateTime.UtcNow,
             DateUpdated = DateTime.UtcNow
         };
+
+        if (dto.Summary != null)
+        {
+            article.SecondSection = dto.Summary.SecondSection;
+            article.ThirdSection = dto.Summary.ThirdSection;
+            article.FourthSection = dto.Summary.FourthSection;
+        }
 
         articleRepo.Create(article);
         return ResponseResult<bool>.Success(true);
@@ -92,9 +110,16 @@ public class ArticleService(
         article.GrandPrixId = dto.GrandPrixId;
         article.Title = dto.Title;
         article.Lead = dto.Lead;
-        article.Content = dto.Content;
+        article.FirstSection = dto.FirstSection;
+        article.LastSection = dto.LastSection;
         article.DateUpdated = DateTime.UtcNow;
 
+        if (dto.Summary != null)
+        {
+            article.SecondSection = dto.Summary.SecondSection;
+            article.ThirdSection = dto.Summary.ThirdSection;
+            article.FourthSection = dto.Summary.FourthSection;
+        }
 
         articleRepo.Update(article);
         return ResponseResult<bool>.Success(true);

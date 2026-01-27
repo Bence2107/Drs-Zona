@@ -31,8 +31,28 @@ public class Article
     public required string Lead { get; set; }
     
     [Required]
-    [Column("content")]
-    public required string Content { get; set; }
+    [Column("slug")]
+    public required string Slug { get; set; }
+    
+    [Required]
+    [Column("first_section")]
+    public required string FirstSection { get; set; }
+    
+    [Required]
+    [Column("second_section")]
+    public string? SecondSection { get; set; }    
+    
+    [Required]
+    [Column("third_section")]
+    public string? ThirdSection { get; set; }    
+    
+    [Required]
+    [Column("fourth_section")]
+    public string? FourthSection { get; set; } 
+    
+    [Required]
+    [Column("last_section")]
+    public required string LastSection { get; set; }
     
     [Required]
     [Column("published_at")]

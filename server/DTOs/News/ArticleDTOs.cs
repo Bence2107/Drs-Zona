@@ -7,18 +7,26 @@ public record ArticleCreateDto(
     [Required(ErrorMessage = "A cím kitöltése kötelező")]
     [StringLength(200, MinimumLength = 5, ErrorMessage = "A cím hossza nem megfelelő (5-200 karakter)")]
     string Title,
+    [StringLength(200, MinimumLength = 5, ErrorMessage = "A slug hossza nem megfelelő (5-200 karakter)")]
+    string Slug,
     [Required(ErrorMessage = "A Lead mező kitöltése kötelező")]
     [StringLength(500, MinimumLength = 20, ErrorMessage = "A Lead hossza nem megfelelő (20-500 karakter)")]
     string Lead,
-    [Required(ErrorMessage = "A tartalom mező kitöltése kötelező")]
-    [StringLength(524288, MinimumLength = 100, ErrorMessage = "A tartalom túl rövid (min 100 karakter)")]
-    string Content
+    [StringLength(5000, MinimumLength = 100, ErrorMessage = "A szekció hossza nem megfelelő (100-5000 karakter) )")]
+    [MinLength(100)] [MaxLength(524288)] string FirstSection,
+    [StringLength(5000, MinimumLength = 100, ErrorMessage = "A szekció hossza nem megfelelő (100-5000 karakter) )")]
+    string LastSection,
+    SummaryDto? Summary
 ) : IValidatableObject
 {
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (!string.IsNullOrEmpty(Lead) && !string.IsNullOrEmpty(Content) && Lead.Length > Content.Length)
-            yield return new ValidationResult("A Lead nem lehet hosszabb a cikk tartamánál", [nameof(Lead)]);
+        if (Summary == null) yield break;
+        if (string.IsNullOrEmpty(Summary.SecondSection) && !string.IsNullOrEmpty(Summary.ThirdSection))
+            yield return new ValidationResult("Nem töltheted ki a harmadik szekciót, amíg a második üres.", [nameof(Summary.SecondSection)]);
+                
+        if (string.IsNullOrEmpty(Summary.ThirdSection) && !string.IsNullOrEmpty(Summary.FourthSection))
+            yield return new ValidationResult("Nem töltheted ki a negyedik szekciót, amíg a harmadik üres.", [nameof(Summary.ThirdSection)]);
     }
 }
 
@@ -29,18 +37,26 @@ public record ArticleUpdateDto(
     [Required(ErrorMessage = "A cím kitöltése kötelező")]
     [StringLength(200, MinimumLength = 5, ErrorMessage = "A cím hossza nem megfelelő (5-200 karakter)")]
     string Title,
+    [StringLength(200, MinimumLength = 5, ErrorMessage = "A slug hossza nem megfelelő (5-200 karakter)")]
+    string Slug,
     [Required(ErrorMessage = "A Lead mező kitöltése kötelező")]
     [StringLength(500, MinimumLength = 20, ErrorMessage = "A Lead hossza nem megfelelő (20-500 karakter)")]
     string Lead,
-    [Required(ErrorMessage = "A tartalom mező kitöltése kötelező")]
-    [StringLength(524288, MinimumLength = 100, ErrorMessage = "A tartalom túl rövid (min 100 karakter)")]
-    string Content
+    [StringLength(5000, MinimumLength = 100, ErrorMessage = "A szekció hossza nem megfelelő (100-5000 karakter) )")]
+    [MinLength(100)] [MaxLength(524288)] string FirstSection,
+    [StringLength(5000, MinimumLength = 100, ErrorMessage = "A szekció hossza nem megfelelő (100-5000 karakter) )")]
+    string LastSection,
+    SummaryDto? Summary
 ) : IValidatableObject
 {
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (!string.IsNullOrEmpty(Lead) && !string.IsNullOrEmpty(Content) && Lead.Length > Content.Length)
-            yield return new ValidationResult("A Lead nem lehet hosszabb a cikk tartamánál", [nameof(Lead)]);
+        if (Summary == null) yield break;
+        if (string.IsNullOrEmpty(Summary.SecondSection) && !string.IsNullOrEmpty(Summary.ThirdSection))
+            yield return new ValidationResult("Nem töltheted ki a harmadik szekciót, amíg a második üres.", [nameof(Summary.SecondSection)]);
+                
+        if (string.IsNullOrEmpty(Summary.ThirdSection) && !string.IsNullOrEmpty(Summary.FourthSection))
+            yield return new ValidationResult("Nem töltheted ki a negyedik szekciót, amíg a harmadik üres.", [nameof(Summary.ThirdSection)]);
     }
 }
 
@@ -52,24 +68,23 @@ public record ArticleListDto(
     DateTime DatePublished
 );
 
+public record SummaryDto(
+    [MinLength(100)] [MaxLength(5000)] string SecondSection,
+    [MinLength(100)] [MaxLength(5000)] string ThirdSection,
+    [MinLength(100)] [MaxLength(5000)] string FourthSection
+);
+
 public record ArticleDetailDto(
     [Range(1, int.MaxValue)] int Id,
     [StringLength(200, MinimumLength = 5)] string Title,
     [StringLength(500, MinimumLength = 20)] string Lead,
-    [MinLength(100)] [MaxLength(524288)] string Content,
+    [MinLength(100)] [MaxLength(524288)] string FirstSection,
+    [MinLength(100)] [MaxLength(524288)] string LastSection,
+    List<string> MiddleSections,
     [Range(1, int.MaxValue)] int AuthorId,
     [StringLength(50, MinimumLength = 3)] string AuthorName,
     [Range(1, int.MaxValue)] int? GrandPrixId,
     [StringLength(100)] string? GrandPrixName,
     DateTime DatePublished,
     DateTime DateUpdated
-);
-
-public record ArticleRecentDto(
-    [Range(1, int.MaxValue)] int Id,
-    [StringLength(200, MinimumLength = 5)] string Title,
-    [StringLength(500, MinimumLength = 20)]
-    string Lead,
-    [StringLength(50, MinimumLength = 3)] string AuthorName,
-    DateTime DatePublished
 );

@@ -35,7 +35,7 @@ public class ArticleController(IArticleService articleService): ControllerBase
     }
 
     [HttpGet("getRecent/{number:int}")]
-    [ProducesResponseType(typeof(List<ArticleRecentDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<ArticleListDto>), StatusCodes.Status200OK)]
     public IActionResult GetRecent([FromRoute]int number)
     {
         var response  = articleService.GetRecentArticles(number);
