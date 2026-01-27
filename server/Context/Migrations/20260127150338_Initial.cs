@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -16,8 +15,7 @@ namespace Context.Migrations
                 name: "brands",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     name = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     principal = table.Column<string>(type: "text", nullable: false),
@@ -32,8 +30,7 @@ namespace Context.Migrations
                 name: "circuits",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     name = table.Column<string>(type: "text", nullable: false),
                     length = table.Column<int>(type: "integer", nullable: false),
                     type = table.Column<string>(type: "text", nullable: false),
@@ -49,12 +46,17 @@ namespace Context.Migrations
                 name: "drivers",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     name = table.Column<string>(type: "text", nullable: false),
                     nationality = table.Column<string>(type: "text", nullable: false),
                     birth_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    driver_number = table.Column<int>(type: "integer", nullable: false)
+                    driver_number = table.Column<int>(type: "integer", nullable: false),
+                    total_races = table.Column<int>(type: "integer", nullable: false),
+                    wins = table.Column<int>(type: "integer", nullable: false),
+                    podiums = table.Column<int>(type: "integer", nullable: false),
+                    championships = table.Column<int>(type: "integer", nullable: false),
+                    pole_positions = table.Column<int>(type: "integer", nullable: false),
+                    seasons = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,8 +67,7 @@ namespace Context.Migrations
                 name: "series",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     name = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     governing_body = table.Column<string>(type: "text", nullable: false),
@@ -82,8 +83,7 @@ namespace Context.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     username = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
@@ -100,14 +100,17 @@ namespace Context.Migrations
                 name: "constructors",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    brand_id = table.Column<int>(type: "integer", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    brand_id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     founded_year = table.Column<int>(type: "integer", nullable: false),
                     headquarters = table.Column<string>(type: "text", nullable: false),
                     team_chief = table.Column<string>(type: "text", nullable: false),
-                    technical_chief = table.Column<string>(type: "text", nullable: false)
+                    technical_chief = table.Column<string>(type: "text", nullable: false),
+                    seasons = table.Column<int>(type: "integer", nullable: false),
+                    championships = table.Column<int>(type: "integer", nullable: false),
+                    wins = table.Column<int>(type: "integer", nullable: false),
+                    podiums = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -120,37 +123,11 @@ namespace Context.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "grands_prix",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    circuit_id = table.Column<int>(type: "integer", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    round_number = table.Column<int>(type: "integer", nullable: false),
-                    season_year = table.Column<int>(type: "integer", nullable: false),
-                    start_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    end_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    race_distance = table.Column<int>(type: "integer", nullable: false),
-                    laps_completed = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_grands_prix", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_grands_prix_circuits_circuit_id",
-                        column: x => x.circuit_id,
-                        principalTable: "circuits",
-                        principalColumn: "id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "constructor_champions",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    series_id = table.Column<int>(type: "integer", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    series_id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     season = table.Column<string>(type: "text", nullable: false),
                     status = table.Column<string>(type: "text", nullable: false)
@@ -170,9 +147,8 @@ namespace Context.Migrations
                 name: "driver_championships",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    series_id = table.Column<int>(type: "integer", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    series_id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     season = table.Column<string>(type: "text", nullable: false),
                     status = table.Column<string>(type: "text", nullable: false)
@@ -189,12 +165,43 @@ namespace Context.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "grands_prix",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    circuit_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    series_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    round_number = table.Column<int>(type: "integer", nullable: false),
+                    season_year = table.Column<int>(type: "integer", nullable: false),
+                    start_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    end_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    race_distance = table.Column<int>(type: "integer", nullable: false),
+                    laps_completed = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_grands_prix", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_grands_prix_circuits_circuit_id",
+                        column: x => x.circuit_id,
+                        principalTable: "circuits",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_grands_prix_series_series_id",
+                        column: x => x.series_id,
+                        principalTable: "series",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "polls",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    author_id = table.Column<int>(type: "integer", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    author_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    title = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     expires_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -214,10 +221,9 @@ namespace Context.Migrations
                 name: "contracts",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    driver_id = table.Column<int>(type: "integer", nullable: false),
-                    constructor_id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    driver_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    constructor_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -237,40 +243,11 @@ namespace Context.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "articles",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    author_id = table.Column<int>(type: "integer", nullable: false),
-                    grand_prix_id = table.Column<int>(type: "integer", nullable: true),
-                    title = table.Column<string>(type: "text", nullable: false),
-                    lead = table.Column<string>(type: "text", nullable: false),
-                    content = table.Column<string>(type: "text", nullable: false),
-                    published_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_articles", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_articles_grands_prix_grand_prix_id",
-                        column: x => x.grand_prix_id,
-                        principalTable: "grands_prix",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_articles_users_author_id",
-                        column: x => x.author_id,
-                        principalTable: "users",
-                        principalColumn: "id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "constructor_competitions",
                 columns: table => new
                 {
-                    constructors_id = table.Column<int>(type: "integer", nullable: false),
-                    constructors_championship_id = table.Column<int>(type: "integer", nullable: false)
+                    constructors_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    constructors_championship_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -291,8 +268,8 @@ namespace Context.Migrations
                 name: "driver_participations",
                 columns: table => new
                 {
-                    driver_id = table.Column<int>(type: "integer", nullable: false),
-                    drivers_championship_id = table.Column<int>(type: "integer", nullable: false)
+                    driver_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    drivers_championship_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -310,16 +287,48 @@ namespace Context.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "articles",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    author_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    grand_prix_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    title = table.Column<string>(type: "text", nullable: false),
+                    lead = table.Column<string>(type: "text", nullable: false),
+                    slug = table.Column<string>(type: "text", nullable: false),
+                    first_section = table.Column<string>(type: "text", nullable: false),
+                    second_section = table.Column<string>(type: "text", nullable: false),
+                    third_section = table.Column<string>(type: "text", nullable: false),
+                    fourth_section = table.Column<string>(type: "text", nullable: false),
+                    last_section = table.Column<string>(type: "text", nullable: false),
+                    published_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_articles", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_articles_grands_prix_grand_prix_id",
+                        column: x => x.grand_prix_id,
+                        principalTable: "grands_prix",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_articles_users_author_id",
+                        column: x => x.author_id,
+                        principalTable: "users",
+                        principalColumn: "id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "results",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    grand_prix_id = table.Column<int>(type: "integer", nullable: false),
-                    driver_id = table.Column<int>(type: "integer", nullable: false),
-                    constructor_id = table.Column<int>(type: "integer", nullable: false),
-                    drivers_championship_id = table.Column<int>(type: "integer", nullable: false),
-                    constructors_championship_id = table.Column<int>(type: "integer", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    grand_prix_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    driver_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    constructor_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    drivers_championship_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    constructors_championship_id = table.Column<Guid>(type: "uuid", nullable: false),
                     start_position = table.Column<int>(type: "integer", nullable: false),
                     finish_position = table.Column<int>(type: "integer", nullable: false),
                     session = table.Column<string>(type: "text", nullable: false),
@@ -361,9 +370,8 @@ namespace Context.Migrations
                 name: "pollOptions",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    poll_id = table.Column<int>(type: "integer", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    poll_id = table.Column<Guid>(type: "uuid", nullable: false),
                     text = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -381,11 +389,10 @@ namespace Context.Migrations
                 name: "comments",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    user_id = table.Column<int>(type: "integer", nullable: false),
-                    article_id = table.Column<int>(type: "integer", nullable: false),
-                    reply_id = table.Column<int>(type: "integer", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    article_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    reply_id = table.Column<Guid>(type: "uuid", nullable: true),
                     content = table.Column<string>(type: "text", nullable: false),
                     upvotes = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
                     downvotes = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
@@ -416,8 +423,8 @@ namespace Context.Migrations
                 name: "votes",
                 columns: table => new
                 {
-                    user_id = table.Column<int>(type: "integer", nullable: false),
-                    poll_option_id = table.Column<int>(type: "integer", nullable: false)
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    poll_option_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -499,6 +506,11 @@ namespace Context.Migrations
                 name: "IX_grands_prix_circuit_id",
                 table: "grands_prix",
                 column: "circuit_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_grands_prix_series_id",
+                table: "grands_prix",
+                column: "series_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_pollOptions_poll_id",
@@ -587,13 +599,13 @@ namespace Context.Migrations
                 name: "brands");
 
             migrationBuilder.DropTable(
-                name: "series");
-
-            migrationBuilder.DropTable(
                 name: "polls");
 
             migrationBuilder.DropTable(
                 name: "circuits");
+
+            migrationBuilder.DropTable(
+                name: "series");
 
             migrationBuilder.DropTable(
                 name: "users");
