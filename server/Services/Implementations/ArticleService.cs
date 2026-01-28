@@ -67,9 +67,9 @@ public class ArticleService(
         return ResponseResult<List<ArticleListDto>>.Success(articles);
     }
 
-    public ResponseResult<bool> CreateArticle(ArticleCreateDto dto, Guid authorId)
+    public ResponseResult<bool> CreateArticle(ArticleCreateDto dto)
     {
-        if (!userRepo.CheckIfIdExists(authorId))
+        if (!userRepo.CheckIfIdExists(dto.AuthorId))
             return ResponseResult<bool>.Failure("AuthorId", "Author not found");
 
         if (dto.GrandPrixId != null && !gpRepo.CheckIfIdExists(dto.GrandPrixId.Value))
@@ -82,7 +82,7 @@ public class ArticleService(
             Slug = dto.Slug,
             FirstSection = dto.FirstSection,
             LastSection = dto.LastSection,
-            AuthorId = authorId,
+            AuthorId = dto.AuthorId,
             GrandPrixId = dto.GrandPrixId,
             DatePublished = DateTime.UtcNow,
             DateUpdated = DateTime.UtcNow

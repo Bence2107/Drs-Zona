@@ -42,11 +42,11 @@ public class ArticleController(IArticleService articleService): ControllerBase
         return Ok(response);
     }
     
-    [HttpPost("create/{authorId:guid}")]
+    [HttpPost("create")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Create([FromBody]ArticleCreateDto dto, [FromRoute]Guid authorId)
+    public IActionResult Create([FromBody]ArticleCreateDto dto)
     {
-        var result = articleService.CreateArticle(dto, authorId);
+        var result = articleService.CreateArticle(dto);
 
         if (!result.IsSuccess)
         {

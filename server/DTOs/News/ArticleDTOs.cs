@@ -3,8 +3,9 @@
 namespace DTOs.News;
 
 public record ArticleCreateDto(
-    
     Guid? GrandPrixId,
+    [Required(ErrorMessage = "Az író megadása kötelező")]
+    Guid AuthorId,
     [Required(ErrorMessage = "A cím kitöltése kötelező")]
     [StringLength(200, MinimumLength = 5, ErrorMessage = "A cím hossza nem megfelelő (5-200 karakter)")]
     string Title,

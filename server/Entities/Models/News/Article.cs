@@ -38,15 +38,12 @@ public class Article
     [Column("first_section")]
     public required string FirstSection { get; set; }
     
-    [Required]
     [Column("second_section")]
     public string? SecondSection { get; set; }    
     
-    [Required]
     [Column("third_section")]
     public string? ThirdSection { get; set; }    
     
-    [Required]
     [Column("fourth_section")]
     public string? FourthSection { get; set; } 
     
