@@ -6,6 +6,7 @@ export interface ArticleUpdateDto {
   firstSection?: string | null;
   grandPrixId?: string | null;
   id?: string;
+  isReview?: boolean;
   lastSection?: string | null;
   lead?: string | null;
   slug?: string | null;

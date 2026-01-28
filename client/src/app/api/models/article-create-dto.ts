@@ -6,6 +6,7 @@ export interface ArticleCreateDto {
   authorId?: string;
   firstSection?: string | null;
   grandPrixId?: string | null;
+  isReview?: boolean;
   lastSection?: string | null;
   lead?: string | null;
   slug?: string | null;

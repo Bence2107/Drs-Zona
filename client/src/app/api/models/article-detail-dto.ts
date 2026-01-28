@@ -10,6 +10,7 @@ export interface ArticleDetailDto {
   grandPrixId?: string | null;
   grandPrixName?: string | null;
   id?: string;
+  isReview?: boolean;
   lastSection?: string | null;
   lead?: string | null;
   middleSections?: Array<string> | null;
