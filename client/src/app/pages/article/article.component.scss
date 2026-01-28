@@ -89,6 +89,14 @@ main {
   border-top: 1px solid rgba(255,255,255,0.05);
 }
 
+.comments-section {
+  h3 {
+    text-align: center;
+    margin: 20px 0;
+    text-transform: uppercase;
+  }
+}
+
 @media (max-width: 768px) {
   .title-group { padding: 20px 5%; }
   .mat-card-content { padding: 0 5% 30px 5% !important; }

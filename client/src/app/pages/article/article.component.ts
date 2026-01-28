@@ -8,6 +8,8 @@ import {MatProgressBar} from '@angular/material/progress-bar';
 import {ErrorDisplayComponent} from '../../components/error-display/error-display.component';
 import {ArticleDetailDto} from '../../api/models/article-detail-dto';
 import {ArticleService} from '../../services/article.service';
+import {MatDivider} from '@angular/material/list';
+import {CommentListComponent} from './components/comment-list/comment-list.component';
 
 @Component({
   selector: 'app-article',
@@ -19,7 +21,9 @@ import {ArticleService} from '../../services/article.service';
     MatCardContent,
     MatCardFooter,
     ErrorDisplayComponent,
-    NgForOf
+    NgForOf,
+    MatDivider,
+    CommentListComponent
   ],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss'

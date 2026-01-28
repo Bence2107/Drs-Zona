@@ -1,0 +1,7 @@
+<div class="comments-wrapper">
+  <div class="comment-list">
+    <mat-card *ngFor="let comment of comments" class="comment-card shadow-none">
+      <app-comment-item [comment]="comment"></app-comment-item>
+    </mat-card>
+  </div>
+</div>

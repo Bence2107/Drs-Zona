@@ -5,10 +5,11 @@ import {Observable} from 'rxjs';
 import {
   apiArticleGetAllArticlesGet$Json,
   apiArticleGetAllSummaryGet$Json,
-  apiArticleGetRecentNumberGet$Json
+  apiArticleGetRecentNumberGet$Json, apiArticleGetSlugGet$Json
 } from '../api/functions';
 import {map} from 'rxjs/operators';
 import {ArticleListDto} from '../api/models/article-list-dto';
+import {ArticleDetailDto} from '../api/models/article-detail-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +43,13 @@ export class ArticleService {
         return body.value as ArticleListDto[] ?? [];
       })
     );
+  }
+
+  getBySlug(slug: string): Observable<ArticleDetailDto> {
+    return apiArticleGetSlugGet$Json(this.http, this.apiConfig.rootUrl, {slug: slug}).pipe(
+      map(response => {
+        return response.body as ArticleDetailDto ?? [];
+      })
+    )
   }
 }

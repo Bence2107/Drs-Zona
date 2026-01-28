@@ -1,0 +1,159 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.comment-layout {
+  display: flex;
+  gap: 12px;
+
+  &.is-reply-node {
+    margin-top: 12px;
+  }
+}
+
+.avatar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 32px;
+
+  .mini-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .reply-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .thread-line {
+    width: 2px;
+    background-color: #343536;
+    flex-grow: 1;
+    margin-top: 4px;
+    border-radius: 1px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--accent-color);
+    }
+  }
+}
+
+.content-column {
+  flex-grow: 1;
+}
+
+.comment-header {
+  font-size: 12px;
+  line-height: 1;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+
+  .author-name {
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .dot-separator, .timestamp {
+    color: #818384;
+    margin-left: 4px;
+  }
+}
+
+.comment-body {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-main);
+  margin: 4px 0 8px 0;
+}
+
+.comment-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: -8px;
+
+  .vote-group {
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    padding: 0 2px;
+
+    .score {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+      padding: 0 4px;
+    }
+  }
+
+  .footer-action {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    border-radius: 4px;
+    color: #818384;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  button[mat-icon-button] {
+    color: #818384;
+  }
+}
+
+.replies-panel {
+  background-color: var(--primary-bg);
+
+  ::ng-deep .mat-expansion-panel-header {
+    .mat-expansion-panel-header-title {
+      color: var(--accent-color) !important;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        color: inherit;
+      }
+    }
+  }
+
+}
+
+.reply-loader {
+  height: 2px;
+  width: 140px;
+  margin-top: 8px;
+}
+
+.no-replies {
+  color: var(--text-main);
+}

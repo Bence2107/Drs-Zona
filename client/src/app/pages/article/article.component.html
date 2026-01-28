@@ -38,6 +38,16 @@
         </figure>
 
         <div class="content-block" *ngIf="article?.lastSection" [innerHTML]="article.lastSection"></div>
+
+        <mat-divider class="section-divider"></mat-divider>
+
+        <section class="comments-section" *ngIf="article?.id">
+          <h3>Hozzászólások</h3>
+          <app-comment-list
+            [articleId]="article.id"
+            [articleUrl]="article.url || ''">
+          </app-comment-list>
+        </section>
       </mat-card-content>
 
       <mat-card-footer class="card-footer">
