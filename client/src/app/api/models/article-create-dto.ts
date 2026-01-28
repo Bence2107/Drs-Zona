@@ -3,6 +3,7 @@
 
 import { SummaryDto } from '../models/summary-dto';
 export interface ArticleCreateDto {
+  authorId?: string;
   firstSection?: string | null;
   grandPrixId?: string | null;
   lastSection?: string | null;

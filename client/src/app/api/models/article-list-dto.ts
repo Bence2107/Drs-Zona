@@ -5,5 +5,6 @@ export interface ArticleListDto {
   datePublished?: string;
   id?: string;
   lead?: string | null;
+  slug?: string | null;
   title?: string | null;
 }

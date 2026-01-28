@@ -52,8 +52,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @include mat.progress-bar-overrides((
   active-indicator-color: #f8274f,
-  track-color: black,
-  track-height: 8px
+  track-color: #21212e,
+  track-height: 50px
 ));
 
 @include mat.slide-toggle-overrides((
