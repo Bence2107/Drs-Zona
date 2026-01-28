@@ -251,6 +251,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
         modelBuilder.Entity<User>(options =>
         {
             options.Property(u => u.Role).HasDefaultValue("user");
+            options.Property(u => u.HasAvatar).HasDefaultValue(false);
         });
         
         

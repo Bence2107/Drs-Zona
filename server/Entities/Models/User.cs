@@ -31,6 +31,10 @@ public class User
     public DateTime Created { get; set; }
     
     [Required]
+    [Column("has_avatar")]
+    public bool HasAvatar { get; set; }
+    
+    [Required]
     [Column("last_login")]
     public DateTime LastActive { get; set; }
 }
