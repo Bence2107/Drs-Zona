@@ -9,11 +9,11 @@ import { RequestBuilder } from '../../request-builder';
 
 import { ArticleListDto } from '../../models/article-list-dto';
 
-export interface ApiArticleGetAllGet$Plain$Params {
+export interface ApiArticleGetAllArticlesGet$Plain$Params {
 }
 
-export function apiArticleGetAllGet$Plain(http: HttpClient, rootUrl: string, params?: ApiArticleGetAllGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ArticleListDto>>> {
-  const rb = new RequestBuilder(rootUrl, apiArticleGetAllGet$Plain.PATH, 'get');
+export function apiArticleGetAllArticlesGet$Plain(http: HttpClient, rootUrl: string, params?: ApiArticleGetAllArticlesGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ArticleListDto>>> {
+  const rb = new RequestBuilder(rootUrl, apiArticleGetAllArticlesGet$Plain.PATH, 'get');
   if (params) {
   }
 
@@ -27,4 +27,4 @@ export function apiArticleGetAllGet$Plain(http: HttpClient, rootUrl: string, par
   );
 }
 
-apiArticleGetAllGet$Plain.PATH = '/api/Article/getAll';
+apiArticleGetAllArticlesGet$Plain.PATH = '/api/Article/getAllArticles';

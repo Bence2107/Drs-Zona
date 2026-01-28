@@ -42,6 +42,35 @@ public class ArticleService(
             DateUpdated: article.DateUpdated
         ));
     }
+    public ResponseResult<ArticleDetailDto> GetArticleBySlug(string slug)
+    {
+        var article = articleRepo.GetArticleBySlug(slug);
+        if (article == null) return ResponseResult<ArticleDetailDto>.Failure("Article not found.");
+
+        var s2 = article.SecondSection;
+        var s3 = article.ThirdSection;
+        var s4 = article.FourthSection;
+        
+        var middleSections = new List<string?> { s2, s3, s4 }
+            .Where(s => !string.IsNullOrWhiteSpace(s))
+            .Cast<string>()
+            .ToList();
+        
+        return ResponseResult<ArticleDetailDto>.Success( new ArticleDetailDto(
+            Id: article.Id,
+            Title: article.Title,
+            Lead: article.Lead,
+            FirstSection: article.FirstSection,
+            LastSection: article.LastSection,
+            MiddleSections: middleSections,
+            AuthorId: article.AuthorId,
+            AuthorName: article.Author!.Username,
+            GrandPrixId: article.GrandPrixId,
+            GrandPrixName: article.GrandPrix!.Name,
+            DatePublished: article.DatePublished,
+            DateUpdated: article.DateUpdated
+        ));
+    }
 
     public ResponseResult<List<ArticleListDto>> ListArticles()
     {
@@ -49,6 +78,19 @@ public class ArticleService(
             Id: a.Id,
             Title: a.Title,
             Lead: a.Lead,
+            Slug: a.Slug,
+            DatePublished: a.DatePublished
+        )).ToList();
+        
+        return ResponseResult<List<ArticleListDto>>.Success(articles);
+    }
+    public ResponseResult<List<ArticleListDto>> ListAllSummary()
+    {
+        var articles = articleRepo.GetAllSummary().Select(a => new ArticleListDto(
+            Id: a.Id,
+            Title: a.Title,
+            Lead: a.Lead,
+            Slug: a.Slug,
             DatePublished: a.DatePublished
         )).ToList();
         
@@ -57,10 +99,11 @@ public class ArticleService(
 
     public ResponseResult<List<ArticleListDto>> GetRecentArticles(int count)
     {
-        var articles = articleRepo.GetRecent(count).Select(a => new ArticleListDto(
+        var articles = articleRepo.GetRecentNews(count).Select(a => new ArticleListDto(
             Id: a.Id,
             Title: a.Title,
             Lead: a.Lead,
+            Slug: a.Slug,
             DatePublished: a.DatePublished
         )).ToList();
         

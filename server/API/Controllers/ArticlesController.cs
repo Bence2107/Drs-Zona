@@ -26,11 +26,37 @@ public class ArticleController(IArticleService articleService): ControllerBase
         return Ok(response.Value);
     }
     
-    [HttpGet("getAll")]
+    [HttpGet("get/{slug}")]
+    [ProducesResponseType(typeof(ArticleDetailDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult GetBySlug([FromRoute]string slug)
+    {
+        var response = articleService.GetArticleBySlug(slug);
+        if (!response.IsSuccess)
+        {
+            return BadRequest(new
+            {
+                response.ErrorField, 
+                response.Message
+            });
+        }
+        
+        return Ok(response.Value);
+    }
+    
+    [HttpGet("getAllArticles")]
     [ProducesResponseType(typeof(List<ArticleListDto>), StatusCodes.Status200OK)]
-    public IActionResult GetAll()
+    public IActionResult GetAllArticles()
     {
         var response = articleService.ListArticles();
+        return Ok(response);
+    }
+    
+    [HttpGet("getAllSummary")]
+    [ProducesResponseType(typeof(List<ArticleListDto>), StatusCodes.Status200OK)]
+    public IActionResult GetAllSummary()
+    {
+        var response = articleService.ListAllSummary();
         return Ok(response);
     }
 

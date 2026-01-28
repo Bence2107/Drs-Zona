@@ -67,6 +67,7 @@ public record ArticleListDto(
     [StringLength(200, MinimumLength = 5)] string Title,
     [StringLength(500, MinimumLength = 20)]
     string Lead,
+    string Slug,
     DateTime DatePublished
 );
 

@@ -7,14 +7,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ArticleListDto } from '../../models/article-list-dto';
+import { ArticleDetailDto } from '../../models/article-detail-dto';
 
-export interface ApiArticleGetAllGet$Json$Params {
+export interface ApiArticleGetSlugGet$Json$Params {
+  slug: string;
 }
 
-export function apiArticleGetAllGet$Json(http: HttpClient, rootUrl: string, params?: ApiArticleGetAllGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ArticleListDto>>> {
-  const rb = new RequestBuilder(rootUrl, apiArticleGetAllGet$Json.PATH, 'get');
+export function apiArticleGetSlugGet$Json(http: HttpClient, rootUrl: string, params: ApiArticleGetSlugGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<ArticleDetailDto>> {
+  const rb = new RequestBuilder(rootUrl, apiArticleGetSlugGet$Json.PATH, 'get');
   if (params) {
+    rb.path('slug', params.slug, {});
   }
 
   return http.request(
@@ -22,9 +24,9 @@ export function apiArticleGetAllGet$Json(http: HttpClient, rootUrl: string, para
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<ArticleListDto>>;
+      return r as StrictHttpResponse<ArticleDetailDto>;
     })
   );
 }
 
-apiArticleGetAllGet$Json.PATH = '/api/Article/getAll';
+apiArticleGetSlugGet$Json.PATH = '/api/Article/get/{slug}';

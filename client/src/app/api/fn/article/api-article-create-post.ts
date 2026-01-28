@@ -9,15 +9,13 @@ import { RequestBuilder } from '../../request-builder';
 
 import { ArticleCreateDto } from '../../models/article-create-dto';
 
-export interface ApiArticleCreateAuthorIdPost$Params {
-  authorId: string;
+export interface ApiArticleCreatePost$Params {
       body?: ArticleCreateDto
 }
 
-export function apiArticleCreateAuthorIdPost(http: HttpClient, rootUrl: string, params: ApiArticleCreateAuthorIdPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiArticleCreateAuthorIdPost.PATH, 'post');
+export function apiArticleCreatePost(http: HttpClient, rootUrl: string, params?: ApiArticleCreatePost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiArticleCreatePost.PATH, 'post');
   if (params) {
-    rb.path('authorId', params.authorId, {});
     rb.body(params.body, 'application/*+json');
   }
 
@@ -31,4 +29,4 @@ export function apiArticleCreateAuthorIdPost(http: HttpClient, rootUrl: string, 
   );
 }
 
-apiArticleCreateAuthorIdPost.PATH = '/api/Article/create/{authorId}';
+apiArticleCreatePost.PATH = '/api/Article/create';

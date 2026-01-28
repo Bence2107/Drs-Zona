@@ -11,7 +11,15 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
     
     public Article? GetArticleById(Guid id) => _articles.FirstOrDefault(article => article.Id == id);
     
-    public List<Article> GetAllArticles() => _articles.ToList();
+    public Article? GetArticleBySlug(string slug) => _articles.FirstOrDefault(article => article.Slug == slug);
+    
+    public List<Article> GetAllArticles() => _articles
+        .Where(article => article.IsSummary != true)
+        .ToList();
+    
+    public List<Article> GetAllSummary() => _articles
+        .Where(article => article.IsSummary == true)
+        .ToList();
     
     public void Create(Article article)
     {
@@ -46,8 +54,7 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
         .Include(article => article.Author)
         .Include(article => article.GrandPrix)
         .FirstOrDefault(article => article.Id == id);
-
-
+    
     public List<Article> GetByAuthorId(Guid authorId)  => _articles
         .Where(article => article.AuthorId == authorId)
         .ToList();
@@ -56,8 +63,16 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
         .Where(article => article.GrandPrixId == grandPrixId)
         .ToList();
 
-    public List<Article> GetRecent(int count) => _articles
+    public List<Article> GetRecentNews(int count) => _articles
         .Include(a => a.Author)
+        .Where(a => a.IsSummary != true)
+        .OrderByDescending(a => a.DatePublished)
+        .Take(count)
+        .ToList();
+    
+    public List<Article> GetRecentSummarys(int count) => _articles
+        .Include(a => a.Author)
+        .Where(a => a.IsSummary == true)
         .OrderByDescending(a => a.DatePublished)
         .Take(count)
         .ToList();

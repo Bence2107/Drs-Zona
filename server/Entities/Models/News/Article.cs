@@ -31,6 +31,10 @@ public class Article
     public required string Lead { get; set; }
     
     [Required]
+    [Column("is_summary")]
+    public bool IsSummary { get; set; }
+    
+    [Required]
     [Column("slug")]
     public required string Slug { get; set; }
     
