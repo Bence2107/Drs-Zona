@@ -38,7 +38,7 @@ export class NewsListComponent implements OnInit {
     this.isLoading = true;
     this.errorOccurred = false;
 
-    this.articleService.getAll().subscribe({
+    this.articleService.getAllArticles().subscribe({
       next: (data) => {
         this.articles = data;
         this.isLoading = false;
