@@ -26,7 +26,6 @@ header {
   z-index: 1000;
   background-color: var(--header-bg) !important;
   border-bottom: 1px solid var(--border-color);
-  transition: background-color 0.3s ease;
 }
 
 .account-icon {
@@ -62,7 +61,6 @@ header {
   color: var(--text-main) !important;
   align-items: center;
   cursor: pointer;
-  transition: all 0.3s ease 0s;
 }
 
 .nav_links li a {

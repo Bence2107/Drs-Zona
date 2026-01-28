@@ -1,9 +1,13 @@
-import {ApplicationConfig, ErrorHandler,} from '@angular/core';
+import {ApplicationConfig, ErrorHandler, LOCALE_ID,} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import {ApiConfiguration} from './api/api-configuration';
 import {provideHttpClient} from '@angular/common/http';
+import localeHu from '@angular/common/locales/hu';
+import {registerLocaleData} from '@angular/common';
+
+registerLocaleData(localeHu)
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,5 +24,6 @@ export const appConfig: ApplicationConfig = {
         return config;
       }
     },
+    { provide: LOCALE_ID, useValue: 'hu-HU' }
   ]
 };
