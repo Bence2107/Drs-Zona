@@ -1,11 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {MatProgressBar} from '@angular/material/progress-bar';
-import {NgForOf, NgIf} from '@angular/common';
+import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {ArticleService} from '../../../../services/article.service';
-import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
-import {MatButton} from '@angular/material/button';
-import {MatList, MatListItem, MatListItemMeta, MatListItemTitle} from '@angular/material/list';
+import {MatCard, MatCardContent, MatCardImage} from '@angular/material/card';
 import {ArticleListDto} from '../../../../api/models/article-list-dto';
 import {ErrorDisplayComponent} from '../../../../components/error-display/error-display.component';
 
@@ -18,19 +16,15 @@ import {ErrorDisplayComponent} from '../../../../components/error-display/error-
     RouterLink,
     MatCard,
     MatCardContent,
-    MatList,
-    MatListItem,
-    MatListItemTitle,
-    MatListItemMeta,
-    MatCardHeader,
-    MatCardTitle,
-    ErrorDisplayComponent
+    ErrorDisplayComponent,
+    DatePipe,
+    MatCardImage
   ],
   templateUrl: './recent-news.component.html',
   styleUrl: './recent-news.component.scss'
 })
 export class RecentNewsComponent implements OnInit {
-  articles$: ArticleListDto[] = [];
+  @Input() articles: ArticleListDto[] = []
   isLoading = false;
   errorOccurred = false;
 
@@ -46,7 +40,7 @@ export class RecentNewsComponent implements OnInit {
 
     this.articleService.getRecent(3).subscribe({
       next: (data) => {
-        this.articles$ = data;
+        this.articles = data;
         this.isLoading = false;
       },
       error: (err) => {
