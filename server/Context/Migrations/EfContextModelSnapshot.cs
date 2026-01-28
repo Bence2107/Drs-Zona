@@ -17,7 +17,7 @@ namespace Context.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.11")
+                .HasAnnotation("ProductVersion", "9.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -48,7 +48,6 @@ namespace Context.Migrations
                         .HasColumnName("first_section");
 
                     b.Property<string>("FourthSection")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("fourth_section");
 
@@ -67,7 +66,6 @@ namespace Context.Migrations
                         .HasColumnName("lead");
 
                     b.Property<string>("SecondSection")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("second_section");
 
@@ -77,7 +75,6 @@ namespace Context.Migrations
                         .HasColumnName("slug");
 
                     b.Property<string>("ThirdSection")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("third_section");
 
