@@ -5,7 +5,7 @@ export interface DriverUpdateDto {
   birthDate?: string;
   championships?: number;
   driverNumber?: number;
-  id?: number;
+  id?: string;
   name?: string | null;
   nationality?: string | null;
   polePositions?: number;

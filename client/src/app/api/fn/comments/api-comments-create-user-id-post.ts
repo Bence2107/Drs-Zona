@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 import { CommentCreateDto } from '../../models/comment-create-dto';
 
 export interface ApiCommentsCreateUserIdPost$Params {
-  userId: number;
+  userId: string;
       body?: CommentCreateDto
 }
 

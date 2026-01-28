@@ -9,7 +9,7 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface ApiDriversDeleteIdDelete$Params {
-  id: number;
+  id: string;
 }
 
 export function apiDriversDeleteIdDelete(http: HttpClient, rootUrl: string, params: ApiDriversDeleteIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {

@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 import { DriverDetailDto } from '../../models/driver-detail-dto';
 
 export interface ApiDriversGetIdGet$Json$Params {
-  id: number;
+  id: string;
 }
 
 export function apiDriversGetIdGet$Json(http: HttpClient, rootUrl: string, params: ApiDriversGetIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<DriverDetailDto>> {

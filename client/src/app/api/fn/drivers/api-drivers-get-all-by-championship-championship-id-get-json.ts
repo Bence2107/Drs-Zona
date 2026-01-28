@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 import { DriverDetailDto } from '../../models/driver-detail-dto';
 
 export interface ApiDriversGetAllByChampionshipChampionshipIdGet$Json$Params {
-  championshipId: number;
+  championshipId: string;
 }
 
 export function apiDriversGetAllByChampionshipChampionshipIdGet$Json(http: HttpClient, rootUrl: string, params: ApiDriversGetAllByChampionshipChampionshipIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DriverDetailDto>>> {

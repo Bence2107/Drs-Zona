@@ -4,13 +4,13 @@
 import { DriverNameRecord } from '../models/driver-name-record';
 export interface ConstructorDetailDto {
   brandDescription?: string | null;
-  brandId?: number;
+  brandId?: string;
   brandName?: string | null;
   championships?: number;
   driverNames?: Array<DriverNameRecord> | null;
   foundedYear?: number;
   headQuarters?: string | null;
-  id?: number;
+  id?: string;
   name?: string | null;
   teamChief?: string | null;
   technicalChief?: string | null;

@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 import { GrandPrixDetailDto } from '../../models/grand-prix-detail-dto';
 
 export interface ApiGrandPrixGetGrandPrixIdGet$Plain$Params {
-  grandPrixId: number;
+  grandPrixId: string;
 }
 
 export function apiGrandPrixGetGrandPrixIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiGrandPrixGetGrandPrixIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<GrandPrixDetailDto>> {

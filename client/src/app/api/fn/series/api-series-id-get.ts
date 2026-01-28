@@ -9,7 +9,7 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface ApiSeriesIdGet$Params {
-  id: number;
+  id: string;
 }
 
 export function apiSeriesIdGet(http: HttpClient, rootUrl: string, params: ApiSeriesIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {

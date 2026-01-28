@@ -4,15 +4,15 @@
 import { CircuitDetailDto } from '../models/circuit-detail-dto';
 export interface GrandPrixDetailDto {
   circuitDetail?: CircuitDetailDto;
-  circuitId?: number;
+  circuitId?: string;
   endTime?: string;
-  id?: number;
+  id?: string;
   lapsCompleted?: number;
   name?: string | null;
   raceDistance?: number;
   roundNumber?: number;
   seasonYear?: number;
-  seriesId?: number;
+  seriesId?: string;
   seriesName?: string | null;
   startTime?: string;
 }

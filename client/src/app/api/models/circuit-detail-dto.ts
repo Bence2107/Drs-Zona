@@ -3,7 +3,7 @@
 
 export interface CircuitDetailDto {
   fastestLap?: string | null;
-  id?: number;
+  id?: string;
   length?: number;
   location?: string | null;
   name?: string | null;

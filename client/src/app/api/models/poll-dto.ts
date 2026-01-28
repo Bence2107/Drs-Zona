@@ -3,16 +3,16 @@
 
 import { PollOptionDto } from '../models/poll-option-dto';
 export interface PollDto {
-  authorId?: number;
+  authorId?: string;
   authorName?: string | null;
   createdAt?: string;
   description?: string | null;
   expiresAt?: string;
   hasVoted?: boolean;
-  id?: number;
+  id?: string;
   isActive?: boolean;
   isExpired?: boolean;
   pollOptions?: Array<PollOptionDto> | null;
   totalVotes?: number;
-  userVoteOptionId?: number | null;
+  userVoteOptionId?: string | null;
 }

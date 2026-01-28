@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 import { GrandPrixDetailDto } from '../../models/grand-prix-detail-dto';
 
 export interface ApiGrandPrixGetSeasonGrandsPrixSeriesIdYearGet$Plain$Params {
-  seriesId: number;
+  seriesId: string;
   year: number;
 }
 

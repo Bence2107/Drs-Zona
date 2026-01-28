@@ -3,7 +3,7 @@
 
 export interface GrandPrixUpdateDto {
   endTime?: string;
-  id?: number;
+  id?: string;
   lapsCompleted?: number;
   startTime?: string;
 }

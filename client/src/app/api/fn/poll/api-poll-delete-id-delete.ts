@@ -9,8 +9,8 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface ApiPollDeleteIdDelete$Params {
-  id: number;
-  userId?: number;
+  id: string;
+  userId?: string;
 }
 
 export function apiPollDeleteIdDelete(http: HttpClient, rootUrl: string, params: ApiPollDeleteIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {

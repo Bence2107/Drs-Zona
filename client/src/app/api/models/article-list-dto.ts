@@ -3,7 +3,7 @@
 
 export interface ArticleListDto {
   datePublished?: string;
-  id?: number;
+  id?: string;
   lead?: string | null;
   title?: string | null;
 }

@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 import { ConstructorDetailDto } from '../../models/constructor-detail-dto';
 
 export interface ApiConstructorsGetIdGet$Plain$Params {
-  id: number;
+  id: string;
 }
 
 export function apiConstructorsGetIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiConstructorsGetIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<ConstructorDetailDto>> {

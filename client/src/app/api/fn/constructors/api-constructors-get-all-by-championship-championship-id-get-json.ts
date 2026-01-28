@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 import { ConstructorListDto } from '../../models/constructor-list-dto';
 
 export interface ApiConstructorsGetAllByChampionshipChampionshipIdGet$Json$Params {
-  championshipId: number;
+  championshipId: string;
 }
 
 export function apiConstructorsGetAllByChampionshipChampionshipIdGet$Json(http: HttpClient, rootUrl: string, params: ApiConstructorsGetAllByChampionshipChampionshipIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ConstructorListDto>>> {

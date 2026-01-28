@@ -6,9 +6,9 @@ export interface CommentDetailDto {
   dateCreated?: string;
   dateUpdated?: string;
   downVotes?: number;
-  id?: number;
-  replyToCommentId?: number | null;
+  id?: string;
+  replyToCommentId?: string | null;
   upVotes?: number;
-  userId?: number;
+  userId?: string;
   username?: string | null;
 }

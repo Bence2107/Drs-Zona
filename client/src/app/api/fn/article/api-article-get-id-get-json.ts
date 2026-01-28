@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 import { ArticleDetailDto } from '../../models/article-detail-dto';
 
 export interface ApiArticleGetIdGet$Json$Params {
-  id: number;
+  id: string;
 }
 
 export function apiArticleGetIdGet$Json(http: HttpClient, rootUrl: string, params: ApiArticleGetIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<ArticleDetailDto>> {

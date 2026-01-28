@@ -4,7 +4,7 @@
 export interface BrandDetailDto {
   description?: string | null;
   headQuarters?: string | null;
-  id?: number;
+  id?: string;
   name?: string | null;
   principal?: string | null;
 }

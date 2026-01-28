@@ -32,3 +32,4 @@ export type { PollOptionDto } from './models/poll-option-dto';
 export type { ProblemDetails } from './models/problem-details';
 export type { SeriesCreateDto } from './models/series-create-dto';
 export type { SeriesUpdateDto } from './models/series-update-dto';
+export type { SummaryDto } from './models/summary-dto';

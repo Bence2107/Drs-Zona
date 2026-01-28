@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 import { PollDto } from '../../models/poll-dto';
 
 export interface ApiPollGetIdGet$Plain$Params {
-  id: number;
+  id: string;
 }
 
 export function apiPollGetIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiPollGetIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<PollDto>> {

@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 import { CommentDetailDto } from '../../models/comment-detail-dto';
 
 export interface ApiCommentsGetCommentRepliesCommentIdGet$Plain$Params {
-  commentId: number;
+  commentId: string;
 }
 
 export function apiCommentsGetCommentRepliesCommentIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiCommentsGetCommentRepliesCommentIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CommentDetailDto>>> {

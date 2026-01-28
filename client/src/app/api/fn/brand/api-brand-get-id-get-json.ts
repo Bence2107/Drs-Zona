@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 import { BrandDetailDto } from '../../models/brand-detail-dto';
 
 export interface ApiBrandGetIdGet$Json$Params {
-  id: number;
+  id: string;
 }
 
 export function apiBrandGetIdGet$Json(http: HttpClient, rootUrl: string, params: ApiBrandGetIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<BrandDetailDto>> {

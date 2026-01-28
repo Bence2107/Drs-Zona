@@ -5,7 +5,7 @@ export interface SeriesUpdateDto {
   description?: string | null;
   firstYear?: number;
   governingBody?: string | null;
-  id?: number;
+  id?: string;
   lastYear?: number;
   name?: string | null;
 }

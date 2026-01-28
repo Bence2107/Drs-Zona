@@ -9,7 +9,7 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface ApiGrandPrixDeleteIdDelete$Params {
-  id: number;
+  id: string;
 }
 
 export function apiGrandPrixDeleteIdDelete(http: HttpClient, rootUrl: string, params: ApiGrandPrixDeleteIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
