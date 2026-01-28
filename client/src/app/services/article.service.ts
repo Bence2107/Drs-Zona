@@ -21,17 +21,16 @@ export class ArticleService {
     return apiArticleGetAllArticlesGet$Json(this.http, this.apiConfig.rootUrl).pipe(
       map(response => {
         const body = response.body as any;
-        return body.value as ArticleListDto[] ??[]
+        return body.value as ArticleListDto[] ?? []
       })
     )
   }
-
 
   getAllSummary() : Observable<ArticleListDto[]> {
     return apiArticleGetAllSummaryGet$Json(this.http, this.apiConfig.rootUrl).pipe(
       map(response => {
         const body = response.body as any;
-        return body.value as ArticleListDto[] ??[]
+        return body.value as ArticleListDto[] ?? []
       })
     )
   }

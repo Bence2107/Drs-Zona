@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardImage} from '@angular/material/card';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
-import {ErrorDisplayComponent} from '../../../../components/error-display/error-display.component';
+import {ErrorDisplayComponent} from '../../../../../components/error-display/error-display.component';
 import {MatProgressBar} from '@angular/material/progress-bar';
-import {ArticleListDto} from '../../../../api/models/article-list-dto';
-import {ArticleService} from '../../../../services/article.service';
+import {ArticleListDto} from '../../../../../api/models/article-list-dto';
+import {ArticleService} from '../../../../../services/article.service';
 import {RouterLink} from '@angular/router';
 
 @Component({
