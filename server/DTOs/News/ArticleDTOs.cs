@@ -11,6 +11,8 @@ public record ArticleCreateDto(
     string Title,
     [StringLength(200, MinimumLength = 5, ErrorMessage = "A slug hossza nem megfelelő (5-200 karakter)")]
     string Slug,
+    [Required(ErrorMessage = "Kötelező megadni a hír összefoglaló-e?")]
+    bool IsReview,
     [Required(ErrorMessage = "A Lead mező kitöltése kötelező")]
     [StringLength(500, MinimumLength = 20, ErrorMessage = "A Lead hossza nem megfelelő (20-500 karakter)")]
     string Lead,
@@ -41,6 +43,8 @@ public record ArticleUpdateDto(
     string Title,
     [StringLength(200, MinimumLength = 5, ErrorMessage = "A slug hossza nem megfelelő (5-200 karakter)")]
     string Slug,
+    [Required(ErrorMessage = "Kötelező megadni a hír összefoglaló-e?")]
+    bool IsReview,
     [Required(ErrorMessage = "A Lead mező kitöltése kötelező")]
     [StringLength(500, MinimumLength = 20, ErrorMessage = "A Lead hossza nem megfelelő (20-500 karakter)")]
     string Lead,
@@ -81,6 +85,7 @@ public record ArticleDetailDto(
     [Required] Guid Id,
     [StringLength(200, MinimumLength = 5)] string Title,
     [StringLength(500, MinimumLength = 20)] string Lead,
+    [Required] bool IsReview,
     [MinLength(100)] [MaxLength(524288)] string FirstSection,
     [MinLength(100)] [MaxLength(524288)] string LastSection,
     List<string> MiddleSections,

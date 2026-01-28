@@ -31,6 +31,7 @@ public class ArticleService(
             Id: article.Id,
             Title: article.Title,
             Lead: article.Lead,
+            IsReview: article.IsSummary,
             FirstSection: article.FirstSection,
             LastSection: article.LastSection,
             MiddleSections: middleSections,
@@ -60,6 +61,7 @@ public class ArticleService(
             Id: article.Id,
             Title: article.Title,
             Lead: article.Lead,
+            IsReview: article.IsSummary,
             FirstSection: article.FirstSection,
             LastSection: article.LastSection,
             MiddleSections: middleSections,
@@ -123,6 +125,7 @@ public class ArticleService(
             Title = dto.Title,
             Lead = dto.Lead,
             Slug = dto.Slug,
+            IsSummary = dto.IsReview,
             FirstSection = dto.FirstSection,
             LastSection = dto.LastSection,
             AuthorId = dto.AuthorId,
@@ -153,6 +156,7 @@ public class ArticleService(
         article.GrandPrixId = dto.GrandPrixId;
         article.Title = dto.Title;
         article.Lead = dto.Lead;
+        article.IsSummary = dto.IsReview;
         article.FirstSection = dto.FirstSection;
         article.LastSection = dto.LastSection;
         article.DateUpdated = DateTime.UtcNow;
