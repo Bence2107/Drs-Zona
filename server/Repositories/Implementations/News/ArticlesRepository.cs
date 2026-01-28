@@ -9,9 +9,15 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
 {
     private readonly DbSet<Article> _articles = context.Articles;
     
-    public Article? GetArticleById(Guid id) => _articles.FirstOrDefault(article => article.Id == id);
+    public Article? GetArticleById(Guid id) => _articles
+        .Include(article => article.Author)
+        .Include(article => article.GrandPrix)
+        .FirstOrDefault(article => article.Id == id);
     
-    public Article? GetArticleBySlug(string slug) => _articles.FirstOrDefault(article => article.Slug == slug);
+    public Article? GetArticleBySlug(string slug) => _articles
+        .Include(article => article.Author)
+        .Include(article => article.GrandPrix)
+        .FirstOrDefault(article => article.Slug == slug);
     
     public List<Article> GetAllArticles() => _articles
         .Where(article => article.IsSummary != true)

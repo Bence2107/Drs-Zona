@@ -38,7 +38,7 @@ public class ArticleService(
             AuthorId: article.AuthorId,
             AuthorName: article.Author!.Username,
             GrandPrixId: article.GrandPrixId,
-            GrandPrixName: article.GrandPrix!.Name,
+            GrandPrixName: article.GrandPrix?.Name,
             DatePublished: article.DatePublished,
             DateUpdated: article.DateUpdated
         ));
@@ -68,7 +68,7 @@ public class ArticleService(
             AuthorId: article.AuthorId,
             AuthorName: article.Author!.Username,
             GrandPrixId: article.GrandPrixId,
-            GrandPrixName: article.GrandPrix!.Name,
+            GrandPrixName: article.GrandPrix?.Name,
             DatePublished: article.DatePublished,
             DateUpdated: article.DateUpdated
         ));
