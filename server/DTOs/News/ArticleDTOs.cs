@@ -71,7 +71,7 @@ public record ArticleListDto(
     [StringLength(200, MinimumLength = 5)] string Title,
     [StringLength(500, MinimumLength = 20)]
     string Lead,
-    string Slug,
+    [StringLength(200, MinimumLength = 5)] string Slug,
     DateTime DatePublished
 );
 
@@ -85,6 +85,7 @@ public record ArticleDetailDto(
     [Required] Guid Id,
     [StringLength(200, MinimumLength = 5)] string Title,
     [StringLength(500, MinimumLength = 20)] string Lead,
+    [StringLength(200, MinimumLength = 5)] string Slug,
     [Required] bool IsReview,
     [MinLength(100)] [MaxLength(524288)] string FirstSection,
     [MinLength(100)] [MaxLength(524288)] string LastSection,
