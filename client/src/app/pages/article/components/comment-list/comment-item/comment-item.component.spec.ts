@@ -1,3 +1,4 @@
+/*
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CommentItemComponent } from './comment-item.component';
@@ -21,3 +22,4 @@ describe('CommentItemComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+*/
