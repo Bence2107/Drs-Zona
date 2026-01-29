@@ -256,7 +256,7 @@ public class ArticleTests
         FirstSection = "First",
         LastSection = "Last",
         Author = author,
-        AuthorId = author?.Id,
+        AuthorId = author!.Id,
         DatePublished = published ?? DateTime.UtcNow
     };
 }

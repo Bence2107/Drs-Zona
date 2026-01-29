@@ -71,6 +71,7 @@ public record ArticleListDto(
     [StringLength(200, MinimumLength = 5)] string Title,
     [StringLength(500, MinimumLength = 20)]
     string Lead,
+    bool IsReview,
     [StringLength(200, MinimumLength = 5)] string Slug,
     DateTime DatePublished
 );
@@ -90,7 +91,7 @@ public record ArticleDetailDto(
     [MinLength(100)] [MaxLength(524288)] string FirstSection,
     [MinLength(100)] [MaxLength(524288)] string LastSection,
     List<string> MiddleSections,
-    Guid AuthorId,
+    Guid? AuthorId,
     [StringLength(50, MinimumLength = 3)] string AuthorName,
     Guid? GrandPrixId,
     [StringLength(100)] string? GrandPrixName,

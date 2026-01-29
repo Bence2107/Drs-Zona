@@ -82,6 +82,7 @@ public class ArticleService(
             Id: a.Id,
             Title: a.Title,
             Lead: a.Lead,
+            IsReview: a.IsSummary,
             Slug: a.Slug,
             DatePublished: a.DatePublished
         )).ToList();
@@ -94,6 +95,7 @@ public class ArticleService(
             Id: a.Id,
             Title: a.Title,
             Lead: a.Lead,
+            IsReview: a.IsSummary,
             Slug: a.Slug,
             DatePublished: a.DatePublished
         )).ToList();
@@ -107,6 +109,7 @@ public class ArticleService(
             Id: a.Id,
             Title: a.Title,
             Lead: a.Lead,
+            IsReview: a.IsSummary,
             Slug: a.Slug,
             DatePublished: a.DatePublished
         )).ToList();
