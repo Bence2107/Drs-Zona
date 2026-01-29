@@ -5,7 +5,7 @@
     <mat-icon>menu</mat-icon>
   </button>
 
-  <img [src]="'img/header/logo.png'" alt="Drs Zone" class="logo">
+  <img [src]="!isDarkMode ? 'img/header/logo-light.png' : 'img/header/logo-dark.png'" alt="Drs Zone" class="logo">
   <nav *ngIf="!isScreenSmall">
     <ul class="nav_links">
       <li routerLinkActive="activeLink" [routerLink]="'home'">
