@@ -32,7 +32,8 @@ html, body {
 .nav-list li a {
   font-size: 18px;
   color: var(--text-main) !important;
-  font-weight: 400;
+  font-family: 'Kanit', sans-serif;
+  font-weight: bold;
 }
 
 .nav-list li mat-icon {
