@@ -1,18 +1,15 @@
-.news-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
+.news-container,
+.reviews-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 30px 20px;
-  gap: 30px;
   box-sizing: border-box;
   border-radius: 30px 12px 30px 12px;
   background-color: var(--secondary-bg);
-
   min-height: 60vh;
 }
 
@@ -20,7 +17,6 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 850px;
   cursor: pointer;
   background-color: var(--primary-bg);
   border-radius: 20px;
@@ -36,7 +32,7 @@
 
   img {
     width: 100%;
-    height: 300px;
+    height: 250px;
     object-fit: cover;
   }
 }
@@ -52,14 +48,14 @@
 
   .news-label {
     color: var(--text-main);
-    font-size: 1.8em;
+    font-size: 1.5em;
     font-weight: bold;
     margin: 0;
     line-height: 1.2;
   }
 
   .news-desc {
-    font-size: 1.1em;
+    font-size: 1em;
     color: var(--text-secondary);
     margin: 0;
   }
@@ -73,6 +69,7 @@
 }
 
 .loading-container, .error-container {
+  grid-column: 1 / -1;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -101,44 +98,57 @@ mat-progress-bar {
 }
 
 .empty-msg {
+  grid-column: 1 / -1;
   text-align: center;
   width: 100%;
   font-size: 1.5em;
   color: var(--primary-text);
 }
 
+// Tablet - 1 oszlop
 @media (max-width: 1200px) {
-  .new-item {
-    width: calc(85% - 15px);
+  .news-container,
+  .reviews-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+
+  .new-item img {
+    height: 220px;
+  }
+
+  .text-content .news-label {
+    font-size: 1.4em;
   }
 }
 
-@media (max-width: 990px) {
+// Mobil - 1 oszlop
+@media (max-width: 768px) {
+  .news-container,
   .reviews-container {
+    grid-template-columns: 1fr;
     padding: 10px 2%;
     gap: 15px;
     width: 100%;
-    flex-direction: column;
-    align-items: center;
   }
 
   .new-item {
     width: 100%;
     margin: auto;
     border-radius: 12px;
-    gap: 10px;
   }
 
   .new-item img {
+    height: 200px;
     max-width: 100%;
     border-radius: 8px;
   }
 
-  .news-label {
+  .text-content .news-label {
     font-size: 1.3em;
   }
 
-  .news-desc {
+  .text-content .news-desc {
     font-size: 1em;
     color: var(--secondary-text);
   }
