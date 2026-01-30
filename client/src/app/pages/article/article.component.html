@@ -1,4 +1,4 @@
-<main>
+<main [class.error-state]="errorOccurred || isLoading">
   <div class="container" *ngIf="!isLoading && !errorOccurred; else stateTemplate">
     <mat-card class="article-card">
 
@@ -21,11 +21,11 @@
             <div class="content-block" [innerHTML]="section"></div>
 
             <figure class="article-figure" *ngIf="i === 0">
-              <img [src]="'img/news-images/' + article.id + '/secondary.jpg'" class="img-fluid">
+              <img [src]="'img/news-images/' + article.id + '/secondary.jpg'" class="img-fluid" alt="">
             </figure>
 
             <figure class="article-figure" *ngIf="i === 1">
-              <img [src]="'img/news-images/' + article.id + '/third.jpg'" class="img-fluid">
+              <img [src]="'img/news-images/' + article.id + '/third.jpg'" class="img-fluid" alt="">
             </figure>
           </div>
         </ng-container>
@@ -57,21 +57,16 @@
   </div>
 
   <ng-template #stateTemplate>
-    <app-error-display *ngIf="errorOccurred" (retry)="fetchArticle()"></app-error-display>
+    <div class="error-container" *ngIf="errorOccurred">
+      <app-error-display
+        *ngIf="errorOccurred"
+        (retry)="fetchArticle()">
+      </app-error-display>
+    </div>
 
-    <div class="container" *ngIf="isLoading && !errorOccurred">
-      <mat-card class="article-card skeleton-card">
-        <div class="skeleton-hero"></div>
-        <div class="title-group">
-          <div class="skeleton-title"></div>
-          <div class="skeleton-lead"></div>
-        </div>
-        <mat-card-content>
-          <div class="skeleton-text"></div>
-          <div class="skeleton-text"></div>
-          <div class="skeleton-text short"></div>
-        </mat-card-content>
-      </mat-card>
+    <div class="loading-container" *ngIf="isLoading && !errorOccurred">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <h3>Információ betöltése...</h3>
     </div>
   </ng-template>
 </main>

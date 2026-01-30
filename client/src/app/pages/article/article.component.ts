@@ -23,7 +23,8 @@ import {CommentListComponent} from './components/comment-list/comment-list.compo
     ErrorDisplayComponent,
     NgForOf,
     MatDivider,
-    CommentListComponent
+    CommentListComponent,
+    MatProgressBar
   ],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss'

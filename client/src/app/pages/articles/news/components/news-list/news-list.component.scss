@@ -105,7 +105,6 @@ mat-progress-bar {
   color: var(--primary-text);
 }
 
-// Tablet - 1 oszlop
 @media (max-width: 1200px) {
   .news-container,
   .reviews-container {
@@ -122,7 +121,6 @@ mat-progress-bar {
   }
 }
 
-// Mobil - 1 oszlop
 @media (max-width: 768px) {
   .news-container,
   .reviews-container {
