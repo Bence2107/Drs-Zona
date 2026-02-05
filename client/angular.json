@@ -70,7 +70,14 @@
               "buildTarget": "drs-zona:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "allowedHosts": [
+              "drs-zona.hu",
+              "www.drs-zona.hu",
+              "localhost"
+            ]
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
