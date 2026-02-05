@@ -80,7 +80,13 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddCors(options => {
     options.AddPolicy("AngularPolicy", policy => {
-        policy.WithOrigins("http://localhost:4200") 
+        policy.WithOrigins(
+                "http://localhost:4200",
+                "http://localhost:80",
+                "http://localhost",
+                "http://drs-zona.hu",
+                "https://drs-zona.hu"
+                ) 
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
