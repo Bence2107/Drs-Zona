@@ -4,7 +4,9 @@
 export interface ArticleListDto {
   datePublished?: string;
   id?: string;
+  isReview?: boolean;
   lead?: string | null;
+  primaryImageUrl?: string | null;
   slug?: string | null;
   title?: string | null;
 }
