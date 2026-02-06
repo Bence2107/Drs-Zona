@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {UIComment} from '../../../../../api/models/ui-comment';
+import {UIComment} from '../../../../../models/ui-comment';
 import {CommentService} from '../../../../../services/comment.service';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {MatIconButton} from '@angular/material/button';

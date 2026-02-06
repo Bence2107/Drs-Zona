@@ -3,7 +3,7 @@
     <mat-card class="article-card">
 
       <header class="article-header">
-        <img [src]="'img/news-images/' + article?.id + '/primary.jpg'"
+        <img [src]="article?.primaryImageUrl"
              [alt]="article?.title"
              class="img-fluid primary-img">
 
@@ -21,18 +21,18 @@
             <div class="content-block" [innerHTML]="section"></div>
 
             <figure class="article-figure" *ngIf="i === 0">
-              <img [src]="'img/news-images/' + article.id + '/secondary.jpg'" class="img-fluid" alt="">
+              <img [src]="article?.secondaryImageUrl" class="img-fluid" alt="">
             </figure>
 
             <figure class="article-figure" *ngIf="i === 1">
-              <img [src]="'img/news-images/' + article.id + '/third.jpg'" class="img-fluid" alt="">
+              <img [src]="article?.thirdImageUrl" class="img-fluid" alt="">
             </figure>
           </div>
         </ng-container>
 
 
         <figure class="article-figure" *ngIf="article?.id">
-          <img [src]="'img/news-images/' + article.id + '/last.jpg'"
+          <img [src]="article?.lastImageUrl"
                [alt]="article.title"
                class="img-fluid">
         </figure>

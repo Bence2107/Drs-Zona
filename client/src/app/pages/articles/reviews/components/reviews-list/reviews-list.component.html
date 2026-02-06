@@ -1,9 +1,9 @@
 <div class="reviews-container" *ngIf="!isLoading && !errorOccurred; else stateTemplate">
 
-  <mat-card class="new-item" *ngFor="let new_item of reviews" [routerLink]="['/article', new_item.id]">
+  <mat-card class="new-item" *ngFor="let new_item of reviews" [routerLink]="['/article', new_item.slug]">
 
     <img mat-card-image
-         [src]="'img/news-images/' + new_item.id + '/primary.jpg'"
+         [src]="new_item.primaryImageUrl"
          [alt]="new_item.title"
          loading="lazy">
 

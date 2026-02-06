@@ -6,7 +6,7 @@ import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from
 import {MatIcon} from '@angular/material/icon';
 import {MatDivider} from '@angular/material/list';
 import {CommentService} from '../../../../services/comment.service';
-import {UIComment} from '../../../../api/models/ui-comment';
+import {UIComment} from '../../../../models/ui-comment';
 import { ReactiveFormsModule } from '@angular/forms';
 import {CommentItemComponent} from './comment-item/comment-item.component';
 
