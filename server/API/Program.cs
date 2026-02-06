@@ -1,6 +1,7 @@
 using Context;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 using Repositories.Implementations;
 using Repositories.Implementations.News;
@@ -13,7 +14,9 @@ using Repositories.Interfaces.Polls;
 using Repositories.Interfaces.RaceTracks;
 using Repositories.Interfaces.Standings;
 using Services.Implementations;
+using Services.Implementations.image;
 using Services.Interfaces;
+using Services.Interfaces.images;
 
 Env.Load();
 
@@ -64,6 +67,8 @@ builder.Services.AddScoped<IDriverService, DriverService>();
 builder.Services.AddScoped<IPollService, PollService>();
 builder.Services.AddScoped<ISeriesService, SeriesService>();
 
+builder.Services.AddScoped<IArticleImageService, ArticleImageService>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -101,10 +106,28 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
+    RequestPath = "/uploads"
+});
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "client", "dist", "drs-zona", "browser")),
+    RequestPath = ""
+});
+
+app.UseStaticFiles();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapFallbackToFile("index.html");
 
 app.Run();
