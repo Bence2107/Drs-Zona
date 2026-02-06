@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardFooter} from '@angular/material/card';
-import {MatIcon} from '@angular/material/icon';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 
 import {MatButton} from '@angular/material/button';

@@ -1,10 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
-import {MatProgressBar} from '@angular/material/progress-bar';
-import { DatePipe } from '@angular/common';
-import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
-import {MatIcon} from '@angular/material/icon';
-import {MatDivider} from '@angular/material/list';
+import { MatCard } from '@angular/material/card';
 import {CommentService} from '../../../../services/comment.service';
 import {UIComment} from '../../../../models/ui-comment';
 import { ReactiveFormsModule } from '@angular/forms';
