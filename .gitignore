@@ -13,6 +13,7 @@ desktop.ini
 **/publish/
 **/TestResults/
 **/reports/
+**/uploads/
 
 # .NET User Secrets & Local Config
 **/appsettings.Development.json
