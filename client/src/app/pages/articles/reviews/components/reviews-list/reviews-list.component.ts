@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import { DatePipe } from "@angular/common";
 import {ErrorDisplayComponent} from "../../../../../components/error-display/error-display.component";
 import {MatCard, MatCardContent, MatCardImage} from "@angular/material/card";
 import {MatProgressBar} from "@angular/material/progress-bar";
@@ -16,10 +16,8 @@ import {ArticleService} from '../../../../../services/article.service';
     MatCardContent,
     MatCardImage,
     MatProgressBar,
-    NgForOf,
-    NgIf,
     RouterLink
-  ],
+],
   templateUrl: './reviews-list.component.html',
   styleUrl: './reviews-list.component.scss'
 })

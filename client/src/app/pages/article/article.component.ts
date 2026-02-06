@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardFooter} from '@angular/material/card';
 import {MatIcon} from '@angular/material/icon';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {NgForOf, NgIf} from '@angular/common';
+
 import {MatButton} from '@angular/material/button';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {ErrorDisplayComponent} from '../../components/error-display/error-display.component';
@@ -16,16 +16,14 @@ import {CommentListComponent} from './components/comment-list/comment-list.compo
   imports: [
     MatCard,
     RouterLink,
-    NgIf,
     MatButton,
     MatCardContent,
     MatCardFooter,
     ErrorDisplayComponent,
-    NgForOf,
     MatDivider,
     CommentListComponent,
     MatProgressBar
-  ],
+],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss'
 })

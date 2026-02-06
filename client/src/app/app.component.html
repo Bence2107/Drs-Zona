@@ -3,29 +3,39 @@
 <mat-sidenav-container class="app-container" [hasBackdrop]="isMobileOverlay">
 
   <mat-sidenav #sidenav
-               [mode]="isMobileOverlay ? 'over' : 'side'"
-               [opened]="!isMobileOverlay"
-               class="sidebar">
+    [mode]="isMobileOverlay ? 'over' : 'side'"
+    [opened]="!isMobileOverlay"
+    class="sidebar">
 
     <ul class="nav-list">
-      <li routerLink="home" routerLinkActive="activeLink" *ngIf="isMobileOverlay">
-        <mat-icon>home</mat-icon>
-        <a>Főoldal</a>
-      </li>
-      <li routerLink="news" routerLinkActive="activeLink" *ngIf="isMobileOverlay">
-        <mat-icon>newspaper</mat-icon>
-        <a>Hírek</a>
-      </li>
-      <li routerLink="reviews" routerLinkActive="activeLink" *ngIf="isMobileOverlay">
-        <mat-icon>rate_review</mat-icon>
-        <a>Összefoglalók</a>
-      </li>
+      @if (isMobileOverlay) {
+        <li routerLink="home" routerLinkActive="activeLink">
+          <mat-icon>home</mat-icon>
+          <a>Főoldal</a>
+        </li>
+      }
+      @if (isMobileOverlay) {
+        <li routerLink="news" routerLinkActive="activeLink">
+          <mat-icon>newspaper</mat-icon>
+          <a>Hírek</a>
+        </li>
+      }
+      @if (isMobileOverlay) {
+        <li routerLink="reviews" routerLinkActive="activeLink">
+          <mat-icon>rate_review</mat-icon>
+          <a>Összefoglalók</a>
+        </li>
+      }
 
-      <li routerLink="reviews" routerLinkActive="activeLink" *ngIf="isSmallScreen">
-        <mat-icon>person</mat-icon>
-        <a>Bejelentkezés</a>
-      </li>
-      <mat-divider *ngIf="isMobileOverlay"></mat-divider>
+      @if (isSmallScreen) {
+        <li routerLink="reviews" routerLinkActive="activeLink">
+          <mat-icon>person</mat-icon>
+          <a>Bejelentkezés</a>
+        </li>
+      }
+      @if (isMobileOverlay) {
+        <mat-divider></mat-divider>
+      }
 
       <mat-accordion multi="true" class="menu-accordion">
         <mat-expansion-panel expanded="true" class="menu-panel">
@@ -72,13 +82,15 @@
   </mat-sidenav>
 
   <mat-sidenav-content class="main-content-host" [class.menu-closed]="!sidenav.opened">
-    <button mat-icon-button
-            class="toggle-anchor"
-            [class.closed-pos]="!sidenav.opened"
-            (click)="sidenav.toggle()"
-            *ngIf="!isSmallScreen">
-      <mat-icon>{{ sidenav.opened ? 'menu_open' : 'menu' }}</mat-icon>
-    </button>
+    @if (!isSmallScreen) {
+      <button mat-icon-button
+        class="toggle-anchor"
+        [class.closed-pos]="!sidenav.opened"
+        (click)="sidenav.toggle()"
+        >
+        <mat-icon>{{ sidenav.opened ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+    }
     <div class="content-scroll-wrapper">
       <main class="content-padding">
         <router-outlet></router-outlet>

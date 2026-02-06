@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {UIComment} from '../../../../../models/ui-comment';
 import {CommentService} from '../../../../../services/comment.service';
-import {DatePipe, NgForOf, NgIf} from '@angular/common';
+import { DatePipe } from '@angular/common';
 import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatProgressBar} from '@angular/material/progress-bar';
@@ -10,16 +10,14 @@ import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from
 @Component({
   selector: 'app-comment-item',
   imports: [
-    NgIf,
     DatePipe,
     MatIconButton,
     MatIcon,
     MatProgressBar,
     MatExpansionPanel,
     MatExpansionPanelHeader,
-    MatExpansionPanelTitle,
-    NgForOf
-  ],
+    MatExpansionPanelTitle
+],
   templateUrl: './comment-item.component.html',
   styleUrl: './comment-item.component.scss'
 })

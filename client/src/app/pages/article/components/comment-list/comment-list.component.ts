@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
 import {MatProgressBar} from '@angular/material/progress-bar';
-import {DatePipe, NgForOf, NgIf} from '@angular/common';
+import { DatePipe } from '@angular/common';
 import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
 import {MatIcon} from '@angular/material/icon';
 import {MatDivider} from '@angular/material/list';
@@ -14,10 +14,9 @@ import {CommentItemComponent} from './comment-item/comment-item.component';
   selector: 'app-comment-list',
   imports: [
     MatCard,
-    NgForOf,
     ReactiveFormsModule,
-    CommentItemComponent,
-  ],
+    CommentItemComponent
+],
   templateUrl: './comment-list.component.html',
   styleUrl: './comment-list.component.scss'
 })

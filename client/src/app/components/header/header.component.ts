@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {MatButton, MatIconButton} from '@angular/material/button';
-import {NgIf} from '@angular/common';
+
 import {MatIcon} from '@angular/material/icon';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {MatTooltip} from '@angular/material/tooltip';
@@ -10,7 +10,6 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
 @Component({
   selector: 'app-header',
   imports: [
-    NgIf,
     MatIcon,
     RouterLink,
     RouterLinkActive,
@@ -18,7 +17,7 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
     MatTooltip,
     MatSlideToggle,
     MatIconButton
-  ],
+],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

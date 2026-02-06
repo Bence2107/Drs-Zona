@@ -6,30 +6,31 @@
   </button>
 
   <img [src]="!isDarkMode ? 'img/header/logo-light.png' : 'img/header/logo-dark.png'" alt="Drs Zone" class="logo">
-  <nav *ngIf="!isScreenSmall">
-    <ul class="nav_links">
-      <li routerLinkActive="activeLink" [routerLink]="'home'">
-        <a routerLinkActive="activeLink" >Főoldal</a>
-        <mat-icon routerLinkActive="activeLink">home</mat-icon>
-      </li>
-      <li routerLinkActive="activeLink" [routerLink]="'news'">
-        <a routerLinkActive="activeLink">Hírek</a>
-        <mat-icon routerLinkActive="activeLink">newspaper</mat-icon>
-      </li>
-      <li routerLinkActive="activeLink" [routerLink]="'reviews'">
-
-        <a routerLinkActive="activeLink">Összefoglalók</a>
-        <mat-icon routerLinkActive="activeLink">rate_review</mat-icon>
-      </li>
-      <li routerLinkActive="activeLink">
-        <a routerLinkActive="activeLink">Eredmények</a>
-        <mat-icon routerLinkActive="activeLink">rate_review</mat-icon>
-      </li>
-    </ul>
-  </nav>
-  <ng-container *ngIf="!isLoggedIn;">
+  @if (!isScreenSmall) {
+    <nav>
+      <ul class="nav_links">
+        <li routerLinkActive="activeLink" [routerLink]="'home'">
+          <a routerLinkActive="activeLink" >Főoldal</a>
+          <mat-icon routerLinkActive="activeLink">home</mat-icon>
+        </li>
+        <li routerLinkActive="activeLink" [routerLink]="'news'">
+          <a routerLinkActive="activeLink">Hírek</a>
+          <mat-icon routerLinkActive="activeLink">newspaper</mat-icon>
+        </li>
+        <li routerLinkActive="activeLink" [routerLink]="'reviews'">
+          <a routerLinkActive="activeLink">Összefoglalók</a>
+          <mat-icon routerLinkActive="activeLink">rate_review</mat-icon>
+        </li>
+        <li routerLinkActive="activeLink">
+          <a routerLinkActive="activeLink">Eredmények</a>
+          <mat-icon routerLinkActive="activeLink">rate_review</mat-icon>
+        </li>
+      </ul>
+    </nav>
+  }
+  @if (!isLoggedIn;) {
     <button matTooltip="Jelentkezz be!" class="login-button" routerLink="/login" mat-flat-button>Bejelentkezés</button>
-  </ng-container>
+  }
 
   <mat-slide-toggle
     (change)="toggleTheme()"

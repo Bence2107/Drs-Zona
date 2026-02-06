@@ -1,72 +1,79 @@
 <main [class.error-state]="errorOccurred || isLoading">
-  <div class="container" *ngIf="!isLoading && !errorOccurred; else stateTemplate">
-    <mat-card class="article-card">
-
-      <header class="article-header">
-        <img [src]="article?.primaryImageUrl"
-             [alt]="article?.title"
-             class="img-fluid primary-img">
-
-        <div class="title-group">
-          <h1 class="mat-headline-3">{{ article?.title }}</h1>
-          <h2 class="mat-headline-6">{{ article?.lead }}</h2>
+  @if (!isLoading && !errorOccurred) {
+    <div class="container">
+      <mat-card class="article-card">
+        <header class="article-header">
+          <img [src]="article?.primaryImageUrl"
+            [alt]="article?.title"
+            class="img-fluid primary-img">
+            <div class="title-group">
+              <h1 class="mat-headline-3">{{ article?.title }}</h1>
+              <h2 class="mat-headline-6">{{ article?.lead }}</h2>
+            </div>
+          </header>
+          <mat-card-content>
+            @if (article?.firstSection) {
+              <div class="content-block" [innerHTML]="article.firstSection"></div>
+            }
+            @if (article?.isReview) {
+              @for (section of article?.middleSections; track section; let i = $index) {
+                <div class="section-wrapper">
+                  <div class="content-block" [innerHTML]="section"></div>
+                  @if (i === 0) {
+                    <figure class="article-figure">
+                      <img [src]="article?.secondaryImageUrl" class="img-fluid" alt="">
+                    </figure>
+                  }
+                  @if (i === 1) {
+                    <figure class="article-figure">
+                      <img [src]="article?.thirdImageUrl" class="img-fluid" alt="">
+                    </figure>
+                  }
+                </div>
+              }
+            }
+            @if (article?.id) {
+              <figure class="article-figure">
+                <img [src]="article?.lastImageUrl"
+                  [alt]="article.title"
+                  class="img-fluid">
+                </figure>
+              }
+              @if (article?.lastSection) {
+                <div class="content-block" [innerHTML]="article.lastSection"></div>
+              }
+              <mat-divider class="section-divider"></mat-divider>
+              @if (article?.id) {
+                <section class="comments-section">
+                  <h3>Hozzászólások</h3>
+                  <app-comment-list
+                    [articleId]="article.id"
+                    [articleUrl]="article.url || ''">
+                  </app-comment-list>
+                </section>
+              }
+            </mat-card-content>
+            <mat-card-footer class="card-footer">
+              <button mat-flat-button color="primary" routerLink="/news">Vissza a hírekhez</button>
+            </mat-card-footer>
+          </mat-card>
         </div>
-      </header>
-
-      <mat-card-content>
-        <div class="content-block" *ngIf="article?.firstSection" [innerHTML]="article.firstSection"></div>
-
-        <ng-container *ngIf="article?.isReview">
-          <div class="section-wrapper" *ngFor="let section of article?.middleSections; let i = index">
-            <div class="content-block" [innerHTML]="section"></div>
-
-            <figure class="article-figure" *ngIf="i === 0">
-              <img [src]="article?.secondaryImageUrl" class="img-fluid" alt="">
-            </figure>
-
-            <figure class="article-figure" *ngIf="i === 1">
-              <img [src]="article?.thirdImageUrl" class="img-fluid" alt="">
-            </figure>
+      } @else {
+        @if (errorOccurred) {
+          <div class="error-container">
+            @if (errorOccurred) {
+              <app-error-display
+                (retry)="fetchArticle()">
+              </app-error-display>
+            }
           </div>
-        </ng-container>
+        }
+        @if (isLoading && !errorOccurred) {
+          <div class="loading-container">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            <h3>Információ betöltése...</h3>
+          </div>
+        }
+      }
 
-
-        <figure class="article-figure" *ngIf="article?.id">
-          <img [src]="article?.lastImageUrl"
-               [alt]="article.title"
-               class="img-fluid">
-        </figure>
-
-        <div class="content-block" *ngIf="article?.lastSection" [innerHTML]="article.lastSection"></div>
-
-        <mat-divider class="section-divider"></mat-divider>
-
-        <section class="comments-section" *ngIf="article?.id">
-          <h3>Hozzászólások</h3>
-          <app-comment-list
-            [articleId]="article.id"
-            [articleUrl]="article.url || ''">
-          </app-comment-list>
-        </section>
-      </mat-card-content>
-
-      <mat-card-footer class="card-footer">
-        <button mat-flat-button color="primary" routerLink="/news">Vissza a hírekhez</button>
-      </mat-card-footer>
-    </mat-card>
-  </div>
-
-  <ng-template #stateTemplate>
-    <div class="error-container" *ngIf="errorOccurred">
-      <app-error-display
-        *ngIf="errorOccurred"
-        (retry)="fetchArticle()">
-      </app-error-display>
-    </div>
-
-    <div class="loading-container" *ngIf="isLoading && !errorOccurred">
-      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      <h3>Információ betöltése...</h3>
-    </div>
-  </ng-template>
-</main>
+    </main>

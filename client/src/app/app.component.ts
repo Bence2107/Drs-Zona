@@ -4,7 +4,7 @@ import {HeaderComponent} from './components/header/header.component';
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
 import {MatIcon} from '@angular/material/icon';
 import {BreakpointObserver } from '@angular/cdk/layout';
-import {NgIf} from '@angular/common';
+
 import {MatDivider} from '@angular/material/list';
 import {
   MatAccordion,
@@ -16,7 +16,7 @@ import {MatIconButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, MatSidenavContainer, MatSidenav, RouterLink, RouterLinkActive, MatIcon, MatSidenavContent, NgIf, MatDivider, MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatIconButton],
+  imports: [RouterOutlet, HeaderComponent, MatSidenavContainer, MatSidenav, RouterLink, RouterLinkActive, MatIcon, MatSidenavContent, MatDivider, MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatIconButton],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

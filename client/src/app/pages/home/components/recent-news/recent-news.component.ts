@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatProgressBar} from '@angular/material/progress-bar';
-import {DatePipe, NgForOf, NgIf} from '@angular/common';
+import { DatePipe } from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {ArticleService} from '../../../../services/article.service';
 import {MatCard, MatCardContent, MatCardImage} from '@angular/material/card';
@@ -11,15 +11,13 @@ import {ErrorDisplayComponent} from '../../../../components/error-display/error-
   selector: 'app-recent-news',
   imports: [
     MatProgressBar,
-    NgIf,
-    NgForOf,
     RouterLink,
     MatCard,
     MatCardContent,
     ErrorDisplayComponent,
     DatePipe,
     MatCardImage
-  ],
+],
   templateUrl: './recent-news.component.html',
   styleUrl: './recent-news.component.scss'
 })

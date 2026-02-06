@@ -1,58 +1,65 @@
 <div class="comment-layout" [class.is-reply-node]="isReply">
   <div class="avatar-column">
     <img [src]="'img/user/avatars/avatar.jpg'"
-         [class.mini-avatar]="!isReply"
-         [class.reply-avatar]="isReply" alt="avatar">
-    <div class="thread-line" *ngIf="comment.replies?.length || !comment.loaded"></div>
+      [class.mini-avatar]="!isReply"
+      [class.reply-avatar]="isReply" alt="avatar">
+      @if (comment.replies?.length || !comment.loaded) {
+        <div class="thread-line"></div>
+      }
+    </div>
+
+    <div class="content-column">
+      <div class="comment-header">
+        <span class="author-name">{{ comment.username }}</span>
+        <span class="dot-separator">•</span>
+        <span class="timestamp">{{ comment.dateCreated | date:'yyyy.MM.dd HH:mm' }}</span>
+      </div>
+
+      <div class="comment-body">
+        <p>{{ comment.content }}</p>
+      </div>
+
+      <div class="comment-footer">
+        <div class="vote-group">
+          <button mat-icon-button class="vote-btn"><mat-icon>arrow_upward</mat-icon></button>
+          <span class="score">{{ (comment.upVotes || 0) - (comment.downVotes || 0) }}</span>
+          <button mat-icon-button class="vote-btn"><mat-icon>arrow_downward</mat-icon></button>
+        </div>
+
+        <div class="footer-action">
+          <mat-icon>chat_bubble_outline</mat-icon>
+          <span>Válasz</span>
+        </div>
+
+        <button mat-icon-button class="more-btn"><mat-icon>more_horiz</mat-icon></button>
+      </div>
+
+      @if (comment.loadingReplies) {
+        <mat-progress-bar mode="indeterminate" class="reply-loader"></mat-progress-bar>
+      }
+
+      <mat-expansion-panel (opened)="loadReplies()" class="replies-panel" flat>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>add_circle_outline</mat-icon>
+            Válaszok megtekintése
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="nested-replies">
+          @for (reply of comment.replies; track reply) {
+            <app-comment-item
+              [comment]="reply"
+              [isReply]="true">
+            </app-comment-item>
+          }
+
+          @if (comment.loaded && !comment.replies?.length) {
+            <p class="no-replies">
+              Nincsenek további válaszok.
+            </p>
+          }
+        </div>
+      </mat-expansion-panel>
+    </div>
   </div>
-
-  <div class="content-column">
-    <div class="comment-header">
-      <span class="author-name">{{ comment.username }}</span>
-      <span class="dot-separator">•</span>
-      <span class="timestamp">{{ comment.dateCreated | date:'yyyy.MM.dd HH:mm' }}</span>
-    </div>
-
-    <div class="comment-body">
-      <p>{{ comment.content }}</p>
-    </div>
-
-    <div class="comment-footer">
-      <div class="vote-group">
-        <button mat-icon-button class="vote-btn"><mat-icon>arrow_upward</mat-icon></button>
-        <span class="score">{{ (comment.upVotes || 0) - (comment.downVotes || 0) }}</span>
-        <button mat-icon-button class="vote-btn"><mat-icon>arrow_downward</mat-icon></button>
-      </div>
-
-      <div class="footer-action">
-        <mat-icon>chat_bubble_outline</mat-icon>
-        <span>Válasz</span>
-      </div>
-
-      <button mat-icon-button class="more-btn"><mat-icon>more_horiz</mat-icon></button>
-    </div>
-
-    <mat-progress-bar *ngIf="comment.loadingReplies" mode="indeterminate" class="reply-loader"></mat-progress-bar>
-
-    <mat-expansion-panel (opened)="loadReplies()" class="replies-panel" flat>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <mat-icon>add_circle_outline</mat-icon>
-          Válaszok megtekintése
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-
-      <div class="nested-replies">
-        <app-comment-item
-          *ngFor="let reply of comment.replies"
-          [comment]="reply"
-          [isReply]="true">
-        </app-comment-item>
-
-        <p *ngIf="comment.loaded && !comment.replies?.length" class="no-replies">
-          Nincsenek további válaszok.
-        </p>
-      </div>
-    </mat-expansion-panel>
-  </div>
-</div>

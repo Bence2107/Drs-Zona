@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardImage} from '@angular/material/card';
-import {DatePipe, NgForOf, NgIf} from '@angular/common';
+import { DatePipe } from '@angular/common';
 import {ErrorDisplayComponent} from '../../../../../components/error-display/error-display.component';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {ArticleListDto} from '../../../../../api/models/article-list-dto';
@@ -12,14 +12,12 @@ import {RouterLink} from '@angular/router';
   imports: [
     MatCard,
     MatCardImage,
-    NgIf,
-    NgForOf,
     MatCardContent,
     ErrorDisplayComponent,
     MatProgressBar,
     DatePipe,
     RouterLink
-  ],
+],
   templateUrl: './news-list.component.html',
   styleUrl: './news-list.component.scss'
 })

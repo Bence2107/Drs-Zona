@@ -1,36 +1,37 @@
-<div class="reviews-container" *ngIf="!isLoading && !errorOccurred; else stateTemplate">
+@if (!isLoading && !errorOccurred) {
+  <div class="reviews-container">
+    @for (new_item of reviews; track new_item) {
+      <mat-card class="new-item" [routerLink]="['/article', new_item.slug]">
+        <img mat-card-image
+          [src]="new_item.primaryImageUrl"
+          [alt]="new_item.title"
+          loading="lazy">
+          <mat-card-content class="text-content">
+            <h2 class="news-label">{{ new_item.title }}</h2>
+            <p class="news-desc">{{ new_item.lead }}</p>
+            <p class="news-date">
+              {{ new_item.datePublished | date:'yyyy. MMMM d. – HH:mm' }}
+            </p>
+          </mat-card-content>
+        </mat-card>
+      }
+      @if (reviews?.length === 0) {
+        <p class="empty-msg">
+          Nem találtunk híreket.
+        </p>
+      }
+    </div>
+  } @else {
+    @if (errorOccurred) {
+      <app-error-display
+        (retry)="fetchArticles()">
+      </app-error-display>
+    }
+    @if (isLoading && !errorOccurred) {
+      <div class="loading-container">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <h3>Hírek betöltése...</h3>
+      </div>
+    }
+  }
 
-  <mat-card class="new-item" *ngFor="let new_item of reviews" [routerLink]="['/article', new_item.slug]">
-
-    <img mat-card-image
-         [src]="new_item.primaryImageUrl"
-         [alt]="new_item.title"
-         loading="lazy">
-
-    <mat-card-content class="text-content">
-      <h2 class="news-label">{{ new_item.title }}</h2>
-      <p class="news-desc">{{ new_item.lead }}</p>
-
-      <p class="news-date">
-        {{ new_item.datePublished | date:'yyyy. MMMM d. – HH:mm' }}
-      </p>
-    </mat-card-content>
-
-  </mat-card>
-
-  <p *ngIf="reviews?.length === 0" class="empty-msg">
-    Nem találtunk híreket.
-  </p>
-</div>
-
-<ng-template #stateTemplate>
-  <app-error-display
-    *ngIf="errorOccurred"
-    (retry)="fetchArticles()">
-  </app-error-display>
-
-  <div class="loading-container" *ngIf="isLoading && !errorOccurred">
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-    <h3>Hírek betöltése...</h3>
-  </div>
-</ng-template>
