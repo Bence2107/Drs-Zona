@@ -1,0 +1,7 @@
+{
+  "/uploads": {
+    "target": "http://localhost:5244",
+    "secure": false,
+    "changeOrigin": true
+  }
+}
