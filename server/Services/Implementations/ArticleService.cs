@@ -4,14 +4,16 @@ using Repositories.Interfaces;
 using Repositories.Interfaces.News;
 using Repositories.Interfaces.RaceTracks;
 using Services.Interfaces;
+using Services.Interfaces.images;
 
 namespace Services.Implementations;
 
 public class ArticleService(
     IArticlesRepository articleRepo,
     IUsersRepository userRepo,
-    IGrandsPrixRepository gpRepo
-) : IArticleService
+    IGrandsPrixRepository gpRepo,
+    IArticleImageService imageService) 
+: IArticleService
 {
     public ResponseResult<ArticleDetailDto> GetArticleById(Guid id)
     {
@@ -41,7 +43,11 @@ public class ArticleService(
             GrandPrixId: article.GrandPrixId,
             GrandPrixName: article.GrandPrix?.Name,
             DatePublished: article.DatePublished,
-            DateUpdated: article.DateUpdated
+            DateUpdated: article.DateUpdated,
+            PrimaryImageUrl: imageService.GetImageUrl(article.Slug, "primary.jpg"),
+            SecondaryImageUrl: article.IsSummary ? imageService.GetImageUrl(article.Slug, "secondary.jpg") : null,
+            ThirdImageUrl: article.IsSummary ? imageService.GetImageUrl(article.Slug, "third.jpg") : null,
+            LastImageUrl: imageService.GetImageUrl(article.Slug, "last.jpg")
         ));
     }
     public ResponseResult<ArticleDetailDto> GetArticleBySlug(string slug)
@@ -72,7 +78,11 @@ public class ArticleService(
             GrandPrixId: article.GrandPrixId,
             GrandPrixName: article.GrandPrix?.Name,
             DatePublished: article.DatePublished,
-            DateUpdated: article.DateUpdated
+            DateUpdated: article.DateUpdated,
+            PrimaryImageUrl: imageService.GetImageUrl(article.Slug, "primary.jpg"),
+            SecondaryImageUrl: article.IsSummary ? imageService.GetImageUrl(article.Slug, "secondary.jpg") : null,
+            ThirdImageUrl: article.IsSummary ? imageService.GetImageUrl(article.Slug, "third.jpg") : null,
+            LastImageUrl: imageService.GetImageUrl(article.Slug, "last.jpg")
         ));
     }
 
@@ -84,7 +94,8 @@ public class ArticleService(
             Lead: a.Lead,
             IsReview: a.IsSummary,
             Slug: a.Slug,
-            DatePublished: a.DatePublished
+            DatePublished: a.DatePublished,
+            PrimaryImageUrl: imageService.GetImageUrl(a.Slug, "primary.jpg")
         )).ToList();
         
         return ResponseResult<List<ArticleListDto>>.Success(articles);
@@ -97,7 +108,8 @@ public class ArticleService(
             Lead: a.Lead,
             IsReview: a.IsSummary,
             Slug: a.Slug,
-            DatePublished: a.DatePublished
+            DatePublished: a.DatePublished,
+            PrimaryImageUrl: imageService.GetImageUrl(a.Slug, "primary.jpg")
         )).ToList();
         
         return ResponseResult<List<ArticleListDto>>.Success(articles);
@@ -111,7 +123,8 @@ public class ArticleService(
             Lead: a.Lead,
             IsReview: a.IsSummary,
             Slug: a.Slug,
-            DatePublished: a.DatePublished
+            DatePublished: a.DatePublished,
+            PrimaryImageUrl: imageService.GetImageUrl(a.Slug, "primary.jpg")
         )).ToList();
         
         return ResponseResult<List<ArticleListDto>>.Success(articles);
