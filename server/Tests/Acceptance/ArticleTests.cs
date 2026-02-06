@@ -3,12 +3,13 @@ using DTOs.News;
 using Entities.Models;
 using Entities.Models.News;
 using FluentAssertions;
+using Moq;
 using Repositories.Implementations;
 using Repositories.Implementations.News;
 using Repositories.Implementations.RaceTracks;
 using Services.Implementations;
-using Services.Implementations.image;
 using Services.Interfaces;
+using Services.Interfaces.images;
 using Xunit;
 
 namespace Tests.Acceptance;
@@ -17,28 +18,43 @@ public class ArticleTests
 {
     private readonly EfContext _context;
     private readonly IArticleService _service;
-
-    /*
-    public ArticleTests()
+    
+    public ArticleTests(EfContext context)
     {
-        _context = InMemoryDbFactory.CreateContext();
-
+        var mockImageService = new Mock<IArticleImageService>();
+        mockImageService
+            .Setup(s => s.GetImageUrl(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns((string slug, string imageName) => $"/uploads/images/articles/{slug}/{imageName}");
+        
+        _context = context;
         _service = new ArticleService(
             new ArticlesRepository(_context),
             new UsersRepository(_context),
             new GrandsPrixRepository(_context),
+            mockImageService.Object
         );
     }
-    
+
+    public ArticleTests(IArticleService service, EfContext context)
+    {
+        _service = service;
+        _context = context;
+    }
+
     [Fact]
     public void US_03_AC_01_02_GetArticleBySlug_ShouldReturnCorrectArticleContentAndAuthor()
     {
         var context = InMemoryDbFactory.CreateContext();
-
+        var mockImageService = new Mock<IArticleImageService>();
+        mockImageService
+            .Setup(s => s.GetImageUrl(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns((string slug, string imageName) => $"/uploads/images/articles/{slug}/{imageName}");
+        
         var service = new ArticleService(
             new ArticlesRepository(context),
             new UsersRepository(context),
-            new GrandsPrixRepository(context)
+            new GrandsPrixRepository(context),
+            mockImageService.Object
         );
 
         const string testSlug = "hungaroring-news-2024";
@@ -86,11 +102,16 @@ public class ArticleTests
     public void US_02_AC_02_GetRecentArticles_ShouldReturnArticles_SortedByDateDescending()
     {
         var context = InMemoryDbFactory.CreateContext();
+        var mockImageService = new Mock<IArticleImageService>();
+        mockImageService
+            .Setup(s => s.GetImageUrl(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns((string slug, string imageName) => $"/uploads/images/articles/{slug}/{imageName}");
 
         var service = new ArticleService(
             new ArticlesRepository(context),
             new UsersRepository(context),
-            new GrandsPrixRepository(context)
+            new GrandsPrixRepository(context),
+            mockImageService.Object
         );
 
         var now = DateTime.UtcNow;
@@ -146,7 +167,7 @@ public class ArticleTests
             .Should().BeInDescendingOrder();
     }
     
-       */
+    
     [Fact]
     public void GetArticleBySlug_ShouldReturnArticle()
     {
