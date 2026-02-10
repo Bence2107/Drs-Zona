@@ -15,6 +15,32 @@ public class StandingsService (
 )
 : IStandingsService
 {
+    public ResponseResult<DefaultFiltersDto> GetDefaultFilters()
+    {
+        var series = seriesRepo.GetAllSeries().FirstOrDefault();
+        if (series == null) return ResponseResult<DefaultFiltersDto>.Failure("Nincs elérhető széria");
+
+        var latestChamp = driverChampRepo.GetBySeriesId(series.Id)
+            .OrderByDescending(c => c.Season)
+            .FirstOrDefault();
+        if (latestChamp == null) return ResponseResult<DefaultFiltersDto>.Failure("Nincs elérhető szezon");
+
+        var latestGp = grandsPrixRepo.GetBySeriesAndYear(series.Id, int.Parse(latestChamp.Season))
+            .OrderByDescending(g => g.RoundNumber)
+            .FirstOrDefault();
+        if (latestGp == null) return ResponseResult<DefaultFiltersDto>.Failure("Nincs elérhető nagydíj");
+
+        var sessions = resultsRepo.GetAvailableSessionsByGrandPrixId(latestGp.Id);
+        var defaultSession = sessions.Contains("Race") ? "Race" : sessions.FirstOrDefault() ?? "Race";
+
+        return ResponseResult<DefaultFiltersDto>.Success(new DefaultFiltersDto(
+            series.Id,
+            latestChamp.Id,
+            latestGp.Id,
+            defaultSession
+        ));
+    }
+    
     public ResponseResult<List<SeriesLookupDto>> GetAllSeries()
     {
         var series = seriesRepo.GetAllSeries();

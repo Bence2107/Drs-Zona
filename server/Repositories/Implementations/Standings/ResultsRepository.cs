@@ -90,7 +90,6 @@ public class ResultsRepository(EfContext context) : IResultsRepository
             .OrderBy(s => s) 
             .ToList();
     }
-
-
+    
     public bool CheckIfIdExists(Guid id) => _results.Any(d => d.Id == id);
 }
