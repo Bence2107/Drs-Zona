@@ -56,6 +56,14 @@ public class Result
     public long RaceTime {get; set;}
     
     [Required]
+    [Column("status")]
+    public required string Status {get; set;}
+    
+    [Required]
+    [Column("laps_completed")]
+    public int LapsCompleted {get; set;}
+    
+    [Required]
     [Column("driver_points")]
     public int DriverPoints {get; set;}
     

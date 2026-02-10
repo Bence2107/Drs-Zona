@@ -50,7 +50,7 @@ public class GrandsPrixRepository(EfContext context) : IGrandsPrixRepository
     public List<GrandPrix> GetByCircuitId(Guid circuitId) => _grandsPrix
         .Where(gp => gp.CircuitId == circuitId)
         .ToList();
-
+    
     public List<GrandPrix> GetBySeriesAndYear(Guid seriesId, int year) => _grandsPrix
         .Where(gp => gp.SeriesId == seriesId && gp.SeasonYear == year)
         .ToList();

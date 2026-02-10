@@ -13,8 +13,9 @@ public interface IResultsRepository
     List<Result> GetByGrandPrixId(Guid grandPrixId);
     List<Result> GetByDriverId(Guid driverId);
     List<Result> GetByConstructorId(Guid constructorId);
-    List<Result> GetBySession(string session);
+    List<Result> GetBySession(Guid grandPrixId, string session);
     List<Result> GetByDriversChampionshipId(Guid championshipId);
     List<Result> GetByConstructorsChampionshipId(Guid championshipId);
+    List<string> GetAvailableSessionsByGrandPrixId(Guid grandPrixId);
     bool CheckIfIdExists(Guid id);
 }

@@ -216,7 +216,7 @@ public record ResultCreateDto(
     [Required(ErrorMessage = "Helyezés kötelező")] 
     [Range(1, 30, ErrorMessage = "A helyezés 1-30 között lehet")] int FinishPosition,
     [Required(ErrorMessage = "Munkamenet típus kötelező")]
-    [RegularExpression("^(Race|Qualifying|Sprint|Practice)$", ErrorMessage = "Érvénytelen típus (Race, Qualifying, Sprint, Practice)")]
+    [RegularExpression("^(Race|Sprint)$", ErrorMessage = "Érvénytelen típus (Race, Sprint)")]
     string Session,
     [Required] [Range(0, long.MaxValue, ErrorMessage = "Érvénytelen időeredmény")] long RaceTime,
     [Required] [Range(0, 26, ErrorMessage = "A pontszám 0-26 lehet")] int DriverPoints,
@@ -230,53 +230,52 @@ public record ResultCreateDto(
     }
 }
 
-public record ResultUpdateDto(
-    [Required]
-    [Range(0, 26, ErrorMessage = "A pontszám 0-26 lehet")]
-    int DriverPoints,
-    [Required]
-    [Range(0, 44, ErrorMessage = "A pontszám 0-44 lehet")]
-    int ConstructorPoints
-);
 
-public record ResultDto(
-    Guid Id,
+public record GrandPrixResultsDto(
     Guid GrandPrixId,
-    string GrandPrixName,
-    Guid DriverId,
-    string DriverName,
-    int DriverNumber,
-    Guid ConstructorId,
-    string ConstructorName,
-    int StartPosition,
-    int FinishPosition,
     string Session,
-    string RaceTimeFormatted,
-    int DriverPoints,
-    int ConstructorPoints
+    GrandRrixResultDto[] Results
 );
 
-public record DriversStandingsDto(
+
+public record GrandRrixResultDto(
+    int Position,
+    Guid DriverId,
+    int DriverNumber,
+    string DriverName,
+    Guid ConstructorId,
+    string ConstructorName,
+    string TimeOrCompleted,
+    int Points
+);
+
+public record DriverStandingsDto(
+    Guid DriverChampId,
+    DriverStandingsResultDto[] Results
+);
+
+public record DriverStandingsResultDto(
     int Position,
     Guid DriverId,
     string DriverName,
-    int DriverNumber,
     string Nationality,
-    Guid TeamId,
-    string TeamName,
-    int Points,
-    int Wins,
-    int Podiums,
-    int PolePositions,
-    int FastestLaps
+    Guid ConstructorId,
+    string ConstructorName,
+    int Points
 );
 
-public record ConstructorsStandingsDto(
+public record ConstructorStandingsDto(
+    Guid ConstructorChampId,
+    ConstructorStandingsResultDto[] Results
+);
+
+public record ConstructorStandingsResultDto(
     int Position,
     Guid ConstructorId,
     string ConstructorName,
-    string BrandName,
-    int Points,
-    int Wins,
-    int Podiums
+    int Points
 );
+
+public record SeriesLookupDto(Guid Id, string Name);
+public record YearLookupDto(string Season, Guid DriversChampId); 
+public record GrandPrixLookupDto(Guid Id, string Name);

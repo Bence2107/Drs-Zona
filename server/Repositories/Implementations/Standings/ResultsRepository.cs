@@ -8,7 +8,12 @@ namespace Repositories.Implementations.Standings;
 public class ResultsRepository(EfContext context) : IResultsRepository
 {
     private readonly DbSet<Result> _results = context.Results;
-    
+
+    public IQueryable<Result> GetQueryable()
+    {
+        return _results.AsNoTracking();
+    }
+
     public Result? GetResultById(Guid id) => _results.FirstOrDefault(r => r.Id == id);
 
     public List<Result> GetAllResults() => _results.ToList();
@@ -53,17 +58,39 @@ public class ResultsRepository(EfContext context) : IResultsRepository
         .Where(r => r.ConstructorId == constructorId)
         .ToList();
 
+    public List<Result> GetBySession(Guid grandPrixId, string session) => _results
+        .Include(r => r.GrandPrix)
+        .Include(r => r.Driver)
+        .Include(r => r.Constructor)
+        .Where(r => r.GrandPrixId == grandPrixId && r.Session == session)
+        .ToList();
+
     public List<Result> GetBySession(string session) => _results
         .Where(r => r.Session == session)
         .ToList();
     
     public List<Result> GetByDriversChampionshipId(Guid championshipId) => _results
+        .Include(r => r.Driver)
+        .Include(r => r.Constructor)
         .Where(r=> r.DriversChampId == championshipId)
         .ToList();
     
     public List<Result> GetByConstructorsChampionshipId(Guid championshipId) => _results
+        .Include(r => r.Constructor)
         .Where(r=> r.ConsChampId == championshipId)
         .ToList();
+
+    public List<string> GetAvailableSessionsByGrandPrixId(Guid grandPrixId)
+    {
+        return _results
+            .AsNoTracking()
+            .Where(r => r.GrandPrixId == grandPrixId)
+            .Select(r => r.Session)
+            .Distinct() 
+            .OrderBy(s => s) 
+            .ToList();
+    }
+
 
     public bool CheckIfIdExists(Guid id) => _results.Any(d => d.Id == id);
 }
