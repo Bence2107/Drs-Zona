@@ -8,6 +8,24 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class StandingsController(IStandingsService standingsService): ControllerBase
 {
+    [HttpGet("getDefaultFilters")]
+    [ProducesResponseType(typeof(DefaultFiltersDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult GetDefaultFilters()
+    {
+        var response = standingsService.GetDefaultFilters();
+        if (!response.IsSuccess)
+        {
+            return BadRequest(new
+            {
+                response.ErrorField, 
+                response.Message
+            });
+        }
+        
+        return Ok(response.Value);      
+    }
+    
     [HttpGet("getAllSeries")]
     [ProducesResponseType(typeof(List<SeriesLookupDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

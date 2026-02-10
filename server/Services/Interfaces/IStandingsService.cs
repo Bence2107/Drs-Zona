@@ -4,6 +4,8 @@ namespace Services.Interfaces;
 
 public interface IStandingsService
 {
+    ResponseResult<DefaultFiltersDto> GetDefaultFilters();
+    
     ResponseResult<List<SeriesLookupDto>> GetAllSeries();
 
     ResponseResult<List<YearLookupDto>> GetSeasonsBySeries(Guid seriesId);

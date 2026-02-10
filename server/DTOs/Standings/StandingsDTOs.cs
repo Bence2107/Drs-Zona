@@ -279,3 +279,10 @@ public record ConstructorStandingsResultDto(
 public record SeriesLookupDto(Guid Id, string Name);
 public record YearLookupDto(string Season, Guid DriversChampId); 
 public record GrandPrixLookupDto(Guid Id, string Name);
+
+public record DefaultFiltersDto(
+    Guid SeriesId,
+    Guid DriversChampId,
+    Guid GrandPrixId,
+    string Session
+);
