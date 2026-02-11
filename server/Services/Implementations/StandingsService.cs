@@ -183,7 +183,7 @@ public class StandingsService (
         var resultsDto = results.Select(r => new GrandRrixResultDto(
             r.FinishPosition,
             r.DriverId,
-            r.Driver?.DriverNumber ?? 0,
+            r.CarNumber,
             r.Driver?.Name ?? "N/A",
             r.ConstructorId,
             r.Constructor?.Nickname ?? "N/A",
@@ -206,7 +206,9 @@ public class StandingsService (
         if (result.FinishPosition == 1)
         {
             var t = TimeSpan.FromMilliseconds(result.RaceTime);
-            return $"{(int)t.TotalHours}:{t.Minutes:D2}:{t.Seconds:D2}:{t.Milliseconds:D3}";
+            return t.TotalHours >= 1 
+                ? $"{(int)t.TotalHours}:{t.Minutes:D2}:{t.Seconds:D2}.{t.Milliseconds:D3}" 
+                : $"{t.Minutes:D2}:{t.Seconds:D2}.{t.Milliseconds:D3}";
         }
 
         if (result.LapsCompleted < leaderLaps)

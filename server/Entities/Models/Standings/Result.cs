@@ -52,6 +52,10 @@ public class Result
     public required string Session {get; set;}
     
     [Required]
+    [Column("car_number")]
+    public int CarNumber {get; set;}
+    
+    [Required]
     [Column("race_time")]
     public long RaceTime {get; set;}
     
