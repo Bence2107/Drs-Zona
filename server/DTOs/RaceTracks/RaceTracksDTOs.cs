@@ -5,7 +5,7 @@ namespace DTOs.RaceTracks;
 public record CircuitDetailDto(
     Guid Id,
     string Name,
-    int Length,
+    double Length,
     string Type,
     string Location,
     string FastestLap

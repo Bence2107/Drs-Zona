@@ -53,7 +53,7 @@ public class ConstructorsService(
         
         var dto = constructors.Select(c => new ConstructorListDto(
             Id: c!.Id,
-            Name: c.Name!
+            Name: c.Name
         ))
         .ToList();
 
@@ -68,6 +68,7 @@ public class ConstructorsService(
         var constructor = new Constructor
         {
             Name = constructorCreateDto.Name,
+            Nickname = constructorCreateDto.Nickname,
             FoundedYear = constructorCreateDto.FoundedYear,
             HeadQuarters = constructorCreateDto.HeadQuarters,
             TeamChief = constructorCreateDto.TeamChief,
@@ -103,6 +104,7 @@ public class ConstructorsService(
         constructor.Id = constructorUpdateDto.Id;
         constructor.BrandId = constructorUpdateDto.BrandId;
         constructor.Name = constructorUpdateDto.Name;
+        constructor.Nickname = constructorUpdateDto.Nickname;
         constructor.FoundedYear = constructorUpdateDto.FoundedYear;
         constructor.HeadQuarters = constructorUpdateDto.HeadQuarters;
         constructor.TeamChief = constructorUpdateDto.TeamChief;

@@ -66,6 +66,7 @@ builder.Services.AddScoped<IGrandPrixService, GrandPrixService>();
 builder.Services.AddScoped<IDriverService, DriverService>();
 builder.Services.AddScoped<IPollService, PollService>();
 builder.Services.AddScoped<ISeriesService, SeriesService>();
+builder.Services.AddScoped<IStandingsService, StandingsService>();
 
 builder.Services.AddScoped<IArticleImageService, ArticleImageService>();
 

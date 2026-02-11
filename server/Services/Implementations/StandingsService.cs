@@ -99,7 +99,7 @@ public class StandingsService (
                         : "Unknown",
                     Nationality = latestResult.Driver?.Nationality ?? "N/A",
                     ConstructId = latestResult.ConstructorId,
-                    ConstructorName = latestResult.Constructor?.Name ?? "N/A",
+                    ConstructorName = latestResult.Constructor?.Nickname ?? "N/A",
                     Points = group.Sum(r => r.DriverPoints),
                     BestFinish = group.Min(r => r.FinishPosition)
                 };
@@ -186,7 +186,7 @@ public class StandingsService (
             r.Driver?.DriverNumber ?? 0,
             r.Driver?.Name ?? "N/A",
             r.ConstructorId,
-            r.Constructor?.Name ?? "N/A",
+            r.Constructor?.Nickname ?? "N/A",
             FormatTimeOrStatus(r, leaderTime, leaderLaps), 
             r.DriverPoints
         )).ToArray();
@@ -218,6 +218,6 @@ public class StandingsService (
         var diffMs = result.RaceTime - leaderTime;
         var d = TimeSpan.FromMilliseconds(Math.Abs(diffMs));
 
-        return d.TotalMinutes >= 1 ? $"+{(int)d.TotalMinutes}:{d.Seconds:D2}:{d.Milliseconds:D3}" : $"+{d.Seconds}.{d.Milliseconds:D3}";
+        return d.TotalMinutes >= 1 ? $"+{(int)d.TotalMinutes}:{d.Seconds:D2}:{d.Milliseconds:D3}s" : $"+{d.Seconds}.{d.Milliseconds:D3}s";
     }
 }

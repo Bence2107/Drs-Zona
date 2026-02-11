@@ -18,7 +18,11 @@ public class Constructor
     
     [Required]
     [Column("name")]
-    public required string? Name { get; set; }
+    public required string Name { get; set; }
+    
+    [Required]
+    [Column("nickname")]
+    public required string Nickname { get; set; }
     
     [Required]
     [Column("founded_year")]
@@ -30,11 +34,11 @@ public class Constructor
     
     [Required]
     [Column("team_chief")]
-    public required string? TeamChief { get; set; }
+    public required string TeamChief { get; set; }
     
     [Required]
     [Column("technical_chief")]
-    public required string? TechnicalChief { get; set; }
+    public required string TechnicalChief { get; set; }
     
     [Required]
     [Column("seasons")]

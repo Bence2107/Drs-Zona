@@ -16,7 +16,7 @@ public class Circuit
     
     [Required]
     [Column("length")]
-    public int Length { get; set; }
+    public double Length { get; set; }
     
     [Required]
     [Column("type")]

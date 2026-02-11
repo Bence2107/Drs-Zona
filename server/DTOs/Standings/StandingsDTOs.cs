@@ -51,6 +51,9 @@ public record ConstructorCreateDto(
     [Required(ErrorMessage = "A név megadása kötelező")] 
     [StringLength(100, ErrorMessage = "A név max 100 karakter")] 
     string Name,
+    [Required(ErrorMessage = "A név megadása kötelező")] 
+    [StringLength(100, ErrorMessage = "A név max 100 karakter")] 
+    string Nickname,
     [Required(ErrorMessage = "Az alapítás éve kötelező")] 
     [Range(1900, 2100, ErrorMessage = "Az alapítás éve 1900 és 2100 között kell legyen")] 
     int FoundedYear,
@@ -74,6 +77,9 @@ public record ConstructorUpdateDto(
     [Required(ErrorMessage = "A név megadása kötelező")] 
     [StringLength(100, ErrorMessage = "A név max 100 karakter")] 
     string Name,
+    [Required(ErrorMessage = "A név megadása kötelező")] 
+    [StringLength(100, ErrorMessage = "A név max 100 karakter")] 
+    string Nickname,
     [Required(ErrorMessage = "Az alapítás éve kötelező")] 
     [Range(1900, 2100, ErrorMessage = "Az alapítás éve 1900 és 2100 között kell legyen")] 
     int FoundedYear,
