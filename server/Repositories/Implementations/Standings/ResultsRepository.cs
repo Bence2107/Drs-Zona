@@ -71,12 +71,14 @@ public class ResultsRepository(EfContext context) : IResultsRepository
     
     public List<Result> GetByDriversChampionshipId(Guid championshipId) => _results
         .Include(r => r.Driver)
+        .Include(r => r.GrandPrix)
         .Include(r => r.Constructor)
         .Where(r=> r.DriversChampId == championshipId)
         .ToList();
     
     public List<Result> GetByConstructorsChampionshipId(Guid championshipId) => _results
         .Include(r => r.Constructor)
+        .Include(r => r.GrandPrix)
         .Where(r=> r.ConsChampId == championshipId)
         .ToList();
 

@@ -151,4 +151,58 @@ public class StandingsController(IStandingsService standingsService): Controller
         
         return Ok(response.Value);
     }
+    
+    [HttpGet("getDriverResultsBySeason/{driverId:guid}/{driverChampId:guid}")]
+    [ProducesResponseType(typeof(List<DriverSeasonResultDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult GetDriverResultsBySeason(Guid driverId, Guid driverChampId)
+    {
+        var response = standingsService.GetDriverResultsBySeason(driverId, driverChampId);
+        if (!response.IsSuccess)
+        {
+            return BadRequest(new
+            {
+                response.ErrorField, 
+                response.Message
+            });
+        }
+        
+        return Ok(response.Value);
+    }
+    
+    [HttpGet("getConstructorsResultsBySeason/{constructorId:guid}/{constructorChampId:guid}")]
+    [ProducesResponseType(typeof(List<ConstructorSeasonResultDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult GetConstructorsResultsBySeason(Guid constructorId, Guid constructorChampId)
+    {
+        var response = standingsService.GetConstructorResultsBySeason(constructorId, constructorChampId);
+        if (!response.IsSuccess)
+        {
+            return BadRequest(new
+            {
+                response.ErrorField, 
+                response.Message
+            });
+        }
+        
+        return Ok(response.Value);
+    }
+    
+    [HttpGet("getSeasonOverview/{driverChampId:guid}")]
+    [ProducesResponseType(typeof(List<ConstructorSeasonResultDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult GetSeasonOverview(Guid driverChampId)
+    {
+        var response = standingsService.GetSeasonOverview(driverChampId);
+        if (!response.IsSuccess)
+        {
+            return BadRequest(new
+            {
+                response.ErrorField, 
+                response.Message
+            });
+        }
+        
+        return Ok(response.Value);
+    }
 }

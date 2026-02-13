@@ -176,7 +176,6 @@ public record DriverListDto(
     [Required] Guid Id,
     [StringLength(100)] string Name,
     [StringLength(50)] string Nationality,
-    [Range(1, 99)] int DriverNumber,
     [Range(15, 99)] int Age,
     string? CurrentTeam
 );
@@ -191,7 +190,6 @@ public record DriverDetailDto(
     [Required] [StringLength(100)] string Name,
     [Required] [StringLength(50)] string Nationality,
     [Required] DateTime BirthDate,
-    [Required] [Range(1, 99)] int DriverNumber,
     List<Guid>? ConstructorIds,
     [Required] [Range(1, 500)] int TotalRaces,
     [Required] [Range(1, 500)] int TotalWins,
@@ -292,3 +290,7 @@ public record DefaultFiltersDto(
     Guid GrandPrixId,
     string Session
 );
+
+public record DriverSeasonResultDto(string GrandPrixName, DateTime Date, string TeamName, int Position, double Points);
+public record ConstructorSeasonResultDto(string GrandPrixName, DateTime Date, double Points);
+public record SeasonOverviewDto(string GrandPrixName, DateTime Date, string WinnerName, string TeamName, int Laps, string Time);

@@ -19,4 +19,10 @@ public interface IStandingsService
     ResponseResult<ConstructorStandingsDto> GetConstructorStandings(Guid constructorsChampionId);
 
     ResponseResult<GrandPrixResultsDto> GetGrandPrixResults(Guid grandPrixId, string session);
+
+    ResponseResult<List<DriverSeasonResultDto>> GetDriverResultsBySeason(Guid driverId, Guid driverChampId);
+
+    ResponseResult<List<ConstructorSeasonResultDto>> GetConstructorResultsBySeason(Guid constructorId, Guid constructorChampId);
+    
+    public ResponseResult<List<SeasonOverviewDto>> GetSeasonOverview(Guid driverChampId);
 }

@@ -89,7 +89,7 @@ public class StandingsService (
             .GroupBy(r => r.DriverId)
             .Select(group =>
             {
-                var latestResult = group.Last(); 
+                var latestResult = group.OrderBy(r => r.GrandPrix!.RoundNumber).Last();
             
                 return new
                 {
@@ -194,6 +194,59 @@ public class StandingsService (
         return ResponseResult<GrandPrixResultsDto>.Success(
             new GrandPrixResultsDto(grandPrixId, session, resultsDto)
         );
+    }
+    
+    public ResponseResult<List<DriverSeasonResultDto>> GetDriverResultsBySeason(Guid driverId, Guid driverChampId)
+    {
+        var results = resultsRepo.GetByDriversChampionshipId(driverChampId)
+            .Where(r => r.DriverId == driverId &&  string.Equals(r.Session, "Race", StringComparison.OrdinalIgnoreCase))
+            .OrderBy(r => r.GrandPrix?.RoundNumber)
+            .Select(r => new DriverSeasonResultDto(
+                r.GrandPrix?.Name ?? "N/A GP",
+                r.GrandPrix?.EndTime ?? DateTime.MinValue,
+                r.Constructor?.Nickname ?? "N/A",
+                r.FinishPosition,
+                r.DriverPoints
+            ))
+            .ToList();
+
+        return ResponseResult<List<DriverSeasonResultDto>>.Success(results);
+    }
+    
+    public ResponseResult<List<ConstructorSeasonResultDto>> GetConstructorResultsBySeason(Guid constructorId, Guid constructorChampId)
+    {
+        var results = resultsRepo.GetByConstructorsChampionshipId(constructorChampId)
+            .Where(r => r.ConstructorId == constructorId &&  string.Equals(r.Session, "Race", StringComparison.OrdinalIgnoreCase))
+            .GroupBy(r => new { r.GrandPrixId, r.GrandPrix?.Name, r.GrandPrix?.EndTime, r.GrandPrix?.RoundNumber })
+            .OrderBy(g => g.Key.RoundNumber)
+            .Select(group => new ConstructorSeasonResultDto(
+                group.Key.Name ?? "N/A GP",
+                group.Key.EndTime ?? DateTime.MinValue,
+                group.Sum(r => r.ConstructorPoints) 
+            ))
+            .ToList();
+
+        return ResponseResult<List<ConstructorSeasonResultDto>>.Success(results);
+    }
+    
+    public ResponseResult<List<SeasonOverviewDto>> GetSeasonOverview(Guid driverChampId)
+    {
+        var results = resultsRepo.GetByDriversChampionshipId(driverChampId)
+            .Where(r => r.FinishPosition == 1 && 
+                        string.Equals(r.Session, "Race", StringComparison.OrdinalIgnoreCase))
+            .OrderBy(r => r.GrandPrix?.RoundNumber)
+            .ToList();
+
+        var overview = results.Select(r => new SeasonOverviewDto(
+            r.GrandPrix?.Name ?? "Ismeretlen GP",
+            r.GrandPrix?.EndTime ?? DateTime.MinValue,
+            r.Driver?.Name ?? "Ismeretlen",
+            r.Constructor?.Nickname ?? "N/A",
+            r.LapsCompleted,
+            FormatTimeOrStatus(r, r.RaceTime, r.LapsCompleted) 
+        )).ToList();
+
+        return ResponseResult<List<SeasonOverviewDto>>.Success(overview);
     }
     
     private static string FormatTimeOrStatus(Result result, long leaderTime, int leaderLaps)
