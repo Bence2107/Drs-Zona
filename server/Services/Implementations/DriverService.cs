@@ -23,7 +23,6 @@ public class DriverService(
             driver.Name,
             driver.Nationality,
             driver.BirthDate,
-            driver.DriverNumber,
             contractIds,
             driver.TotalRaces,
             driver.Wins,
@@ -51,7 +50,6 @@ public class DriverService(
                 d.Id,
                 d.Name,
                 d.Nationality,
-                d.DriverNumber,
                 GetDriversAge(d.BirthDate),
                 currentTeamName
             );
@@ -63,12 +61,6 @@ public class DriverService(
 
     public ResponseResult<bool> CreateDriver(DriverCreateDto dto)
     {
-        var existing = driverRepo.GetByDriverNumber(dto.DriverNumber);
-        if (existing != null)
-        {
-            return ResponseResult<bool>.Failure("Driver number is already taken by another driver.");
-        }
-
         if (dto.BirthDate.Year > 2005)
         {
             return ResponseResult<bool>.Failure(nameof(dto.BirthDate), "Driver cannot be younger than 15 year");
@@ -84,7 +76,6 @@ public class DriverService(
             Name = dto.Name,
             Nationality = dto.Nationality,
             BirthDate = dto.BirthDate,
-            DriverNumber = dto.DriverNumber,
             TotalRaces = dto.TotalRaces,
             Wins = dto.TotalWins,
             Podiums = dto.TotalPodiums,
@@ -101,13 +92,7 @@ public class DriverService(
     {
         var driver = driverRepo.GetDriverById(dto.Id);
         if (driver == null) return ResponseResult<bool>.Failure("Driver not found.");
-
-        var existing = driverRepo.GetByDriverNumber(driver.DriverNumber);
-        if (existing != null)
-        {
-            return ResponseResult<bool>.Failure("Driver number is already taken by another driver.");
-        }
-
+        
         if (dto.BirthDate.Year > 2005)
         {
             return ResponseResult<bool>.Failure(nameof(driver.BirthDate), "Driver cannot be younger than 15 year");
@@ -122,7 +107,6 @@ public class DriverService(
         driver.Name = dto.Name;
         driver.Nationality = dto.Nationality;
         driver.BirthDate = dto.BirthDate;
-        driver.DriverNumber = dto.DriverNumber;
         driver.TotalRaces = dto.TotalRaces;
         driver.Wins = dto.TotalWins;
         driver.Podiums = dto.TotalPodiums;

@@ -15,4 +15,7 @@ public class DriverParticipation
     public Guid DriverChampId { get; set; }
     [JsonIgnore]
     public virtual DriversChampionship? DriversChampionship { get; set; }
+    
+    [Column("driver_number")]
+    public int DriverNumber { get; set; }
 }

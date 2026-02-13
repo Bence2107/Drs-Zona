@@ -10,7 +10,6 @@ public interface IDriversRepository
     void Update(Driver driver);
     void Delete(Guid id);
     List<Driver> GetByNationality(string nationality);
-    Driver? GetByDriverNumber(int number);
     Driver? GetByName(string name);
     bool CheckIfIdExists(Guid id);
 }

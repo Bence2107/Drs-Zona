@@ -37,9 +37,7 @@ public class DriversRepository(EfContext context) : IDriversRepository
     public List<Driver> GetByNationality(string nationality) => _drivers
         .Where(d => d.Nationality == nationality)
         .ToList();
-
-    public Driver? GetByDriverNumber(int number) => _drivers.FirstOrDefault(d => d.DriverNumber == number);
-
+    
     public Driver? GetByName(string name) => _drivers.FirstOrDefault(d => d.Name == name);
 
     public bool CheckIfIdExists(Guid id) => _drivers.Any(d => d.Id == id);

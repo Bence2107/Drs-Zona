@@ -174,6 +174,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
         modelBuilder.Entity<DriverParticipation>(options =>
         {
             options.HasKey(dp => new { dp.DriverId, dp.DriverChampId });
+            options.Property(dp => dp.DriverNumber).HasDefaultValue(-1);
             
             options
                 .HasOne(dp => dp.Driver)

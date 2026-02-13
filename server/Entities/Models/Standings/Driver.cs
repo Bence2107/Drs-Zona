@@ -23,10 +23,6 @@ public class Driver
     public DateTime BirthDate { get; set; }
     
     [Required]
-    [Column("driver_number")]
-    public int DriverNumber { get; set; }
-    
-    [Required]
     [Column("total_races")]
     public int TotalRaces { get; set; }
     

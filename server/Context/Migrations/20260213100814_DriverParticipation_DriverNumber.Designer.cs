@@ -3,6 +3,7 @@ using System;
 using Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Context.Migrations
 {
     [DbContext(typeof(EfContext))]
-    partial class EfContextModelSnapshot : ModelSnapshot
+    [Migration("20260213100814_DriverParticipation_DriverNumber")]
+    partial class DriverParticipation_DriverNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -515,6 +518,10 @@ namespace Context.Migrations
                     b.Property<int>("Championships")
                         .HasColumnType("integer")
                         .HasColumnName("championships");
+
+                    b.Property<int>("DriverNumber")
+                        .HasColumnType("integer")
+                        .HasColumnName("driver_number");
 
                     b.Property<string>("Name")
                         .IsRequired()
