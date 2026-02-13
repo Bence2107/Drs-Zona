@@ -22,7 +22,7 @@ public class CommentTests
 
         _service = new CommentService(
             new CommentsRepository(_context),
-            new UsersRepository(_context)
+            new AuthRepository(_context)
         );
     }
 
@@ -227,8 +227,9 @@ public class CommentTests
     {
         Id = Guid.NewGuid(),
         Username = "User",
+        FullName = "Lakatos Zsigmond",
         Email = "user@test.com",
-        Password = "pwd",
+        PasswordHash = "pwd",
         Role = "user"
     };
 

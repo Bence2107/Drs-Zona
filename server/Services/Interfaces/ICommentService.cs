@@ -10,7 +10,7 @@ public interface ICommentService
     
     ResponseResult<List<CommentDetailDto>> GetUsersComments(Guid userId);
     
-    ResponseResult<bool> AddComment(CommentCreateDto commentCreateDto, Guid userId);
+    ResponseResult<bool> AddComment(CommentCreateDto commentCreateDto, Guid id);
     
     ResponseResult<bool> UpdateCommentsContent(CommentContentUpdateDto commentUpdateContentDto);
     

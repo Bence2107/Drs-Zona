@@ -10,7 +10,7 @@ namespace Services.Implementations;
 
 public class ArticleService(
     IArticlesRepository articleRepo,
-    IUsersRepository userRepo,
+    IAuthRepository userRepo,
     IGrandsPrixRepository gpRepo,
     IArticleImageService imageService) 
 : IArticleService

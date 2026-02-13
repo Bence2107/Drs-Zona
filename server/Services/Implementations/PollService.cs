@@ -12,7 +12,7 @@ public class PollService(
     IPollsRepository pollRepository,
     IPollOptionsRepository pollOptionsRepository,
     IVotesRepository voteRepository,
-    IUsersRepository userRepository
+    IAuthRepository userRepository
 ) : IPollService
 {
     public ResponseResult<PollDto> GetPollById(Guid id, Guid? currentUserId = null)

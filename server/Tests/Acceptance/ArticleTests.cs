@@ -29,7 +29,7 @@ public class ArticleTests
         _context = context;
         _service = new ArticleService(
             new ArticlesRepository(_context),
-            new UsersRepository(_context),
+            new AuthRepository(_context),
             new GrandsPrixRepository(_context),
             mockImageService.Object
         );
@@ -52,7 +52,7 @@ public class ArticleTests
         
         var service = new ArticleService(
             new ArticlesRepository(context),
-            new UsersRepository(context),
+            new AuthRepository(context),
             new GrandsPrixRepository(context),
             mockImageService.Object
         );
@@ -63,8 +63,9 @@ public class ArticleTests
         {
             Id = Guid.NewGuid(),
             Username = "Author Alex",
+            FullName = "Csiger Alex",
             Email = "authoralex@gmail.com",
-            Password = "Password2424!",
+            PasswordHash = "Password2424!",
             Role = "author",
             Created = DateTime.UtcNow
         };
@@ -109,7 +110,7 @@ public class ArticleTests
 
         var service = new ArticleService(
             new ArticlesRepository(context),
-            new UsersRepository(context),
+            new AuthRepository(context),
             new GrandsPrixRepository(context),
             mockImageService.Object
         );
@@ -265,8 +266,9 @@ public class ArticleTests
     {
         Id = Guid.NewGuid(),
         Username = "Author",
+        FullName = "Petofi Sandor",
         Email = "author@test.com",
-        Password = "pwd",
+        PasswordHash = "pwd",
         Role = "author"
     };
 

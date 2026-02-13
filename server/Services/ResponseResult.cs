@@ -2,10 +2,10 @@
 
 public class ResponseResult<T>
 {
-    public bool IsSuccess { get; set; }
-    public T? Value { get; set; }
-    public string? ErrorField { get; set; }
-    public string? Message { get; set; }
+    public bool IsSuccess { get; private init; }
+    public T? Value { get; private init; }
+    public string? ErrorField { get; private init; }
+    public string? Message { get; private init; }
 
     public static ResponseResult<T> Success(T value) => 
         new() { IsSuccess = true, Value = value };

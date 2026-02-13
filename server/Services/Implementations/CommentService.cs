@@ -6,7 +6,7 @@ using Services.Interfaces;
 
 namespace Services.Implementations;
 
-public class CommentService(ICommentsRepository commentsRepo, IUsersRepository usersRepo) : ICommentService
+public class CommentService(ICommentsRepository commentsRepo, IAuthRepository usersRepo) : ICommentService
 {
     public ResponseResult<List<CommentDetailDto>> GetArticleCommentsWithoutReplies(Guid articleId)
     {
@@ -57,14 +57,13 @@ public class CommentService(ICommentsRepository commentsRepo, IUsersRepository u
         return ResponseResult<List<CommentDetailDto>>.Success(repliesToComment);
     }
 
-    public ResponseResult<bool> AddComment(CommentCreateDto commentCreateDto, Guid userId)
+    public ResponseResult<bool> AddComment(CommentCreateDto commentCreateDto, Guid id)
     {
         var articleToComment = commentsRepo.GetByIdWithArticle(commentCreateDto.ArticleId);
         if (articleToComment == null) return ResponseResult<bool>.Failure("Article not found");
         
-        var existingUser = usersRepo.GetUserById(userId);
-        if (existingUser == null) return ResponseResult<bool>.Failure("User not found");
-
+        if (!usersRepo.CheckIfIdExists(id)) return ResponseResult<bool>.Failure("User not found");
+        
         var comment = new Comment
         {
             UserId = articleToComment.UserId,

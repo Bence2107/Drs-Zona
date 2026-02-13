@@ -12,18 +12,25 @@ public class User
     
     [Required]
     [Column("username")]
+    [MaxLength(50)]
     public required string Username { get; set; }
     
     [Required]
+    [Column("full_name")]
+    public required string FullName { get; set; }
+    
+    [Required]
     [Column("email")]
+    [MaxLength(100)]
     public required string Email { get; set; }
     
     [Required]
-    [Column("password")]
-    public required string Password { get; set; }
+    [Column("password_hash")]
+    public required string PasswordHash { get; set; }
     
     [Required]
     [Column("role")]
+    [MaxLength(20)]
     public required string Role { get; set; }
     
     [Required]
@@ -34,7 +41,16 @@ public class User
     [Column("has_avatar")]
     public bool HasAvatar { get; set; }
     
-    [Required]
+    [Column("last_active")]
+    public DateTime? LastActive { get; set; }
+    
     [Column("last_login")]
-    public DateTime LastActive { get; set; }
+    public DateTime? LastLogin { get; set; } 
+    
+    [Column("is_logged_in")]
+    public bool IsLoggedIn { get; set; }
+    
+    [Column("current_session_id")]
+    [MaxLength(100)]
+    public string? CurrentSessionId { get; set; }
 }
