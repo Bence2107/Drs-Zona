@@ -22,6 +22,8 @@ public class ArticleTests
     public ArticleTests(EfContext context)
     {
         var mockImageService = new Mock<IArticleImageService>();
+        var userImageService = new Mock<IUserImageService>();
+        
         mockImageService
             .Setup(s => s.GetImageUrl(It.IsAny<string>(), It.IsAny<string>()))
             .Returns((string slug, string imageName) => $"/uploads/images/articles/{slug}/{imageName}");
@@ -31,7 +33,8 @@ public class ArticleTests
             new ArticlesRepository(_context),
             new AuthRepository(_context),
             new GrandsPrixRepository(_context),
-            mockImageService.Object
+            mockImageService.Object,
+            userImageService.Object
         );
     }
 
@@ -46,6 +49,7 @@ public class ArticleTests
     {
         var context = InMemoryDbFactory.CreateContext();
         var mockImageService = new Mock<IArticleImageService>();
+        var userImageService = new Mock<IUserImageService>();
         mockImageService
             .Setup(s => s.GetImageUrl(It.IsAny<string>(), It.IsAny<string>()))
             .Returns((string slug, string imageName) => $"/uploads/images/articles/{slug}/{imageName}");
@@ -54,7 +58,8 @@ public class ArticleTests
             new ArticlesRepository(context),
             new AuthRepository(context),
             new GrandsPrixRepository(context),
-            mockImageService.Object
+            mockImageService.Object,
+            userImageService.Object
         );
 
         const string testSlug = "hungaroring-news-2024";
@@ -104,6 +109,7 @@ public class ArticleTests
     {
         var context = InMemoryDbFactory.CreateContext();
         var mockImageService = new Mock<IArticleImageService>();
+        var userImageService = new Mock<IUserImageService>();
         mockImageService
             .Setup(s => s.GetImageUrl(It.IsAny<string>(), It.IsAny<string>()))
             .Returns((string slug, string imageName) => $"/uploads/images/articles/{slug}/{imageName}");
@@ -112,7 +118,8 @@ public class ArticleTests
             new ArticlesRepository(context),
             new AuthRepository(context),
             new GrandsPrixRepository(context),
-            mockImageService.Object
+            mockImageService.Object,
+            userImageService.Object
         );
 
         var now = DateTime.UtcNow;

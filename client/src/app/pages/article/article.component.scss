@@ -45,8 +45,8 @@ main {
   }
 
   .title-group {
-    padding: 30px 10%;
-    text-align: center;
+    padding: 30px 2%;
+    text-align: left;
 
     h1 {
       font-weight: 800;
@@ -57,6 +57,29 @@ main {
     h2 {
       font-weight: 300;
       opacity: 0.9;
+    }
+    .author-group {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-items: center;
+      width: fit-content;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .author-group p {
+      margin: 0;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .account-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
     }
   }
 }

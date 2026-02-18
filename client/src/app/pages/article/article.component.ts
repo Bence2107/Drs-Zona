@@ -78,6 +78,12 @@ export class ArticleComponent implements OnInit {
       return true;
     }
 
-    return this.article.authorId == this.userId;
+    return this.article?.authorId == this.userId;
+  }
+
+  get avatarUrl(): string | null {
+    const url = this.article.authorImageUrl;
+    if (url == null) return "img/user/avatars/avatar.jpg";
+    return `${url}`;
   }
 }

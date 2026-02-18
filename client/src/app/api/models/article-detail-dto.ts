@@ -3,6 +3,7 @@
 
 export interface ArticleDetailDto {
   authorId?: string | null;
+  authorImageUrl?: string | null;
   authorName?: string | null;
   datePublished?: string;
   dateUpdated?: string;

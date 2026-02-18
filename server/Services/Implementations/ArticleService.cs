@@ -12,8 +12,9 @@ public class ArticleService(
     IArticlesRepository articleRepo,
     IAuthRepository userRepo,
     IGrandsPrixRepository gpRepo,
-    IArticleImageService imageService) 
-: IArticleService
+    IArticleImageService articleImageService, 
+    IUserImageService userImageService
+) : IArticleService
 {
     public ResponseResult<ArticleDetailDto> GetArticleById(Guid id)
     {
@@ -39,15 +40,16 @@ public class ArticleService(
             LastSection: article.LastSection,
             MiddleSections: middleSections,
             AuthorId: article.AuthorId,
-            AuthorName: article.Author!.Username,
+            AuthorName: article.Author!.FullName,
             GrandPrixId: article.GrandPrixId,
             GrandPrixName: article.GrandPrix?.Name,
             DatePublished: article.DatePublished,
             DateUpdated: article.DateUpdated,
-            PrimaryImageUrl: imageService.GetImageUrl(article.Slug, "primary.jpg"),
-            SecondaryImageUrl: article.IsSummary ? imageService.GetImageUrl(article.Slug, "secondary.jpg") : null,
-            ThirdImageUrl: article.IsSummary ? imageService.GetImageUrl(article.Slug, "third.jpg") : null,
-            LastImageUrl: imageService.GetImageUrl(article.Slug, "last.jpg")
+            PrimaryImageUrl: articleImageService.GetImageUrl(article.Slug, "primary.jpg"),
+            SecondaryImageUrl: article.IsSummary ? articleImageService.GetImageUrl(article.Slug, "secondary.jpg") : null,
+            ThirdImageUrl: article.IsSummary ? articleImageService.GetImageUrl(article.Slug, "third.jpg") : null,
+            LastImageUrl: articleImageService.GetImageUrl(article.Slug, "last.jpg"),
+            AuthorImageUrl: userImageService.GetAvatarUrl(article.AuthorId)
         ));
     }
     public ResponseResult<ArticleDetailDto> GetArticleBySlug(string slug)
@@ -74,15 +76,16 @@ public class ArticleService(
             LastSection: article.LastSection,
             MiddleSections: middleSections,
             AuthorId: article.AuthorId,
-            AuthorName: article.Author!.Username,
+            AuthorName: article.Author!.FullName,
             GrandPrixId: article.GrandPrixId,
             GrandPrixName: article.GrandPrix?.Name,
             DatePublished: article.DatePublished,
             DateUpdated: article.DateUpdated,
-            PrimaryImageUrl: imageService.GetImageUrl(article.Slug, "primary.jpg"),
-            SecondaryImageUrl: article.IsSummary ? imageService.GetImageUrl(article.Slug, "secondary.jpg") : null,
-            ThirdImageUrl: article.IsSummary ? imageService.GetImageUrl(article.Slug, "third.jpg") : null,
-            LastImageUrl: imageService.GetImageUrl(article.Slug, "last.jpg")
+            PrimaryImageUrl: articleImageService.GetImageUrl(article.Slug, "primary.jpg"),
+            SecondaryImageUrl: article.IsSummary ? articleImageService.GetImageUrl(article.Slug, "secondary.jpg") : null,
+            ThirdImageUrl: article.IsSummary ? articleImageService.GetImageUrl(article.Slug, "third.jpg") : null,
+            LastImageUrl: articleImageService.GetImageUrl(article.Slug, "last.jpg"),
+            AuthorImageUrl: userImageService.GetAvatarUrl(article.AuthorId)
         ));
     }
 
@@ -95,7 +98,7 @@ public class ArticleService(
             IsReview: a.IsSummary,
             Slug: a.Slug,
             DatePublished: a.DatePublished,
-            PrimaryImageUrl: imageService.GetImageUrl(a.Slug, "primary.jpg")
+            PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
         )).ToList();
         
         return ResponseResult<List<ArticleListDto>>.Success(articles);
@@ -109,7 +112,7 @@ public class ArticleService(
             IsReview: a.IsSummary,
             Slug: a.Slug,
             DatePublished: a.DatePublished,
-            PrimaryImageUrl: imageService.GetImageUrl(a.Slug, "primary.jpg")
+            PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
         )).ToList();
         
         return ResponseResult<List<ArticleListDto>>.Success(articles);
@@ -124,7 +127,7 @@ public class ArticleService(
             IsReview: a.IsSummary,
             Slug: a.Slug,
             DatePublished: a.DatePublished,
-            PrimaryImageUrl: imageService.GetImageUrl(a.Slug, "primary.jpg")
+            PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
         )).ToList();
         
         return ResponseResult<List<ArticleListDto>>.Success(articles);

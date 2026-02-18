@@ -101,5 +101,6 @@ public record ArticleDetailDto(
     string PrimaryImageUrl,
     string? SecondaryImageUrl,
     string? ThirdImageUrl,
-    string LastImageUrl
+    string LastImageUrl,
+    string? AuthorImageUrl
 );

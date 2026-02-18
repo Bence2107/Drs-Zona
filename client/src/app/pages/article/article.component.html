@@ -9,6 +9,13 @@
             <div class="title-group">
               <h1 class="mat-headline-3">{{ article?.title }}</h1>
               <h2 class="mat-headline-6">{{ article?.lead }}</h2>
+              <div class="author-group">
+                <img [src]="avatarUrl"
+                     alt="avatar"
+                     class="account-icon">
+                <p>{{article?.authorName}}</p>
+              </div>
+
             </div>
           </header>
           <mat-card-content>
