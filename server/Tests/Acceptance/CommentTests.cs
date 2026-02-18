@@ -3,9 +3,12 @@ using DTOs.News;
 using Entities.Models;
 using Entities.Models.News;
 using FluentAssertions;
+using Microsoft.AspNetCore.Hosting;
+using Moq;
 using Repositories.Implementations;
 using Repositories.Implementations.News;
 using Services.Implementations;
+using Services.Implementations.image;
 using Services.Interfaces;
 using Xunit;
 
@@ -19,10 +22,14 @@ public class CommentTests
     public CommentTests()
     {
         _context = InMemoryDbFactory.CreateContext();
+        
+        var mockEnv = new Mock<IWebHostEnvironment>();
+        var imageService = new UserImageService(mockEnv.Object);
 
         _service = new CommentService(
             new CommentsRepository(_context),
-            new AuthRepository(_context)
+            new AuthRepository(_context),
+           imageService
         );
     }
 

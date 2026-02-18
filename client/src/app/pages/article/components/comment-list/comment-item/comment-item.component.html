@@ -1,6 +1,6 @@
 <div class="comment-layout" [class.is-reply-node]="isReply">
   <div class="avatar-column">
-    <img [src]="'img/user/avatars/avatar.jpg'"
+    <img [src]="avatarUrl"
       [class.mini-avatar]="!isReply"
       [class.reply-avatar]="isReply" alt="avatar">
       @if (comment.replies?.length || !comment.loaded) {
@@ -38,7 +38,7 @@
         <mat-progress-bar mode="indeterminate" class="reply-loader"></mat-progress-bar>
       }
 
-      <mat-expansion-panel (opened)="loadReplies()" class="replies-panel" flat>
+      <mat-expansion-panel (opened)="loadReplies()" class="replies-panel">
         <mat-expansion-panel-header>
           <mat-panel-title>
             <mat-icon>add_circle_outline</mat-icon>

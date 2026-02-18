@@ -40,4 +40,10 @@ export class CommentItemComponent {
       error: () => this.comment.loadingReplies = false
     });
   }
+
+  get avatarUrl(): string | null {
+    const url = this.comment.userAvatarUrl;
+    if (url == null) return "img/user/avatars/avatar.jpg";
+    return `${url}`;
+  }
 }

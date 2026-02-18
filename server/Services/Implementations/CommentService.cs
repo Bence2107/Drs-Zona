@@ -3,10 +3,11 @@ using Entities.Models.News;
 using Repositories.Interfaces;
 using Repositories.Interfaces.News;
 using Services.Interfaces;
+using Services.Interfaces.images;
 
 namespace Services.Implementations;
 
-public class CommentService(ICommentsRepository commentsRepo, IAuthRepository usersRepo) : ICommentService
+public class CommentService(ICommentsRepository commentsRepo, IAuthRepository usersRepo, IUserImageService userImageService) : ICommentService
 {
     public ResponseResult<List<CommentDetailDto>> GetArticleCommentsWithoutReplies(Guid articleId)
     {
@@ -15,6 +16,7 @@ public class CommentService(ICommentsRepository commentsRepo, IAuthRepository us
             UserId: c.UserId,
             ReplyToCommentId: c.ReplyToCommentId,
             Username: c.User!.Username,
+            UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
             Content: c.Content,
             UpVotes: c.UpVotes,
             DownVotes: c.DownVotes,
@@ -32,6 +34,7 @@ public class CommentService(ICommentsRepository commentsRepo, IAuthRepository us
             UserId: c.UserId,
             ReplyToCommentId: c.ReplyToCommentId,
             Username: c.User!.Username,
+            UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
             Content: c.Content,
             UpVotes: c.UpVotes,
             DownVotes: c.DownVotes,
@@ -48,6 +51,7 @@ public class CommentService(ICommentsRepository commentsRepo, IAuthRepository us
             UserId: c.UserId,
             ReplyToCommentId: c.ReplyToCommentId,
             Username: c.User!.Username,
+            UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
             Content: c.Content,
             UpVotes: c.UpVotes,
             DownVotes: c.DownVotes,

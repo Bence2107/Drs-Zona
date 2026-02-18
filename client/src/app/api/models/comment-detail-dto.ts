@@ -9,6 +9,7 @@ export interface CommentDetailDto {
   id?: string;
   replyToCommentId?: string | null;
   upVotes?: number;
+  userAvatarUrl?: string | null;
   userId?: string;
   username?: string | null;
 }
