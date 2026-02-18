@@ -127,6 +127,13 @@ mat-progress-bar {
   background-color: var(--primary-bg);
 }
 
+.fab-edit {
+  position: fixed;
+  bottom: 42px;
+  right: 42px;
+  z-index: 1000;
+}
+
 @media (max-width: 768px) {
   .title-group { padding: 20px 5%; }
   .mat-card-content { padding: 0 5% 30px 5% !important; }

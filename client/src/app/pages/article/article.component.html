@@ -75,4 +75,10 @@
           </div>
         }
       }
-    </main>
+</main>
+
+@if (isTheAuthorOrAdmin() && !isLoading) {
+  <a mat-fab color="primary" class="fab-edit" [routerLink]="['/news/add']" matTooltip="Cikk szerkesztése">
+    <mat-icon>edit</mat-icon>
+  </a>
+}

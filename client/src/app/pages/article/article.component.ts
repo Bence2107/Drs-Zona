@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardFooter} from '@angular/material/card';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 
-import {MatButton} from '@angular/material/button';
+import {MatButton, MatFabButton} from '@angular/material/button';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {ErrorDisplayComponent} from '../../components/error-display/error-display.component';
 import {ArticleDetailDto} from '../../api/models/article-detail-dto';
@@ -10,6 +10,8 @@ import {ArticleService} from '../../services/article.service';
 import {MatDivider} from '@angular/material/list';
 import {CommentListComponent} from './components/comment-list/comment-list.component';
 import {AuthService} from '../../services/auth.service';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-article',
@@ -22,7 +24,10 @@ import {AuthService} from '../../services/auth.service';
     ErrorDisplayComponent,
     MatDivider,
     CommentListComponent,
-    MatProgressBar
+    MatProgressBar,
+    MatFabButton,
+    MatIcon,
+    MatTooltip
   ],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss'
@@ -61,5 +66,18 @@ export class ArticleComponent implements OnInit {
         }
       });
     }
+  }
+
+  get userId(): string | null {
+    return this.authService.currentProfile()?.userId ?? null;
+  }
+
+  protected isTheAuthorOrAdmin(): boolean {
+    const role = this.authService.currentProfile()?.role;
+    if (role === "Admin") {
+      return true;
+    }
+
+    return this.article.authorId == this.userId;
   }
 }
