@@ -56,6 +56,11 @@ body {
   outlined-ripple-color: rgba(165, 0, 0, 0.2),
 ));
 
+@include mat.fab-overrides((
+  container-color: var(--accent-color),
+  foreground-color: var(--text-main),
+));
+
 @include mat.progress-bar-overrides((
   active-indicator-color: #f8274f,
   track-color: #21212e,

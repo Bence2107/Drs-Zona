@@ -6,6 +6,10 @@ import {MatProgressBar} from '@angular/material/progress-bar';
 import {ArticleListDto} from '../../../../../api/models/article-list-dto';
 import {ArticleService} from '../../../../../services/article.service';
 import {RouterLink} from '@angular/router';
+import {MatFabButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
+import {AuthService} from '../../../../../services/auth.service';
 
 @Component({
   selector: 'app-news-list',
@@ -16,8 +20,11 @@ import {RouterLink} from '@angular/router';
     ErrorDisplayComponent,
     MatProgressBar,
     DatePipe,
-    RouterLink
-],
+    RouterLink,
+    MatFabButton,
+    MatIcon,
+    MatTooltip
+  ],
   templateUrl: './news-list.component.html',
   styleUrl: './news-list.component.scss'
 })
@@ -26,7 +33,7 @@ export class NewsListComponent implements OnInit {
   isLoading = false;
   errorOccurred = false;
 
-  constructor(private articleService: ArticleService) {}
+  constructor(private articleService: ArticleService, private authService: AuthService) {}
 
   ngOnInit() {
     this.fetchArticles();
@@ -47,5 +54,10 @@ export class NewsListComponent implements OnInit {
         this.errorOccurred = true;
       }
     });
+  }
+
+  protected isAuthorOrAdmin(): boolean {
+    const role = this.authService.currentProfile()?.role;
+    return role === 'Author' || role === 'Admin';
   }
 }

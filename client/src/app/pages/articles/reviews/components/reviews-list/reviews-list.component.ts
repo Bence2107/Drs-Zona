@@ -6,6 +6,10 @@ import {MatProgressBar} from "@angular/material/progress-bar";
 import {RouterLink} from '@angular/router';
 import {ArticleListDto} from '../../../../../api/models/article-list-dto';
 import {ArticleService} from '../../../../../services/article.service';
+import {MatFabButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
+import {AuthService} from '../../../../../services/auth.service';
 
 @Component({
   selector: 'app-reviews-list',
@@ -16,8 +20,11 @@ import {ArticleService} from '../../../../../services/article.service';
     MatCardContent,
     MatCardImage,
     MatProgressBar,
-    RouterLink
-],
+    RouterLink,
+    MatFabButton,
+    MatIcon,
+    MatTooltip
+  ],
   templateUrl: './reviews-list.component.html',
   styleUrl: './reviews-list.component.scss'
 })
@@ -26,7 +33,7 @@ export class ReviewsListComponent implements OnInit {
   isLoading = false;
   errorOccurred = false;
 
-  constructor(private articleService: ArticleService) {}
+  constructor(private articleService: ArticleService, private authService: AuthService) {}
 
   ngOnInit() {
     this.fetchArticles();
@@ -47,5 +54,10 @@ export class ReviewsListComponent implements OnInit {
         this.errorOccurred = true;
       }
     });
+  }
+
+  protected isAuthorOrAdmin(): boolean {
+    const role = this.authService.currentProfile()?.role;
+    return role === 'Author' || role === 'Admin';
   }
 }

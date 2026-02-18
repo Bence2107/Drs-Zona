@@ -105,6 +105,13 @@ mat-progress-bar {
   color: var(--primary-text);
 }
 
+.fab-edit {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+}
+
 @media (max-width: 1200px) {
   .news-container,
   .reviews-container {

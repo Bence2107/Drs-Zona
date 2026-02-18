@@ -122,6 +122,13 @@ mat-progress-bar {
   }
 }
 
+.fab-edit {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+}
+
 // Mobil - 1 oszlop
 @media (max-width: 768px) {
   .news-container,

@@ -33,5 +33,11 @@
         <h3>Hírek betöltése...</h3>
       </div>
     }
-  }
+}
+
+@if (isAuthorOrAdmin() && !isLoading) {
+  <a mat-fab color="primary" class="fab-edit" [routerLink]="['/news/add']" matTooltip="Cikk hozzáadása">
+    <mat-icon>add</mat-icon>
+  </a>
+}
 
