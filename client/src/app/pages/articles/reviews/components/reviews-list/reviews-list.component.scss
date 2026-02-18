@@ -131,7 +131,6 @@ mat-progress-bar {
 
 // Mobil - 1 oszlop
 @media (max-width: 768px) {
-  .news-container,
   .reviews-container {
     grid-template-columns: 1fr;
     padding: 10px 2%;
