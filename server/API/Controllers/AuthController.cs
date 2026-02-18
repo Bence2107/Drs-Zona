@@ -84,31 +84,17 @@ public class AuthController(IAuthService authService) : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
-    public async Task<ActionResult> GetCurrentUser()
+    public async Task<ActionResult<UserProfileResponse>> GetCurrentUser()
     {
+        
         var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
-        
         await authService.UpdateLastActivityAsync(userId);
-        
+
         var result = await authService.GetUserByIdAsync(userId);
 
         if (!result.IsSuccess)
-        {
             return NotFound(new { message = result.Message });
-        }
 
-        var user = result.Value!;
-
-        return Ok(new
-        {
-            user.Id,
-            user.Username,
-            user.Email,
-            user.Role,
-            user.HasAvatar,
-            user.Created,
-            user.LastLogin,
-            user.IsLoggedIn
-        });
+        return Ok(result.Value);
     }
 }

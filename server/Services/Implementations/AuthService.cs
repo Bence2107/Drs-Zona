@@ -8,10 +8,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Repositories.Interfaces;
 using Services.Interfaces;
+using Services.Interfaces.images;
 
 namespace Services.Implementations;
 
-public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> jwtSettings)
+public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> jwtSettings, IUserImageService userImageService)
     : IAuthService
 {
     private readonly JwtSettings _jwtSettings = jwtSettings.Value;
@@ -50,7 +51,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
             };
 
             await authRepository.CreateUserAsync(user);
-            var authResponse = GenerateAuthResponse(user);
+            var authResponse = await GenerateAuthResponse(user);
 
             return ResponseResult<AuthResponse>.Success(authResponse);
         }
@@ -90,7 +91,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
             
             await authRepository.UpdateUserAsync(user);
 
-            var authResponse = GenerateAuthResponse(user);
+            var authResponse = await GenerateAuthResponse(user);
             return ResponseResult<AuthResponse>.Success(authResponse);
         }
         catch (Exception ex)
@@ -143,18 +144,25 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
         }
     }
 
-    public async Task<ResponseResult<User>> GetUserByIdAsync(Guid userId)
+    public async Task<ResponseResult<UserProfileResponse>> GetUserByIdAsync(Guid userId)
     {
-        var user = await authRepository.GetUserByIdAsync(userId);
         
-        if (user is null)
-        {
-            return ResponseResult<User>.Failure(
-                message: "Felhasználó nem található"
-            );
-        }
+        var user = await authRepository.GetUserByIdAsync(userId);
 
-        return ResponseResult<User>.Success(user);
+        if (user is null)
+            return ResponseResult<UserProfileResponse>.Failure(message: "Felhasználó nem található");
+
+        return ResponseResult<UserProfileResponse>.Success(new UserProfileResponse
+        {
+            UserId = user.Id,
+            Username = user.Username,
+            FullName = user.FullName,
+            Email = user.Email,
+            Role = user.Role,
+            HasAvatar = user.HasAvatar,
+            AvatarUrl = userImageService.GetAvatarUrl(user.Id),
+            LastLogin = user.LastLogin,
+        });
     }
 
     public async Task<ResponseResult<bool>> LogoutAsync(Guid userId)
@@ -196,16 +204,15 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
         }
     }
 
-    private AuthResponse GenerateAuthResponse(User user)
+    private async Task<AuthResponse> GenerateAuthResponse(User user)
     {
         var sessionId = Guid.NewGuid().ToString();
         var token = GenerateJwtToken(user, sessionId);
         var expiresAt = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes);
 
-        // Store session ID
         user.CurrentSessionId = sessionId;
         user.IsLoggedIn = true;
-        authRepository.UpdateUserAsync(user).Wait();
+        await authRepository.UpdateUserAsync(user);
 
         return new AuthResponse
         {
