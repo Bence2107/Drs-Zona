@@ -109,6 +109,7 @@ builder.Services.AddScoped<ISeriesService, SeriesService>();
 builder.Services.AddScoped<IStandingsService, StandingsService>();
 
 builder.Services.AddScoped<IArticleImageService, ArticleImageService>();
+builder.Services.AddScoped<IUserImageService, UserImageService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
