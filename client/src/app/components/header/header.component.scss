@@ -28,12 +28,23 @@ header {
   border-bottom: 1px solid var(--border-color);
 }
 
+.account-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .account-icon {
   cursor: pointer;
-  font-size: 36px;
-  width: 36px;
-  height: 36px;
-  color: black;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+}
+
+
+.header-menu-item {
+  background-color: var(--primary-bg);
+  color: var(--text-main);
 }
 
 .logo {
@@ -133,6 +144,10 @@ header {
     width: 20%;
   }
 
+  .account-button {
+    display: none;
+  }
+
   .header-menu-toggle {
     display: flex;
   }
@@ -166,6 +181,9 @@ header {
     padding: 20px 40px;
   }
 
+  .account-button {
+    display: none;
+  }
   .logo {
     width: 15%;
   }

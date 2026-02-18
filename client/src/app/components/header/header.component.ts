@@ -6,6 +6,9 @@ import {MatIcon} from '@angular/material/icon';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {AuthService} from '../../services/auth.service';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatDivider} from '@angular/material/list';
 
 @Component({
   selector: 'app-header',
@@ -16,19 +19,22 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
     MatButton,
     MatTooltip,
     MatSlideToggle,
-    MatIconButton
-],
+    MatIconButton,
+    MatMenu,
+    MatMenuItem,
+    MatDivider,
+    MatMenuTrigger
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
-  isDarkMode: boolean = true;
-  isLoggedIn: boolean = false;
+  isDarkMode: boolean = localStorage.getItem('theme') === 'dark';
 
   @Output() toggleSidenav = new EventEmitter<void>();
   isScreenSmall: boolean = false;
 
-  constructor(private breakpointObserver: BreakpointObserver) {
+  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService) {
     this.breakpointObserver.observe(['(max-width: 990px)']).subscribe(result => {
       this.isScreenSmall = result.matches;
     });
@@ -43,25 +49,37 @@ export class HeaderComponent implements OnInit {
   }
 
   private initializeTheme(): void {
-    const savedTheme = localStorage.getItem('theme') || 'dark';
+    const savedTheme = localStorage.getItem('theme') ?? 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
     this.isDarkMode = savedTheme === 'dark';
-    this.setTheme(savedTheme);
   }
 
   toggleTheme() {
     this.isDarkMode = !this.isDarkMode;
-    const newTheme = this.isDarkMode ? 'dark' : 'light';
-    this.setTheme(newTheme);
+    const theme = this.isDarkMode ? 'dark' : 'light';
+    localStorage.setItem('theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
   }
 
-  setTheme(theme: string) {
-    if (theme === 'dark') {
-      document.body.classList.add('dark-mode');
-      document.body.classList.remove('light-mode');
-    } else {
-      document.body.classList.add('light-mode');
-      document.body.classList.remove('dark-mode');
-    }
-    localStorage.setItem('theme', theme);
+  isLoggedIn() {
+    return this.authService.isLoggedIn();
+  }
+
+  logout() {
+    return this.authService.logout();
+  }
+
+  get username(): string | null {
+    return this.authService.currentProfile()?.username ?? null;
+  }
+
+  get avatarUrl(): string | null {
+    const profile = this.authService.currentProfile();
+    if (!profile?.hasAvatar || !profile?.avatarUrl) return "img/user/avatars/avatar.jpg";
+    return `${profile.avatarUrl}`;
+  }
+
+  isAuthor(): boolean {
+    return this.authService.currentProfile()?.role === 'Author';
   }
 }

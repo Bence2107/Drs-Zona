@@ -12,9 +12,14 @@ html {
 }
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: var(--primary-bg);
+}
 
-:root {
+:root , [data-theme="light"] {
+  --main-bg: radial-gradient(circle,rgba(248, 244, 244, 1) 0%, rgba(237, 235, 235, 1) 100%);
   --primary-bg: #f8f4f4;
   --secondary-bg: #d1caca;
   --header-bg: #ffffff;
@@ -26,9 +31,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   --hover-bg: #f0f0f0;
 }
 
-.dark-mode {
+[data-theme="dark"] {
+  --main-bg: radial-gradient(circle,rgba(39, 39, 59, 1) 0%, rgba(33, 33, 46, 1) 100%);
   --primary-bg: #21212e;
-  --secondary-bg: #15161d;
+  --secondary-bg: #181924;
   --header-bg: #1c1c27;
   --sidebar-bg: #1c1c27;
   --text-main: #bbbbbb;
@@ -78,4 +84,44 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   selected-focus-state-layer-color: rgba(0, 0, 0, 0.1),
   unselected-hover-state-layer-color: rgba(0, 0, 0, 0.05),
   unselected-focus-state-layer-color: rgba(0, 0, 0, 0.1),
+));
+
+@include mat.form-field-overrides((
+  filled-container-color: #21212e,
+
+  filled-input-text-color: var(--accent-color),
+  filled-input-text-placeholder-color: var(--text-secondary),
+  filled-label-text-color: var(--text-secondary),
+  filled-focus-label-text-color: var(--accent-color),
+
+  filled-active-indicator-color: var(--border-color),
+  filled-focus-active-indicator-color: var(--accent-color),
+  filled-hover-active-indicator-color: var(--text-main),
+
+  outlined-label-text-color: var(--text-secondary),
+  outlined-focus-label-text-color: var(--accent-color),
+  outlined-input-text-color: var(--text-main),
+  outlined-outline-color: var(--border-color),
+  outlined-focus-outline-color: var(--accent-color)
+));
+
+@include mat.tabs-overrides((
+  divider-color: var(--accent-color),
+
+  active-focus-indicator-color: var(--accent-color),
+  active-focus-label-text-color: var(--accent-color),
+  active-hover-indicator-color: red,
+  active-hover-label-text-color: red,
+  active-indicator-color: var(--accent-color),
+  active-label-text-color: var(--accent-color),
+
+  inactive-focus-label-text-color: var(--text-secondary),
+  inactive-hover-label-text-color: var(--accent-color),
+  inactive-label-text-color: var(--text-secondary),
+));
+
+@include mat.menu-overrides((
+  container-shape: 12px,
+  container-color: var(--primary-bg),
+  divider-color: var(--text-secondary),
 ));
