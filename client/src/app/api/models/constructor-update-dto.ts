@@ -8,6 +8,7 @@ export interface ConstructorUpdateDto {
   headQuarters?: string | null;
   id?: string;
   name?: string | null;
+  nickname?: string | null;
   podiums?: number;
   seasons?: number;
   teamChief?: string | null;

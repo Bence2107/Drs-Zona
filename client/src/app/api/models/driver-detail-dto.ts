@@ -6,7 +6,6 @@ export interface DriverDetailDto {
   birthDate?: string;
   championships?: number;
   constructorIds?: Array<string> | null;
-  driverNumber?: number;
   id?: string;
   name?: string | null;
   nationality?: string | null;

@@ -7,6 +7,7 @@ export interface ConstructorCreateDto {
   foundedYear?: number;
   headQuarters?: string | null;
   name?: string | null;
+  nickname?: string | null;
   podiums?: number;
   seasons?: number;
   teamChief?: string | null;
