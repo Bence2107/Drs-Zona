@@ -1,0 +1,79 @@
+<main class="form-main-container">
+  <mat-card class="auth-card">
+    <div class="auth-split-container">
+
+      <div class="form-side">
+        <div class="form-centering-wrapper">
+          <mat-tab-group dynamicHeight>
+            <mat-tab label="Bejelentkezés">
+              <div class="auth-content">
+                <form class="auth-form" [formGroup]="loginForm" (ngSubmit)="login()">
+                  <div class="form-header">
+                    <h1>Üdvözöljük újra!</h1>
+                    <p>Kérjük, adja meg adatait a belépéshez.</p>
+                  </div>
+
+                  <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" [formControl]="email" placeholder="pelda@email.com" />
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Jelszó</mat-label>
+                    <input matInput type="password" [formControl]="password" />
+                  </mat-form-field>
+
+                  <button mat-flat-button class="submit-button">
+                    Belépés
+                  </button>
+                </form>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="Regisztráció">
+              <div class="auth-content">
+                <form class="auth-form" [formGroup]="registerForm" (ngSubmit)="signup()">
+                  <div class="form-header">
+                    <h1>Fiók létrehozása</h1>
+                    <p>Csatlakozzon hozzánk néhány lépésben.</p>
+                  </div>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Felhasználónév</mat-label>
+                    <input matInput formControlName="username" />
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Teljes név</mat-label>
+                    <input matInput formControlName="fullName" />
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Email Cím</mat-label>
+                    <input matInput formControlName="email" />
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Jelszó</mat-label>
+                    <input matInput type="password" formControlName="password" />
+                  </mat-form-field>
+
+                  <button mat-flat-button class="submit-button">
+                    Regisztráció
+                  </button>
+                </form>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+
+      <div class="visual-side">
+        <img [src]="'img/login/login_page.jpg'"
+             alt="Login page"
+             class="side-image">
+      </div>
+
+    </div>
+  </mat-card>
+</main>

@@ -28,9 +28,38 @@
       </ul>
     </nav>
   }
-  @if (!isLoggedIn;) {
-    <button matTooltip="Jelentkezz be!" class="login-button" routerLink="/login" mat-flat-button>Bejelentkezés</button>
+  @if (!isLoggedIn()) {
+    <button matTooltip="Jelentkezz be!" class="login-button" routerLink="/auth" mat-flat-button>Bejelentkezés</button>
+  } @else {
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="account-button">
+        <img [src]="avatarUrl"
+             alt="avatar"
+             class="account-icon">
+    </button>
+
+    <mat-menu #userMenu="matMenu" class="header-menu">
+      <button mat-menu-item class="header-menu-item">
+        <mat-icon>manage_accounts</mat-icon>
+        <span>Profilom</span>
+      </button>
+
+      @if (isAuthor()) {
+        <button mat-menu-item routerLink="/my-articles" class="header-menu-item">
+          <mat-icon>article</mat-icon>
+          <span>Cikkeim</span>
+        </button>
+      }
+
+      <mat-divider />
+
+      <button mat-menu-item (click)="logout()" class="header-menu-item">
+        <mat-icon color="warn">logout</mat-icon>
+        <span>Kijelentkezés</span>
+      </button>
+    </mat-menu>
+
   }
+
 
   <mat-slide-toggle
     (change)="toggleTheme()"

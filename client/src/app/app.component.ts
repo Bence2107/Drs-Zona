@@ -13,6 +13,7 @@ import {
   MatExpansionPanelTitle
 } from '@angular/material/expansion';
 import {MatIconButton} from '@angular/material/button';
+import {AuthService} from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,9 @@ export class AppComponent implements OnInit{
   title = 'drs-zona';
   isSmallScreen = false;
   isMobileOverlay = false;
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService) {
+     this.authService.loadProfile();
+  }
 
   ngOnInit() {
     this.breakpointObserver.observe(['(max-width: 1280px)'])

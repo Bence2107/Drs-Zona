@@ -3,15 +3,17 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import {ApiConfiguration} from './api/api-configuration';
-import {provideHttpClient} from '@angular/common/http';
+import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import localeHu from '@angular/common/locales/hu';
 import {registerLocaleData} from '@angular/common';
+import {authInterceptor} from './interceptors/auth';
 
 registerLocaleData(localeHu)
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideRouter(routes),
     {
       provide: ErrorHandler,
