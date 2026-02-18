@@ -2,15 +2,13 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardFooter} from '@angular/material/card';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 
-import {MatButton, MatFabButton} from '@angular/material/button';
+import {MatButton} from '@angular/material/button';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {ErrorDisplayComponent} from '../../components/error-display/error-display.component';
 import {ArticleDetailDto} from '../../api/models/article-detail-dto';
 import {ArticleService} from '../../services/article.service';
 import {MatDivider} from '@angular/material/list';
 import {CommentListComponent} from './components/comment-list/comment-list.component';
-import {MatIcon} from '@angular/material/icon';
-import {MatTooltip} from '@angular/material/tooltip';
 import {AuthService} from '../../services/auth.service';
 
 @Component({
