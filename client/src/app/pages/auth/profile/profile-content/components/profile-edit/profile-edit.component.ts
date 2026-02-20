@@ -6,7 +6,11 @@ import {MatButton} from '@angular/material/button';
 import {MatCard} from '@angular/material/card';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../../../../../../services/auth.service';
+import {ChangePasswordRequest} from '../../../../../../api/models/change-password-request';
+import {CustomSnackbarComponent} from '../../../../../../components/custom-snackbar/custom-snackbar.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-profile-edit',
@@ -29,9 +33,14 @@ export class ProfileEditComponent implements OnInit {
 
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
-  previewUrl: string | null = null;
+  isLoading = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.profileForm = this.fb.group({
@@ -47,24 +56,68 @@ export class ProfileEditComponent implements OnInit {
     });
   }
 
-  handleFile(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => this.previewUrl = reader.result as string;
-      reader.readAsDataURL(file);
-    }
+  forceRefresh() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
   }
 
   onUpdateProfile() {
-    console.log('Adatok küldése a szervernek:', this.profileForm.value);
+    if (this.profileForm.invalid) return;
+
+    this.isLoading = true;
+    this.authService.updateProfile(this.profileForm.value).subscribe({
+      next: () => {
+        this.forceRefresh()
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Profil sikeresen módosítva', actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.snackBar.open('Hiba történt a mentés során: ' + (err.error?.message || 'Ismeretlen hiba'), 'Bezár', { duration: 5000 });
+        this.isLoading = false;
+      }
+    });
   }
 
   onUpdatePassword() {
-    if(this.passwordForm.value.newPassword !== this.passwordForm.value.confirmPassword) {
-      alert('A két jelszó nem egyezik!');
+    if (this.passwordForm.invalid) return;
+
+    const { currentPassword, newPassword, confirmPassword } = this.passwordForm.value;
+
+    if (newPassword !== confirmPassword) {
+      this.snackBar.open('A két új jelszó nem egyezik!', 'Hiba', { duration: 3000 });
       return;
     }
-    console.log('Jelszó módosítás...');
+
+    this.isLoading = true;
+    const request: ChangePasswordRequest = {
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+      newPasswordAgain: confirmPassword
+    }
+    this.authService.changePassword(request).subscribe({
+      next: () => {
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Jelszó sikeresen módosítva', actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
+        this.passwordForm.reset();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Sikertelen jelszómódosítás: ' + err, actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
+        this.isLoading = false;
+      }
+    });
   }
 }

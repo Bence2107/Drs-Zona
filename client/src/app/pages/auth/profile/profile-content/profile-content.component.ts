@@ -1,7 +1,6 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {UserProfileResponse} from '../../../../api/models/user-profile-response';
-import {AuthService} from '../../../../services/auth.service';
 import {MatIcon} from '@angular/material/icon';
 import {ProfileGeneralComponent} from './components/profile-general/profile-general.component';
 import {ProfileEditComponent} from './components/profile-edit/profile-edit.component';
@@ -28,14 +27,12 @@ import {MatOption, MatSelect} from '@angular/material/select';
   templateUrl: './profile-content.component.html',
   styleUrl: './profile-content.component.scss',
 })
-export class ProfileContentComponent implements OnInit {
-  ngOnInit(): void {
-      this.activeTab = 'general';
-  }
+export class ProfileContentComponent implements OnInit, OnDestroy {
   @Input() userData: UserProfileResponse | null = null;
   @Input() avatarUrl: string | null = null;
 
   private breakpointObserver = inject(BreakpointObserver);
+  private readonly TAB_KEY = 'profile_active_tab';
 
   isMobile = toSignal(
     this.breakpointObserver.observe('(max-width: 768px)').pipe(
@@ -43,15 +40,21 @@ export class ProfileContentComponent implements OnInit {
     )
   );
 
-  isTablet = toSignal(
-    this.breakpointObserver.observe('(min-width: 769px) and (max-width: 1242px)').pipe(
-      map(result => result.matches)
-    )
-  );
-
   activeTab = 'general';
+
+  ngOnInit(): void {
+    const savedTab = sessionStorage.getItem(this.TAB_KEY);
+    if (savedTab) {
+      this.activeTab = savedTab;
+    }
+  }
+
+  ngOnDestroy(): void {
+    sessionStorage.removeItem(this.TAB_KEY);
+  }
 
   onTabChange(view: string) {
     this.activeTab = view;
+    sessionStorage.setItem(this.TAB_KEY, view);
   }
 }
