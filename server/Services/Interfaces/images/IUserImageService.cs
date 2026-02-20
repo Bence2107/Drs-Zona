@@ -5,6 +5,6 @@ namespace Services.Interfaces.images;
 public interface IUserImageService
 {
     string? GetAvatarUrl(Guid userId);
-    Task<string> SaveAvatar(Guid userId, IFormFile file);
-    void DeleteAvatar(Guid userId);
+    Task<ResponseResult<bool>> SaveAvatar(Guid userId, IFormFile? file);
+    ResponseResult<bool> DeleteAvatar(Guid userId);
 }

@@ -17,7 +17,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
 {
     private readonly JwtSettings _jwtSettings = jwtSettings.Value;
 
-    public async Task<ResponseResult<AuthResponse>> RegisterAsync(RegisterRequest request)
+    public async Task<ResponseResult<AuthResponse>> Register(RegisterRequest request)
     {
         if (await authRepository.UserExistsByEmailAsync(request.Email))
         {
@@ -63,7 +63,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
         }
     }
 
-    public async Task<ResponseResult<AuthResponse>> LoginAsync(LoginRequest request)
+    public async Task<ResponseResult<AuthResponse>> Login(LoginRequest request)
     {
         var user = await authRepository.GetUserByEmailAsync(request.Email);
         
@@ -102,7 +102,59 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
         }
     }
 
-    public async Task<ResponseResult<bool>> ChangePasswordAsync(Guid userId, ChangePasswordRequest request)
+    public async Task<ResponseResult<bool>> UpdateUserInfo(Guid userId, UpdateUserRequest request)
+    {
+        var user = await authRepository.GetUserByIdAsync(userId);
+        
+        if (user is null)
+        {
+            return ResponseResult<bool>.Failure(
+                message: "Felhasználó nem található"
+            );
+        }
+
+        if (request.Email != user.Email)
+        {
+            var exist = await authRepository.UserExistsByEmailAsync(request.Email);
+            if (exist)
+            {
+                return ResponseResult<bool>.Failure(
+                    field: "email",
+                    message: "Ez az Email Cím már használatban van."
+                );
+            }
+        }
+
+        if (request.Username != user.Username)
+        {
+            var exist = await authRepository.UserExistsByEmailAsync(request.Email);
+            if (exist)
+            {
+                return ResponseResult<bool>.Failure(
+                    field: "username",
+                    message: "Ez a felhasználónév foglalt."
+                );
+            }
+        }
+        
+        try
+        {
+            user.Email = request.Email;
+            user.FullName = request.FullName;
+            user.Username = request.Username;
+
+            await authRepository.UpdateUserAsync(user);
+            return ResponseResult<bool>.Success(true);
+        }
+        catch (Exception ex)
+        {
+            return ResponseResult<bool>.Failure(
+                message: $"User Info changed failed: {ex.Message}"
+            );
+        }
+    }
+
+    public async Task<ResponseResult<bool>> ChangePassword(Guid userId, ChangePasswordRequest request)
     {
         var user = await authRepository.GetUserByIdAsync(userId);
         
@@ -144,7 +196,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
         }
     }
 
-    public async Task<ResponseResult<UserProfileResponse>> GetUserByIdAsync(Guid userId)
+    public async Task<ResponseResult<UserProfileResponse>> GetUserById(Guid userId)
     {
         
         var user = await authRepository.GetUserByIdAsync(userId);
@@ -161,11 +213,11 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
             Role = user.Role,
             HasAvatar = user.HasAvatar,
             AvatarUrl = userImageService.GetAvatarUrl(user.Id),
-            LastLogin = user.LastLogin,
+            CreatedAt = user.Created,
         });
     }
 
-    public async Task<ResponseResult<bool>> LogoutAsync(Guid userId)
+    public async Task<ResponseResult<bool>> Logout(Guid userId)
     {
         var user = await authRepository.GetUserByIdAsync(userId);
         
@@ -194,7 +246,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
         }
     }
 
-    public async Task UpdateLastActivityAsync(Guid userId)
+    public async Task UpdateLastActivity(Guid userId)
     {
         var user = await authRepository.GetUserByIdAsync(userId);
         if (user != null)

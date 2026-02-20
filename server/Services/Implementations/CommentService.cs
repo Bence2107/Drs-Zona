@@ -7,7 +7,11 @@ using Services.Interfaces.images;
 
 namespace Services.Implementations;
 
-public class CommentService(ICommentsRepository commentsRepo, IAuthRepository usersRepo, IUserImageService userImageService) : ICommentService
+public class CommentService(
+    ICommentsRepository commentsRepo, 
+    IAuthRepository usersRepo, 
+    IUserImageService userImageService) 
+: ICommentService
 {
     public ResponseResult<List<CommentDetailDto>> GetArticleCommentsWithoutReplies(Guid articleId)
     {
