@@ -1,26 +1,38 @@
 <div class="profile-tabs-wrapper">
-  <mat-button-toggle-group
-    [value]="activeTab"
-    (change)="onTabChange($event.value)"
-    hideSingleSelectionIndicator="true"
-    class="custom-toggle-group">
-    <mat-button-toggle value="general">
-      <mat-icon>person</mat-icon> Adataim
-    </mat-button-toggle>
-    <mat-button-toggle value="profile-edit">
-      <mat-icon>manage_accounts</mat-icon> Profil módosítása
-    </mat-button-toggle>
-    <mat-button-toggle value="my-comments">
-      <mat-icon>comment</mat-icon> Kommentjeim
-    </mat-button-toggle>
-    <mat-button-toggle value="my-polls">
-      <mat-icon>ballot</mat-icon>Szavazásaim
-    </mat-button-toggle>
-    <mat-button-toggle value="profile-delete">
-      <mat-icon>account_circle_off</mat-icon> Profil törlése
-    </mat-button-toggle>
-  </mat-button-toggle-group>
+  @if(isMobile()) {
+    <mat-form-field appearance="outline" class="mobile-nav-dropdown" subscriptSizing="dynamic">
+      <mat-select [value]="activeTab" (selectionChange)="onTabChange($event.value)" panelClass="custom-nav-panel">
+        <mat-option value="general"><span>Adataim</span></mat-option>
+        <mat-option value="profile-edit"><span>Profil módosítása</span></mat-option>
+        <mat-option value="my-comments"><span>Kommentjeim</span></mat-option>
+        <mat-option value="my-polls"><span>Szavazásaim</span></mat-option>
+        <mat-option value="profile-delete"><span>Profil törlése</span></mat-option>
+      </mat-select>
+    </mat-form-field>
+  } @else {
+    <mat-button-toggle-group
+      [value]="activeTab"
+      (change)="onTabChange($event.value)"
+      hideSingleSelectionIndicator="true"
+      class="custom-toggle-group">
+      <mat-button-toggle value="general">
+        <mat-icon>person</mat-icon> Adataim
+      </mat-button-toggle>
+      <mat-button-toggle value="profile-edit">
+        <mat-icon>manage_accounts</mat-icon> Profil módosítása
+      </mat-button-toggle>
+      <mat-button-toggle value="my-comments">
+        <mat-icon>comment</mat-icon> Kommentjeim
+      </mat-button-toggle>
+      <mat-button-toggle value="my-polls">
+        <mat-icon>ballot</mat-icon>Szavazásaim
+      </mat-button-toggle>
+      <mat-button-toggle value="profile-delete">
+        <mat-icon>account_circle_off</mat-icon> Profil törlése
+      </mat-button-toggle>
+    </mat-button-toggle-group>
 
+  }
 
   @if(userData) {
     <div class="tab-content-viewport">

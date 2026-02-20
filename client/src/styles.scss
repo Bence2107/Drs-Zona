@@ -58,7 +58,7 @@ app-root {
 
 @include mat.fab-overrides((
   container-color: var(--accent-color),
-  foreground-color: var(--text-main),
+  foreground-color: var(--text-secondary),
 ));
 
 @include mat.progress-bar-overrides((
@@ -122,7 +122,7 @@ app-root {
 
   inactive-focus-label-text-color: var(--text-secondary),
   inactive-hover-label-text-color: var(--accent-color),
-  inactive-label-text-color: var(--text-secondary),
+  inactive-label-text-color: var(--text),
 ));
 
 @include mat.menu-overrides((
@@ -148,3 +148,35 @@ app-root {
   supporting-text-size: 8px,
   container-shape: 8px,
 ));
+
+.custom-nav-panel {
+  background-color: var(--secondary-bg) !important;
+  border-radius: 8px !important;
+  margin-top: 4px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5) !important;
+}
+
+.custom-nav-panel .mat-mdc-option {
+  background-color: transparent !important;
+  opacity: 1 !important;
+}
+
+.custom-nav-panel .mat-mdc-option .mdc-list-item__primary-text {
+  color: var(--text-main) !important;
+}
+
+.custom-nav-panel .mat-mdc-option.mdc-list-item--selected {
+  background-color: var(--accent-color) !important; /* Itt javítva accent-color-ra! */
+}
+
+.custom-nav-panel .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text {
+  color: white !important;
+}
+
+.custom-nav-panel .mat-pseudo-checkbox {
+  display: none !important;
+}
+
+.custom-nav-panel .mat-mdc-option:hover:not(.mdc-list-item--selected) {
+  background-color: var(--hover-bg) !important;
+}
