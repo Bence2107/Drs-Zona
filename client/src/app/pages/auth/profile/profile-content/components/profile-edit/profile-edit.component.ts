@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {UserProfileResponse} from '../../../../../../api/models/user-profile-response';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatIcon} from '@angular/material/icon';
-import {MatButton, MatMiniFabButton} from '@angular/material/button';
+import {MatButton} from '@angular/material/button';
 import {MatCard} from '@angular/material/card';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
@@ -12,7 +12,6 @@ import {AuthService} from '../../../../../../services/auth.service';
   selector: 'app-profile-edit',
   imports: [
     MatIcon,
-    MatMiniFabButton,
     MatCard,
     MatTabGroup,
     MatTab,
@@ -67,11 +66,5 @@ export class ProfileEditComponent implements OnInit {
       return;
     }
     console.log('Jelszó módosítás...');
-  }
-
-  get avatarUrl(): string | null {
-    const profile = this.authService.currentProfile();
-    if (!profile?.hasAvatar || !profile?.avatarUrl) return "img/user/avatars/avatar.jpg";
-    return `${profile.avatarUrl}`;
   }
 }

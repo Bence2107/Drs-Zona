@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-profile-comments',
@@ -7,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './profile-comments.component.scss',
 })
 export class ProfileCommentsComponent {
+  @Input() avatarUrl: string | null = null;
 
 }

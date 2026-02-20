@@ -23,4 +23,10 @@ export class ProfileComponent implements OnInit{
       this.userData = data;
     });
   }
+
+  get avatarUrl(): string {
+    const profile = this.authService.currentProfile();
+    if (!profile?.hasAvatar || !profile?.avatarUrl) return "img/user/avatars/avatar.jpg";
+    return `${profile.avatarUrl}`;
+  }
 }

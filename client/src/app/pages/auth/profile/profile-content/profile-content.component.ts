@@ -23,6 +23,7 @@ import {ProfileCommentsComponent} from './components/profile-comments/profile-co
 export class ProfileContentComponent {
   @Input() userData: UserProfileResponse | null = null;
   activeTab = 'general';
+  @Input() avatarUrl: string | null = null;
 
   constructor(private authService: AuthService) {}
 
