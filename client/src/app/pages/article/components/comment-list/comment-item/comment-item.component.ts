@@ -4,7 +4,6 @@ import {CommentService} from '../../../../../services/comment.service';
 import { DatePipe } from '@angular/common';
 import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {MatProgressBar} from '@angular/material/progress-bar';
 import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
 
 @Component({
@@ -13,7 +12,6 @@ import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from
     DatePipe,
     MatIconButton,
     MatIcon,
-    MatProgressBar,
     MatExpansionPanel,
     MatExpansionPanelHeader,
     MatExpansionPanelTitle

@@ -1,18 +1,23 @@
 .comments-wrapper {
   width: 100%;
-  margin-top: 2rem;
+  max-width: 1600px;
+  margin: 1rem auto;
+  background-color: var(--primary-bg);
+  padding: 24px;
+  border-radius: 12px;
+  box-sizing: border-box;
 }
 
 .comment-card {
-  margin-bottom: 1rem;
-  padding: 12px;
-  background-color: var(--primary-bg);
+  width: 100%;
+  margin-bottom: 12px;
+  background-color: var(--secondary-bg);
   border: 1px solid var(--border-color);
   box-shadow: none !important;
+  padding: 24px;
   border-radius: 8px;
-  overflow: hidden;
 
   ::ng-deep .mat-mdc-card-content {
-    padding: 0 !important;
+    padding: 12px !important;
   }
 }

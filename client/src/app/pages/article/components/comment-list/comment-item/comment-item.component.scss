@@ -6,6 +6,9 @@
 .comment-layout {
   display: flex;
   gap: 12px;
+  background-color: var(--primary-bg);
+  padding: 16px;
+  border-radius: 12px;
 
   &.is-reply-node {
     margin-top: 12px;
@@ -17,6 +20,17 @@
   flex-direction: column;
   align-items: center;
   min-width: 32px;
+  position: relative;
+
+  is-reply-node &::before {
+    content: "";
+    position: absolute;
+    top: 12px;
+    left: -20px;
+    width: 20px;
+    height: 2px;
+    background-color: #343536;
+  }
 
   .mini-avatar {
     width: 32px;
@@ -37,10 +51,14 @@
   .thread-line {
     width: 2px;
     background-color: #343536;
-    flex-grow: 1;
-    margin-top: 4px;
+    position: absolute;
+    top: 36px;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
     border-radius: 1px;
     transition: background-color 0.2s ease;
+    z-index: 1;
 
     &:hover {
       background-color: var(--accent-color);
@@ -126,7 +144,8 @@
 }
 
 .replies-panel {
-  background-color: var(--primary-bg);
+  background-color: var(--secondary-bg);
+  margin: 12px 0;
 
   ::ng-deep .mat-expansion-panel-header {
     .mat-expansion-panel-header-title {

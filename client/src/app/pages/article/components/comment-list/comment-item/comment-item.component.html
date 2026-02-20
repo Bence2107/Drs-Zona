@@ -3,22 +3,17 @@
     <img [src]="avatarUrl"
       [class.mini-avatar]="!isReply"
       [class.reply-avatar]="isReply" alt="avatar">
-      @if (comment.replies?.length || !comment.loaded) {
-        <div class="thread-line"></div>
-      }
     </div>
+  <div class="content-column">
 
-    <div class="content-column">
       <div class="comment-header">
         <span class="author-name">{{ comment.username }}</span>
         <span class="dot-separator">•</span>
         <span class="timestamp">{{ comment.dateCreated | date:'yyyy.MM.dd HH:mm' }}</span>
       </div>
-
       <div class="comment-body">
         <p>{{ comment.content }}</p>
       </div>
-
       <div class="comment-footer">
         <div class="vote-group">
           <button mat-icon-button class="vote-btn"><mat-icon>arrow_upward</mat-icon></button>
@@ -30,36 +25,22 @@
           <mat-icon>chat_bubble_outline</mat-icon>
           <span>Válasz</span>
         </div>
-
-        <button mat-icon-button class="more-btn"><mat-icon>more_horiz</mat-icon></button>
       </div>
 
-      @if (comment.loadingReplies) {
-        <mat-progress-bar mode="indeterminate" class="reply-loader"></mat-progress-bar>
+      @if(comment.replyCount) {
+        <mat-expansion-panel (opened)="loadReplies()" class="replies-panel mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>add_circle_outline</mat-icon>
+              {{comment.replyCount}} válasz megjelenítése
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="nested-replies">
+            @for (reply of comment.replies; track reply) {
+              <app-comment-item [comment]="reply" [isReply]="true"/>
+            }
+          </div>
+        </mat-expansion-panel>
       }
-
-      <mat-expansion-panel (opened)="loadReplies()" class="replies-panel">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <mat-icon>add_circle_outline</mat-icon>
-            Válaszok megtekintése
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div class="nested-replies">
-          @for (reply of comment.replies; track reply) {
-            <app-comment-item
-              [comment]="reply"
-              [isReply]="true">
-            </app-comment-item>
-          }
-
-          @if (comment.loaded && !comment.replies?.length) {
-            <p class="no-replies">
-              Nincsenek további válaszok.
-            </p>
-          }
-        </div>
-      </mat-expansion-panel>
     </div>
   </div>
