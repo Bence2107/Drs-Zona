@@ -4,11 +4,19 @@ import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {LoginRequest} from '../api/models/login-request';
 import {Observable, tap} from 'rxjs';
-import {apiAuthLoginPost$Json, apiAuthLogoutPost, apiAuthMeGet$Json, apiAuthRegisterPost$Json} from '../api/functions';
+import {
+  apiAuthChangePasswordPost,
+  apiAuthLoginPost$Json,
+  apiAuthLogoutPost,
+  apiAuthMeGet$Json, apiAuthProfilePictureDeletePost, apiAuthProfilePictureUpdatePost, apiAuthProfileUpdatePost,
+  apiAuthRegisterPost$Json
+} from '../api/functions';
 import {map} from 'rxjs/operators';
 import {ApiConfiguration} from '../api/api-configuration';
 import {RegisterRequest} from '../api/models/register-request';
 import {UserProfileResponse} from '../api/models/user-profile-response';
+import {ChangePasswordRequest} from '../api/models/change-password-request';
+import {UpdateUserRequest} from '../api/models/update-user-request';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +28,16 @@ export class AuthService {
   currentProfile = signal<UserProfileResponse | null>(null);
 
   constructor(private http: HttpClient, private router: Router, private apiConfig: ApiConfiguration) {}
+
+  register(request: RegisterRequest): Observable<AuthResponse> {
+    return apiAuthRegisterPost$Json(this.http, this.apiConfig.rootUrl, {body: request}).pipe(
+      map(response => response.body),
+      tap(response => {
+        localStorage.setItem(this.TOKEN_KEY, JSON.stringify(response));
+        this.currentUser.set(response);
+      })
+    )
+  }
 
   login(request: LoginRequest): Observable<AuthResponse> {
     return apiAuthLoginPost$Json(this.http, this.apiConfig.rootUrl, { body: request }).pipe(
@@ -40,22 +58,47 @@ export class AuthService {
     });
   }
 
-
-  register(request: RegisterRequest): Observable<AuthResponse> {
-    return apiAuthRegisterPost$Json(this.http, this.apiConfig.rootUrl, {body: request}).pipe(
-      map(response => response.body),
-      tap(response => {
-        localStorage.setItem(this.TOKEN_KEY, JSON.stringify(response));
-        this.currentUser.set(response);
-      })
+  getMe(): Observable<UserProfileResponse> | null {
+    if(!this.isLoggedIn()) return null;
+    return apiAuthMeGet$Json(this.http, this.apiConfig.rootUrl).pipe(
+      map(response => response.body as UserProfileResponse),
     )
   }
+
+  updateProfile(request: UpdateUserRequest): Observable<void> {
+    return apiAuthProfileUpdatePost(this.http, this.apiConfig.rootUrl, { body: request }).pipe(
+      map(() => void 0),
+      tap(() => this.loadProfile())
+    );
+  }
+
+  changePassword(request: ChangePasswordRequest): Observable<void> {
+    return apiAuthChangePasswordPost(this.http, this.apiConfig.rootUrl, { body: request }).pipe(
+      map(() => void 0)
+    );
+  }
+
+  updateProfilePicture(file: Blob): Observable<void> {
+    return apiAuthProfilePictureUpdatePost(this.http, this.apiConfig.rootUrl, { body: file }).pipe(
+      map(() => void 0),
+      tap(() => this.loadProfile())
+    );
+  }
+
+  deleteProfilePicture(): Observable<void> {
+    return apiAuthProfilePictureDeletePost(this.http, this.apiConfig.rootUrl).pipe(
+      map(() => void 0),
+      tap(() => this.loadProfile())
+    );
+  }
+
 
   logout(): void {
     apiAuthLogoutPost(this.http, this.apiConfig.rootUrl).subscribe({
       complete: () => this.clearSession()
     });
   }
+
 
   getToken(): string | null {
     return this.currentUser()?.token ?? null;
