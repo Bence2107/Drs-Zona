@@ -1,5 +1,4 @@
-.news-container,
-.reviews-container {
+.news-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 30px;
@@ -11,6 +10,7 @@
   border-radius: 30px 12px 30px 12px;
   background-color: var(--secondary-bg);
   min-height: 60vh;
+  animation: fadeIn 0.2s ease-out;
 }
 
 .new-item {
@@ -156,4 +156,9 @@ mat-progress-bar {
     font-size: 1em;
     color: var(--secondary-text);
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0.3; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
