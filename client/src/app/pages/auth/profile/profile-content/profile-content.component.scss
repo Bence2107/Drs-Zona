@@ -1,0 +1,19 @@
+.mat-button-toggle-status-indicator svg {
+  display: none !important;
+}
+
+.mat-button-toggle-checked .mat-button-toggle-status-indicator {
+  width: 8px !important;
+  height: 8px !important;
+  background-color: var(--text-main) !important;
+  border-radius: 50% !important;
+  display: inline-block !important;
+  margin-right: 8px;
+  visibility: visible !important;
+}
+
+.mat-button-toggle-label-content {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}

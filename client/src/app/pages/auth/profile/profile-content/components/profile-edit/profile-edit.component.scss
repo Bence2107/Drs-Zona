@@ -1,0 +1,85 @@
+.edit-container {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.edit-card {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05) !important;
+  background: var(--secondary-bg);
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.tab-body {
+  padding: 32px;
+}
+
+.section-header {
+  margin-bottom: 24px;
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+  p {
+    margin: 4px 0 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.password-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.save-btn {
+  padding: 24px 32px !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+}
+
+::ng-deep .mat-mdc-tab-labels {
+  padding: 0 16px;
+  background: rgba(0,0,0,0.02);
+}
+
+@media (max-width: 600px) {
+  .tab-body {
+    padding: 20px;
+  }
+  .password-grid {
+    grid-template-columns: 1fr;
+  }
+  .save-btn {
+    width: 100%;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

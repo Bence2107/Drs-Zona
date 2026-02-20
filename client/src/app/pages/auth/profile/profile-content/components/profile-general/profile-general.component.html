@@ -1,0 +1,13 @@
+<mat-card class="profile-card">
+  <mat-list>
+    @for ( field of profileFields; track field.label) {
+      <mat-list-item>
+        <mat-icon matListItemIcon color="primary">{{ field.icon }}</mat-icon>
+        <div class="list-content">
+          <span class="field-label">{{ field.label }}</span>
+          <span class="field-value">{{ field.value }}</span>
+        </div>
+      </mat-list-item>
+    }
+  </mat-list>
+</mat-card>

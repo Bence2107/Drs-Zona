@@ -1,0 +1,62 @@
+.profile-card {
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 16px;
+  border-radius: 12px;
+  background-color: var(--secondary-bg);
+  color: var(--text-main);
+  animation: fadeIn 0.2s ease-in-out;
+
+  mat-list-item {
+    height: auto !important;
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+
+    &:hover {
+      background-color: var(--primary-bg);
+      cursor: default;
+    }
+
+    ::ng-deep .mat-mdc-list-item-unscoped-content {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+  }
+}
+
+.list-content {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  margin-left: 16px;
+}
+
+.field-label {
+  font-weight: 500;
+  color: #666;
+  flex: 0 0 150px;
+}
+
+.field-value {
+  flex: 1;
+  color: var(--text-main);
+  font-family: 'Roboto', sans-serif;
+  word-break: break-all;
+}
+
+mat-icon[matListItemIcon] {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50%;
+  background: rgba(var(--primary-rgb), 0.1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

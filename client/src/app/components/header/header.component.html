@@ -38,7 +38,7 @@
     </button>
 
     <mat-menu #userMenu="matMenu" class="header-menu">
-      <button mat-menu-item class="header-menu-item">
+      <button mat-menu-item class="header-menu-item" [routerLink]="['/profile',username]">
         <mat-icon>manage_accounts</mat-icon>
         <span>Profilom</span>
       </button>

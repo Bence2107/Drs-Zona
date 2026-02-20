@@ -1,0 +1,76 @@
+<div class="edit-container">
+  <mat-card class="edit-card">
+    <mat-tab-group dynamicHeight class="inner-tabs">
+
+      <mat-tab label="Adatok módosítása">
+        <div class="tab-body">
+          <div class="section-header">
+            <h2>Személyes adatok</h2>
+            <p>Itt módosíthatja a profiljához tartozó alapvető információkat.</p>
+          </div>
+
+          <form class="edit-form" [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()">
+            <mat-form-field appearance="fill">
+              <mat-label>Teljes név</mat-label>
+              <input matInput formControlName="fullName">
+              <mat-icon matSuffix>badge</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Felhasználónév</mat-label>
+              <input matInput formControlName="username">
+              <mat-icon matSuffix>alternate_email</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Email cím</mat-label>
+              <input matInput type="email" formControlName="email">
+              <mat-icon matSuffix>mail</mat-icon>
+            </mat-form-field>
+
+            <div class="actions">
+              <button mat-flat-button color="primary" class="save-btn" [disabled]="profileForm.invalid || profileForm.pristine">
+                Változtatások mentése
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Jelszó módosítása">
+        <div class="tab-body">
+          <div class="section-header">
+            <h2>Biztonsági beállítások</h2>
+            <p>A fiókja biztonsága érdekében használjon erős jelszót.</p>
+          </div>
+
+          <form class="edit-form" [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
+            <mat-form-field appearance="fill">
+              <mat-label>Jelenlegi jelszó</mat-label>
+              <input matInput type="password" formControlName="currentPassword">
+            </mat-form-field>
+
+            <div class="password-grid">
+              <mat-form-field appearance="fill">
+                <mat-label>Új jelszó</mat-label>
+                <input matInput type="password" formControlName="newPassword">
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Új jelszó megerősítése</mat-label>
+                <input matInput type="password" formControlName="confirmPassword">
+              </mat-form-field>
+            </div>
+
+            <div class="actions">
+              <button mat-flat-button color="warn" class="save-btn" [disabled]="passwordForm.invalid">
+                Jelszó frissítése
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </mat-card>
+</div>

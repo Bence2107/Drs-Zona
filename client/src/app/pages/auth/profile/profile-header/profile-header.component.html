@@ -1,0 +1,24 @@
+<mat-card class="profile-card">
+  <div class="banner-container">
+    <img [src]="'img/user/profile/background.jpg'" alt="Background" class="banner-img">
+  </div>
+
+  <div class="profile-content">
+    <div class="avatar-container">
+      <img [src]="avatarUrl" alt="{{userData?.username}}" class="avatar-img">
+      <button
+        class="edit-avatar-btn"
+        (click)="fileInput.click()"
+        matTooltip="Change profile picture"
+        matTooltipPosition="above">">
+        <mat-icon>photo_camera</mat-icon>
+      </button>
+      <input type="file" #fileInput (change)="onFileSelected($event)" hidden accept="image/*">
+    </div>
+
+    <div class="info-container">
+      <h1 class="name">{{ userData?.fullName }}</h1>
+      <p class="title">{{userData?.username}}</p>
+    </div>
+  </div>
+</mat-card>

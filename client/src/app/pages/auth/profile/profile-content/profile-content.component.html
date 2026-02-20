@@ -1,0 +1,40 @@
+<div class="profile-tabs-wrapper">
+  <mat-button-toggle-group
+    [value]="activeTab"
+    (change)="onTabChange($event.value)"
+    hideSingleSelectionIndicator="true"
+    class="custom-toggle-group">
+    <mat-button-toggle value="general">
+      <mat-icon>person</mat-icon> Adataim
+    </mat-button-toggle>
+    <mat-button-toggle value="profile-edit">
+      <mat-icon>manage_accounts</mat-icon> Profil módosítása
+    </mat-button-toggle>
+    <mat-button-toggle value="my-comments">
+      <mat-icon>comment</mat-icon> Kommentjeim
+    </mat-button-toggle>
+    <mat-button-toggle value="my-polls">
+      <mat-icon>ballot</mat-icon>Szavazásaim
+    </mat-button-toggle>
+    <mat-button-toggle value="profile-delete">
+      <mat-icon>account_circle_off</mat-icon> Profil törlése
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+
+  @if(userData) {
+    <div class="tab-content-viewport">
+      @switch (activeTab) {
+        @case ('general') {
+          <app-profile-general [userData]="userData"/>
+        }
+        @case ('profile-edit') {
+          <app-profile-edit [userData]="userData"/>
+        }
+        @case ('my-comments') {
+          <app-profile-comments/>
+        }
+      }
+    </div>
+  }
+</div>
