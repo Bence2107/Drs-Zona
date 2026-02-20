@@ -44,10 +44,10 @@ body {
   --hover-bg: #2d2d3a;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 @include mat.button-overrides((
@@ -92,7 +92,7 @@ body {
 ));
 
 @include mat.form-field-overrides((
-  filled-container-color: #21212e,
+  filled-container-color: var(--primary-bg),
 
   filled-input-text-color: var(--accent-color),
   filled-input-text-placeholder-color: var(--text-secondary),
@@ -129,4 +129,15 @@ body {
   container-shape: 12px,
   container-color: var(--primary-bg),
   divider-color: var(--text-secondary),
+));
+
+@include mat.button-toggle-overrides((
+  background-color: var(--secondary-bg),
+  selected-state-background-color: var(--accent-color),
+  text-color: var(--text-main),
+  selected-state-text-color: var(--text-main),
+  divider-color: var(--border-color),
+  state-layer-color: var(--text-main),
+  hover-state-layer-opacity: 0.12,
+  focus-state-layer-opacity: 0.20
 ));
