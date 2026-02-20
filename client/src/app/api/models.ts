@@ -48,5 +48,6 @@ export type { SeriesCreateDto } from './models/series-create-dto';
 export type { SeriesLookupDto } from './models/series-lookup-dto';
 export type { SeriesUpdateDto } from './models/series-update-dto';
 export type { SummaryDto } from './models/summary-dto';
+export type { UpdateUserRequest } from './models/update-user-request';
 export type { UserProfileResponse } from './models/user-profile-response';
 export type { YearLookupDto } from './models/year-lookup-dto';

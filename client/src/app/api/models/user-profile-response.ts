@@ -3,11 +3,10 @@
 
 export interface UserProfileResponse {
   avatarUrl?: string | null;
+  createdAt?: string;
   email: string | null;
   fullName: string | null;
   hasAvatar?: boolean;
-  lastActive?: string | null;
-  lastLogin?: string | null;
   role: string | null;
   userId?: string;
   username: string | null;
