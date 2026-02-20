@@ -9,6 +9,8 @@ import {AuthService} from '../../../services/auth.service';
 import {LoginRequest} from '../../../api/models/login-request';
 import {Router} from '@angular/router';
 import {RegisterRequest} from '../../../api/models/register-request';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {CustomSnackbarComponent} from '../../../components/custom-snackbar/custom-snackbar.component';
 
 @Component({
   selector: 'app-auth',
@@ -36,7 +38,7 @@ export class AuthComponent implements OnInit{
   loginError: Observable<string> = this.loginErrorSubject.asObservable();
   signupError: Observable<string> = this.signupErrorSubject.asObservable();
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.initForms();
@@ -71,6 +73,11 @@ export class AuthComponent implements OnInit{
           next: () => {
             console.log(localStorage.getItem('auth_token'));
             this.router.navigate(['/home'])
+            this.snackBar.openFromComponent(CustomSnackbarComponent, {
+              data: { message: 'Sikeres Bejelentkezés', actionLabel: 'Rendben' },
+              duration: 3000,
+              horizontalPosition: 'center',
+            });
           },
           error: (err) => this.loginErrorSubject.next(err.error.message)
         });
@@ -89,7 +96,12 @@ export class AuthComponent implements OnInit{
       this.authService.register(request).subscribe({
         next: () => {
           console.log(localStorage.getItem('auth_token'));
-          this.router.navigate(['/home'])
+          this.router.navigate(['/home']);
+          this.snackBar.openFromComponent(CustomSnackbarComponent, {
+            data: { message: 'Sikeres Regisztráció', actionLabel: 'Rendben' },
+            duration: 3000,
+            horizontalPosition: 'center',
+          });
         },
         error: (err) => this.loginErrorSubject.next(err.error.message)
       });

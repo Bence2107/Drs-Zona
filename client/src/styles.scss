@@ -141,3 +141,10 @@ app-root {
   hover-state-layer-opacity: 0.12,
   focus-state-layer-opacity: 0.20
 ));
+
+@include mat.snack-bar-overrides((
+  container-color: var(--primary-bg),
+  supporting-text-color: var(--text-main),
+  supporting-text-size: 8px,
+  container-shape: 8px,
+));

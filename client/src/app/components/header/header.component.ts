@@ -9,6 +9,8 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {AuthService} from '../../services/auth.service';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatDivider} from '@angular/material/list';
+import {CustomSnackbarComponent} from '../custom-snackbar/custom-snackbar.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-header',
@@ -34,7 +36,7 @@ export class HeaderComponent implements OnInit {
   @Output() toggleSidenav = new EventEmitter<void>();
   isScreenSmall: boolean = false;
 
-  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService) {
+  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService, private snackBar: MatSnackBar) {
     this.breakpointObserver.observe(['(max-width: 990px)']).subscribe(result => {
       this.isScreenSmall = result.matches;
     });
@@ -66,6 +68,11 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
+    this.snackBar.openFromComponent(CustomSnackbarComponent, {
+      data: { message: 'Kijelentkezve', actionLabel: 'Rendben' },
+      duration: 3000,
+      horizontalPosition: 'center',
+    });
     return this.authService.logout();
   }
 
