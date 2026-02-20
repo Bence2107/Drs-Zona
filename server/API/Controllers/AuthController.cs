@@ -121,7 +121,7 @@ public class AuthController(IAuthService authService, IUserImageService userImag
     
     [Authorize]
     [HttpPost("profile-picture-update")]
-    public async Task<IActionResult> UpdateProfilePicture([FromBody] IFormFile file) {
+    public async Task<IActionResult> UpdateProfilePicture([FromForm] IFormFile file) {
         var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
         
         await authService.UpdateLastActivity(userId);

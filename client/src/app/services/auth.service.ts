@@ -78,8 +78,11 @@ export class AuthService {
     );
   }
 
-  updateProfilePicture(file: Blob): Observable<void> {
-    return apiAuthProfilePictureUpdatePost(this.http, this.apiConfig.rootUrl, { body: file }).pipe(
+  updateProfilePicture(file: File): Observable<void> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return apiAuthProfilePictureUpdatePost(this.http, this.apiConfig.rootUrl, { body: formData as any }).pipe(
       map(() => void 0),
       tap(() => this.loadProfile())
     );
@@ -109,6 +112,7 @@ export class AuthService {
     if (!user?.token || !user?.expiresAt) return false;
     return new Date(user.expiresAt) > new Date();
   }
+
 
   private loadFromStorage(): AuthResponse | null {
     const stored = localStorage.getItem(this.TOKEN_KEY);

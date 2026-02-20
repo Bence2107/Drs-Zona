@@ -6,13 +6,29 @@
   <div class="profile-content">
     <div class="avatar-container">
       <img [src]="avatarUrl" alt="{{userData?.username}}" class="avatar-img">
+
       <button
         class="edit-avatar-btn"
-        (click)="fileInput.click()"
-        matTooltip="Change profile picture"
-        matTooltipPosition="above">">
+        [matMenuTriggerFor]="avatarMenu"
+        matTooltip="Profilkép kezelése"
+        matTooltipPosition="above">
         <mat-icon>photo_camera</mat-icon>
       </button>
+
+      <mat-menu #avatarMenu="matMenu">
+        <button mat-menu-item (click)="fileInput.click()" class="mat-menu-item">
+          <mat-icon>upload</mat-icon>
+          <span>Új kép feltöltése</span>
+        </button>
+
+        @if(hasAvatar) {
+          <button mat-menu-item  (click)="deleteAvatar()" class="mat-menu-item">
+            <mat-icon color="warn">delete</mat-icon>
+            <span>Profilkép törlése</span>
+          </button>
+        }
+      </mat-menu>
+
       <input type="file" #fileInput (change)="onFileSelected($event)" hidden accept="image/*">
     </div>
 
