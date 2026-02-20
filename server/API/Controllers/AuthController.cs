@@ -9,7 +9,10 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IAuthService authService, IUserImageService userImageService) : ControllerBase
+public class AuthController(
+    IAuthService authService, 
+    IUserImageService userImageService)
+: ControllerBase
 {
     [HttpPost("register")]
     public async Task<ActionResult<AuthResponse>> Register([FromBody] RegisterRequest request)
@@ -121,7 +124,9 @@ public class AuthController(IAuthService authService, IUserImageService userImag
     
     [Authorize]
     [HttpPost("profile-picture-update")]
-    public async Task<IActionResult> UpdateProfilePicture([FromForm] IFormFile file) {
+    public async Task<IActionResult> UpdateProfilePicture([FromForm] ProfilePictureUpload model)
+    {
+        var file = model.File;
         var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
         
         await authService.UpdateLastActivity(userId);
