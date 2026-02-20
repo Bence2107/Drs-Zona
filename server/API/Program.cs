@@ -24,7 +24,11 @@ using Services.Interfaces.images;
 
 Env.Load();
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")
+});
 
 //Database connection
 var connectionString = $"Host={Environment.GetEnvironmentVariable("DB_HOST")};" +
@@ -184,7 +188,6 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = ""
 });
 
-app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
