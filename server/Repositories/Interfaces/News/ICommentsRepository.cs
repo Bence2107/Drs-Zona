@@ -16,5 +16,6 @@ public interface ICommentsRepository
     List<Comment> GetUsersComments(Guid userId);
     List<Comment> GetCommentsWithoutReplies(Guid articleId);
     List<Comment> GetRepliesToAComment(Guid replyCommentId);
+    int GetNumberOfReplies(Guid commentId);
     bool CheckIfIdExists(Guid id);
 }

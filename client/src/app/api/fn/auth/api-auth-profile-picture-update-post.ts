@@ -9,13 +9,15 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface ApiAuthProfilePictureUpdatePost$Params {
-      body?: Blob
+      body?: {
+'File'?: Blob;
+}
 }
 
 export function apiAuthProfilePictureUpdatePost(http: HttpClient, rootUrl: string, params?: ApiAuthProfilePictureUpdatePost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
   const rb = new RequestBuilder(rootUrl, apiAuthProfilePictureUpdatePost.PATH, 'post');
   if (params) {
-    rb.body(params.body, 'application/*+json');
+    rb.body(params.body, 'multipart/form-data');
   }
 
   return http.request(

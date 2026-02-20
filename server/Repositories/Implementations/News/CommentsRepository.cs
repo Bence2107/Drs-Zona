@@ -64,5 +64,9 @@ public class CommentsRepository(EfContext context) : ICommentsRepository
         .Include(comment => comment.User)
         .Where(comment => comment.ReplyToCommentId == replyCommentId)
         .ToList();
+
+    public int GetNumberOfReplies(Guid commentId) => _comments
+        .Count(comment => comment.ReplyToCommentId == commentId);
+
     public bool CheckIfIdExists(Guid id) => _comments.Any(comment => comment.Id == id);
 }

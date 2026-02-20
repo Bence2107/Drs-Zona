@@ -24,6 +24,7 @@ public class CommentService(
             Content: c.Content,
             UpVotes: c.UpVotes,
             DownVotes: c.DownVotes,
+            ReplyCount: commentsRepo.GetNumberOfReplies(c.Id),
             DateCreated: c.DateCreated,
             DateUpdated: c.DateUpdated
         )).ToList();
@@ -42,6 +43,7 @@ public class CommentService(
             Content: c.Content,
             UpVotes: c.UpVotes,
             DownVotes: c.DownVotes,
+            ReplyCount: commentsRepo.GetNumberOfReplies(c.Id),
             DateCreated: c.DateCreated,
             DateUpdated: c.DateUpdated
             )).ToList();
@@ -59,6 +61,7 @@ public class CommentService(
             Content: c.Content,
             UpVotes: c.UpVotes,
             DownVotes: c.DownVotes,
+            ReplyCount: commentsRepo.GetNumberOfReplies(c.Id),
             DateCreated: c.DateCreated,
             DateUpdated: c.DateUpdated
         )).ToList();

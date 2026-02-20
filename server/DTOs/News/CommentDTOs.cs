@@ -42,6 +42,7 @@ public record CommentDetailDto(
     Guid? ReplyToCommentId,
     string Username,
     string? UserAvatarUrl,
+    int ReplyCount, 
     [StringLength(1000, MinimumLength = 1)] string Content,
     [Range(0, int.MaxValue)]int UpVotes,
     [Range(0, int.MaxValue)]int DownVotes,
