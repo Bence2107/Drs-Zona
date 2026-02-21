@@ -2,7 +2,7 @@ using Entities.Models.Polls;
 
 namespace Repositories.Interfaces.Polls;
 
-public interface IVotesRepository
+public interface IPollVotesRepository
 {
     PollVote? GetVoteById(Guid userId, Guid pollOptionId);
     List<PollVote> GetAllVotes();

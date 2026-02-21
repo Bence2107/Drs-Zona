@@ -29,7 +29,8 @@ public class CommentTests
         _service = new CommentService(
             new CommentsRepository(_context),
             new AuthRepository(_context),
-           imageService
+           imageService,
+            new CommentVotesRepository(_context)
         );
     }
 
@@ -192,7 +193,7 @@ public class CommentTests
     [Fact]
     public void UpdateCommentsVote_ShouldFail_WhenArticleNotFound()
     {
-        var dto = new CommentUpdateVoteDto(Guid.NewGuid(), Guid.NewGuid(), 1, 1);
+        var dto = new CommentUpdateVoteDto(Guid.NewGuid(), Guid.NewGuid(), true);
 
         var result = _service.UpdateCommentsVote(dto);
 

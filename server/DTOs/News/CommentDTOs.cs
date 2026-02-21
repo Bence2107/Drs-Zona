@@ -29,10 +29,12 @@ public record CommentContentUpdateDto(
 );
 
 public record CommentUpdateVoteDto(
-    [Required] Guid Id,
-    [Required] Guid ArticleId,
-    [Range(0, int.MaxValue)] int UpVotes,
-    [Range(0, int.MaxValue)] int DownVotes
+    [Required(ErrorMessage = "Az felhasználó azonosítója kötelező")]
+    Guid UserId, 
+    [Required(ErrorMessage = "A komment azonosítója kötelező")]
+    Guid CommentId, 
+    [Required(ErrorMessage = "A szavazat megadása kötelező")]
+    bool IsUpvote
 );
 
 public record CommentDetailDto(

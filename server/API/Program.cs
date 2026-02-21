@@ -84,7 +84,7 @@ builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 
 builder.Services.AddScoped<IPollOptionsRepository, PollOptionsRepository>();
 builder.Services.AddScoped<IPollsRepository, PollsRepository>();
-builder.Services.AddScoped<IVotesRepository, VotesRepository>();
+builder.Services.AddScoped<IPollVotesRepository, PollVotesRepository>();
 
 builder.Services.AddScoped<ICircuitsRepository, CircuitsRepository>();
 builder.Services.AddScoped<IGrandsPrixRepository, GrandsPrixRepository>();
@@ -99,13 +99,14 @@ builder.Services.AddScoped<IDriversChampionshipsRepository, DriversChampionships
 builder.Services.AddScoped<IDriversRepository, DriversRepository>();
 builder.Services.AddScoped<IResultsRepository, ResultsRepository>();
 builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
-builder.Services.AddScoped<IVotesRepository, VotesRepository>();
+builder.Services.AddScoped<IPollVotesRepository, PollVotesRepository>();
 
 builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<IConstructorsService, ConstructorsService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<ICommentVotesRepository, CommentVotesRepository>();
 builder.Services.AddScoped<IGrandPrixService, GrandPrixService>();
 builder.Services.AddScoped<IDriverService, DriverService>();
 builder.Services.AddScoped<IPollService, PollService>();

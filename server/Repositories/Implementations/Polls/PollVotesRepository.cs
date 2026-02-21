@@ -5,7 +5,7 @@ using Repositories.Interfaces.Polls;
 
 namespace Repositories.Implementations.Polls;
 
-public class VotesRepository(EfContext context) : IVotesRepository
+public class PollVotesRepository(EfContext context) : IPollVotesRepository
 {
     private readonly DbSet<PollVote> _votes = context.PollVotes;
     public PollVote? GetVoteById(Guid userId, Guid pollOptionId) =>_votes

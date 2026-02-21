@@ -97,20 +97,12 @@ public class CommentsController(ICommentService commentService): ControllerBase
         return Ok(result.Value);
     }
     
-    [HttpPost("updateVote")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult UpdateContent([FromBody]CommentUpdateVoteDto commentUpdateVoteDto)
+    [HttpPost("vote")]
+    public IActionResult Vote([FromBody] CommentUpdateVoteDto request)
     {
-        var result = commentService.UpdateCommentsVote(commentUpdateVoteDto);
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new
-            {
-                result.ErrorField, 
-                result.Message
-            });
-        }
-        
+        var result = commentService.UpdateCommentsVote(request);
+    
+        if (!result.IsSuccess) return BadRequest(result.Message);
         return Ok(result.Value);
     }
     

@@ -13,7 +13,7 @@ public interface ICommentService
     ResponseResult<bool> AddComment(CommentCreateDto commentCreateDto, Guid id);
     
     ResponseResult<bool> UpdateCommentsContent(CommentContentUpdateDto commentUpdateContentDto);
-    
+
     ResponseResult<bool> UpdateCommentsVote(CommentUpdateVoteDto commentUpdateVoteDto);
     
     ResponseResult<bool> DeleteComment(Guid commentId);

@@ -10,7 +10,8 @@ namespace Services.Implementations;
 public class CommentService(
     ICommentsRepository commentsRepo, 
     IAuthRepository usersRepo, 
-    IUserImageService userImageService) 
+    IUserImageService userImageService,
+    ICommentVotesRepository commentVotesRepo) 
 : ICommentService
 {
     public ResponseResult<List<CommentDetailDto>> GetArticleCommentsWithoutReplies(Guid articleId)
@@ -114,26 +115,40 @@ public class CommentService(
 
     public ResponseResult<bool> UpdateCommentsVote(CommentUpdateVoteDto commentUpdateVoteDto)
     {
-        var existingComment = commentsRepo.GetCommentById(commentUpdateVoteDto.Id);
-        if (existingComment == null) return ResponseResult<bool>.Failure("Comment not found");
+        var userId = commentUpdateVoteDto.UserId;
+        var commentId = commentUpdateVoteDto.CommentId;
+        var isUpvote = commentUpdateVoteDto.IsUpvote;
         
-        var articleToComment = commentsRepo.GetByIdWithArticle(commentUpdateVoteDto.ArticleId);
-        if (articleToComment == null) return ResponseResult<bool>.Failure("Article not found");
-        
-        
-        var comment = new Comment
+        var comment = commentsRepo.GetCommentById(commentId);
+        if (comment == null) return ResponseResult<bool>.Failure("A komment nem található.");
+
+        var existingVote = commentVotesRepo.GetVote(userId, commentId);
+
+        if (existingVote == null)
         {
-            Id = articleToComment.Id,
-            UserId = articleToComment.UserId,
-            ArticleId = articleToComment.ArticleId,
-            ReplyToCommentId = articleToComment.ReplyToCommentId,
-            Content = articleToComment.Content,
-            UpVotes = commentUpdateVoteDto.UpVotes,
-            DownVotes = commentUpdateVoteDto.DownVotes,
-            DateCreated = articleToComment.DateCreated,
-            DateUpdated = DateTime.Now
-        };
-        commentsRepo.Update(comment);
+            commentVotesRepo.Add(new CommentVote { UserId = userId, CommentId = commentId, IsUpvote = isUpvote });
+            if (isUpvote) comment.UpVotes++; else comment.DownVotes++;
+        }
+        else if (existingVote.IsUpvote == isUpvote)
+        {
+            commentVotesRepo.Delete(existingVote);
+            if (isUpvote) comment.UpVotes--; else comment.DownVotes--;
+        }
+        else
+        {
+            existingVote.IsUpvote = isUpvote;
+            commentVotesRepo.Update(existingVote);
+
+            if (isUpvote) {
+                comment.UpVotes++;
+                comment.DownVotes--;
+            } else {
+                comment.UpVotes--;
+                comment.DownVotes++;
+            }
+        }
+
+        commentsRepo.Update(comment); 
         return ResponseResult<bool>.Success(true);
     }
 

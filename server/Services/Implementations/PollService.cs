@@ -11,7 +11,7 @@ public class PollService(
     EfContext context,
     IPollsRepository pollRepository,
     IPollOptionsRepository pollOptionsRepository,
-    IVotesRepository voteRepository,
+    IPollVotesRepository pollVoteRepository,
     IAuthRepository userRepository
 ) : IPollService
 {
@@ -21,13 +21,13 @@ public class PollService(
         if (poll == null) return ResponseResult<PollDto>.Failure("Poll not found");
 
         var options = pollOptionsRepository.GetByPollId(id);
-        var totalVotes = options.Sum(o => voteRepository.GetVoteCount(o.Id));
+        var totalVotes = options.Sum(o => pollVoteRepository.GetVoteCount(o.Id));
         var isExpired = DateTime.Now > poll.ExpiresAt;
         
         Guid? userVoteOptionId = null;
         if (currentUserId.HasValue)
         {
-            userVoteOptionId = voteRepository.GetUserVoteForPoll(id, currentUserId.Value)?.PollOptionId;
+            userVoteOptionId = pollVoteRepository.GetUserVoteForPoll(id, currentUserId.Value)?.PollOptionId;
         }
 
         return ResponseResult<PollDto>.Success(new PollDto(
@@ -40,7 +40,7 @@ public class PollService(
             IsActive: poll.IsActive,
             PollOptions: options.Select(o =>
             {
-                var voteCount = voteRepository.GetVoteCount(o.Id);
+                var voteCount = pollVoteRepository.GetVoteCount(o.Id);
                 var percentage = totalVotes > 0
                     ? Math.Round((double)voteCount / totalVotes * 100, 2)
                     : 0;
@@ -191,13 +191,13 @@ public class PollService(
             PollOptionId = pollOptionId
         };
 
-        voteRepository.Create(vote);
+        pollVoteRepository.Create(vote);
         return ResponseResult<bool>.Success(true);
     }
 
     public ResponseResult<bool> RemoveVote(Guid pollId, Guid pollOptionId, Guid userId)
     {
-        var vote = voteRepository.GetUserVoteForPoll(userId, pollOptionId);
+        var vote = pollVoteRepository.GetUserVoteForPoll(userId, pollOptionId);
         if (vote == null)
             return ResponseResult<bool>.Failure("Vote not found");
 
@@ -205,7 +205,7 @@ public class PollService(
         if (option == null || option.PollId != pollId)
             return ResponseResult<bool>.Failure("Poll option not found");
 
-        voteRepository.Delete(userId, pollOptionId);
+        pollVoteRepository.Delete(userId, pollOptionId);
         return ResponseResult<bool>.Success(true);
     }
     
@@ -215,7 +215,7 @@ public class PollService(
             .Select(o => o.Id)
             .ToList();
 
-        var userVotes = voteRepository.GetByUserId(userId);
+        var userVotes = pollVoteRepository.GetByUserId(userId);
         return userVotes.Any(v => optionIds.Contains(v.PollOptionId));
     }
 }
