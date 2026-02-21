@@ -1,4 +1,27 @@
 <div class="comments-wrapper">
+  <div class="main-comment-form">
+    <img [src]="avatarUrl" class="form-avatar" alt="avatar">
+    <div class="input-wrapper">
+      <textarea
+        class="comment-textarea"
+        [(ngModel)]="newCommentText"
+        placeholder="Írj hozzászólást..."
+        rows="1"
+        (input)="autoResize($event)"
+      ></textarea>
+      @if(newCommentText.trim()) {
+        <div class="form-actions" >
+          <button class="cancel-btn" (click)="newCommentText = ''">Mégse</button>
+          <button class="submit-btn" (click)="submitComment()" [disabled]="!newCommentText.trim()">
+            <mat-icon>send</mat-icon>
+            Küldés
+          </button>
+        </div>
+
+      }
+    </div>
+  </div>
+
   <div class="comment-list">
     @for (comment of comments; track comment) {
       <mat-card class="comment-card shadow-none">

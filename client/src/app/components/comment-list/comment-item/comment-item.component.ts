@@ -5,6 +5,8 @@ import { DatePipe } from '@angular/common';
 import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
+import {FormsModule} from '@angular/forms';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-comment-item',
@@ -14,8 +16,9 @@ import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from
     MatIcon,
     MatExpansionPanel,
     MatExpansionPanelHeader,
-    MatExpansionPanelTitle
-],
+    MatExpansionPanelTitle,
+    FormsModule
+  ],
   templateUrl: './comment-item.component.html',
   styleUrl: './comment-item.component.scss'
 })
@@ -26,7 +29,7 @@ export class CommentItemComponent {
   @Input() depth: number = 0;
   repliesVisible = false;
 
-  constructor(private commentService: CommentService) {}
+  constructor(private commentService: CommentService, private authService: AuthService) {}
 
   loadReplies() {
     if (this.comment.loaded || !this.comment.id) return;
@@ -46,5 +49,34 @@ export class CommentItemComponent {
     const url = this.comment.userAvatarUrl;
     if (url == null) return "img/user/avatars/avatar.jpg";
     return `${url}`;
+  }
+
+  get avatarReplierUrl(): string {
+    const profile = this.authService.currentProfile();
+    if (profile?.hasAvatar && profile?.avatarUrl) {
+      return profile.avatarUrl;
+    }
+    return "img/user/avatars/avatar.jpg";
+  }
+
+  replyFormVisible = false;
+  replyText = '';
+
+  toggleReplyForm() {
+    this.replyFormVisible = !this.replyFormVisible;
+    if (!this.replyFormVisible) this.replyText = '';
+  }
+
+  submitReply() {
+    if (!this.replyText.trim()) return;
+    console.log('Reply:', this.replyText);
+    this.replyText = '';
+    this.replyFormVisible = false;
+  }
+
+  autoResize(event: Event) {
+    const el = event.target as HTMLTextAreaElement;
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
   }
 }
