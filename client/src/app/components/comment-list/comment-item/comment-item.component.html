@@ -1,11 +1,11 @@
-<div class="comment-layout" [class.is-reply-node]="isReply">
+<div class="comment-layout" [class.is-reply-node]="isReply" [style.--depth]="depth">
   <div class="avatar-column">
     <img [src]="avatarUrl"
-      [class.mini-avatar]="!isReply"
-      [class.reply-avatar]="isReply" alt="avatar">
-    </div>
+         [class.mini-avatar]="!isReply"
+         [class.reply-avatar]="isReply" alt="avatar">
+  </div>
   <div class="content-column">
-
+    <div class="comment-bubble">
       <div class="comment-header">
         <span class="author-name">{{ comment.username }}</span>
         <span class="dot-separator">•</span>
@@ -14,33 +14,49 @@
       <div class="comment-body">
         <p>{{ comment.content }}</p>
       </div>
-      <div class="comment-footer">
-        <div class="vote-group">
-          <button mat-icon-button class="vote-btn"><mat-icon>arrow_upward</mat-icon></button>
-          <span class="score">{{ (comment.upVotes || 0) - (comment.downVotes || 0) }}</span>
-          <button mat-icon-button class="vote-btn"><mat-icon>arrow_downward</mat-icon></button>
-        </div>
+    </div>
 
-        <div class="footer-action">
-          <mat-icon>chat_bubble_outline</mat-icon>
-          <span>Válasz</span>
-        </div>
+    <div class="comment-footer">
+      <div class="vote-group">
+        <button mat-icon-button class="vote-btn"><mat-icon>arrow_upward</mat-icon></button>
+        <span class="score">{{ (comment.upVotes || 0) - (comment.downVotes || 0) }}</span>
+        <button mat-icon-button class="vote-btn"><mat-icon>arrow_downward</mat-icon></button>
       </div>
+      <div class="footer-action">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        <span>Válasz</span>
+      </div>
+    </div>
 
-      @if(comment.replyCount) {
-        <mat-expansion-panel (opened)="loadReplies()" class="replies-panel mat-elevation-z0">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon>add_circle_outline</mat-icon>
-              {{comment.replyCount}} válasz megjelenítése
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="nested-replies">
+    @if(comment.replyCount) {
+      <mat-expansion-panel (opened)="loadReplies()" class="replies-panel mat-elevation-z0 desktop-only">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>add_circle_outline</mat-icon>
+            {{comment.replyCount}} válasz megjelenítése
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="nested-replies">
+          @for (reply of comment.replies; track reply) {
+            <app-comment-item [comment]="reply" [isReply]="true" [depth]="(depth || 0) + 1"/>
+          }
+        </div>
+      </mat-expansion-panel>
+
+      <div class="mobile-replies mobile-only">
+        <button class="show-replies-btn" (click)="loadReplies(); repliesVisible = !repliesVisible">
+          <mat-icon>{{ repliesVisible ? 'expand_less' : 'expand_more' }}</mat-icon>
+          {{ repliesVisible ? 'Válaszok elrejtése' : comment.replyCount + ' válasz' }}
+        </button>
+
+        @if(repliesVisible) {
+          <div class="mobile-reply-list">
             @for (reply of comment.replies; track reply) {
-              <app-comment-item [comment]="reply" [isReply]="true"/>
+              <app-comment-item [comment]="reply" [isReply]="true" [depth]="(depth || 0) + 1"/>
             }
           </div>
-        </mat-expansion-panel>
-      }
-    </div>
+        }
+      </div>
+    }
   </div>
+</div>

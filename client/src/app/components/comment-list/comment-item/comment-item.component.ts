@@ -23,6 +23,9 @@ export class CommentItemComponent {
   @Input() comment!: UIComment;
   @Input() isReply: boolean = false;
 
+  @Input() depth: number = 0;
+  repliesVisible = false;
+
   constructor(private commentService: CommentService) {}
 
   loadReplies() {

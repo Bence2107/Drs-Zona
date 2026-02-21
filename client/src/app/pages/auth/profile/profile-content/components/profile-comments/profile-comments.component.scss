@@ -45,3 +45,15 @@
   from { opacity: 0.3; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+@media (max-width: 600px) {
+  .comments-wrapper {
+    padding: 8px;
+    margin: 0.25rem;
+  }
+
+  .comment-card {
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+}
