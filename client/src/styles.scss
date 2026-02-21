@@ -149,6 +149,10 @@ app-root {
   container-shape: 8px,
 ));
 
+@include mat.progress-spinner-overrides((
+  active-indicator-color: var(--accent-color),
+));
+
 .custom-nav-panel {
   background-color: var(--secondary-bg) !important;
   border-radius: 8px !important;

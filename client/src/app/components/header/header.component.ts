@@ -11,6 +11,8 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatDivider} from '@angular/material/list';
 import {CustomSnackbarComponent} from '../custom-snackbar/custom-snackbar.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {ConnectionService} from '../../services/connection-service.service';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-header',
@@ -25,7 +27,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
     MatMenu,
     MatMenuItem,
     MatDivider,
-    MatMenuTrigger
+    MatMenuTrigger,
+    MatProgressSpinner
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
@@ -36,14 +39,57 @@ export class HeaderComponent implements OnInit {
   @Output() toggleSidenav = new EventEmitter<void>();
   isScreenSmall: boolean = false;
 
-  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService, private snackBar: MatSnackBar) {
+  isAuthLoading: boolean = true;
+  isServerAlive: boolean = false;
+  isAvatarLoading: boolean = true;
+
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private connectionService: ConnectionService) {
     this.breakpointObserver.observe(['(max-width: 990px)']).subscribe(result => {
       this.isScreenSmall = result.matches;
     });
   }
 
+  onAvatarLoad() {
+    this.isAvatarLoading = false;
+  }
+
+  onAvatarError() {
+    this.isAvatarLoading = false;
+  }
+
+  get showSpinner(): boolean {
+    return this.isAuthLoading || (this.canShowUserMenu() && this.isAvatarLoading);
+  }
+
+  canShowUserMenu(): boolean {
+    return !this.isAuthLoading && this.isLoggedIn() && this.isServerAlive;
+  }
+
   ngOnInit(): void {
     this.initializeTheme();
+    this.verifyServerAndAuth();
+  }
+
+  private verifyServerAndAuth(): void {
+    this.connectionService.checkConnection().subscribe({
+      next: () => {
+        this.isServerAlive = true;
+        this.isAuthLoading = false;
+
+        if (!this.isLoggedIn()) {
+          this.isAvatarLoading = false;
+        }
+      },
+      error: () => {
+        this.isServerAlive = false;
+        this.isAuthLoading = false;
+        this.isAvatarLoading = false;
+      }
+    });
   }
 
   toggleSidebar() {
@@ -80,10 +126,16 @@ export class HeaderComponent implements OnInit {
     return this.authService.currentProfile()?.username ?? null;
   }
 
-  get avatarUrl(): string | null {
+  get hasProfileData(): boolean {
+    return !!this.authService.currentProfile();
+  }
+
+  get avatarUrl(): string {
     const profile = this.authService.currentProfile();
-    if (!profile?.hasAvatar || !profile?.avatarUrl) return "img/user/avatars/avatar.jpg";
-    return `${profile.avatarUrl}`;
+    if (profile?.hasAvatar && profile?.avatarUrl) {
+      return profile.avatarUrl;
+    }
+    return "img/user/avatars/avatar.jpg";
   }
 
   isAuthor(): boolean {

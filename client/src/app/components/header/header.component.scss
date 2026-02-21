@@ -28,6 +28,26 @@ header {
   border-bottom: 1px solid var(--border-color);
 }
 
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  height: 48px;
+}
+
+.loader-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+::ng-deep .mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: #f8274f;
+}
+
 .account-button {
   display: flex;
   align-items: center;
