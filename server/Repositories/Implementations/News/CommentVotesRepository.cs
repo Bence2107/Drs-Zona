@@ -12,7 +12,13 @@ public class CommentVotesRepository(EfContext context) : ICommentVotesRepository
     public CommentVote? GetVote(Guid userId, Guid commentId) => 
         _votes.FirstOrDefault(v => v.UserId == userId && v.CommentId == commentId);
 
+    public List<CommentVote> GetVotesByUser(Guid userId) => context.CommentVotes
+        .Where(v => v.UserId == userId)
+        .ToList();
+    
     public void Add(CommentVote vote) { _votes.Add(vote); context.SaveChanges(); }
+    
     public void Update(CommentVote vote) { _votes.Update(vote); context.SaveChanges(); }
+    
     public void Delete(CommentVote vote) { _votes.Remove(vote); context.SaveChanges(); }
 }

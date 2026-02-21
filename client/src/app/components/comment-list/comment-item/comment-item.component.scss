@@ -86,12 +86,30 @@
     padding: 0 2px;
     height: 32px;
 
+    .vote-btn {
+      transition: all 0.2s ease;
+      color: #818384;
+
+      &.upvote.active {
+        color: #4caf50 !important;
+      }
+
+      &.downvote.active {
+        color: #f44336 !important;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+
     .score {
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1;
-      color: var(--text-main);
-      padding: 0 4px;
+      min-width: 24px;
+      text-align: center;
+      transition: color 0.2s;
+
+      &.positive { color: #4caf50; }
+      &.negative { color: #f44336; }
     }
   }
 

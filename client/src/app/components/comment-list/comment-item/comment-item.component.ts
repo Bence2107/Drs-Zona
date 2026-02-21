@@ -10,6 +10,7 @@ import {AuthService} from '../../../services/auth.service';
 import {CommentCreateDto} from '../../../api/models/comment-create-dto';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {CommentContentUpdateDto} from '../../../api/models/comment-content-update-dto';
+import {CommentUpdateVoteDto} from '../../../api/models/comment-update-vote-dto';
 
 @Component({
   selector: 'app-comment-item',
@@ -145,6 +146,45 @@ export class CommentItemComponent {
       },
       error: (err) => {
         console.error("Hiba a mentés során:", err);
+      }
+    });
+  }
+
+  // comment-item.component.ts
+
+  vote(isUpvote: boolean) {
+    const profile = this.authService.currentProfile();
+    if (!profile || !this.comment.id) return;
+
+    const oldVote = this.comment.currentUserVote || 0;
+    const oldUp = this.comment.upVotes || 0;
+    const oldDown = this.comment.downVotes || 0;
+
+    const targetVote = isUpvote ? 1 : -1;
+
+    if (this.comment.currentUserVote === targetVote) {
+      if (isUpvote) this.comment.upVotes!--; else this.comment.downVotes!--;
+      this.comment.currentUserVote = 0;
+    } else {
+      if (this.comment.currentUserVote === 1) this.comment.upVotes!--;
+      if (this.comment.currentUserVote === -1) this.comment.downVotes!--;
+
+      if (isUpvote) this.comment.upVotes!++; else this.comment.downVotes!++;
+      this.comment.currentUserVote = targetVote;
+    }
+
+    const dto: CommentUpdateVoteDto = {
+      commentId: this.comment.id,
+      userId: profile.userId,
+      isUpvote: isUpvote
+    };
+
+    this.commentService.updateVote(dto).subscribe({
+      error: (err) => {
+        this.comment.currentUserVote = oldVote;
+        this.comment.upVotes = oldUp;
+        this.comment.downVotes = oldDown;
+        console.error('Hiba a szavazásnál:', err);
       }
     });
   }

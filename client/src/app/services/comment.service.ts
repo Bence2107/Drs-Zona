@@ -7,11 +7,12 @@ import {
   apiCommentsCreateUserIdPost, apiCommentsDeleteIdDelete,
   apiCommentsGetCommentRepliesCommentIdGet$Json,
   apiCommentsGetCommentsWithoutRepliesArticleIdGet$Json, apiCommentsGetUsersCommentsUserIdGet$Json,
-  apiCommentsUpdateContentPost
+  apiCommentsUpdateContentPost, apiCommentsVotePost
 } from '../api/functions';
 import {map} from 'rxjs/operators';
 import {CommentCreateDto} from '../api/models/comment-create-dto';
 import {CommentContentUpdateDto} from '../api/models/comment-content-update-dto';
+import {CommentUpdateVoteDto} from '../api/models/comment-update-vote-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +58,13 @@ export class CommentService {
       body: dto
     }).pipe(map(() => void 0));
   }
+
+  updateVote(dto: CommentUpdateVoteDto): Observable<void> {
+    return apiCommentsVotePost(this.http, this.apiConfig.rootUrl, {
+      body: dto
+    }).pipe(map(() => void 0));
+  }
+
 
   deleteComment(id: string): Observable<void> {
     return apiCommentsDeleteIdDelete(this.http, this.apiConfig.rootUrl, {id: id}).pipe(map(() => void 0));

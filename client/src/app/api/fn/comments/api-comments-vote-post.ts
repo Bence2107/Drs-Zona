@@ -9,12 +9,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { CommentUpdateVoteDto } from '../../models/comment-update-vote-dto';
 
-export interface ApiCommentsUpdateVotePost$Params {
+export interface ApiCommentsVotePost$Params {
       body?: CommentUpdateVoteDto
 }
 
-export function apiCommentsUpdateVotePost(http: HttpClient, rootUrl: string, params?: ApiCommentsUpdateVotePost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiCommentsUpdateVotePost.PATH, 'post');
+export function apiCommentsVotePost(http: HttpClient, rootUrl: string, params?: ApiCommentsVotePost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiCommentsVotePost.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/*+json');
   }
@@ -29,4 +29,4 @@ export function apiCommentsUpdateVotePost(http: HttpClient, rootUrl: string, par
   );
 }
 
-apiCommentsUpdateVotePost.PATH = '/api/Comments/updateVote';
+apiCommentsVotePost.PATH = '/api/Comments/vote';

@@ -4,6 +4,7 @@
 export interface CommentDetailDto {
   articleId?: string;
   content?: string | null;
+  currentUserVote?: number;
   dateCreated?: string;
   dateUpdated?: string;
   downVotes?: number;

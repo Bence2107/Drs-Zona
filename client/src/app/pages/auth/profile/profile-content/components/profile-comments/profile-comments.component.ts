@@ -34,7 +34,16 @@ export class ProfileCommentsComponent implements OnInit {
     this.isLoading = true;
     this.commentService.getUsersComments(this.userData.userId).subscribe({
       next: (data) => {
-        this.comments = data;
+        this.comments = data.map(comment => ({
+          ...comment,
+          upVotes: comment.upVotes ?? 0,
+          downVotes: comment.downVotes ?? 0,
+          currentUserVote: comment.currentUserVote ?? null,
+          replies: [],
+          loaded: false,
+          loadingReplies: false
+        } as UIComment));
+
         this.isLoading = false;
       },
       error: (err) => {

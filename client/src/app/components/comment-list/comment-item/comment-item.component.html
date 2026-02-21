@@ -38,9 +38,25 @@
 
     <div class="comment-footer">
       <div class="vote-group">
-        <button mat-icon-button class="vote-btn"><mat-icon>arrow_upward</mat-icon></button>
-        <span class="score">{{ (comment.upVotes || 0) - (comment.downVotes || 0) }}</span>
-        <button mat-icon-button class="vote-btn"><mat-icon>arrow_downward</mat-icon></button>
+        <button mat-icon-button
+                class="vote-btn upvote"
+                [class.active]="comment.currentUserVote === 1"
+                (click)="vote(true)">
+          <mat-icon>arrow_upward</mat-icon>
+        </button>
+
+        <span class="score"
+              [class.positive]="(comment.upVotes || 0) - (comment.downVotes || 0) > 0"
+              [class.negative]="(comment.upVotes || 0) - (comment.downVotes || 0) < 0">
+    {{ (comment.upVotes || 0) - (comment.downVotes || 0) }}
+  </span>
+
+        <button mat-icon-button
+                class="vote-btn downvote"
+                [class.active]="comment.currentUserVote === -1"
+                (click)="vote(false)">
+          <mat-icon>arrow_downward</mat-icon>
+        </button>
       </div>
 
       @if(!isOnProfileSite) {

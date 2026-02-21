@@ -14,62 +14,96 @@ public class CommentService(
     ICommentVotesRepository commentVotesRepo) 
 : ICommentService
 {
-    public ResponseResult<List<CommentDetailDto>> GetArticleCommentsWithoutReplies(Guid articleId)
+    public ResponseResult<List<CommentDetailDto>> GetArticleCommentsWithoutReplies(Guid articleId, Guid? currentUserId = null)
     {
-        var comments = commentsRepo.GetCommentsWithoutReplies(articleId).Select(c => new CommentDetailDto(
-            Id: c.Id,
-            UserId: c.UserId,
-            ArticleId: c.ArticleId,
-            ReplyToCommentId: c.ReplyToCommentId,
-            Username: c.User!.Username,
-            UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
-            Content: c.Content,
-            UpVotes: c.UpVotes,
-            DownVotes: c.DownVotes,
-            ReplyCount: commentsRepo.GetNumberOfReplies(c.Id),
-            DateCreated: c.DateCreated,
-            DateUpdated: c.DateUpdated
-        )).ToList();
-        
+        var userVotes = currentUserId.HasValue 
+            ? commentVotesRepo.GetVotesByUser(currentUserId.Value) 
+            : [];
+
+        var comments = commentsRepo.GetCommentsWithoutReplies(articleId).Select(c => {
+            var vote = userVotes.FirstOrDefault(v => v.CommentId == c.Id);
+            var voteStatus = vote == null ? 0 : (vote.IsUpvote ? 1 : -1);
+
+            return new CommentDetailDto(
+                Id: c.Id,
+                UserId: c.UserId,
+                ArticleId: c.ArticleId,
+                ReplyToCommentId: c.ReplyToCommentId,
+                Username: c.User!.Username,
+                UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
+                Content: c.Content,
+                UpVotes: c.UpVotes,
+                DownVotes: c.DownVotes,
+                ReplyCount: commentsRepo.GetNumberOfReplies(c.Id),
+                DateCreated: c.DateCreated,
+                DateUpdated: c.DateUpdated,
+                CurrentUserVote: voteStatus 
+            );
+        }).ToList();
+    
         return ResponseResult<List<CommentDetailDto>>.Success(comments);
     }
 
-    public ResponseResult<List<CommentDetailDto>> GetCommentReplies(Guid commentId)
+    public ResponseResult<List<CommentDetailDto>> GetCommentReplies(Guid commentId, Guid? currentUserId = null)
     {
-        var repliesToComment = commentsRepo.GetRepliesToAComment(commentId).Select(c=> new CommentDetailDto(
-            Id: c.Id,
-            UserId: c.UserId,
-            ArticleId: c.ArticleId,
-            ReplyToCommentId: c.ReplyToCommentId,
-            Username: c.User!.Username,
-            UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
-            Content: c.Content,
-            UpVotes: c.UpVotes,
-            DownVotes: c.DownVotes,
-            ReplyCount: commentsRepo.GetNumberOfReplies(c.Id),
-            DateCreated: c.DateCreated,
-            DateUpdated: c.DateUpdated
-            )).ToList();
-        return ResponseResult<List<CommentDetailDto>>.Success(repliesToComment);
+        var userVotes = currentUserId.HasValue
+            ? commentVotesRepo.GetVotesByUser(currentUserId.Value)
+            : [];
+
+        var comments = commentsRepo.GetRepliesToAComment(commentId).Select(c =>
+        {
+            var vote = userVotes.FirstOrDefault(v => v.CommentId == c.Id);
+            var voteStatus = vote == null ? 0 : (vote.IsUpvote ? 1 : -1);
+
+            return new CommentDetailDto(
+                Id: c.Id,
+                UserId: c.UserId,
+                ArticleId: c.ArticleId,
+                ReplyToCommentId: c.ReplyToCommentId,
+                Username: c.User!.Username,
+                UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
+                Content: c.Content,
+                UpVotes: c.UpVotes,
+                DownVotes: c.DownVotes,
+                ReplyCount: commentsRepo.GetNumberOfReplies(c.Id),
+                DateCreated: c.DateCreated,
+                DateUpdated: c.DateUpdated,
+                CurrentUserVote: voteStatus
+            );
+        }).ToList();
+
+        return ResponseResult<List<CommentDetailDto>>.Success(comments);
     }
 
-    public ResponseResult<List<CommentDetailDto>> GetUsersComments(Guid userId)
+    public ResponseResult<List<CommentDetailDto>> GetUsersComments(Guid userId, Guid? currentUserId = null)
     {
-        var repliesToComment = commentsRepo.GetUsersComments(userId).Select(c=> new CommentDetailDto(
-            Id: c.Id,
-            UserId: c.UserId,
-            ArticleId: c.ArticleId,
-            ReplyToCommentId: c.ReplyToCommentId,
-            Username: c.User!.Username,
-            UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
-            Content: c.Content,
-            UpVotes: c.UpVotes,
-            DownVotes: c.DownVotes,
-            ReplyCount: commentsRepo.GetNumberOfReplies(c.Id),
-            DateCreated: c.DateCreated,
-            DateUpdated: c.DateUpdated
-        )).ToList();
-        return ResponseResult<List<CommentDetailDto>>.Success(repliesToComment);
+        var userVotes = currentUserId.HasValue
+            ? commentVotesRepo.GetVotesByUser(currentUserId.Value)
+            : [];
+
+        var comments = commentsRepo.GetUsersComments(userId).Select(c =>
+        {
+            var vote = userVotes.FirstOrDefault(v => v.CommentId == c.Id);
+            var voteStatus = vote == null ? 0 : (vote.IsUpvote ? 1 : -1);
+
+            return new CommentDetailDto(
+                Id: c.Id,
+                UserId: c.UserId,
+                ArticleId: c.ArticleId,
+                ReplyToCommentId: c.ReplyToCommentId,
+                Username: c.User!.Username,
+                UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
+                Content: c.Content,
+                UpVotes: c.UpVotes,
+                DownVotes: c.DownVotes,
+                ReplyCount: commentsRepo.GetNumberOfReplies(c.Id),
+                DateCreated: c.DateCreated,
+                DateUpdated: c.DateUpdated,
+                CurrentUserVote: voteStatus
+            );
+        }).ToList();
+
+        return ResponseResult<List<CommentDetailDto>>.Success(comments);
     }
 
     public ResponseResult<bool> AddComment(CommentCreateDto commentCreateDto, Guid userId)

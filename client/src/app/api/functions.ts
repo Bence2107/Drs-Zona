@@ -83,8 +83,8 @@ export type { ApiCommentsCreateUserIdPost$Params as ApiCommentsCreateUserIdPost$
 export { apiCommentsCreateUserIdPost as apiCommentsCreateUserIdPost } from './fn/comments/api-comments-create-user-id-post';
 export type { ApiCommentsUpdateContentPost$Params as ApiCommentsUpdateContentPost$Params } from './fn/comments/api-comments-update-content-post';
 export { apiCommentsUpdateContentPost as apiCommentsUpdateContentPost } from './fn/comments/api-comments-update-content-post';
-export type { ApiCommentsUpdateVotePost$Params as ApiCommentsUpdateVotePost$Params } from './fn/comments/api-comments-update-vote-post';
-export { apiCommentsUpdateVotePost as apiCommentsUpdateVotePost } from './fn/comments/api-comments-update-vote-post';
+export type { ApiCommentsVotePost$Params as ApiCommentsVotePost$Params } from './fn/comments/api-comments-vote-post';
+export { apiCommentsVotePost as apiCommentsVotePost } from './fn/comments/api-comments-vote-post';
 export type { ApiCommentsDeleteIdDelete$Params as ApiCommentsDeleteIdDelete$Params } from './fn/comments/api-comments-delete-id-delete';
 export { apiCommentsDeleteIdDelete as apiCommentsDeleteIdDelete } from './fn/comments/api-comments-delete-id-delete';
 export type { ApiConstructorsGetIdGet$Plain$Params as ApiConstructorsGetIdGet$Plain$Params } from './fn/constructors/api-constructors-get-id-get-plain';

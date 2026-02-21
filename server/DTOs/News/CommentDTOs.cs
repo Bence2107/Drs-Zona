@@ -49,5 +49,6 @@ public record CommentDetailDto(
     [Range(0, int.MaxValue)]int UpVotes,
     [Range(0, int.MaxValue)]int DownVotes,
     DateTime DateCreated,
-    DateTime DateUpdated
+    DateTime DateUpdated,
+    int CurrentUserVote = 0
 );
