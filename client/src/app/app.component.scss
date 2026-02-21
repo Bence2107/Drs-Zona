@@ -8,6 +8,7 @@ html, body {
   font-family: 'Kanit', sans-serif;
   background: var(--primary-bg);
   color: var(--text-main);
+  overflow: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -171,14 +172,20 @@ html, body {
   height: 100%;
 }
 
+.mat-drawer-content {
+  overflow: hidden !important;
+}
+
 .content-scroll-wrapper {
   display: flex;
-  overflow-y: auto;
   overflow-x: hidden;
   height: 100%;
   position: relative;
   flex-direction: column;
   align-items: center;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
 }
 
 .toggle-anchor {

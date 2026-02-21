@@ -121,9 +121,9 @@ app-root {
   active-indicator-color: var(--accent-color),
   active-label-text-color: var(--accent-color),
 
-  inactive-focus-label-text-color: var(--text-secondary),
+  inactive-focus-label-text-color: red,
   inactive-hover-label-text-color: var(--accent-color),
-  inactive-label-text-color: var(--text),
+  inactive-label-text-color: var(--text-main),
 ));
 
 @include mat.menu-overrides((

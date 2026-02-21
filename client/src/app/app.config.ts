@@ -1,5 +1,5 @@
 import {ApplicationConfig, ErrorHandler, LOCALE_ID,} from '@angular/core';
-import { provideRouter } from '@angular/router';
+import {provideRouter, withInMemoryScrolling} from '@angular/router';
 
 import { routes } from './app.routes';
 import {ApiConfiguration} from './api/api-configuration';
@@ -18,6 +18,10 @@ export const appConfig: ApplicationConfig = {
     {
       provide: ErrorHandler,
     },
+    provideRouter(routes, withInMemoryScrolling({
+      scrollPositionRestoration: 'top',
+      anchorScrolling: 'enabled'
+    })),
     {
       provide: ApiConfiguration,
       useFactory: () => {
