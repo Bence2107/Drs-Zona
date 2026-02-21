@@ -43,7 +43,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
 
     public DbSet<Series> Series { get; set; }
     
-    public DbSet<Vote> Votes { get; set; }
+    public DbSet<PollVote> PollVotes { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -106,6 +106,24 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
             options.Property(c => c.DateUpdated).HasDefaultValue(null);
         });
         
+        modelBuilder.Entity<CommentVote>(options =>
+        {
+            // Composite primary key
+            options.HasKey(v => new { v.UserId, v.CommentId });
+
+            options
+                .HasOne(v => v.User)
+                .WithMany()
+                .HasForeignKey(v => v.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            options
+                .HasOne(v => v.Comment)
+                .WithMany()
+                .HasForeignKey(v => v.CommentId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+        
         //------------POLL------------
         // Poll -> User (Many-to-One)
         modelBuilder.Entity<Poll>(options =>
@@ -126,7 +144,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
         );
 
         // Vote composite key and relationships
-        modelBuilder.Entity<Vote>(options =>
+        modelBuilder.Entity<PollVote>(options =>
         {
             // Composite primary key
             options.HasKey(v => new { v.UserId, v.PollOptionId });

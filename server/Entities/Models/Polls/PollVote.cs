@@ -3,8 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace Entities.Models.Polls;
 
-[Table("votes")]
-public class Vote
+[Table("poll_votes")]
+public class PollVote
 {
     [Column("user_id")]
     public Guid UserId { get; set; }
