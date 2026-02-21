@@ -4,6 +4,7 @@
   width: 80%;
   margin: auto;
   flex: 1;
+  animation: fadeIn 0.2s ease-out;
 }
 
 .header-container {
@@ -12,4 +13,9 @@
 
 .content-container {
   width: 100%;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0.3; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
