@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
-import {UIComment} from '../../../../../models/ui-comment';
-import {CommentService} from '../../../../../services/comment.service';
+import {UIComment} from '../../../models/ui-comment';
+import {CommentService} from '../../../services/comment.service';
 import { DatePipe } from '@angular/common';
 import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';

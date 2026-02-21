@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 import {CommentDetailDto} from '../api/models/comment-detail-dto';
 import {
   apiCommentsGetCommentRepliesCommentIdGet$Json,
-  apiCommentsGetCommentsWithoutRepliesArticleIdGet$Json
+  apiCommentsGetCommentsWithoutRepliesArticleIdGet$Json, apiCommentsGetUsersCommentsUserIdGet$Json
 } from '../api/functions';
 import {map} from 'rxjs/operators';
 
@@ -26,6 +26,15 @@ export class CommentService {
 
   getCommentsReplies(id: string): Observable<CommentDetailDto[]> {
     return apiCommentsGetCommentRepliesCommentIdGet$Json(this.http, this.apiConfig.rootUrl, {commentId: id}).pipe(
+      map(response => {
+        return response.body as CommentDetailDto[];
+      })
+    );
+  }
+
+
+  getUsersComments(userId: string): Observable<CommentDetailDto[]> {
+    return apiCommentsGetUsersCommentsUserIdGet$Json(this.http, this.apiConfig.rootUrl, {userId: userId}).pipe(
       map(response => {
         return response.body as CommentDetailDto[];
       })

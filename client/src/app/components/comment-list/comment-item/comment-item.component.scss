@@ -47,23 +47,6 @@
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
-
-  .thread-line {
-    width: 2px;
-    background-color: #343536;
-    position: absolute;
-    top: 36px;
-    bottom: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 1px;
-    transition: background-color 0.2s ease;
-    z-index: 1;
-
-    &:hover {
-      background-color: var(--accent-color);
-    }
-  }
 }
 
 .content-column {
@@ -79,6 +62,7 @@
 
   .author-name {
     font-weight: 700;
+    font-size: 16px;
     color: var(--text-main);
   }
 
@@ -89,7 +73,7 @@
 }
 
 .comment-body {
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.5;
   color: var(--text-main);
   margin: 4px 0 8px 0;
@@ -104,12 +88,12 @@
   .vote-group {
     display: flex;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.03);
+    background-color: var(--secondary-bg);
     border-radius: 20px;
     padding: 0 2px;
 
     .score {
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--text-main);
       padding: 0 4px;
@@ -123,7 +107,7 @@
     padding: 6px 8px;
     border-radius: 4px;
     color: #818384;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
     cursor: pointer;
 
@@ -171,8 +155,4 @@
   height: 2px;
   width: 140px;
   margin-top: 8px;
-}
-
-.no-replies {
-  color: var(--text-main);
 }

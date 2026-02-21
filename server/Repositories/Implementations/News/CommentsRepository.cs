@@ -52,6 +52,7 @@ public class CommentsRepository(EfContext context) : ICommentsRepository
         .ToList();
     
     public List<Comment> GetUsersComments(Guid userId) => _comments
+        .Include(c => c.User)
         .Where(comment => comment.UserId == userId)
         .ToList();
 

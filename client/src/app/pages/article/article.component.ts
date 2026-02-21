@@ -8,7 +8,7 @@ import {ErrorDisplayComponent} from '../../components/error-display/error-displa
 import {ArticleDetailDto} from '../../api/models/article-detail-dto';
 import {ArticleService} from '../../services/article.service';
 import {MatDivider} from '@angular/material/list';
-import {CommentListComponent} from './components/comment-list/comment-list.component';
+import {CommentListComponent} from '../../components/comment-list/comment-list.component';
 import {AuthService} from '../../services/auth.service';
 import {MatIcon} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
