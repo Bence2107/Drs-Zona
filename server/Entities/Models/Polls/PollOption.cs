@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Entities.Models.Polls;
 
-[Table("pollOptions")]
+[Table("poll_options")]
 public class PollOption
 {
     [Key]

@@ -7,21 +7,21 @@ namespace Repositories.Implementations.Polls;
 
 public class VotesRepository(EfContext context) : IVotesRepository
 {
-    private readonly DbSet<Vote> _votes = context.Votes;
-    public Vote? GetVoteById(Guid userId, Guid pollOptionId) =>_votes
+    private readonly DbSet<PollVote> _votes = context.PollVotes;
+    public PollVote? GetVoteById(Guid userId, Guid pollOptionId) =>_votes
         .FirstOrDefault(vote => vote.UserId == userId && vote.PollOptionId == pollOptionId);
     
-    public List<Vote> GetAllVotes() => _votes.ToList();
+    public List<PollVote> GetAllVotes() => _votes.ToList();
     
-    public void Create(Vote vote)
+    public void Create(PollVote pollVote)
     {
-        _votes.Add(vote);
+        _votes.Add(pollVote);
         context.SaveChanges();
     }
 
-    public void Update(Vote vote)
+    public void Update(PollVote pollVote)
     {
-        _votes.Update(vote);
+        _votes.Update(pollVote);
         context.SaveChanges();
     }
 
@@ -34,16 +34,16 @@ public class VotesRepository(EfContext context) : IVotesRepository
         context.SaveChanges();
     }
 
-    public List<Vote> GetByUserId(Guid userId) =>_votes
+    public List<PollVote> GetByUserId(Guid userId) =>_votes
         .Where(vote => vote.UserId == userId)
         .ToList();
     
 
-    public List<Vote> GetByPollOptionId(Guid pollOptionId) => _votes
+    public List<PollVote> GetByPollOptionId(Guid pollOptionId) => _votes
         .Where(vote => vote.PollOptionId == pollOptionId)
         .ToList();
 
-    public Vote? GetUserVoteForPoll(Guid userId, Guid pollId) => _votes
+    public PollVote? GetUserVoteForPoll(Guid userId, Guid pollId) => _votes
         .Include(v => v.PollOption) 
         .FirstOrDefault(v => v.UserId == userId && v.PollOption!.PollId == pollId);
 

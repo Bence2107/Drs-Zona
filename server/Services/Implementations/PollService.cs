@@ -185,7 +185,7 @@ public class PollService(
         if (HasUserVoted(pollId, userId))
             return ResponseResult<bool>.Failure("User has already voted on this poll");
 
-        var vote = new Vote
+        var vote = new PollVote
         {
             UserId = userId,
             PollOptionId = pollOptionId
