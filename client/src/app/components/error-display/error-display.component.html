@@ -1,6 +1,9 @@
-<div class="error-display-container">
-  <p class="error-msg">{{ message }}</p>
+<div class="server-error-container">
+  <mat-icon color="warn" class="error-icon">cloud_off</mat-icon>
+  <h2>{{ title }}</h2>
+  <p>{{ message }}</p>
+
   <button mat-flat-button (click)="onRetry()">
-    Újraprobálkozás
+    Újrapróbálkozás
   </button>
 </div>

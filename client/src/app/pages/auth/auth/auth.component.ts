@@ -11,6 +11,9 @@ import {Router} from '@angular/router';
 import {RegisterRequest} from '../../../api/models/register-request';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CustomSnackbarComponent} from '../../../components/custom-snackbar/custom-snackbar.component';
+import {ConnectionService} from '../../../services/connection-service.service';
+import {MatProgressBar} from '@angular/material/progress-bar';
+import {ErrorDisplayComponent} from '../../../components/error-display/error-display.component';
 
 @Component({
   selector: 'app-auth',
@@ -22,7 +25,9 @@ import {CustomSnackbarComponent} from '../../../components/custom-snackbar/custo
     MatLabel,
     MatInput,
     MatButton,
+    ErrorDisplayComponent,
     MatCard,
+    MatProgressBar,
 
   ],
   templateUrl: './auth.component.html',
@@ -38,10 +43,35 @@ export class AuthComponent implements OnInit{
   loginError: Observable<string> = this.loginErrorSubject.asObservable();
   signupError: Observable<string> = this.signupErrorSubject.asObservable();
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
+  isServerLoading = true;
+  isServerDown = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private connectionService: ConnectionService) {}
 
   ngOnInit(): void {
     this.initForms();
+    this.checkConnection();
+  }
+
+  checkConnection(): void {
+    this.isServerLoading = true;
+    this.isServerDown = false;
+
+    this.connectionService.checkConnection().subscribe({
+      next: () => {
+        this.isServerLoading = false;
+        this.isServerDown = false;
+      },
+      error: () => {
+        this.isServerLoading = false;
+        this.isServerDown = true;
+      }
+    });
   }
 
   private initForms(): void {

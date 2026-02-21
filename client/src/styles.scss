@@ -11,11 +11,12 @@ html {
   ));
 }
 
-html, body { height: 100%; }
+html, body {
+  background-color: var(--primary-bg);
+  height: 100%; }
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: var(--primary-bg);
 }
 
 :root , [data-theme="light"] {
