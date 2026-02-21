@@ -66,7 +66,7 @@ export class HeaderComponent implements OnInit {
   }
 
   canShowUserMenu(): boolean {
-    return !this.isAuthLoading && this.isLoggedIn() && this.isServerAlive;
+    return !this.isAuthLoading && this.isLoggedIn() && this.isServerAlive && !this.isScreenSmall && this.hasProfileData;
   }
 
   ngOnInit(): void {

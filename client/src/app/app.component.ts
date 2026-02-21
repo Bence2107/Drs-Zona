@@ -14,6 +14,8 @@ import {
 } from '@angular/material/expansion';
 import {MatIconButton} from '@angular/material/button';
 import {AuthService} from './services/auth.service';
+import {CustomSnackbarComponent} from './components/custom-snackbar/custom-snackbar.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +27,8 @@ export class AppComponent implements OnInit{
   title = 'drs-zona';
   isSmallScreen = false;
   isMobileOverlay = false;
-  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService) {
+
+  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService, private snackBar: MatSnackBar) {
      this.authService.loadProfile();
   }
 
@@ -39,5 +42,30 @@ export class AppComponent implements OnInit{
       .subscribe(result => {
         this.isMobileOverlay = result.matches;
       });
+  }
+
+  isLoggedIn() {
+    return this.authService.isLoggedIn();
+  }
+
+  logout() {
+    this.snackBar.openFromComponent(CustomSnackbarComponent, {
+      data: { message: 'Kijelentkezve', actionLabel: 'Rendben' },
+      duration: 3000,
+      horizontalPosition: 'center',
+    });
+    return this.authService.logout();
+  }
+
+  get username(): string | null {
+    return this.authService.currentProfile()?.username ?? null;
+  }
+
+  get hasProfileData(): boolean {
+    return !!this.authService.currentProfile();
+  }
+
+  isAuthor(): boolean {
+    return this.authService.currentProfile()?.role === 'Author';
   }
 }

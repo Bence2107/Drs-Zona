@@ -9,29 +9,64 @@
 
     <ul class="nav-list">
       @if (isMobileOverlay) {
-        <li routerLink="home" routerLinkActive="activeLink">
+        <li routerLink="home" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
           <mat-icon>home</mat-icon>
           <a>Főoldal</a>
         </li>
       }
       @if (isMobileOverlay) {
-        <li routerLink="news" routerLinkActive="activeLink">
+        <li routerLink="news" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
           <mat-icon>newspaper</mat-icon>
           <a>Hírek</a>
         </li>
       }
       @if (isMobileOverlay) {
-        <li routerLink="reviews" routerLinkActive="activeLink">
+        <li routerLink="reviews" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
           <mat-icon>rate_review</mat-icon>
           <a>Összefoglalók</a>
         </li>
       }
 
       @if (isSmallScreen) {
-        <li routerLink="auth" routerLinkActive="activeLink">
-          <mat-icon>person</mat-icon>
-          <a>Bejelentkezés</a>
-        </li>
+        @if(isLoggedIn()) {
+          <mat-accordion multi="true" class="menu-accordion" >
+            <mat-expansion-panel expanded="false" class="nav-panel" >
+              <mat-expansion-panel-header>
+                <mat-panel-title class="nav-panel-title">
+                  <mat-icon>person</mat-icon>
+                  <span>Felhasználó</span>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <ul class="profile-nav-list inner-list">
+                <li [routerLink]="['/profile', username]" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+                  <mat-icon>manage_accounts</mat-icon>
+                  <a>Profilom</a>
+                </li>
+
+                @if (isAuthor()) {
+                  <li routerLink="/my-articles" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+                    <mat-icon>article</mat-icon>
+                    <a>Cikkeim</a>
+                  </li>
+                }
+
+                <mat-divider style="margin: 5px 0;"></mat-divider>
+
+                <li (click)="logout(); isMobileOverlay ? sidenav.close() : null" class="logout-item">
+                  <mat-icon class="warn-icon">logout</mat-icon>
+                  <a>Kijelentkezés</a>
+                </li>
+              </ul>
+            </mat-expansion-panel>
+          </mat-accordion>
+        } @else {
+          <li routerLink="auth" routerLinkActive="activeLink">
+            <mat-icon>person</mat-icon>
+            <a>Bejelentkezés</a>
+          </li>
+        }
+
       }
       @if (isMobileOverlay) {
         <mat-divider></mat-divider>

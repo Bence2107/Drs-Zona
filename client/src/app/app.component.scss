@@ -12,13 +12,23 @@ html, body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.nav-list {
+.nav-list, .profile-nav-list {
   list-style: none;
-  padding: 10px;
+}
+.nav-list {
   background-color: var(--sidebar-bg) !important;
+  padding: 10px;
 }
 
-.nav-list li {
+.profile-nav-list {
+  background-color: var(--secondary-bg) ! important;
+  padding: 20px;
+  border-radius: 12px;
+  gap: 16px;
+  margin-bottom: 16px;;
+}
+
+.nav-list li, .profile-nav-list li {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -30,16 +40,24 @@ html, body {
   color: var(--text-main) !important;
 }
 
-.nav-list li a {
+.profile-nav-list li {
+  background-color: var(--sidebar-bg) !important;
+}
+
+.nav-list li a , .profile-nav-list li a{
   font-size: 18px;
   color: var(--text-main) !important;
   font-family: 'Kanit', sans-serif;
   font-weight: bold;
 }
 
-.nav-list li mat-icon {
+.nav-list li mat-icon, .profile-nav-list li mat-icon {
   font-size: 22px;
   color: #606060;
+}
+
+::ng-deep .nav-panel.mat-expanded {
+  margin-bottom: 12px !important;
 }
 
 .activeLink {
@@ -87,6 +105,13 @@ html, body {
   box-shadow: none !important;
 }
 
+.auth-panel {
+  background-color: transparent;
+  color: var(--text-main);
+  box-shadow: none !important;
+  margin: 10px 0;
+}
+
 .panel-title {
   font-family: 'Kanit', sans-serif;
   font-size: 12px;
@@ -112,6 +137,12 @@ html, body {
 .inner-list {
   padding: 0 !important;
   margin: 0 !important;
+}
+
+.nav-inner-list {
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: var(--secondary-bg);
 }
 
 .inner-list li {
@@ -161,6 +192,64 @@ html, body {
 .nav-list li a img,
 .nav-list li a mat-icon {
   margin-right: 0;
+}
+
+.nav-panel {
+  background-color: transparent;
+  box-shadow: none !important;
+  margin-bottom: 16px;
+}
+
+::ng-deep .nav-panel .mat-expansion-panel-body {
+  padding: 0 !important;
+}
+
+::ng-deep .nav-panel .mat-expansion-panel-header {
+  height: 48px !important;
+  padding: 0 15px !important;
+  border-radius: 8px !important;
+}
+
+::ng-deep .nav-panel .mat-expansion-panel-header:hover {
+  background-color: var(--hover-bg) !important;
+}
+
+.nav-panel .inner-list {
+  padding: 8px !important;
+  margin: 0 !important;
+}
+
+.profile-nav-list li {
+  margin-bottom: 8px !important;
+  padding: 12px 18px !important;
+}
+
+.nav-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-family: 'Kanit', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text-main) !important;
+}
+
+.nav-panel-title mat-icon {
+  font-size: 22px;
+  color: #606060;
+}
+
+::ng-deep .nav-panel .mat-expansion-indicator::after {
+  color: #606060 !important;
+}
+
+.logout-item a,
+.logout-item mat-icon {
+  color: var(--accent-color) !important;
+}
+
+.warn-icon {
+  color: var(--accent-color) !important;
 }
 
 .main-content-host {
