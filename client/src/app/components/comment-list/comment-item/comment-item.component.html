@@ -22,10 +22,13 @@
         <span class="score">{{ (comment.upVotes || 0) - (comment.downVotes || 0) }}</span>
         <button mat-icon-button class="vote-btn"><mat-icon>arrow_downward</mat-icon></button>
       </div>
-      <div class="footer-action" (click)="toggleReplyForm()">
-        <mat-icon>chat_bubble_outline</mat-icon>
-        <span>Válasz</span>
-      </div>
+      @if(!isOnProfileSite) {
+        <div class="footer-action" (click)="toggleReplyForm()">
+          <mat-icon>chat_bubble_outline</mat-icon>
+          <span>Válasz</span>
+        </div>
+
+      }
     </div>
 
     @if(replyFormVisible) {

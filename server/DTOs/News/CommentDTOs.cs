@@ -4,7 +4,6 @@ namespace DTOs.News;
 
 public record CommentCreateDto(
     [Required(ErrorMessage = "A cikk azonosítója kötelező")] 
-    [Range(1, int.MaxValue, ErrorMessage = "Érvénytelen cikk azonosító")] 
     Guid ArticleId,
     Guid? ReplyToCommentId,
     [Required(ErrorMessage = "A komment tartalma nem lehet üres")]

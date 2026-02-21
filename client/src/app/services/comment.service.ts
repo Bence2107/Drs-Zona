@@ -4,10 +4,12 @@ import {ApiConfiguration} from '../api/api-configuration';
 import {Observable} from 'rxjs';
 import {CommentDetailDto} from '../api/models/comment-detail-dto';
 import {
+  apiCommentsCreateUserIdPost,
   apiCommentsGetCommentRepliesCommentIdGet$Json,
   apiCommentsGetCommentsWithoutRepliesArticleIdGet$Json, apiCommentsGetUsersCommentsUserIdGet$Json
 } from '../api/functions';
 import {map} from 'rxjs/operators';
+import {CommentCreateDto} from '../api/models/comment-create-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +41,12 @@ export class CommentService {
         return response.body as CommentDetailDto[];
       })
     );
+  }
+
+  createComment(dto: CommentCreateDto, userId: string): Observable<void> {
+    return apiCommentsCreateUserIdPost(this.http, this.apiConfig.rootUrl, {
+      userId,
+      body: dto
+    }).pipe(map(() => void 0));
   }
 }

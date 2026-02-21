@@ -68,23 +68,20 @@ public class CommentService(
         return ResponseResult<List<CommentDetailDto>>.Success(repliesToComment);
     }
 
-    public ResponseResult<bool> AddComment(CommentCreateDto commentCreateDto, Guid id)
+    public ResponseResult<bool> AddComment(CommentCreateDto commentCreateDto, Guid userId)
     {
-        var articleToComment = commentsRepo.GetByIdWithArticle(commentCreateDto.ArticleId);
-        if (articleToComment == null) return ResponseResult<bool>.Failure("Article not found");
-        
-        if (!usersRepo.CheckIfIdExists(id)) return ResponseResult<bool>.Failure("User not found");
+        if (!usersRepo.CheckIfIdExists(userId)) return ResponseResult<bool>.Failure("User not found");
         
         var comment = new Comment
         {
-            UserId = articleToComment.UserId,
-            ArticleId = articleToComment.ArticleId,
+            UserId = userId,
+            ArticleId = commentCreateDto.ArticleId,
             ReplyToCommentId = null,
             Content = commentCreateDto.Content,
             UpVotes = 0,
             DownVotes = 0,
-            DateCreated = DateTime.Now,
-            DateUpdated = DateTime.Now
+            DateCreated = DateTime.UtcNow,
+            DateUpdated = DateTime.UtcNow
         };
         
         if (commentCreateDto.ReplyToCommentId.HasValue)

@@ -17,7 +17,6 @@
             Küldés
           </button>
         </div>
-
       }
     </div>
   </div>
@@ -25,7 +24,7 @@
   <div class="comment-list">
     @for (comment of comments; track comment) {
       <mat-card class="comment-card shadow-none">
-        <app-comment-item [comment]="comment"></app-comment-item>
+        <app-comment-item [comment]="comment" [articleId]="articleId"></app-comment-item>
       </mat-card>
     } @empty {
       <div class="no-comments">

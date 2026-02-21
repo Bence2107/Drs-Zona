@@ -2,7 +2,7 @@
   <div class="comment-list">
     @for (comment of comments; track comment) {
       <mat-card class="comment-card shadow-none">
-        <app-comment-item [comment]="comment"></app-comment-item>
+        <app-comment-item [comment]="comment" [isOnProfileSite]="true"></app-comment-item>
       </mat-card>
     } @empty {
       <div class="no-comments">

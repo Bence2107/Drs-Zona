@@ -7,6 +7,7 @@ import {MatIcon} from '@angular/material/icon';
 import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
 import {FormsModule} from '@angular/forms';
 import {AuthService} from '../../../services/auth.service';
+import {CommentCreateDto} from '../../../api/models/comment-create-dto';
 
 @Component({
   selector: 'app-comment-item',
@@ -24,7 +25,9 @@ import {AuthService} from '../../../services/auth.service';
 })
 export class CommentItemComponent {
   @Input() comment!: UIComment;
+  @Input() articleId!: string;
   @Input() isReply: boolean = false;
+  @Input() isOnProfileSite: boolean = false;
 
   @Input() depth: number = 0;
   repliesVisible = false;
@@ -68,10 +71,35 @@ export class CommentItemComponent {
   }
 
   submitReply() {
-    if (!this.replyText.trim()) return;
-    console.log('Reply:', this.replyText);
-    this.replyText = '';
-    this.replyFormVisible = false;
+    const userId = this.authService.currentProfile()?.userId;
+    if (!this.replyText.trim() || !userId) return;
+
+    const dto: CommentCreateDto = {
+      articleId: this.articleId,
+      content: this.replyText.trim(),
+      replyToCommentId: this.comment.id
+    };
+
+    const textSnapshot = this.replyText.trim();
+
+    this.commentService.createComment(dto, userId).subscribe({
+      next: () => {
+        this.replyText = '';
+        this.replyFormVisible = false;
+
+        if (this.comment.id) {
+          this.comment.loaded = false;
+          this.commentService.getCommentsReplies(this.comment.id).subscribe({
+            next: (replies) => {
+              this.comment.replies = replies as UIComment[];
+              this.comment.replyCount = replies.length;
+              this.comment.loaded = true;
+              this.repliesVisible = true;
+            }
+          });
+        }
+      }
+    });
   }
 
   autoResize(event: Event) {
