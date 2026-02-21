@@ -51,10 +51,42 @@ public class CommentsRepository(EfContext context) : ICommentsRepository
         .Where(comment => comment.ArticleId == articleId)
         .ToList();
     
-    public List<Comment> GetUsersComments(Guid userId) => _comments
-        .Include(c => c.User)
-        .Where(comment => comment.UserId == userId)
-        .ToList();
+    public List<Comment> GetUsersComments(Guid userId)
+    {
+        var userComments = _comments
+            .Include(c => c.User)
+            .Where(c => c.UserId == userId)
+            .ToList();
+
+        var replyIds = userComments
+            .Where(c => c.ReplyToCommentId != null)
+            .Select(c => c.ReplyToCommentId!.Value)
+            .ToHashSet();
+
+        var parentComments = _comments
+            .Where(c => replyIds.Contains(c.Id))
+            .ToDictionary(c => c.Id);
+
+        return userComments
+            .Where(c => c.ReplyToCommentId == null || !HasRootInOwnComments(c, userComments, parentComments))
+            .ToList();
+    }
+
+    private static bool HasRootInOwnComments(Comment comment, List<Comment> userComments, Dictionary<Guid, Comment> parentMap)
+    {
+        var current = comment;
+        while (current.ReplyToCommentId != null)
+        {
+            if (userComments.Any(c => c.Id == current.ReplyToCommentId))
+                return true;
+
+            if (!parentMap.TryGetValue(current.ReplyToCommentId.Value, out var parent))
+                break;
+
+            current = parent;
+        }
+        return false;
+    }
 
     public List<Comment> GetCommentsWithoutReplies(Guid articleId) => _comments
         .Include(comment => comment.User)

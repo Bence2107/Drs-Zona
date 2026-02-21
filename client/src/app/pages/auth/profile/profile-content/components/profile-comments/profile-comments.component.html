@@ -4,6 +4,11 @@
       <mat-card class="comment-card shadow-none">
         <app-comment-item [comment]="comment"></app-comment-item>
       </mat-card>
+    } @empty {
+      <div class="no-comments">
+        <mat-icon>history</mat-icon>
+        <p>Önnek nincsen hozzászólása.</p>
+      </div>
     }
   </div>
 </div>
