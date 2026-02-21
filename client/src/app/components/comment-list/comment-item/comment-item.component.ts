@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {UIComment} from '../../../models/ui-comment';
 import {CommentService} from '../../../services/comment.service';
 import { DatePipe } from '@angular/common';
@@ -10,7 +10,6 @@ import {AuthService} from '../../../services/auth.service';
 import {CommentCreateDto} from '../../../api/models/comment-create-dto';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {CommentContentUpdateDto} from '../../../api/models/comment-content-update-dto';
-
 
 @Component({
   selector: 'app-comment-item',
@@ -31,78 +30,32 @@ import {CommentContentUpdateDto} from '../../../api/models/comment-content-updat
 })
 export class CommentItemComponent {
   @Input() comment!: UIComment;
-  @Input() articleId!: string;
+  @Input() articleId: string | null = null;
 
   @Input() isReply: boolean = false;
   @Input() isOnProfileSite: boolean = false;
 
   @Input() depth: number = 0;
 
+  @Output() commentDeleted = new EventEmitter<void>();
+
   repliesVisible = false;
 
   isEditing = false;
+
   editText = '';
+  replyFormVisible = false;
+  replyText = '';
 
   constructor(private commentService: CommentService, private authService: AuthService) {}
+
+
+  //Getters:
 
   isMyComment(commentUsername: string | null | undefined): boolean {
     return this.authService.currentProfile()?.username === commentUsername;
   }
 
-  editComment() {
-    if(this.comment.content) {
-      this.editText = this.comment.content;
-      this.isEditing = true;
-      this.replyFormVisible = false;
-
-      if(this.isReply) {
-        this.isReply = false;
-      }
-    }
-
-  }
-
-  cancelEdit() {
-    this.isEditing = false;
-    this.editText = '';
-  }
-
-  saveEdit() {
-    if (!this.editText.trim() || this.editText === this.comment.content) {
-      this.cancelEdit();
-      return;
-    }
-
-    const dto: CommentContentUpdateDto = {
-      articleId: this.articleId,
-      content: this.editText.trim(),
-      id: this.comment.id
-    };
-
-    this.commentService.updateComment(dto).subscribe({
-      next: () => {
-        this.comment.content = this.editText.trim();
-
-        this.isEditing = false;
-        this.editText = '';
-
-
-        if (this.comment.id) {
-          this.comment.loaded = false;
-          this.commentService.getCommentsReplies(this.comment.id).subscribe({
-            next: (replies) => {
-              this.comment.replies = replies as UIComment[];
-              this.comment.replyCount = replies.length;
-              this.comment.loaded = true;
-            }
-          });
-        }
-      },
-      error: (err) => {
-        console.error("Hiba a mentés során:", err);
-      }
-    });
-  }
   loadReplies() {
     if (this.comment.loaded || !this.comment.id) return;
 
@@ -131,8 +84,72 @@ export class CommentItemComponent {
     return "img/user/avatars/avatar.jpg";
   }
 
-  replyFormVisible = false;
-  replyText = '';
+  //Helpers:
+
+  autoResize(event: Event) {
+    const el = event.target as HTMLTextAreaElement;
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+  }
+
+  //Edit Comment:
+
+  editComment() {
+    if(this.comment.content) {
+      this.editText = this.comment.content;
+      this.isEditing = true;
+      this.replyFormVisible = false;
+
+      if(this.isReply) {
+        this.isReply = false;
+      }
+    }
+
+  }
+
+  cancelEdit() {
+    this.isEditing = false;
+    this.editText = '';
+  }
+
+  saveEdit() {
+    if (!this.editText.trim() || this.editText === this.comment.content) {
+      this.cancelEdit();
+      return;
+    }
+
+    const dto: CommentContentUpdateDto = {
+      articleId: this.articleId!,
+      content: this.editText.trim(),
+      id: this.comment.id
+    };
+
+    this.commentService.updateComment(dto).subscribe({
+      next: () => {
+        this.comment.content = this.editText.trim();
+
+        this.isEditing = false;
+        this.editText = '';
+
+
+        if (this.comment.id) {
+          this.comment.loaded = false;
+          this.commentService.getCommentsReplies(this.comment.id).subscribe({
+            next: (replies) => {
+              this.comment.replies = replies as UIComment[];
+              this.comment.replyCount = replies.length;
+              this.comment.loaded = true;
+            }
+          });
+        }
+      },
+      error: (err) => {
+        console.error("Hiba a mentés során:", err);
+      }
+    });
+  }
+
+  //Reply Comment:
 
   toggleReplyForm() {
     this.replyFormVisible = !this.replyFormVisible;
@@ -147,7 +164,7 @@ export class CommentItemComponent {
     if (!this.replyText.trim() || !userId) return;
 
     const dto: CommentCreateDto = {
-      articleId: this.articleId,
+      articleId: this.articleId!,
       content: this.replyText.trim(),
       replyToCommentId: this.comment.id
     };
@@ -172,13 +189,18 @@ export class CommentItemComponent {
     });
   }
 
-  autoResize(event: Event) {
-    const el = event.target as HTMLTextAreaElement;
-    el.style.height = 'auto';
-    el.style.height = el.scrollHeight + 'px';
-  }
+  //Delete Comment:
 
-  deleteComment(id: string | undefined) {
+  deleteComment(id: string) {
+    if(id.length > 0){
+      this.commentService.deleteComment(id).subscribe({
+        next: () => {
+          this.commentDeleted.emit();
+        },
+        error: (err) => console.error("Hiba a törlés során:", err)
+      });
+    }
 
+    return;
   }
 }

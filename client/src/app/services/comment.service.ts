@@ -4,7 +4,7 @@ import {ApiConfiguration} from '../api/api-configuration';
 import {Observable} from 'rxjs';
 import {CommentDetailDto} from '../api/models/comment-detail-dto';
 import {
-  apiCommentsCreateUserIdPost,
+  apiCommentsCreateUserIdPost, apiCommentsDeleteIdDelete,
   apiCommentsGetCommentRepliesCommentIdGet$Json,
   apiCommentsGetCommentsWithoutRepliesArticleIdGet$Json, apiCommentsGetUsersCommentsUserIdGet$Json,
   apiCommentsUpdateContentPost
@@ -56,5 +56,9 @@ export class CommentService {
     return apiCommentsUpdateContentPost(this.http, this.apiConfig.rootUrl, {
       body: dto
     }).pipe(map(() => void 0));
+  }
+
+  deleteComment(id: string): Observable<void> {
+    return apiCommentsDeleteIdDelete(this.http, this.apiConfig.rootUrl, {id: id}).pipe(map(() => void 0));
   }
 }

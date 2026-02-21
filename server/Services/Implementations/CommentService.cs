@@ -18,6 +18,7 @@ public class CommentService(
         var comments = commentsRepo.GetCommentsWithoutReplies(articleId).Select(c => new CommentDetailDto(
             Id: c.Id,
             UserId: c.UserId,
+            ArticleId: c.ArticleId,
             ReplyToCommentId: c.ReplyToCommentId,
             Username: c.User!.Username,
             UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
@@ -37,6 +38,7 @@ public class CommentService(
         var repliesToComment = commentsRepo.GetRepliesToAComment(commentId).Select(c=> new CommentDetailDto(
             Id: c.Id,
             UserId: c.UserId,
+            ArticleId: c.ArticleId,
             ReplyToCommentId: c.ReplyToCommentId,
             Username: c.User!.Username,
             UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
@@ -55,6 +57,7 @@ public class CommentService(
         var repliesToComment = commentsRepo.GetUsersComments(userId).Select(c=> new CommentDetailDto(
             Id: c.Id,
             UserId: c.UserId,
+            ArticleId: c.ArticleId,
             ReplyToCommentId: c.ReplyToCommentId,
             Username: c.User!.Username,
             UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),

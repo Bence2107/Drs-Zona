@@ -38,6 +38,7 @@ public record CommentUpdateVoteDto(
 public record CommentDetailDto(
     [Required] Guid Id,
     [Required] Guid UserId,
+    [Required] Guid ArticleId,
     Guid? ReplyToCommentId,
     string Username,
     string? UserAvatarUrl,

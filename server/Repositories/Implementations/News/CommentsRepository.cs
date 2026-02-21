@@ -55,6 +55,7 @@ public class CommentsRepository(EfContext context) : ICommentsRepository
     {
         var userComments = _comments
             .Include(c => c.User)
+            .Include(c => c.Article)
             .Where(c => c.UserId == userId)
             .ToList();
 
@@ -67,9 +68,11 @@ public class CommentsRepository(EfContext context) : ICommentsRepository
             .Where(c => replyIds.Contains(c.Id))
             .ToDictionary(c => c.Id);
 
-        return userComments
+        var filteredComments = userComments
             .Where(c => c.ReplyToCommentId == null || !HasRootInOwnComments(c, userComments, parentComments))
             .ToList();
+
+        return filteredComments;
     }
 
     private static bool HasRootInOwnComments(Comment comment, List<Comment> userComments, Dictionary<Guid, Comment> parentMap)
