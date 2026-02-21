@@ -8,7 +8,8 @@ import {
   apiAuthChangePasswordPost,
   apiAuthLoginPost$Json,
   apiAuthLogoutPost,
-  apiAuthMeGet$Json, apiAuthProfilePictureDeletePost, apiAuthProfilePictureUpdatePost, apiAuthProfileUpdatePost,
+  apiAuthMeGet$Json, apiAuthProfilePictureDeletePost, apiAuthProfilePictureUpdatePost,
+  ApiAuthProfilePictureUpdatePost$Params, apiAuthProfileUpdatePost,
   apiAuthRegisterPost$Json
 } from '../api/functions';
 import {map} from 'rxjs/operators';
@@ -79,10 +80,13 @@ export class AuthService {
   }
 
   updateProfilePicture(file: File): Observable<void> {
-    const formData = new FormData();
-    formData.append('file', file);
+    const params: ApiAuthProfilePictureUpdatePost$Params = {
+      body: {
+        File: file
+      }
+    };
 
-    return apiAuthProfilePictureUpdatePost(this.http, this.apiConfig.rootUrl, { body: formData as any }).pipe(
+    return apiAuthProfilePictureUpdatePost(this.http, this.apiConfig.rootUrl, params).pipe(
       map(() => void 0),
       tap(() => this.loadProfile())
     );

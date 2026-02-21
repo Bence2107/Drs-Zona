@@ -32,6 +32,8 @@ export class ProfileHeaderComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
+
+
       this.authService.updateProfilePicture(file).subscribe({
         next: () => {
           this.snackBar.openFromComponent(CustomSnackbarComponent, {
@@ -40,9 +42,9 @@ export class ProfileHeaderComponent {
             horizontalPosition: 'center',
           });
         },
-        error: (err) =>  {
+        error: () =>  {
           this.snackBar.openFromComponent(CustomSnackbarComponent, {
-            data: { message: 'Hiba a feltöltésnél.' + err, actionLabel: 'Rendben' },
+            data: { message: 'Hiba a feltöltésnél.', actionLabel: 'Rendben' },
             duration: 3000,
             horizontalPosition: 'center',
           });
