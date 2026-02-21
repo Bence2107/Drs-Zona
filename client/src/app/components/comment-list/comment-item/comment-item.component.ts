@@ -8,6 +8,9 @@ import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from
 import {FormsModule} from '@angular/forms';
 import {AuthService} from '../../../services/auth.service';
 import {CommentCreateDto} from '../../../api/models/comment-create-dto';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {CommentContentUpdateDto} from '../../../api/models/comment-content-update-dto';
+
 
 @Component({
   selector: 'app-comment-item',
@@ -18,7 +21,10 @@ import {CommentCreateDto} from '../../../api/models/comment-create-dto';
     MatExpansionPanel,
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
-    FormsModule
+    FormsModule,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger
   ],
   templateUrl: './comment-item.component.html',
   styleUrl: './comment-item.component.scss'
@@ -26,14 +32,77 @@ import {CommentCreateDto} from '../../../api/models/comment-create-dto';
 export class CommentItemComponent {
   @Input() comment!: UIComment;
   @Input() articleId!: string;
+
   @Input() isReply: boolean = false;
   @Input() isOnProfileSite: boolean = false;
 
   @Input() depth: number = 0;
+
   repliesVisible = false;
+
+  isEditing = false;
+  editText = '';
 
   constructor(private commentService: CommentService, private authService: AuthService) {}
 
+  isMyComment(commentUsername: string | null | undefined): boolean {
+    return this.authService.currentProfile()?.username === commentUsername;
+  }
+
+  editComment() {
+    if(this.comment.content) {
+      this.editText = this.comment.content;
+      this.isEditing = true;
+      this.replyFormVisible = false;
+
+      if(this.isReply) {
+        this.isReply = false;
+      }
+    }
+
+  }
+
+  cancelEdit() {
+    this.isEditing = false;
+    this.editText = '';
+  }
+
+  saveEdit() {
+    if (!this.editText.trim() || this.editText === this.comment.content) {
+      this.cancelEdit();
+      return;
+    }
+
+    const dto: CommentContentUpdateDto = {
+      articleId: this.articleId,
+      content: this.editText.trim(),
+      id: this.comment.id
+    };
+
+    this.commentService.updateComment(dto).subscribe({
+      next: () => {
+        this.comment.content = this.editText.trim();
+
+        this.isEditing = false;
+        this.editText = '';
+
+
+        if (this.comment.id) {
+          this.comment.loaded = false;
+          this.commentService.getCommentsReplies(this.comment.id).subscribe({
+            next: (replies) => {
+              this.comment.replies = replies as UIComment[];
+              this.comment.replyCount = replies.length;
+              this.comment.loaded = true;
+            }
+          });
+        }
+      },
+      error: (err) => {
+        console.error("Hiba a mentés során:", err);
+      }
+    });
+  }
   loadReplies() {
     if (this.comment.loaded || !this.comment.id) return;
 
@@ -67,6 +136,9 @@ export class CommentItemComponent {
 
   toggleReplyForm() {
     this.replyFormVisible = !this.replyFormVisible;
+    if(this.isEditing) {
+      this.isEditing = false;
+    }
     if (!this.replyFormVisible) this.replyText = '';
   }
 
@@ -79,8 +151,6 @@ export class CommentItemComponent {
       content: this.replyText.trim(),
       replyToCommentId: this.comment.id
     };
-
-    const textSnapshot = this.replyText.trim();
 
     this.commentService.createComment(dto, userId).subscribe({
       next: () => {
@@ -106,5 +176,9 @@ export class CommentItemComponent {
     const el = event.target as HTMLTextAreaElement;
     el.style.height = 'auto';
     el.style.height = el.scrollHeight + 'px';
+  }
+
+  deleteComment(id: string | undefined) {
+
   }
 }

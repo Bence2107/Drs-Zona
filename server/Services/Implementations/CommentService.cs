@@ -93,29 +93,19 @@ public class CommentService(
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> UpdateCommentsContent(CommentContentUpdateDto commentContentUpdateDto)
+    public ResponseResult<bool> UpdateCommentsContent(CommentContentUpdateDto dto)
     {
-        var existingComment = commentsRepo.GetCommentById(commentContentUpdateDto.Id);
-        if (existingComment == null) return ResponseResult<bool>.Failure("Comment not found");
-        
-        var articleToComment = commentsRepo.GetByIdWithArticle(commentContentUpdateDto.ArticleId);
-        if (articleToComment == null) return ResponseResult<bool>.Failure("Article not found");
-        
-        
-        var comment = new Comment
-        {
-            Id = articleToComment.Id,
-            UserId = articleToComment.UserId,
-            ArticleId = articleToComment.ArticleId,
-            ReplyToCommentId = articleToComment.ReplyToCommentId,
-            Content = commentContentUpdateDto.Content,
-            UpVotes = articleToComment.UpVotes,
-            DownVotes = articleToComment.DownVotes,
-            DateCreated = articleToComment.DateCreated,
-            DateUpdated = DateTime.Now
-        };
-        
-        commentsRepo.Update(comment);
+        var existingComment = commentsRepo.GetCommentById(dto.Id);
+        if (existingComment == null) return ResponseResult<bool>.Failure("A komment nem található");
+
+        if (existingComment.ArticleId != dto.ArticleId) 
+            return ResponseResult<bool>.Failure("Nem megfelelő hír");
+
+        existingComment.Content = dto.Content;
+        existingComment.DateUpdated = DateTime.UtcNow;
+
+        commentsRepo.Update(existingComment);
+    
         return ResponseResult<bool>.Success(true);
     }
 

@@ -12,7 +12,27 @@
         <span class="timestamp">{{ comment.dateCreated | date:'yyyy.MM.dd HH:mm' }}</span>
       </div>
       <div class="comment-body">
-        <p>{{ comment.content }}</p>
+        @if (!isEditing) {
+          <p>{{ comment.content }}</p>
+        } @else {
+          <div class="edit-container">
+            <div class="edit-input-wrapper">
+        <textarea
+          class="reply-textarea edit-textarea"
+          [(ngModel)]="editText"
+          (input)="autoResize($event)"
+          rows="1"
+          placeholder="Módosítsd a hozzászólásod..."
+          autofocus></textarea>
+            </div>
+            <div class="edit-actions">
+              <button class="edit-btn cancel" (click)="cancelEdit()">Mégse</button>
+              <button class="edit-btn save" (click)="saveEdit()" [disabled]="!editText.trim()">
+                Mentés
+              </button>
+            </div>
+          </div>
+        }
       </div>
     </div>
 
@@ -22,14 +42,32 @@
         <span class="score">{{ (comment.upVotes || 0) - (comment.downVotes || 0) }}</span>
         <button mat-icon-button class="vote-btn"><mat-icon>arrow_downward</mat-icon></button>
       </div>
+
       @if(!isOnProfileSite) {
         <div class="footer-action" (click)="toggleReplyForm()">
           <mat-icon>chat_bubble_outline</mat-icon>
           <span>Válasz</span>
         </div>
 
+        @if(isMyComment(comment.username)) {
+          <button mat-icon-button [matMenuTriggerFor]="commentMenu" class="mini-menu-btn">
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+        }
       }
     </div>
+
+    <mat-menu #commentMenu="matMenu" class="header-menu comment-menu-panel">
+      <button mat-menu-item class="header-menu-item" (click)="editComment()">
+        <mat-icon>edit</mat-icon>
+        <span>Szerkesztés</span>
+      </button>
+
+      <button mat-menu-item class="header-menu-item" (click)="deleteComment(comment.id)">
+        <mat-icon color="warn">delete_outline</mat-icon>
+        <span class="warn-text">Törlés</span>
+      </button>
+    </mat-menu>
 
     @if(replyFormVisible) {
       <div class="reply-form-container">
