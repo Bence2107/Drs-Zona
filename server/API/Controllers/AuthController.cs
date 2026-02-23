@@ -165,4 +165,31 @@ public class AuthController(
 
         return Ok(new { message = "User infos changed successfully" });
     }
+
+    [Authorize]
+    [HttpDelete("delete-profile/{userId:guid}")]
+    public async Task<IActionResult> DeleteProfile([FromRoute] Guid userId)
+    {
+        var userResponse = authService.GetUserById(userId);
+        if (!userResponse.Result.IsSuccess)
+        {
+            return BadRequest(new
+            {
+                userResponse.Result.ErrorField,
+                userResponse.Result.Message
+            });
+        }
+
+        var result = await authService.Delete(userId);
+        if (!result.IsSuccess)
+        {
+            return BadRequest(new
+            {
+                result.ErrorField,
+                result.Message
+            });
+        }
+
+        return Ok();
+    }
 }

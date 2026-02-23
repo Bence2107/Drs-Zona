@@ -10,5 +10,6 @@ public interface IAuthService
     Task<ResponseResult<bool>> ChangePassword(Guid userId, ChangePasswordRequest request);
     Task<ResponseResult<UserProfileResponse>> GetUserById(Guid userId);
     Task<ResponseResult<bool>> Logout(Guid userId);
+    Task<ResponseResult<bool>> Delete(Guid userId);
     Task UpdateLastActivity(Guid userId);
 }

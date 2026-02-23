@@ -4,12 +4,13 @@ namespace Repositories.Interfaces;
 
 public interface IAuthRepository
 {
-    Task<User?> GetUserByEmailAsync(string email);
-    Task<User?> GetUserByIdAsync(Guid userId);
-    Task<User?> GetUserByUsernameAsync(string username);
-    Task<User> CreateUserAsync(User user);
-    Task UpdateUserAsync(User user);
-    Task<bool> UserExistsByEmailAsync(string email);
-    Task<bool> UserExistsByUsernameAsync(string username);
+    Task<User?> GetUserByEmail(string email);
+    Task<User?> GetUserById(Guid userId);
+    Task<User?> GetUserByUsername(string username);
+    Task<User> CreateUser(User user);
+    Task UpdateUser(User user);
+    Task<bool> UserExistsByEmail(string email);
+    Task<bool> UserExistsByUsername(string username);
+    Task<bool> DeleteUser(User user);
     bool CheckIfIdExists(Guid id);
 }
