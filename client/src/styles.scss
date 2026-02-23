@@ -55,6 +55,11 @@ app-root {
   filled-container-color: #f8274f,
   filled-label-text-color: white,
   outlined-ripple-color: rgba(165, 0, 0, 0.2),
+
+  text-label-text-color: var(--accent-color),
+  text-ripple-color: rgba(165, 0, 0, 0.2),
+  text-state-layer-color: var(--accent-color),
+  text-hover-state-layer-opacity: 0.05,
 ));
 
 @include mat.fab-overrides((
@@ -152,6 +157,25 @@ app-root {
 
 @include mat.progress-spinner-overrides((
   active-indicator-color: var(--accent-color),
+));
+
+@include mat.dialog-overrides((
+  container-color: var(--primary-bg),
+  subhead-color: var(--text-main),
+  supporting-text-color: var(--text-secondary)
+));
+
+@include mat.checkbox-overrides((
+  selected-icon-color: var(--accent-color),
+  selected-hover-icon-color: darkred,
+  selected-focus-icon-color: var(--accent-color),
+  selected-pressed-icon-color: var(--accent-color),
+
+  selected-focus-state-layer-color: var(--accent-color),
+  selected-hover-state-layer-color: rgba(255, 0, 0, 0.04),
+  selected-pressed-state-layer-color: rgba(255, 0, 0, 0.1),
+
+  selected-checkmark-color: white,
 ));
 
 .custom-nav-panel {
