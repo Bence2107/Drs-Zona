@@ -5,7 +5,7 @@ import {Router} from '@angular/router';
 import {LoginRequest} from '../api/models/login-request';
 import {Observable, tap} from 'rxjs';
 import {
-  apiAuthChangePasswordPost,
+  apiAuthChangePasswordPost, apiAuthDeleteProfileUserIdDelete,
   apiAuthLoginPost$Json,
   apiAuthLogoutPost,
   apiAuthMeGet$Json, apiAuthProfilePictureDeletePost, apiAuthProfilePictureUpdatePost,
@@ -36,6 +36,7 @@ export class AuthService {
       tap(response => {
         localStorage.setItem(this.TOKEN_KEY, JSON.stringify(response));
         this.currentUser.set(response);
+        this.loadProfile();
       })
     )
   }
@@ -99,12 +100,23 @@ export class AuthService {
     );
   }
 
+  deleteProfile(userId: string) : Observable<void> {
+    return apiAuthDeleteProfileUserIdDelete(this.http, this.apiConfig.rootUrl, {userId: userId}).pipe(
+      map(() => void 0),
+      tap(() => this.clearSession())
+    );
+  }
+
 
   logout(): void {
     apiAuthLogoutPost(this.http, this.apiConfig.rootUrl).subscribe({
-      complete: () => this.clearSession()
+      complete: () => {
+        this.clearSession();
+      }
     });
   }
+
+
 
 
   getToken(): string | null {

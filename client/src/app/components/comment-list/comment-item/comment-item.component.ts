@@ -11,6 +11,8 @@ import {CommentCreateDto} from '../../../api/models/comment-create-dto';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {CommentContentUpdateDto} from '../../../api/models/comment-content-update-dto';
 import {CommentUpdateVoteDto} from '../../../api/models/comment-update-vote-dto';
+import {RouterLink} from '@angular/router';
+import {ArticleService} from '../../../services/article.service';
 
 @Component({
   selector: 'app-comment-item',
@@ -24,7 +26,8 @@ import {CommentUpdateVoteDto} from '../../../api/models/comment-update-vote-dto'
     FormsModule,
     MatMenu,
     MatMenuItem,
-    MatMenuTrigger
+    MatMenuTrigger,
+    RouterLink
   ],
   templateUrl: './comment-item.component.html',
   styleUrl: './comment-item.component.scss'
@@ -48,7 +51,7 @@ export class CommentItemComponent {
   replyFormVisible = false;
   replyText = '';
 
-  constructor(private commentService: CommentService, private authService: AuthService) {}
+  constructor(private commentService: CommentService, private authService: AuthService, private articleService: ArticleService) {}
 
 
   //Getters:

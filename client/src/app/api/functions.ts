@@ -49,6 +49,8 @@ export type { ApiAuthProfilePictureUpdatePost$Params as ApiAuthProfilePictureUpd
 export { apiAuthProfilePictureUpdatePost as apiAuthProfilePictureUpdatePost } from './fn/auth/api-auth-profile-picture-update-post';
 export type { ApiAuthProfilePictureDeletePost$Params as ApiAuthProfilePictureDeletePost$Params } from './fn/auth/api-auth-profile-picture-delete-post';
 export { apiAuthProfilePictureDeletePost as apiAuthProfilePictureDeletePost } from './fn/auth/api-auth-profile-picture-delete-post';
+export type { ApiAuthDeleteProfileUserIdDelete$Params as ApiAuthDeleteProfileUserIdDelete$Params } from './fn/auth/api-auth-delete-profile-user-id-delete';
+export { apiAuthDeleteProfileUserIdDelete as apiAuthDeleteProfileUserIdDelete } from './fn/auth/api-auth-delete-profile-user-id-delete';
 export type { ApiBrandGetIdGet$Plain$Params as ApiBrandGetIdGet$Plain$Params } from './fn/brand/api-brand-get-id-get-plain';
 export { apiBrandGetIdGet$Plain as apiBrandGetIdGet$Plain } from './fn/brand/api-brand-get-id-get-plain';
 export type { ApiBrandGetIdGet$Json$Params as ApiBrandGetIdGet$Json$Params } from './fn/brand/api-brand-get-id-get-json';

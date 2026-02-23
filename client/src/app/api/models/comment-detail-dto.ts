@@ -3,6 +3,7 @@
 
 export interface CommentDetailDto {
   articleId?: string;
+  articleSlug?: string | null;
   content?: string | null;
   currentUserVote?: number;
   dateCreated?: string;
