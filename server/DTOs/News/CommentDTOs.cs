@@ -41,6 +41,7 @@ public record CommentDetailDto(
     [Required] Guid Id,
     [Required] Guid UserId,
     [Required] Guid ArticleId,
+    [Required] string ArticleSlug,
     Guid? ReplyToCommentId,
     string Username,
     string? UserAvatarUrl,
