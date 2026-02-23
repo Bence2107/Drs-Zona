@@ -76,14 +76,21 @@
     </div>
 
     <mat-menu #commentMenu="matMenu" class="header-menu comment-menu-panel">
+      @if(isOnProfileSite) {
+        <button mat-menu-item class="header-menu-item" [routerLink]="['/article', comment.articleSlug]">
+          <span>Ugrás a cikkhez</span>
+          <mat-icon>article</mat-icon>
+        </button>
+      }
+
       <button mat-menu-item class="header-menu-item" (click)="editComment()">
-        <mat-icon>edit</mat-icon>
         <span>Szerkesztés</span>
+        <mat-icon>edit</mat-icon>
       </button>
 
       <button mat-menu-item class="header-menu-item" (click)="deleteComment(comment.id!)">
-        <mat-icon color="warn">delete_outline</mat-icon>
         <span class="warn-text">Törlés</span>
+        <mat-icon color="warn">delete_outline</mat-icon>
       </button>
     </mat-menu>
 
