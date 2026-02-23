@@ -10,6 +10,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {MatFormField} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
+import {ProfileDeleteComponent} from './components/profile-delete/profile-delete.component';
 
 @Component({
   selector: 'app-profile-content',
@@ -22,7 +23,8 @@ import {MatOption, MatSelect} from '@angular/material/select';
     ProfileCommentsComponent,
     MatFormField,
     MatSelect,
-    MatOption
+    MatOption,
+    ProfileDeleteComponent
   ],
   templateUrl: './profile-content.component.html',
   styleUrl: './profile-content.component.scss',

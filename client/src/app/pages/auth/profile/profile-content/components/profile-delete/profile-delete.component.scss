@@ -1,0 +1,100 @@
+.profile-delete-container {
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.danger-zone-card.jumbo-variant {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  min-height: 600px;
+  padding: 25px;
+  background-color: var(--primary-bg);
+  border-radius: 24px;
+  color: var(--text-main);
+  border: 4px solid rgba(0, 0, 0, 0.05);
+}
+
+.danger-zone-card.active-border {
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+.delete-icon-jumbo {
+  color: #999;
+  font-size: 48px;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 25px;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.delete-icon-jumbo.activated {
+  color: var(--accent-color) !important;
+  font-size: 42px;
+  width: 60px;
+  height: 60px;
+  animation: shakeAndPop 0.4s ease-in-out;
+}
+
+.danger-title-jumbo {
+  color: var(--accent-color);
+  font-size: 38px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.divider-line {
+  width: 100px;
+  height: 4px;
+  background-color: var(--accent-color);
+  margin: 20px auto;
+  opacity: 0.4;
+}
+
+.confirmation-section {
+   margin: 20px auto 20px auto;
+   padding: 30px;
+   color: var(--text-main);
+   background-color: rgba(244, 67, 54, 0.05);
+   border-radius: 15px;
+   max-width: 650px;
+ }
+
+.checkbox-label {
+  color: var(--text-main);
+}
+
+.warning-text-jumbo {
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto 30px auto;
+}
+
+@keyframes shakeAndPop {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.4) rotate(10deg); }
+  50% { transform: scale(1.4) rotate(-10deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .danger-title-jumbo {
+      font-size: 28px;
+    }
+  .warning-text-jumbo {
+    line-height: 1.1;
+  }
+
+}

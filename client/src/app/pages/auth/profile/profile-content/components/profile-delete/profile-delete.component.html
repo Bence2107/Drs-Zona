@@ -1,0 +1,39 @@
+<div class="profile-delete-container">
+  <mat-card class="danger-zone-card jumbo-variant" [class.active-border]="isConfirmed">
+
+    <mat-icon fontSet="material-symbols-outlined"
+              class="delete-icon-jumbo"
+              [class.activated]="isConfirmed">
+      account_circle_off
+    </mat-icon>
+
+    <div class="content-wrapper">
+      <h1 class="danger-title-jumbo">Veszélyes zóna</h1>
+      <h3 class="danger-subtitle-jumbo">Végleges fióktörlés</h3>
+
+      <div class="divider-line"></div>
+
+      <p class="warning-text-jumbo">
+        Ha törlöd a profilodat, az összes beállításod, mentett adatod és előzményed
+        azonnal és helyreállíthatatlanul törlődik.
+      </p>
+
+      <div class="confirmation-section">
+        <mat-checkbox color="warn" [(ngModel)]="isConfirmed" class="large-checkbox">
+          <span class="checkbox-label">Megértettem a következményeket, és véglegesen törölni szeretném a profilomat.</span>
+        </mat-checkbox>
+      </div>
+
+      <div class="action-section">
+        <button
+          mat-flat-button
+          color="warn"
+          [disabled]="!isConfirmed"
+          (click)="onDeleteAccount()"
+          class="delete-button-jumbo">
+          Profil végleges törlése
+        </button>
+      </div>
+    </div>
+  </mat-card>
+</div>
