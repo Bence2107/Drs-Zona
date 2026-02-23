@@ -58,7 +58,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                     .HasOne(a => a.Author)
                     .WithMany()
                     .HasForeignKey(a => a.AuthorId)
-                    .OnDelete(DeleteBehavior.NoAction);
+                    .OnDelete(DeleteBehavior.SetNull);
 
                 // Article -> GrandPrix (Many-to-One)
                 options
@@ -86,21 +86,21 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .HasOne(c => c.User)
                 .WithMany()
                 .HasForeignKey(c => c.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Comment -> Article (Many-to-One)
             options
                 .HasOne(c => c.Article)
                 .WithMany()
                 .HasForeignKey(c => c.ArticleId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Comment -> Comment (Self-referencing for replies)
             options
                 .HasOne(c => c.ReplyToComment)
                 .WithMany()
                 .HasForeignKey(c => c.ReplyToCommentId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
             
             options.Property(c => c.ReplyToCommentId).HasDefaultValue(null);
             options.Property(c => c.UpVotes).HasDefaultValue(0);
@@ -111,13 +111,13 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
         modelBuilder.Entity<CommentVote>(options =>
         {
             // Composite primary key
-            options.HasKey(v => new { v.UserId, v.CommentId });
+            options.HasIndex(v => new { v.UserId, v.CommentId }).IsUnique();
 
             options
                 .HasOne(v => v.User)
                 .WithMany()
                 .HasForeignKey(v => v.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.SetNull);
 
             options
                 .HasOne(v => v.Comment)
@@ -133,7 +133,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .HasOne(p => p.Author)
                 .WithMany()
                 .HasForeignKey(p => p.AuthorId)
-                .OnDelete(DeleteBehavior.NoAction)
+                .OnDelete(DeleteBehavior.SetNull)
         );
 
         // PollOption -> Poll (Many-to-One)
@@ -155,7 +155,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .HasOne(v => v.User)
                 .WithMany()
                 .HasForeignKey(v => v.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.SetNull);
 
             options
                 .HasOne(v => v.PollOption)
@@ -181,13 +181,13 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .HasOne(c => c.Driver)
                 .WithMany()
                 .HasForeignKey(c => c.DriverId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             options
                 .HasOne(c => c.Constructor)
                 .WithMany()
                 .HasForeignKey(c => c.ConstructorId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         // DriverParticipation relationships

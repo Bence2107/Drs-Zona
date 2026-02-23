@@ -3,6 +3,7 @@ using System;
 using Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Context.Migrations
 {
     [DbContext(typeof(EfContext))]
-    partial class EfContextModelSnapshot : ModelSnapshot
+    [Migration("20260223184342_Update_DeleteBehaviors")]
+    partial class Update_DeleteBehaviors
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,11 +159,9 @@ namespace Context.Migrations
 
             modelBuilder.Entity("Entities.Models.News.CommentVote", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnName("user_id");
 
                     b.Property<Guid>("CommentId")
                         .HasColumnType("uuid")
@@ -170,16 +171,9 @@ namespace Context.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_upvote");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "CommentId");
 
                     b.HasIndex("CommentId");
-
-                    b.HasIndex("UserId", "CommentId")
-                        .IsUnique();
 
                     b.ToTable("comment_votes");
                 });
@@ -192,7 +186,7 @@ namespace Context.Migrations
                         .HasColumnName("id")
                         .HasDefaultValueSql("gen_random_uuid()");
 
-                    b.Property<Guid?>("AuthorId")
+                    b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid")
                         .HasColumnName("author_id");
 
@@ -258,12 +252,6 @@ namespace Context.Migrations
                     b.Property<Guid>("PollOptionId")
                         .HasColumnType("uuid")
                         .HasColumnName("poll_option_id");
-
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.HasKey("UserId", "PollOptionId");
 
@@ -886,7 +874,8 @@ namespace Context.Migrations
                     b.HasOne("Entities.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
                     b.Navigation("Comment");
 
@@ -898,7 +887,8 @@ namespace Context.Migrations
                     b.HasOne("Entities.Models.User", "Author")
                         .WithMany()
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
                     b.Navigation("Author");
                 });

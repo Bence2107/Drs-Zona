@@ -44,7 +44,7 @@ public record PollListDto(
 
 public record PollDto(
     [Required] Guid Id,
-    [Required] Guid AuthorId,
+    [Required] Guid? AuthorId,
     string AuthorName,
     string Description,
     DateTime CreatedAt,

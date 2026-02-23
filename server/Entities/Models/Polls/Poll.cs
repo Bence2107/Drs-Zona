@@ -12,7 +12,7 @@ public class Poll
     public Guid Id { get; set; }
     
     [Column("author_id")]
-    public Guid AuthorId { get; set; }
+    public Guid? AuthorId { get; set; }
     [JsonIgnore]
     public virtual User? Author { get; set; }
     
