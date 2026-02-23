@@ -8,12 +8,19 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class CommentsController(ICommentService commentService): ControllerBase
 {
+    private Guid? GetCurrentUserId()
+    {
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        return Guid.TryParse(userIdClaim, out var guid) ? guid : null;
+    }
+    
     [HttpGet("getCommentsWithoutReplies/{articleId:guid}")]
     [ProducesResponseType(typeof(List<CommentDetailDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetCommentsWithoutReplies([FromRoute] Guid articleId)
     {
-        var response = commentService.GetArticleCommentsWithoutReplies(articleId);
+        var currentUserId = GetCurrentUserId();
+        var response = commentService.GetArticleCommentsWithoutReplies(articleId, currentUserId);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -31,7 +38,8 @@ public class CommentsController(ICommentService commentService): ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetCommentReplies([FromRoute] Guid commentId)
     {
-        var response = commentService.GetCommentReplies(commentId);
+        var currentUserId = GetCurrentUserId();
+        var response = commentService.GetCommentReplies(commentId, currentUserId);
         if (!response.IsSuccess)
         {
             return BadRequest(new

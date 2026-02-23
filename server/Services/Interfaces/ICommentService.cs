@@ -8,7 +8,7 @@ public interface ICommentService
     
     ResponseResult<List<CommentDetailDto>> GetCommentReplies(Guid commentId, Guid? currentUserId = null);
     
-    ResponseResult<List<CommentDetailDto>> GetUsersComments(Guid userId, Guid? currentUserId = null);
+    ResponseResult<List<CommentDetailDto>> GetUsersComments(Guid userId);
     
     ResponseResult<bool> AddComment(CommentCreateDto commentCreateDto, Guid id);
     

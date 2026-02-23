@@ -9,7 +9,7 @@ public class CommentVotesRepository(EfContext context) : ICommentVotesRepository
 {
     private readonly DbSet<CommentVote> _votes = context.CommentVotes;
 
-    public CommentVote? GetVote(Guid userId, Guid commentId) => 
+    public CommentVote? GetVoteForACommment(Guid? userId, Guid commentId) => 
         _votes.FirstOrDefault(v => v.UserId == userId && v.CommentId == commentId);
 
     public List<CommentVote> GetVotesByUser(Guid userId) => context.CommentVotes

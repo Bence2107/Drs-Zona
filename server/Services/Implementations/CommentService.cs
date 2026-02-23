@@ -16,12 +16,9 @@ public class CommentService(
 {
     public ResponseResult<List<CommentDetailDto>> GetArticleCommentsWithoutReplies(Guid articleId, Guid? currentUserId = null)
     {
-        var userVotes = currentUserId.HasValue 
-            ? commentVotesRepo.GetVotesByUser(currentUserId.Value) 
-            : [];
-
-        var comments = commentsRepo.GetCommentsWithoutReplies(articleId).Select(c => {
-            var vote = userVotes.FirstOrDefault(v => v.CommentId == c.Id);
+        var comments = commentsRepo.GetCommentsWithoutReplies(articleId).Select(c =>
+        {
+            var vote = commentVotesRepo.GetVoteForACommment(currentUserId, c.Id);
             var voteStatus = vote == null ? 0 : (vote.IsUpvote ? 1 : -1);
 
             return new CommentDetailDto(
@@ -46,15 +43,11 @@ public class CommentService(
 
     public ResponseResult<List<CommentDetailDto>> GetCommentReplies(Guid commentId, Guid? currentUserId = null)
     {
-        var userVotes = currentUserId.HasValue
-            ? commentVotesRepo.GetVotesByUser(currentUserId.Value)
-            : [];
-
         var comments = commentsRepo.GetRepliesToAComment(commentId).Select(c =>
         {
-            var vote = userVotes.FirstOrDefault(v => v.CommentId == c.Id);
+            var vote = commentVotesRepo.GetVoteForACommment(currentUserId, c.Id);
             var voteStatus = vote == null ? 0 : (vote.IsUpvote ? 1 : -1);
-
+            
             return new CommentDetailDto(
                 Id: c.Id,
                 UserId: c.UserId,
@@ -75,15 +68,11 @@ public class CommentService(
         return ResponseResult<List<CommentDetailDto>>.Success(comments);
     }
 
-    public ResponseResult<List<CommentDetailDto>> GetUsersComments(Guid userId, Guid? currentUserId = null)
+    public ResponseResult<List<CommentDetailDto>> GetUsersComments(Guid userId)
     {
-        var userVotes = currentUserId.HasValue
-            ? commentVotesRepo.GetVotesByUser(currentUserId.Value)
-            : [];
-
         var comments = commentsRepo.GetUsersComments(userId).Select(c =>
         {
-            var vote = userVotes.FirstOrDefault(v => v.CommentId == c.Id);
+            var vote = commentVotesRepo.GetVoteForACommment(userId, c.Id);
             var voteStatus = vote == null ? 0 : (vote.IsUpvote ? 1 : -1);
 
             return new CommentDetailDto(
@@ -156,7 +145,7 @@ public class CommentService(
         var comment = commentsRepo.GetCommentById(commentId);
         if (comment == null) return ResponseResult<bool>.Failure("A komment nem található.");
 
-        var existingVote = commentVotesRepo.GetVote(userId, commentId);
+        var existingVote = commentVotesRepo.GetVoteForACommment(userId, commentId);
 
         if (existingVote == null)
         {

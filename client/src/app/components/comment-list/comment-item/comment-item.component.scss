@@ -108,6 +108,7 @@
       text-align: center;
       transition: color 0.2s;
 
+      &.none { color: var(--text-main)}
       &.positive { color: #4caf50; }
       &.negative { color: #f44336; }
     }
