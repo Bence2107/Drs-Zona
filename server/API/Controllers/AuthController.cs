@@ -152,7 +152,7 @@ public class AuthController(
         
         await authService.UpdateLastActivity(userId);
 
-        var result = userImageService.DeleteAvatar(userId);
+        var result = await userImageService.DeleteAvatar(userId);
 
         if (!result.IsSuccess)
         {

@@ -15,12 +15,10 @@ public class CommentsController(ICommentService commentService): ControllerBase
     }
     
     [HttpGet("getCommentsWithoutReplies/{articleId:guid}")]
-    [ProducesResponseType(typeof(List<CommentDetailDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetCommentsWithoutReplies([FromRoute] Guid articleId)
+    public async Task<ActionResult<List<CommentDetailDto>>> GetCommentsWithoutReplies([FromRoute] Guid articleId)
     {
         var currentUserId = GetCurrentUserId();
-        var response = commentService.GetArticleCommentsWithoutReplies(articleId, currentUserId);
+        var response = await commentService.GetArticleCommentsWithoutReplies(articleId, currentUserId);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -34,12 +32,10 @@ public class CommentsController(ICommentService commentService): ControllerBase
     }
     
     [HttpGet("getCommentReplies/{commentId:guid}")]
-    [ProducesResponseType(typeof(List<CommentDetailDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetCommentReplies([FromRoute] Guid commentId)
+    public async Task<ActionResult<List<CommentDetailDto>>> GetCommentReplies([FromRoute] Guid commentId)
     {
         var currentUserId = GetCurrentUserId();
-        var response = commentService.GetCommentReplies(commentId, currentUserId);
+        var response = await commentService.GetCommentReplies(commentId, currentUserId);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -53,11 +49,9 @@ public class CommentsController(ICommentService commentService): ControllerBase
     }
     
     [HttpGet("getUsersComments/{userId:guid}")]
-    [ProducesResponseType(typeof(List<CommentDetailDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetUsersComments([FromRoute] Guid userId)
+    public async Task<ActionResult<List<CommentDetailDto>>> GetUsersComments([FromRoute] Guid userId)
     {
-        var response = commentService.GetUsersComments(userId);
+        var response = await commentService.GetUsersComments(userId);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -71,10 +65,9 @@ public class CommentsController(ICommentService commentService): ControllerBase
     }
     
     [HttpPost("create/{userId:guid}")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Create([FromBody]CommentCreateDto dto, [FromRoute]Guid userId)
+    public async Task<ActionResult> Create([FromBody]CommentCreateDto dto, [FromRoute]Guid userId)
     {
-        var result = commentService.AddComment(dto, userId);
+        var result = await commentService.AddComment(dto, userId);
 
         if (!result.IsSuccess)
         {
@@ -89,10 +82,9 @@ public class CommentsController(ICommentService commentService): ControllerBase
     }
     
     [HttpPost("updateContent")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult UpdateContent([FromBody]CommentContentUpdateDto commentUpdateVoteDto)
+    public async Task<ActionResult> UpdateContent([FromBody]CommentContentUpdateDto commentUpdateVoteDto)
     {
-        var result = commentService.UpdateCommentsContent(commentUpdateVoteDto);
+        var result = await commentService.UpdateCommentsContent(commentUpdateVoteDto);
         if (!result.IsSuccess)
         {
             return BadRequest(new
@@ -106,9 +98,9 @@ public class CommentsController(ICommentService commentService): ControllerBase
     }
     
     [HttpPost("vote")]
-    public IActionResult Vote([FromBody] CommentUpdateVoteDto request)
+    public async Task<ActionResult> Vote([FromBody] CommentUpdateVoteDto request)
     {
-        var result = commentService.UpdateCommentsVote(request);
+        var result = await commentService.UpdateCommentsVote(request);
     
         if (!result.IsSuccess) return BadRequest(result.Message);
         return Ok(result.Value);
@@ -116,9 +108,9 @@ public class CommentsController(ICommentService commentService): ControllerBase
     
     [HttpDelete("delete/{id:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Delete([FromRoute]Guid id)
+    public async Task<ActionResult> Delete([FromRoute]Guid id)
     {
-        var response = commentService.DeleteComment(id);
+        var response = await commentService.DeleteComment(id);
         if (!response.IsSuccess) return NotFound(response.Message);
 
         return Ok();

@@ -9,11 +9,9 @@ namespace Drs_Zona.API.Controllers;
 public class ArticleController(IArticleService articleService): ControllerBase
 {
     [HttpGet("get/{id:guid}")]
-    [ProducesResponseType(typeof(ArticleDetailDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Get([FromRoute]Guid id)
+    public async Task<ActionResult<ArticleDetailDto>> Get([FromRoute]Guid id)
     {
-        var response = articleService.GetArticleById(id);
+        var response = await articleService.GetArticleById(id);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -27,11 +25,9 @@ public class ArticleController(IArticleService articleService): ControllerBase
     }
     
     [HttpGet("get/{slug}")]
-    [ProducesResponseType(typeof(ArticleDetailDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetBySlug([FromRoute]string slug)
+    public async Task<ActionResult<ArticleDetailDto>> GetBySlug([FromRoute]string slug)
     {
-        var response = articleService.GetArticleBySlug(slug);
+        var response = await articleService.GetArticleBySlug(slug);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -45,34 +41,30 @@ public class ArticleController(IArticleService articleService): ControllerBase
     }
     
     [HttpGet("getAllArticles")]
-    [ProducesResponseType(typeof(List<ArticleListDto>), StatusCodes.Status200OK)]
-    public IActionResult GetAllArticles()
+    public async Task<ActionResult<List<ArticleListDto>>> GetAllArticles()
     {
-        var response = articleService.ListArticles();
+        var response = await articleService.ListArticles();
         return Ok(response);
     }
     
     [HttpGet("getAllSummary")]
-    [ProducesResponseType(typeof(List<ArticleListDto>), StatusCodes.Status200OK)]
-    public IActionResult GetAllSummary()
+    public async Task<ActionResult<List<ArticleListDto>>> GetAllSummary()
     {
-        var response = articleService.ListAllSummary();
+        var response = await articleService.ListAllSummary();
         return Ok(response);
     }
 
     [HttpGet("getRecent/{number:int}")]
-    [ProducesResponseType(typeof(List<ArticleListDto>), StatusCodes.Status200OK)]
-    public IActionResult GetRecent([FromRoute]int number)
+    public async Task<ActionResult<List<ArticleListDto>>> GetRecent([FromRoute]int number)
     {
-        var response  = articleService.GetRecentArticles(number);
+        var response  = await articleService.GetRecentArticles(number);
         return Ok(response);
     }
     
     [HttpPost("create")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Create([FromBody]ArticleCreateDto dto)
+    public async Task<ActionResult> Create([FromBody]ArticleCreateDto dto)
     {
-        var result = articleService.CreateArticle(dto);
+        var result = await articleService.CreateArticle(dto);
 
         if (!result.IsSuccess)
         {
@@ -87,10 +79,9 @@ public class ArticleController(IArticleService articleService): ControllerBase
     }
 
     [HttpPost("update")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Update([FromBody]ArticleUpdateDto dto)
+    public async Task<ActionResult> Update([FromBody]ArticleUpdateDto dto)
     {
-        var result = articleService.UpdateArticle(dto);
+        var result = await articleService.UpdateArticle(dto);
         if (!result.IsSuccess)
         {
             return BadRequest(new
@@ -104,10 +95,9 @@ public class ArticleController(IArticleService articleService): ControllerBase
     }
 
     [HttpDelete("delete/{id:guid}")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Delete([FromRoute]Guid id)
+    public async Task<ActionResult> Delete([FromRoute]Guid id)
     {
-        var articleResponse = articleService.GetArticleById(id);
+        var articleResponse = await articleService.GetArticleById(id);
         if (!articleResponse.IsSuccess)
         {
             return BadRequest(new
@@ -117,7 +107,7 @@ public class ArticleController(IArticleService articleService): ControllerBase
             });
         }
         
-        var result = articleService.DeleteArticle(id);
+        var result = await articleService.DeleteArticle(id);
         if (!result.IsSuccess)
         {
             return BadRequest(new

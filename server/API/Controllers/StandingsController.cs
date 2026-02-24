@@ -9,11 +9,9 @@ namespace Drs_Zona.API.Controllers;
 public class StandingsController(IStandingsService standingsService): ControllerBase
 {
     [HttpGet("getDefaultFilters")]
-    [ProducesResponseType(typeof(DefaultFiltersDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetDefaultFilters()
+    public async Task<ActionResult<DefaultFiltersDto>> GetDefaultFilters()
     {
-        var response = standingsService.GetDefaultFilters();
+        var response = await standingsService.GetDefaultFilters();
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -27,11 +25,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
     
     [HttpGet("getAllSeries")]
-    [ProducesResponseType(typeof(List<SeriesLookupDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetAllSeries()
+    public async Task<ActionResult<List<SeriesLookupDto>>> GetAllSeries()
     {
-        var response = standingsService.GetAllSeries();
+        var response = await standingsService.GetAllSeries();
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -45,11 +41,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
 
     [HttpGet("getSeasonsBySeries/{seriesId:guid}")]
-    [ProducesResponseType(typeof(List<YearLookupDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetSeasonsBySeries(Guid seriesId)
+    public async Task<ActionResult<List<YearLookupDto>>> GetSeasonsBySeries(Guid seriesId)
     {
-        var response = standingsService.GetSeasonsBySeries(seriesId);
+        var response = await standingsService.GetSeasonsBySeries(seriesId);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -63,11 +57,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
 
     [HttpGet("getGrandPrixByChampionship/{driverChampId:guid}")]
-    [ProducesResponseType(typeof(List<GrandPrixLookupDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetGrandsPrixByChampionship(Guid driverChampId)
+    public async Task<ActionResult<List<GrandPrixLookupDto>>> GetGrandsPrixByChampionship(Guid driverChampId)
     {
-        var response = standingsService.GetGrandsPrixByChampionship(driverChampId);
+        var response = await standingsService.GetGrandsPrixByChampionship(driverChampId);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -81,11 +73,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
 
     [HttpGet("getSeasonsByGrandPrix/{grandPrixId:guid}")]
-    [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetSessionsByGrandPrix(Guid grandPrixId)
+    public async Task<ActionResult<string>> GetSessionsByGrandPrix(Guid grandPrixId)
     {
-        var response = standingsService.GetSessionsByGrandPrix(grandPrixId);
+        var response = await standingsService.GetSessionsByGrandPrix(grandPrixId);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -99,11 +89,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
     
     [HttpGet("getByDriversChampionshipId/{driversChampId:guid}")]
-    [ProducesResponseType(typeof(DriverStandingsDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetDriverStandings(Guid driversChampId)
+    public async Task<ActionResult<DriverStandingsDto>> GetDriverStandings(Guid driversChampId)
     {
-        var response = standingsService.GetDriverStandings(driversChampId);
+        var response = await standingsService.GetDriverStandings(driversChampId);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -117,11 +105,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
 
     [HttpGet("getByConstructorChampionshipId/{constructsChampId:guid}")]
-    [ProducesResponseType(typeof(ConstructorStandingsDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetConstructorStandings(Guid constructsChampId)
+    public async Task<ActionResult<ConstructorStandingsDto>> GetConstructorStandings(Guid constructsChampId)
     {
-        var response = standingsService.GetConstructorStandings(constructsChampId);
+        var response = await standingsService.GetConstructorStandings(constructsChampId);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -135,11 +121,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
     
     [HttpGet("getGrandPrixResults/{grandPrixId:guid}/{session}")]
-    [ProducesResponseType(typeof(GrandPrixResultsDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetGrandPrixResults(Guid grandPrixId, string session)
+    public async Task<ActionResult<GrandPrixResultsDto>> GetGrandPrixResults(Guid grandPrixId, string session)
     {
-        var response = standingsService.GetGrandPrixResults(grandPrixId, session);
+        var response = await standingsService.GetGrandPrixResults(grandPrixId, session);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -153,11 +137,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
     
     [HttpGet("getDriverResultsBySeason/{driverId:guid}/{driverChampId:guid}")]
-    [ProducesResponseType(typeof(List<DriverSeasonResultDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetDriverResultsBySeason(Guid driverId, Guid driverChampId)
+    public async Task<ActionResult<List<DriverSeasonResultDto>>> GetDriverResultsBySeason(Guid driverId, Guid driverChampId)
     {
-        var response = standingsService.GetDriverResultsBySeason(driverId, driverChampId);
+        var response = await standingsService.GetDriverResultsBySeason(driverId, driverChampId);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -171,11 +153,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
     
     [HttpGet("getConstructorsResultsBySeason/{constructorId:guid}/{constructorChampId:guid}")]
-    [ProducesResponseType(typeof(List<ConstructorSeasonResultDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetConstructorsResultsBySeason(Guid constructorId, Guid constructorChampId)
+    public async Task<ActionResult<List<ConstructorSeasonResultDto>>> GetConstructorsResultsBySeason(Guid constructorId, Guid constructorChampId)
     {
-        var response = standingsService.GetConstructorResultsBySeason(constructorId, constructorChampId);
+        var response = await standingsService.GetConstructorResultsBySeason(constructorId, constructorChampId);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -189,11 +169,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
     
     [HttpGet("getSeasonOverview/{driverChampId:guid}")]
-    [ProducesResponseType(typeof(List<ConstructorSeasonResultDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetSeasonOverview(Guid driverChampId)
+    public async Task<ActionResult<List<ConstructorSeasonResultDto>>> GetSeasonOverview(Guid driverChampId)
     {
-        var response = standingsService.GetSeasonOverview(driverChampId);
+        var response = await standingsService.GetSeasonOverview(driverChampId);
         if (!response.IsSuccess)
         {
             return BadRequest(new

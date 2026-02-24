@@ -11,7 +11,7 @@ export class ConnectionService {
 
   checkConnection(): Observable<any> {
     return this.http.get(this.apiUrl).pipe(
-      catchError(err => throwError(() => new Error('Server unreachable')))
+      catchError(err => throwError(() => new Error('Server unreachable:' + err)))
     );
   }
 }

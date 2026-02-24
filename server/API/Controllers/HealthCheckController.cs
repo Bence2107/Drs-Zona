@@ -8,7 +8,7 @@ namespace Drs_Zona.API.Controllers;
 public class HealthCheckController(EfContext context) : ControllerBase
 {
     [HttpGet("ping")]
-    public async Task<IActionResult> Ping()
+    public async Task<ActionResult> Ping()
     {
         var canConnect = await context.Database.CanConnectAsync();
         return canConnect ? Ok(new { status = "Healthy" }) : StatusCode(500, "Database connection failed.");

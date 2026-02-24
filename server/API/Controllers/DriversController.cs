@@ -9,11 +9,9 @@ namespace Drs_Zona.API.Controllers;
 public class DriversController(IDriverService driverService): ControllerBase
 {
     [HttpGet("get/{id:guid}")]
-    [ProducesResponseType(typeof(DriverDetailDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Get([FromRoute]Guid id)
+    public async Task<ActionResult<DriverDetailDto>> Get([FromRoute]Guid id)
     {
-        var response = driverService.GetDriverById(id);
+        var response = await driverService.GetDriverById(id);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -27,20 +25,16 @@ public class DriversController(IDriverService driverService): ControllerBase
     }
     
     [HttpGet("getAllByChampionship/{championshipId:guid}")]
-    [ProducesResponseType(typeof(List<DriverDetailDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetAll(Guid championshipId)
+    public async Task<ActionResult<List<DriverDetailDto>>> GetAll(Guid championshipId)
     {
-        var response = driverService.ListAllDriversByChampionships(championshipId);
+        var response = await driverService.ListAllDriversByChampionships(championshipId);
         return Ok(response.Value);
     }
 
     [HttpPost("create")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Create([FromBody] DriverCreateDto dto)
+    public async Task<ActionResult> Create([FromBody] DriverCreateDto dto)
     {
-        var result = driverService.CreateDriver(dto);
+        var result = await driverService.CreateDriver(dto);
 
         if (!result.IsSuccess)
         {
@@ -56,10 +50,9 @@ public class DriversController(IDriverService driverService): ControllerBase
     
     
     [HttpPost("update")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Update([FromBody]DriverUpdateDto dto)
+    public async Task<ActionResult> Update([FromBody]DriverUpdateDto dto)
     {
-        var result = driverService.UpdateDriver(dto);
+        var result = await driverService.UpdateDriver(dto);
         if (!result.IsSuccess)
         {
             return BadRequest(new
@@ -74,10 +67,9 @@ public class DriversController(IDriverService driverService): ControllerBase
     
     
     [HttpDelete("delete/{id:guid}")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Delete([FromRoute]Guid id)
+    public async Task<ActionResult> Delete([FromRoute]Guid id)
     {
-        var driverResponse = driverService.GetDriverById(id);
+        var driverResponse = await driverService.GetDriverById(id);
         if (!driverResponse.IsSuccess)
         {
             return BadRequest(new
@@ -87,7 +79,7 @@ public class DriversController(IDriverService driverService): ControllerBase
             });
         }
 
-        var result = driverService.DeleteDriver(id);
+        var result = await driverService.DeleteDriver(id);
         if (!result.IsSuccess)
         {
             return BadRequest(new

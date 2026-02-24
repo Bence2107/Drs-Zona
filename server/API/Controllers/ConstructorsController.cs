@@ -9,11 +9,9 @@ namespace Drs_Zona.API.Controllers;
 public class ConstructorsController(IConstructorsService constructorsService): ControllerBase
 {
     [HttpGet("get/{id:guid}")]
-    [ProducesResponseType(typeof(ConstructorDetailDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Get([FromRoute]Guid id)
+    public async Task<ActionResult<ConstructorDetailDto>> Get([FromRoute]Guid id)
     {
-        var response = constructorsService.GetById(id);
+        var response = await constructorsService.GetById(id);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -27,19 +25,16 @@ public class ConstructorsController(IConstructorsService constructorsService): C
     }
     
     [HttpGet("getAllByChampionship/{championshipId:guid}")]
-    [ProducesResponseType(typeof(List<ConstructorListDto>), StatusCodes.Status201Created)]
-    public IActionResult GetAll([FromRoute]Guid championshipId)
+    public async Task<ActionResult<List<ConstructorListDto>>> GetAll([FromRoute]Guid championshipId)
     {
-        var response = constructorsService.ListAllConstructorsByChampionship(championshipId);
+        var response = await constructorsService.ListAllConstructorsByChampionship(championshipId);
         return Ok(response.Value);
     }
     
     [HttpPost("create")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Create([FromBody] ConstructorCreateDto dto)
+    public async Task<ActionResult> Create([FromBody] ConstructorCreateDto dto)
     {
-        var result = constructorsService.CreateConstructor(dto);
+        var result = await constructorsService.CreateConstructor(dto);
 
         if (!result.IsSuccess)
         {
@@ -54,10 +49,9 @@ public class ConstructorsController(IConstructorsService constructorsService): C
     }
     
     [HttpPost("update")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Update([FromBody]ConstructorUpdateDto dto)
+    public async Task<ActionResult> Update([FromBody]ConstructorUpdateDto dto)
     {
-        var result = constructorsService.UpdateConstructor(dto);
+        var result = await constructorsService.UpdateConstructor(dto);
         if (!result.IsSuccess)
         {
             return BadRequest(new

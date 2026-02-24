@@ -9,10 +9,9 @@ namespace Drs_Zona.API.Controllers;
 public class SeriesController(ISeriesService seriesService) : ControllerBase
 {
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult GetSeriesById([FromRoute]Guid id)
+    public async Task<ActionResult<SeriesDetailDto>> GetSeriesById([FromRoute]Guid id)
     {
-        var response = seriesService.GetSeriesById(id);
+        var response = await seriesService.GetSeriesById(id);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -26,9 +25,9 @@ public class SeriesController(ISeriesService seriesService) : ControllerBase
     }
 
     [HttpGet("name/{name}")]
-    public IActionResult GetSeriesByName([FromRoute]string name)
+    public async Task<ActionResult<SeriesDetailDto>> GetSeriesByName([FromRoute]string name)
     {
-        var response = seriesService.GetSeriesByName(name);
+        var response = await seriesService.GetSeriesByName(name);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -41,17 +40,17 @@ public class SeriesController(ISeriesService seriesService) : ControllerBase
         return Ok(response.Value);
     }
 
-    [HttpGet]
-    public IActionResult GetAllSeries()
+    [HttpGet("getAllSeries")]
+    public async Task<ActionResult<List<SeriesListDto>>> GetAllSeries()
     {
-        var response = seriesService.ListSeries();
+        var response = await seriesService.ListSeries();
         return Ok(response.Value);
     }
 
     [HttpPost("create")]
-    public IActionResult Create([FromBody]SeriesCreateDto dto)
+    public async Task<ActionResult> Create([FromBody]SeriesCreateDto dto)
     {
-        var response = seriesService.CreateSeries(dto);
+        var response = await seriesService.CreateSeries(dto);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -64,10 +63,9 @@ public class SeriesController(ISeriesService seriesService) : ControllerBase
     }
 
     [HttpPost("update")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Update([FromBody]SeriesUpdateDto dto)
+    public async Task<ActionResult> Update([FromBody]SeriesUpdateDto dto)
     {
-        var response = seriesService.Update(dto);
+        var response = await seriesService.Update(dto);
         if (!response.IsSuccess)
         {
           
@@ -82,10 +80,9 @@ public class SeriesController(ISeriesService seriesService) : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Delete(Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
-        var response = seriesService.Delete(id);
+        var response = await seriesService.Delete(id);
         if (!response.IsSuccess) return NotFound(response.Message);
 
         return Ok();

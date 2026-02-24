@@ -9,11 +9,9 @@ namespace Drs_Zona.API.Controllers;
 public class BrandController(IBrandService brandService) : ControllerBase
 {
     [HttpGet("get/{id:guid}")]
-    [ProducesResponseType(typeof(BrandDetailDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Get([FromRoute] Guid id)
+    public async Task<ActionResult<BrandDetailDto>> Get([FromRoute] Guid id)
     {
-        var response = brandService.GetBrandById(id);
+        var response = await brandService.GetBrandById(id);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -27,11 +25,9 @@ public class BrandController(IBrandService brandService) : ControllerBase
     }
     
     [HttpGet("get/{name}")]
-    [ProducesResponseType(typeof(BrandDetailDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Get([FromRoute] string name)
+    public async Task<ActionResult<BrandDetailDto>> Get([FromRoute] string name)
     {
-        var response = brandService.GetBrandByName(name);
+        var response = await brandService.GetBrandByName(name);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -45,18 +41,16 @@ public class BrandController(IBrandService brandService) : ControllerBase
     }
     
     [HttpGet("getAll")]
-    [ProducesResponseType(typeof(List<BrandListDto>), StatusCodes.Status200OK)]
-    public IActionResult GetAll()
+    public async Task<ActionResult<BrandListDto>> GetAll()
     {
-        var response = brandService.ListBrands();
+        var response = await brandService.ListBrands();
         return Ok(response);
     }
     
     [HttpPost("create")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Create([FromBody]BrandCreateDto dto)
+    public async Task<ActionResult> Create([FromBody]BrandCreateDto dto)
     {
-        var result = brandService.CreateBrand(dto);
+        var result = await brandService.CreateBrand(dto);
 
         if (!result.IsSuccess)
         {
@@ -71,10 +65,9 @@ public class BrandController(IBrandService brandService) : ControllerBase
     }
 
     [HttpPost("update")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Update([FromBody]BrandUpdateDto dto)
+    public async Task<ActionResult> Update([FromBody]BrandUpdateDto dto)
     {
-        var result = brandService.UpdateBrand(dto);
+        var result = await brandService.UpdateBrand(dto);
         if (!result.IsSuccess)
         {
             return BadRequest(new
@@ -88,10 +81,9 @@ public class BrandController(IBrandService brandService) : ControllerBase
     }
 
     [HttpDelete("delete/{id:guid}")]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public IActionResult Delete([FromRoute]Guid id)
+    public async Task<ActionResult> Delete([FromRoute]Guid id)
     {
-        var response = brandService.DeleteBrand(id);
+        var response = await brandService.DeleteBrand(id);
         if (!response.IsSuccess) return NotFound(response.Message);
 
         return Ok();
