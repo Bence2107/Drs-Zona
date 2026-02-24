@@ -8,7 +8,7 @@ using Moq;
 using Repositories.Implementations;
 using Repositories.Implementations.News;
 using Services.Implementations;
-using Services.Implementations.image;
+using Services.Implementations.images; 
 using Services.Interfaces;
 using Xunit;
 
@@ -35,7 +35,7 @@ public class CommentTests
     }
 
     [Fact]
-    public void US_04_AC_01_GetCommentReplies_ShouldReturnAllRepliesForComment()
+    public async Task US_04_AC_01_GetCommentReplies_ShouldReturnAllRepliesForComment()
     {
         var user = CreateUser();
         var parentCommentId = Guid.NewGuid();
@@ -60,9 +60,9 @@ public class CommentTests
 
         _context.Users.Add(user);
         _context.Comments.AddRange(replies);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
-        var result = _service.GetCommentReplies(parentCommentId);
+        var result = await _service.GetCommentReplies(parentCommentId);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().HaveCount(2);
@@ -71,7 +71,7 @@ public class CommentTests
     }
 
     [Fact]
-    public void GetArticleCommentsWithoutReplies_ShouldReturnComments()
+    public async Task GetArticleCommentsWithoutReplies_ShouldReturnComments()
     {
         var user = CreateUser();
         var article = CreateArticle();
@@ -87,16 +87,16 @@ public class CommentTests
         _context.Users.Add(user);
         _context.Articles.Add(article);
         _context.Comments.Add(comment);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
-        var result = _service.GetArticleCommentsWithoutReplies(article.Id);
+        var result = await _service.GetArticleCommentsWithoutReplies(article.Id);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().HaveCount(1);
     }
 
     [Fact]
-    public void GetUsersComments_ShouldReturnComments()
+    public async Task GetUsersComments_ShouldReturnComments()
     {
         var user = CreateUser();
 
@@ -110,16 +110,16 @@ public class CommentTests
 
         _context.Users.Add(user);
         _context.Comments.Add(comment);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
-        var result = _service.GetUsersComments(user.Id);
+        var result = await _service.GetUsersComments(user.Id);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().HaveCount(1);
     }
 
     [Fact]
-    public void AddComment_ShouldSucceed_WhenArticleExists()
+    public async Task AddComment_ShouldSucceed_WhenArticleExists()
     {
         var user = CreateUser();
         var article = CreateArticle();
@@ -136,7 +136,7 @@ public class CommentTests
         _context.Users.Add(user);
         _context.Articles.Add(article);
         _context.Comments.Add(parentComment);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         var dto = new CommentCreateDto(
             ArticleId: parentComment.Id,
@@ -144,7 +144,7 @@ public class CommentTests
             ReplyToCommentId: null
         );
 
-        var result = _service.AddComment(dto, user.Id);
+        var result = await _service.AddComment(dto, user.Id);
 
         result.IsSuccess.Should().BeTrue();
         _context.Comments.Should().HaveCount(2);
@@ -152,12 +152,12 @@ public class CommentTests
 
 
     [Fact]
-    public void AddComment_ShouldFail_WhenArticleDoesNotExist()
+    public async Task AddComment_ShouldFail_WhenArticleDoesNotExist()
     {
         var user = CreateUser();
 
         _context.Users.Add(user);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         var dto = new CommentCreateDto(
             ArticleId: Guid.NewGuid(),
@@ -165,14 +165,14 @@ public class CommentTests
             ReplyToCommentId: null
         );
 
-        var result = _service.AddComment(dto, user.Id);
+        var result = await _service.AddComment(dto, user.Id);
 
         result.IsSuccess.Should().BeFalse();
         _context.Comments.Should().BeEmpty();
     }
 
     [Fact]
-    public void DeleteComment_ShouldSucceed_WhenNoReplies()
+    public async Task DeleteComment_ShouldSucceed_WhenNoReplies()
     {
         var comment = new Comment
         {
@@ -182,20 +182,20 @@ public class CommentTests
         };
 
         _context.Comments.Add(comment);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
-        var result = _service.DeleteComment(comment.Id);
+        var result = await _service.DeleteComment(comment.Id);
 
         result.IsSuccess.Should().BeTrue();
         _context.Comments.Should().BeEmpty();
     }
     
     [Fact]
-    public void UpdateCommentsVote_ShouldFail_WhenArticleNotFound()
+    public async Task UpdateCommentsVote_ShouldFail_WhenArticleNotFound()
     {
         var dto = new CommentUpdateVoteDto(Guid.NewGuid(), Guid.NewGuid(), true);
 
-        var result = _service.UpdateCommentsVote(dto);
+        var result = await _service.UpdateCommentsVote(dto);
 
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("Comment not found");
