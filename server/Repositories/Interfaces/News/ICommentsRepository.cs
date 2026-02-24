@@ -4,18 +4,12 @@ namespace Repositories.Interfaces.News;
 
 public interface ICommentsRepository
 {
-    Comment? GetCommentById(Guid id);
-    List<Comment> GetAllComments(Guid id);
-    void Add(Comment comment);
-    void Update(Comment comment);
-    void Delete(Guid id);
-    Comment? GetByIdWithUser(Guid id);
-    Comment? GetByIdWithArticle(Guid id);
-    Comment? GetByIdWithAll(Guid id);
-    List<Comment> GetByArticleId(Guid articleId);
-    List<Comment> GetUsersComments(Guid userId);
-    List<Comment> GetCommentsWithoutReplies(Guid articleId);
-    List<Comment> GetRepliesToAComment(Guid replyCommentId);
-    int GetNumberOfReplies(Guid commentId);
-    bool CheckIfIdExists(Guid id);
+    Task<Comment?> GetCommentById(Guid id);
+    Task Add(Comment comment);
+    Task Update(Comment comment);
+    Task Delete(Guid id);
+    Task<List<Comment>> GetUsersComments(Guid userId);
+    Task<List<Comment>> GetCommentsWithoutReplies(Guid articleId);
+    Task<List<Comment>> GetRepliesToAComment(Guid replyCommentId);
+    Task<int> GetNumberOfReplies(Guid commentId);
 }

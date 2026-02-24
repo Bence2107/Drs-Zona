@@ -4,9 +4,9 @@ namespace Repositories.Interfaces.News;
 
 public interface ICommentVotesRepository
 {
-    CommentVote? GetVoteForACommment(Guid? userId, Guid commentId);
-    List<CommentVote> GetVotesByUser(Guid userId); 
-    void Add(CommentVote vote);
-    void Update(CommentVote vote);
-    void Delete(CommentVote vote);
+    Task<CommentVote?> GetVoteForACommment(Guid? userId, Guid commentId);
+    Task<List<CommentVote>> GetVotesByUser(Guid userId); 
+    Task Add(CommentVote vote);
+    Task Update(CommentVote vote);
+    Task Delete(CommentVote vote);
 }

@@ -4,12 +4,12 @@ namespace Repositories.Interfaces.Polls;
 
 public interface IPollOptionsRepository
 {
-    PollOption? GetPollOptionById(Guid id);
-    List<PollOption> GetAllPollOptions();
-    void Create(PollOption pollOption);
-    void Update(PollOption pollOption);
-    void Delete(Guid id);
-    PollOption? GetByIdWithPoll(Guid id);
-    List<PollOption> GetByPollId(Guid pollId);
-    bool CheckIfIdExists(Guid id);
+    Task<PollOption?> GetPollOptionById(Guid id);
+    Task<List<PollOption>> GetAllPollOptions();
+    Task Create(PollOption pollOption);
+    Task Update(PollOption pollOption);
+    Task Delete(Guid id);
+    Task<PollOption?> GetByIdWithPoll(Guid id);
+    Task<List<PollOption>> GetByPollId(Guid pollId);
+    Task<bool> CheckIfIdExists(Guid id);
 }

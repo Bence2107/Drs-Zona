@@ -9,64 +9,44 @@ public class CommentsRepository(EfContext context) : ICommentsRepository
 {
     private readonly DbSet<Comment> _comments = context.Comments;
     
-    public Comment? GetCommentById(Guid id) => _comments.FirstOrDefault(comment => comment.Id == id);
+    public async Task<Comment?> GetCommentById(Guid id) => await _comments.FirstOrDefaultAsync(comment => comment.Id == id);
     
-    public List<Comment> GetAllComments(Guid id) => _comments.ToList();
-    
-    public void Add(Comment comment)
+    public async Task Add(Comment comment)
     {
-        _comments.Add(comment);
-        context.SaveChanges();
+        await _comments.AddAsync(comment);
+        await context.SaveChangesAsync();
     }
 
-    public void Update(Comment comment)
+    public async Task Update(Comment comment)
     {
         _comments.Update(comment);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        var comment = GetCommentById(id);
+        var comment = await GetCommentById(id);
         if(comment == null) return;
         _comments.Remove(comment);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
-
-    public Comment? GetByIdWithUser(Guid id) => _comments
-        .Include(comment => comment.User)
-        .FirstOrDefault(comment => comment.Id == id);
     
-
-    public Comment? GetByIdWithArticle(Guid id) => _comments
-        .Include(comment => comment.Article)
-        .FirstOrDefault(comment => comment.Id == id);
-
-    public Comment? GetByIdWithAll(Guid id) => _comments
-        .Include(comment => comment.User)
-        .Include(comment => comment.Article)
-        .FirstOrDefault(comment => comment.Id == id);
-
-    public List<Comment> GetByArticleId(Guid articleId) => _comments
-        .Where(comment => comment.ArticleId == articleId)
-        .ToList();
-    
-    public List<Comment> GetUsersComments(Guid userId)
+    public async Task<List<Comment>> GetUsersComments(Guid userId)
     {
-        var userComments = _comments
+        var userComments = await _comments
             .Include(c => c.User)
             .Include(c => c.Article)
             .Where(c => c.UserId == userId)
-            .ToList();
+            .ToListAsync();
 
         var replyIds = userComments
             .Where(c => c.ReplyToCommentId != null)
             .Select(c => c.ReplyToCommentId!.Value)
             .ToHashSet();
 
-        var parentComments = _comments
+        var parentComments = await _comments
             .Where(c => replyIds.Contains(c.Id))
-            .ToDictionary(c => c.Id);
+            .ToDictionaryAsync(c => c.Id);
 
         var filteredComments = userComments
             .Where(c => c.ReplyToCommentId == null || !HasRootInOwnComments(c, userComments, parentComments))
@@ -91,18 +71,18 @@ public class CommentsRepository(EfContext context) : ICommentsRepository
         return false;
     }
 
-    public List<Comment> GetCommentsWithoutReplies(Guid articleId) => _comments
+    public async Task<List<Comment>> GetCommentsWithoutReplies(Guid articleId) => await _comments
         .Include(comment => comment.User)
         .Where(comment => comment.ArticleId == articleId && comment.ReplyToCommentId == null)
-        .ToList();
+        .ToListAsync();
 
-    public List<Comment> GetRepliesToAComment(Guid replyCommentId) => _comments
+    public async Task<List<Comment>> GetRepliesToAComment(Guid replyCommentId) => await _comments
         .Include(comment => comment.User)
         .Where(comment => comment.ReplyToCommentId == replyCommentId)
-        .ToList();
+        .ToListAsync();
 
-    public int GetNumberOfReplies(Guid commentId) => _comments
-        .Count(comment => comment.ReplyToCommentId == commentId);
+    public async Task<int> GetNumberOfReplies(Guid commentId) => await _comments
+        .CountAsync(comment => comment.ReplyToCommentId == commentId);
 
     public bool CheckIfIdExists(Guid id) => _comments.Any(comment => comment.Id == id);
 }

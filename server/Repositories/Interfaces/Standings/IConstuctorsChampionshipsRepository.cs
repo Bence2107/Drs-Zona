@@ -4,14 +4,14 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IConstructorsChampionshipsRepository
 {
-    ConstructorsChampionship? GetAllConstructorsChampionshipById(Guid id);
-    List<ConstructorsChampionship> GetAllConstructorsChampionships();
-    List<ConstructorsChampionship> GetBySeriesId(Guid seriesId);
-    void Create(ConstructorsChampionship constructorsChampionship);
-    void Update(ConstructorsChampionship constructorsChampionship);
-    void Delete(Guid id);
-    ConstructorsChampionship? GetByIdWithSeries(Guid id);
-    List<ConstructorsChampionship> GetBySeason(string season);
-    List<ConstructorsChampionship> GetByStatus(string status);
-    bool CheckIfIdExists(Guid id);
+    Task<ConstructorsChampionship?> GetAllConstructorsChampionshipById(Guid id);
+    Task<List<ConstructorsChampionship>> GetAllConstructorsChampionships();
+    Task<List<ConstructorsChampionship>> GetBySeriesId(Guid seriesId);
+    Task Create(ConstructorsChampionship constructorsChampionship);
+    Task Update(ConstructorsChampionship constructorsChampionship);
+    Task Delete(Guid id);
+    Task<ConstructorsChampionship?> GetByIdWithSeries(Guid id);
+    Task<List<ConstructorsChampionship>> GetBySeason(string season);
+    Task<List<ConstructorsChampionship>> GetByStatus(string status);
+    Task<bool> CheckIfIdExists(Guid id);
 }

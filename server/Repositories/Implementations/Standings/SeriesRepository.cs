@@ -9,32 +9,32 @@ public class SeriesRepository(EfContext context) : ISeriesRepository
 {
     private readonly DbSet<Series> _series = context.Series;
     
-    public Series? GetSeriesById(Guid id) => _series.FirstOrDefault(d => d.Id == id);
+    public async Task<Series?> GetSeriesById(Guid id) => await _series.FirstOrDefaultAsync(d => d.Id == id);
 
-    public List<Series> GetAllSeries() => _series.ToList();
+    public async Task<List<Series>> GetAllSeries() => await _series.ToListAsync();
 
-    public void Create(Series series)
+    public async Task Create(Series series)
     {
-       _series.Add(series);
-       context.SaveChanges();
+        await _series.AddAsync(series);
+        await context.SaveChangesAsync();
     }
 
-    public void Update(Series series)
+    public async Task Update(Series series)
     {
-        _series.Add(series);
-        context.SaveChanges();
+        _series.Update(series);
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        var series = GetSeriesById(id);
+        var series = await GetSeriesById(id);
         if (series == null) return;
         
         _series.Remove(series);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public Series? GetByName(string name) => _series.FirstOrDefault(d => d.Name == name);
+    public async Task<Series?> GetByName(string name) => await _series.FirstOrDefaultAsync(d => d.Name == name);
 
-    public bool CheckIfIdExists(Guid id) => _series.Any(d => d.Id == id);
+    public async Task<bool> CheckIfIdExists(Guid id) => await _series.AnyAsync(d => d.Id == id);
 }

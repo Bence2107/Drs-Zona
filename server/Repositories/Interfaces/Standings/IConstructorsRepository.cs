@@ -4,13 +4,13 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IConstructorsRepository
 {
-    Constructor? GetConstructorById(Guid id);
-    List<Constructor> GetAllConstructor();
-    void Create(Constructor constructor);
-    void Update(Constructor constructor);
-    void Delete(Guid id);
-    Constructor? GetByIdWithBrand(Guid id);
-    List<Constructor> GetByBrandId(Guid brandId);
-    Constructor? GetByName(string name);
-    bool CheckIfIdExists(Guid id);
+    Task<Constructor?> GetConstructorById(Guid id);
+    Task<List<Constructor>> GetAllConstructor();
+    Task Create(Constructor constructor);
+    Task Update(Constructor constructor);
+    Task Delete(Guid id);
+    Task<Constructor?> GetByIdWithBrand(Guid id);
+    Task<List<Constructor>> GetByBrandId(Guid brandId);
+    Task<Constructor?> GetByName(string name);
+    Task<bool> CheckIfIdExists(Guid id);
 }

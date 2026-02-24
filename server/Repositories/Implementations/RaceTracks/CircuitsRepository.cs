@@ -9,41 +9,42 @@ public class CircuitsRepository(EfContext context) : ICircuitsRepository
 {
     private readonly DbSet<Circuit> _circuits = context.Circuits;
     
-    public Circuit? GetCircuitById(Guid id) => _circuits.FirstOrDefault(p => p.Id == id);
+    public async Task<Circuit?> GetCircuitById(Guid id) => 
+        await _circuits.FirstOrDefaultAsync(p => p.Id == id);
     
-    public List<Circuit> GetAllCircuits() =>_circuits.ToList();
+    public async Task<List<Circuit>> GetAllCircuits() => 
+        await _circuits.ToListAsync();
 
-    public void Create(Circuit circuit)
+    public async Task Create(Circuit circuit)
     {
-        _circuits.Add(circuit);
-        context.SaveChanges();
+        await _circuits.AddAsync(circuit);
+        await context.SaveChangesAsync();
     }
 
-    public void Update(Circuit circuit)
+    public async Task Update(Circuit circuit)
     {
         _circuits.Update(circuit);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        var circuit = GetCircuitById(id);
-        if(circuit == null) return;
+        var circuit = await GetCircuitById(id);
+        if (circuit == null) return;
         
         _circuits.Remove(circuit);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public Circuit? GetByName(string name) => _circuits.FirstOrDefault(p => p.Name == name);
+    public async Task<Circuit?> GetByName(string name) => 
+        await _circuits.FirstOrDefaultAsync(p => p.Name == name);
     
-    public List<Circuit> GetByLocation(string location) => _circuits
-        .Where(p => p.Location == location)
-        .ToList();
-    
+    public async Task<List<Circuit>> GetByLocation(string location) => 
+        await _circuits.Where(p => p.Location == location).ToListAsync();
 
-    public List<Circuit> GetByType(string type) => _circuits
-        .Where(p => p.Type == type)
-        .ToList();
+    public async Task<List<Circuit>> GetByType(string type) => 
+        await _circuits.Where(p => p.Type == type).ToListAsync();
 
-    public bool CheckIfIdExists(Guid id) =>_circuits.Any(p => p.Id == id);
+    public async Task<bool> CheckIfIdExists(Guid id) => 
+        await _circuits.AnyAsync(p => p.Id == id);
 }

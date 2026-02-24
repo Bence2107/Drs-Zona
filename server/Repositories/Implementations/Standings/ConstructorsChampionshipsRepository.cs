@@ -9,45 +9,47 @@ public class ConstructorsChampionshipsRepository(EfContext context) : IConstruct
 {
     private readonly DbSet<ConstructorsChampionship> _constructorsChampionships = context.ConstructorsChampionships;
 
-    public ConstructorsChampionship? GetAllConstructorsChampionshipById(Guid id) => _constructorsChampionships
-        .FirstOrDefault(cc => cc.Id == id);
+    public async Task<ConstructorsChampionship?> GetAllConstructorsChampionshipById(Guid id) => 
+        await _constructorsChampionships.FirstOrDefaultAsync(cc => cc.Id == id);
 
-    public List<ConstructorsChampionship> GetAllConstructorsChampionships() => _constructorsChampionships.ToList();
-    public List<ConstructorsChampionship> GetBySeriesId(Guid seriesId) =>
-        _constructorsChampionships.Where(c => c.SeriesId == seriesId).ToList();
+    public async Task<List<ConstructorsChampionship>> GetAllConstructorsChampionships() => 
+        await _constructorsChampionships.ToListAsync();
+    
+    public async Task<List<ConstructorsChampionship>> GetBySeriesId(Guid seriesId) =>
+        await _constructorsChampionships.Where(c => c.SeriesId == seriesId).ToListAsync();
 
-    public void Create(ConstructorsChampionship constructorsChampionship)
+    public async Task Create(ConstructorsChampionship constructorsChampionship)
     {
         _constructorsChampionships.Add(constructorsChampionship);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Update(ConstructorsChampionship constructorsChampionship)
+    public async Task Update(ConstructorsChampionship constructorsChampionship)
     {
         _constructorsChampionships.Update(constructorsChampionship);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        var constructorsChampionship = GetAllConstructorsChampionshipById(id);
+        var constructorsChampionship = await GetAllConstructorsChampionshipById(id);
         if (constructorsChampionship == null) return;
 
         _constructorsChampionships.Remove(constructorsChampionship);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public ConstructorsChampionship? GetByIdWithSeries(Guid id) => _constructorsChampionships
+    public async Task<ConstructorsChampionship?> GetByIdWithSeries(Guid id) => await _constructorsChampionships
         .Include(cc => cc.Series)
-        .FirstOrDefault(cc => cc.Id == id);
+        .FirstOrDefaultAsync(cc => cc.Id == id);
 
-    public List<ConstructorsChampionship> GetBySeason(string season) => _constructorsChampionships
+    public async Task<List<ConstructorsChampionship>> GetBySeason(string season) => await _constructorsChampionships
         .Where(cc => cc.Season == season)
-        .ToList();
+        .ToListAsync();
 
-    public List<ConstructorsChampionship> GetByStatus(string status) => _constructorsChampionships
+    public async Task<List<ConstructorsChampionship>> GetByStatus(string status) => await _constructorsChampionships
         .Where(cc => cc.Status == status)
-        .ToList();
+        .ToListAsync();
 
-    public bool CheckIfIdExists(Guid id) => _constructorsChampionships.Any(cc => cc.Id == id);
+    public async Task<bool> CheckIfIdExists(Guid id) => await _constructorsChampionships.AnyAsync(cc => cc.Id == id);
 }

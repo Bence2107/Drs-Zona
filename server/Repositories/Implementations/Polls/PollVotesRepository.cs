@@ -8,46 +8,49 @@ namespace Repositories.Implementations.Polls;
 public class PollVotesRepository(EfContext context) : IPollVotesRepository
 {
     private readonly DbSet<PollVote> _votes = context.PollVotes;
-    public PollVote? GetVoteById(Guid userId, Guid pollOptionId) =>_votes
-        .FirstOrDefault(vote => vote.UserId == userId && vote.PollOptionId == pollOptionId);
+    public async Task<PollVote?> GetVoteById(Guid userId, Guid pollOptionId) => await _votes
+        .FirstOrDefaultAsync(vote => vote.UserId == userId && vote.PollOptionId == pollOptionId);
     
-    public List<PollVote> GetAllVotes() => _votes.ToList();
+    public async Task<List<PollVote>> GetAllVotes() => await _votes.ToListAsync();
     
-    public void Create(PollVote pollVote)
+    public async Task Create(PollVote pollVote)
     {
-        _votes.Add(pollVote);
-        context.SaveChanges();
+        await _votes.AddAsync(pollVote);
+        await context.SaveChangesAsync();
     }
 
-    public void Update(PollVote pollVote)
+    public async Task Update(PollVote pollVote)
     {
         _votes.Update(pollVote);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid userId, Guid pollOptionId)
+    public async Task Delete(Guid userId, Guid pollOptionId)
     {
-        var vote = GetVoteById(userId, pollOptionId);
+        var vote = await GetVoteById(userId, pollOptionId);
         if(vote == null) return;
         
         _votes.Remove(vote);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public List<PollVote> GetByUserId(Guid userId) =>_votes
+    public async Task<List<PollVote>> GetByUserId(Guid userId) => await _votes
         .Where(vote => vote.UserId == userId)
-        .ToList();
+        .ToListAsync();
     
 
-    public List<PollVote> GetByPollOptionId(Guid pollOptionId) => _votes
+    public async Task<List<PollVote>> GetByPollOptionId(Guid pollOptionId) => await _votes
         .Where(vote => vote.PollOptionId == pollOptionId)
-        .ToList();
+        .ToListAsync();
 
-    public PollVote? GetUserVoteForPoll(Guid userId, Guid pollId) => _votes
+    public async Task<PollVote?> GetUserVoteForPoll(Guid userId, Guid pollId) => await _votes
         .Include(v => v.PollOption) 
-        .FirstOrDefault(v => v.UserId == userId && v.PollOption!.PollId == pollId);
+        .FirstOrDefaultAsync(v => v.UserId == userId && v.PollOption!.PollId == pollId);
 
-    public int GetVoteCount(Guid pollOptionId) => _votes.Count(v => v.PollOptionId == pollOptionId);
+    public async Task<int> GetVoteCount(Guid pollOptionId) => await _votes
+        .CountAsync(v => v.PollOptionId == pollOptionId);
     
-    public bool CheckIfExists(Guid userId, Guid pollOptionId) => _votes.Any(v => v.UserId == userId && v.PollOptionId == pollOptionId);
+    public async Task<bool> CheckIfExists(Guid userId, Guid pollOptionId) => await _votes
+        .AnyAsync(v => v.UserId == userId && v.PollOptionId == pollOptionId);
+    
 }

@@ -9,46 +9,45 @@ public class DriverParticipationRepository(EfContext context) : IDriverParticipa
 {
     private readonly DbSet<DriverParticipation> _driverParticipates = context.DriverParticipates;
     
-    public DriverParticipation? GetDriverParticipationById(Guid driverId, Guid championshipId) => _driverParticipates
-        .FirstOrDefault(d => d.DriverId == driverId && d.DriverChampId == championshipId);
+    public async Task<DriverParticipation?> GetDriverParticipationById(Guid driverId, Guid championshipId) => await _driverParticipates
+        .FirstOrDefaultAsync(d => d.DriverId == driverId && d.DriverChampId == championshipId);
 
-    public List<DriverParticipation> GetAllDriverParticipation(Guid id) => _driverParticipates.ToList();
+    public async Task<List<DriverParticipation>> GetAllDriverParticipation(Guid id) => await _driverParticipates.ToListAsync();
 
-    public void Create(DriverParticipation driverParticipation)
+    public async Task Create(DriverParticipation driverParticipation)
     {
-        _driverParticipates.Add(driverParticipation);
-        context.SaveChanges();
+        await _driverParticipates.AddAsync(driverParticipation);
+        await context.SaveChangesAsync();
     }
 
-    public void Update(DriverParticipation driverParticipation)
+    public async Task Update(DriverParticipation driverParticipation)
     {
         _driverParticipates.Update(driverParticipation);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid driverId, Guid championshipId)
+    public async Task Delete(Guid driverId, Guid championshipId)
     {
-        var driverParticipation = GetDriverParticipationById(driverId, championshipId);
+        var driverParticipation = await GetDriverParticipationById(driverId, championshipId);
         if(driverParticipation == null) return;
         
         _driverParticipates.Remove(driverParticipation);
-        context.SaveChanges();
-}
+        await context.SaveChangesAsync();
+    }
 
-    public List<DriverParticipation> GetByDriverId(Guid driverId) => _driverParticipates
+    public async Task<List<DriverParticipation>> GetByDriverId(Guid driverId) => await _driverParticipates
         .Where(d => d.DriverId == driverId)
-        .ToList();
+        .ToListAsync();
 
-    public List<DriverParticipation> GetByChampionshipId(Guid champId) => _driverParticipates
+    public async Task<List<DriverParticipation>> GetByChampionshipId(Guid champId) => await _driverParticipates
         .Where(d => d.DriverChampId == champId)
-        .ToList();
+        .ToListAsync();
     
-    public List<Driver?> GetDriversByChampionship(Guid driversChampionshipId) => _driverParticipates
+    public async Task<List<Driver?>> GetDriversByChampionship(Guid driversChampionshipId) => await _driverParticipates
             .Where(p => p.DriverChampId == driversChampionshipId)
             .Select(p => p.Driver)
-            .ToList();
-    
+            .ToListAsync();
 
-    public bool CheckIfExists(Guid driverId, Guid champId) =>  _driverParticipates
-        .Any(d => d.DriverId == driverId && d.DriverChampId == champId);
+    public async Task<bool> CheckIfExists(Guid driverId, Guid champId) => await _driverParticipates
+        .AnyAsync(d => d.DriverId == driverId && d.DriverChampId == champId);
 }

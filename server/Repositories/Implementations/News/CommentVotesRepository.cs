@@ -9,16 +9,28 @@ public class CommentVotesRepository(EfContext context) : ICommentVotesRepository
 {
     private readonly DbSet<CommentVote> _votes = context.CommentVotes;
 
-    public CommentVote? GetVoteForACommment(Guid? userId, Guid commentId) => 
-        _votes.FirstOrDefault(v => v.UserId == userId && v.CommentId == commentId);
+    public async Task<CommentVote?> GetVoteForACommment(Guid? userId, Guid commentId) => await _votes
+            .FirstOrDefaultAsync(v => v.UserId == userId && v.CommentId == commentId);
 
-    public List<CommentVote> GetVotesByUser(Guid userId) => context.CommentVotes
+    public async Task<List<CommentVote>> GetVotesByUser(Guid userId) => await context.CommentVotes
         .Where(v => v.UserId == userId)
-        .ToList();
-    
-    public void Add(CommentVote vote) { _votes.Add(vote); context.SaveChanges(); }
-    
-    public void Update(CommentVote vote) { _votes.Update(vote); context.SaveChanges(); }
-    
-    public void Delete(CommentVote vote) { _votes.Remove(vote); context.SaveChanges(); }
+        .ToListAsync();
+
+    public async Task Add(CommentVote vote)
+    {
+        _votes.Add(vote); 
+        await context.SaveChangesAsync();
+    }
+
+    public async Task Update(CommentVote vote)
+    {
+        _votes.Update(vote); 
+        await context.SaveChangesAsync();
+    }
+
+    public async Task Delete(CommentVote vote)
+    {
+        _votes.Remove(vote); 
+        await context.SaveChangesAsync();
+    }
 }

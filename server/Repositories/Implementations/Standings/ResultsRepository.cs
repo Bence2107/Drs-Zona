@@ -9,89 +9,80 @@ public class ResultsRepository(EfContext context) : IResultsRepository
 {
     private readonly DbSet<Result> _results = context.Results;
 
-    public IQueryable<Result> GetQueryable()
+    public async Task<Result?> GetResultById(Guid id) => await _results.FirstOrDefaultAsync(r => r.Id == id);
+
+    public async Task<List<Result>> GetAllResults() => await _results.ToListAsync();
+
+    public async Task Create(Result result)
     {
-        return _results.AsNoTracking();
+        await _results.AddAsync(result);
+        await context.SaveChangesAsync();
     }
 
-    public Result? GetResultById(Guid id) => _results.FirstOrDefault(r => r.Id == id);
-
-    public List<Result> GetAllResults() => _results.ToList();
-
-    public void Create(Result result)
-    {
-        _results.Add(result);
-        context.SaveChanges();
-    }
-
-    public void Update(Result result)
+    public async Task Update(Result result)
     {
         _results.Update(result);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        var result = GetResultById(id);
+        var result = await GetResultById(id);
         if(result == null) return;
         
         _results.Remove(result);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
     
-    public Result? GetResultWithAll(Guid id) => _results
+    public async Task<Result?> GetResultWithAll(Guid id) => await _results
         .Include(r => r.Driver)
         .Include(r => r.Constructor)
         .Include(r => r.DriversChampionship)
         .Include(r => r.ConsChampionship)
-        .FirstOrDefault(r => r.Id == id);
+        .FirstOrDefaultAsync(r => r.Id == id);
 
-    public List<Result> GetByGrandPrixId(Guid grandPrixId) => _results
+    public async Task<List<Result>> GetByGrandPrixId(Guid grandPrixId) => await _results
         .Where(r => r.GrandPrixId == grandPrixId)
-        .ToList();
+        .ToListAsync();
 
-    public List<Result> GetByDriverId(Guid driverId) => _results
+    public async Task<List<Result>> GetByDriverId(Guid driverId) => await _results
         .Where(r => r.DriverId == driverId)
-        .ToList();
+        .ToListAsync();
 
-    public List<Result> GetByConstructorId(Guid constructorId) => _results
+    public async Task<List<Result>> GetByConstructorId(Guid constructorId) => await _results
         .Where(r => r.ConstructorId == constructorId)
-        .ToList();
+        .ToListAsync();
 
-    public List<Result> GetBySession(Guid grandPrixId, string session) => _results
+    public async Task<List<Result>> GetBySession(Guid grandPrixId, string session) => await _results
         .Include(r => r.GrandPrix)
         .Include(r => r.Driver)
         .Include(r => r.Constructor)
         .Where(r => r.GrandPrixId == grandPrixId && r.Session == session)
-        .ToList();
+        .ToListAsync();
 
-    public List<Result> GetBySession(string session) => _results
-        .Where(r => r.Session == session)
-        .ToList();
-    
-    public List<Result> GetByDriversChampionshipId(Guid championshipId) => _results
+    public async Task<List<Result>> GetByDriversChampionshipId(Guid championshipId) => await _results
         .Include(r => r.Driver)
         .Include(r => r.GrandPrix)
         .Include(r => r.Constructor)
         .Where(r=> r.DriversChampId == championshipId)
-        .ToList();
+        .ToListAsync();
     
-    public List<Result> GetByConstructorsChampionshipId(Guid championshipId) => _results
+    public async Task<List<Result>> GetByConstructorsChampionshipId(Guid championshipId) => await _results
         .Include(r => r.Constructor)
         .Include(r => r.GrandPrix)
         .Where(r=> r.ConsChampId == championshipId)
-        .ToList();
+        .ToListAsync();
 
-    public List<string> GetAvailableSessionsByGrandPrixId(Guid grandPrixId)
+    public async Task<List<string>> GetAvailableSessionsByGrandPrixId(Guid grandPrixId)
     {
-        return _results
+        return await _results
             .AsNoTracking()
             .Where(r => r.GrandPrixId == grandPrixId)
             .Select(r => r.Session)
             .Distinct() 
             .OrderBy(s => s) 
-            .ToList();
+            .ToListAsync();
     }
     
-    public bool CheckIfIdExists(Guid id) => _results.Any(d => d.Id == id);
+    public async Task<bool> CheckIfIdExists(Guid id) => await _results.AnyAsync(d => d.Id == id);
 }

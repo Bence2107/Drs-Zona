@@ -4,14 +4,14 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IDriversChampionshipsRepository
 {
-    DriversChampionship? GetById(Guid id);
-    List<DriversChampionship> GetAll();
-    List<DriversChampionship> GetBySeriesId(Guid seriesId);
-    void Add(DriversChampionship championship);
-    void Modify(DriversChampionship championship);
-    void Delete(Guid id);
-    DriversChampionship? GetByIdWithSeries(Guid id);
-    List<DriversChampionship> GetBySeason(string season);
-    List<DriversChampionship> GetByStatus(string status);
-    bool CheckIfIdExists(Guid id);
+    Task<DriversChampionship?> GetById(Guid id);
+    Task<List<DriversChampionship>> GetAll();
+    Task<List<DriversChampionship>> GetBySeriesId(Guid seriesId);
+    Task Add(DriversChampionship championship);
+    Task Modify(DriversChampionship championship);
+    Task Delete(Guid id);
+    Task<DriversChampionship?> GetByIdWithSeries(Guid id);
+    Task<List<DriversChampionship>> GetBySeason(string season);
+    Task<List<DriversChampionship>> GetByStatus(string status);
+    Task<bool> CheckIfIdExists(Guid id);
 }

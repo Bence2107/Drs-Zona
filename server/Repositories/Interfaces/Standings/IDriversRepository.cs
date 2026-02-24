@@ -4,12 +4,12 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IDriversRepository
 {
-    Driver? GetDriverById(Guid id);
-    List<Driver> GetAllDrivers();
-    void Create(Driver driver);
-    void Update(Driver driver);
-    void Delete(Guid id);
-    List<Driver> GetByNationality(string nationality);
-    Driver? GetByName(string name);
-    bool CheckIfIdExists(Guid id);
+    Task<Driver?> GetDriverById(Guid id);
+    Task<List<Driver>> GetAllDrivers();
+    Task Create(Driver driver);
+    Task Update(Driver driver);
+    Task Delete(Guid id);
+    Task<List<Driver>> GetByNationality(string nationality);
+    Task<Driver?> GetByName(string name);
+    Task<bool> CheckIfIdExists(Guid id);
 }

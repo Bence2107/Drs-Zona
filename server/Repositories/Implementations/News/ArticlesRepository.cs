@@ -9,79 +9,54 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
 {
     private readonly DbSet<Article> _articles = context.Articles;
     
-    public Article? GetArticleById(Guid id) => _articles
+    public async Task<Article?> GetArticleById(Guid id) => await _articles
         .Include(article => article.Author)
         .Include(article => article.GrandPrix)
-        .FirstOrDefault(article => article.Id == id);
+        .FirstOrDefaultAsync(article => article.Id == id);
     
-    public Article? GetArticleBySlug(string slug) => _articles
+    public async Task<Article?> GetArticleBySlug(string slug) => await _articles
         .Include(article => article.Author)
         .Include(article => article.GrandPrix)
-        .FirstOrDefault(article => article.Slug == slug);
+        .FirstOrDefaultAsync(article => article.Slug == slug);
     
-    public List<Article> GetAllArticles() => _articles
+    public async Task<List<Article>> GetAllArticles() => await _articles
         .Where(article => article.IsSummary != true)
-        .ToList();
+        .ToListAsync();
     
-    public List<Article> GetAllSummary() => _articles
+    public async Task<List<Article>> GetAllSummary() => await _articles
         .Where(article => article.IsSummary == true)
-        .ToList();
+        .ToListAsync();
     
-    public void Create(Article article)
+    public async Task Create(Article article)
     {
-        _articles.Add(article);
-        context.SaveChanges();
+        await _articles.AddAsync(article);
+        await context.SaveChangesAsync();
     }
 
-    public void Update(Article article)
+    public async Task Update(Article article)
     {
         _articles.Update(article);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        var article = GetArticleById(id);
+        var article = GetArticleById(id).Result;
         if(article == null) return;
         
         _articles.Remove(article);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public Article? GetByIdWithAuthor(Guid id) => _articles
-            .Include(article => article.Author)
-            .FirstOrDefault(article => article.Id == id);
-
-    public Article? GetByIdWithGrandPrix(Guid id) => _articles
-        .Include(article => article.GrandPrix)
-        .FirstOrDefault(article => article.Id == id);
-
-    public Article? GetByIdWithAll(Guid id) => _articles
+    public async Task<Article?> GetByIdWithAll(Guid id) => await _articles
         .Include(article => article.Author)
         .Include(article => article.GrandPrix)
-        .FirstOrDefault(article => article.Id == id);
-    
-    public List<Article> GetByAuthorId(Guid authorId)  => _articles
-        .Where(article => article.AuthorId == authorId)
-        .ToList();
+        .FirstOrDefaultAsync(article => article.Id == id);
 
-    public List<Article> GetByGrandPrixId(Guid grandPrixId) => _articles
-        .Where(article => article.GrandPrixId == grandPrixId)
-        .ToList();
-
-    public List<Article> GetRecentNews(int count) => _articles
+    public async Task<List<Article>> GetRecentNews(int count) => await _articles
         .Include(a => a.Author)
         .Where(a => a.IsSummary != true)
         .OrderByDescending(a => a.DatePublished)
         .Take(count)
-        .ToList();
-    
-    public List<Article> GetRecentSummarys(int count) => _articles
-        .Include(a => a.Author)
-        .Where(a => a.IsSummary == true)
-        .OrderByDescending(a => a.DatePublished)
-        .Take(count)
-        .ToList();
-    
-    public bool CheckIfIdExists(Guid id)  => _articles.Any(article => article.Id == id);
+        .ToListAsync();
 }

@@ -9,46 +9,47 @@ public class ContractsRepository(EfContext context) : IContractsRepository
 {
     private readonly DbSet<Contract> _contracts = context.Contracts;
     
-    public Contract? GetContractById(Guid id) => _contracts.FirstOrDefault(c => c.Id == id);
-    public Contract? GetContractByDriverAndTConstructorId(Guid driverId, Guid constructorId)=> _contracts 
-        .FirstOrDefault(c => c.DriverId == driverId && c.ConstructorId == constructorId);
+    public async Task<Contract?> GetContractById(Guid id) => await _contracts.FirstOrDefaultAsync(c => c.Id == id);
+    
+    public async Task<Contract?> GetContractByDriverAndTConstructorId(Guid driverId, Guid constructorId) => await _contracts 
+        .FirstOrDefaultAsync(c => c.DriverId == driverId && c.ConstructorId == constructorId);
 
-    public List<Contract> GetContracts() => _contracts.ToList();
+    public async Task<List<Contract>> GetContracts() => await _contracts.ToListAsync();
 
-    public void Create(Contract contract)
+    public async Task Create(Contract contract)
     {
-        _contracts.Add(contract);
-        context.SaveChanges();
+        await _contracts.AddAsync(contract);
+        await context.SaveChangesAsync();
     }
 
-    public void Update(Contract contract)
+    public async Task Update(Contract contract)
     {
         _contracts.Update(contract);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        var contract = GetContractById(id);
+        var contract = await GetContractById(id);
         if(contract == null) return;
         
         _contracts.Remove(contract);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public Contract? GetByIdWithAll(Guid id) => _contracts
+    public async Task<Contract?> GetByIdWithAll(Guid id) => await _contracts
         .Include(c => c.Driver)
         .Include(c => c.Constructor)
-        .FirstOrDefault(c => c.Id == id);
+        .FirstOrDefaultAsync(c => c.Id == id);
 
-    public List<Contract> GetByDriverId(Guid driverId) => _contracts
+    public async Task<List<Contract>> GetByDriverId(Guid driverId) => await _contracts
         .Where(c => c.DriverId == driverId)
-        .ToList();
+        .ToListAsync();
 
-    public List<Contract> GetByTeamId(Guid teamId) => _contracts
+    public async Task<List<Contract>> GetByTeamId(Guid teamId) => await _contracts
         .Include(c => c.Driver)
         .Where(c => c.ConstructorId == teamId)
-        .ToList();
+        .ToListAsync();
 
-    public bool CheckIfIdExists(Guid id) => _contracts.Any(c => c.Id == id);
+    public async Task<bool> CheckIfIdExists(Guid id) => await _contracts.AnyAsync(c => c.Id == id);
 }

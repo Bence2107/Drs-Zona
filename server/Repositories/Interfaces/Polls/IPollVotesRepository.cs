@@ -4,14 +4,14 @@ namespace Repositories.Interfaces.Polls;
 
 public interface IPollVotesRepository
 {
-    PollVote? GetVoteById(Guid userId, Guid pollOptionId);
-    List<PollVote> GetAllVotes();
-    void Create(PollVote pollVote);
-    void Update(PollVote pollVote);
-    void Delete(Guid userId, Guid pollOptionId);
-    List<PollVote> GetByUserId(Guid userId);
-    List<PollVote> GetByPollOptionId(Guid pollOptionId);
-    PollVote? GetUserVoteForPoll(Guid userId, Guid pollId);
-    int GetVoteCount(Guid pollOptionId);
-    bool CheckIfExists(Guid userId, Guid pollOptionId);
+    Task<PollVote?> GetVoteById(Guid userId, Guid pollOptionId);
+    Task<List<PollVote>> GetAllVotes();
+    Task Create(PollVote pollVote);
+    Task Update(PollVote pollVote);
+    Task Delete(Guid userId, Guid pollOptionId);
+    Task<List<PollVote>> GetByUserId(Guid userId);
+    Task<List<PollVote>> GetByPollOptionId(Guid pollOptionId);
+    Task<PollVote?> GetUserVoteForPoll(Guid userId, Guid pollId);
+    Task<int> GetVoteCount(Guid pollOptionId);
+    Task<bool> CheckIfExists(Guid userId, Guid pollOptionId);
 }

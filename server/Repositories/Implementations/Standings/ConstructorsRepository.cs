@@ -9,40 +9,41 @@ public class ConstructorsRepository(EfContext context) : IConstructorsRepository
 {
     private readonly DbSet<Constructor> _constructors = context.Constructors;
     
-    public Constructor? GetConstructorById(Guid id) => _constructors.FirstOrDefault(c => c.Id == id);
+    public async Task<Constructor?> GetConstructorById(Guid id) => await _constructors
+        .FirstOrDefaultAsync(c => c.Id == id);
 
-    public List<Constructor> GetAllConstructor() => _constructors.ToList();
+    public async Task<List<Constructor>> GetAllConstructor() => await _constructors.ToListAsync();
 
-    public void Create(Constructor constructor)
+    public async Task Create(Constructor constructor)
     {
         _constructors.Add(constructor);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Update(Constructor constructor)
+    public async Task Update(Constructor constructor)
     {
         _constructors.Update(constructor);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        var  constructor = GetConstructorById(id);
+        var  constructor = await GetConstructorById(id);
         if(constructor == null) return;
         
         _constructors.Remove(constructor);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public Constructor? GetByIdWithBrand(Guid id) => _constructors
+    public async Task<Constructor?> GetByIdWithBrand(Guid id) => await _constructors
         .Include(c => c.Brand)
-        .FirstOrDefault(c => c.Id == id);
+        .FirstOrDefaultAsync(c => c.Id == id);
 
-    public List<Constructor> GetByBrandId(Guid brandId) => _constructors
+    public async Task<List<Constructor>> GetByBrandId(Guid brandId) => await _constructors
         .Where(c => c.BrandId == brandId)
-        .ToList();
+        .ToListAsync();
 
-    public Constructor? GetByName(string name) => _constructors.FirstOrDefault(c => c.Name == name);
+    public async Task<Constructor?> GetByName(string name) => await _constructors.FirstOrDefaultAsync(c => c.Name == name);
 
-    public bool CheckIfIdExists(Guid id) => _constructors.Any(c => c.Id == id);
+    public async Task<bool> CheckIfIdExists(Guid id) => await _constructors.AnyAsync(c => c.Id == id);
 }

@@ -9,33 +9,34 @@ public class BrandsRepository(EfContext context): IBrandsRepository
 {
     private readonly DbSet<Brand> _brands = context.Brands;
     
-    public Brand? GetBrandById(Guid id) => _brands.FirstOrDefault(b => b.Id == id);
-    
+    public async Task<Brand?> GetBrandById(Guid id) => await _brands.FirstOrDefaultAsync(b => b.Id == id);
 
-    public List<Brand> GetAllBrands() => _brands.ToList();
+    public async Task<List<Brand>> GetAllBrands() => await _brands.ToListAsync();
     
-    public void Create(Brand brand)
+    public async Task Create(Brand brand)
     {
         _brands.Add(brand);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Update(Brand brand)
+    public async Task Update(Brand brand)
     {
         _brands.Update(brand);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        var brand = GetBrandById(id);
+        var brand = await GetBrandById(id);
         if(brand == null) return;
         
         _brands.Remove(brand);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public Brand? GetByName(string name) => _brands.FirstOrDefault(b => b.Name.ToLower().Contains(name.ToLower()));
+    public async Task<Brand?> GetByName(string name) => await _brands.
+        FirstOrDefaultAsync(b => b.Name.Contains(name, StringComparison.CurrentCultureIgnoreCase));
 
-    public bool CheckIfIdExists(Guid id) => _brands.Any(c => c.Id == id);
+    public async Task<bool> CheckIfIdExists(Guid id) => await _brands
+        .AnyAsync(c => c.Id == id);
 }

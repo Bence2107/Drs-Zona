@@ -4,19 +4,13 @@ namespace Repositories.Interfaces.News;
 
 public interface IArticlesRepository
 {
-    Article? GetArticleById(Guid id);
-    Article? GetArticleBySlug(string slug);
-    List<Article> GetAllArticles();
-    List<Article> GetAllSummary();
-    void Create(Article article);
-    void Update(Article article);
-    void Delete(Guid id);
-    Article? GetByIdWithAuthor(Guid id);
-    Article? GetByIdWithGrandPrix(Guid id);
-    Article? GetByIdWithAll(Guid id);
-    List<Article> GetByAuthorId(Guid authorId);
-    List<Article> GetByGrandPrixId(Guid grandPrixId);
-    List<Article> GetRecentNews(int count);
-    List<Article> GetRecentSummarys(int count);
-    bool CheckIfIdExists(Guid id);
+    Task<Article?> GetArticleById(Guid id);
+    Task<Article?> GetArticleBySlug(string slug);
+    Task<List<Article>> GetAllArticles();
+    Task<List<Article>> GetAllSummary();
+    Task Create(Article article);
+    Task Update(Article article);
+    Task Delete(Guid id);
+    Task<Article?> GetByIdWithAll(Guid id);
+    Task<List<Article>> GetRecentNews(int count);
 }

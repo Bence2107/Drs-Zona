@@ -4,11 +4,11 @@ namespace Repositories.Interfaces.Standings;
 
 public interface ISeriesRepository
 {
-    Series? GetSeriesById(Guid id);
-    List<Series> GetAllSeries();
-    void Create(Series series);
-    void Update(Series series);
-    void Delete(Guid id);
-    Series? GetByName(string name);
-    bool CheckIfIdExists(Guid id);
+    Task<Series?> GetSeriesById(Guid id);
+    Task<List<Series>> GetAllSeries();
+    Task Create(Series series);
+    Task Update(Series series);
+    Task Delete(Guid id);
+    Task<Series?> GetByName(string name);
+    Task<bool> CheckIfIdExists(Guid id);
 }

@@ -9,54 +9,59 @@ public class GrandsPrixRepository(EfContext context) : IGrandsPrixRepository
 {
     private readonly DbSet<GrandPrix> _grandsPrix = context.GrandsPrix;
     
-    public GrandPrix? GetGrandPrixById(Guid id) => _grandsPrix.FirstOrDefault(c => c.Id == id);
+    public async Task<GrandPrix?> GetGrandPrixById(Guid id) => 
+        await _grandsPrix.FirstOrDefaultAsync(c => c.Id == id);
     
-    public List<GrandPrix> GetAllGrandPrix() => _grandsPrix.ToList();
-    
-    public void Create(GrandPrix grandPrix)
+    public async Task<List<GrandPrix>> GetAllGrandPrix() => 
+        await _grandsPrix.ToListAsync();
+
+    public async Task Create(GrandPrix grandPrix)
     {
-        _grandsPrix.Add(grandPrix);
-        context.SaveChanges();
+        await _grandsPrix.AddAsync(grandPrix);
+        await context.SaveChangesAsync();
     }
 
-    public void Update(GrandPrix grandPrix)
+    public async Task Update(GrandPrix grandPrix)
     {
         _grandsPrix.Update(grandPrix);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        var grandPrix = GetGrandPrixById(id);
-        if(grandPrix == null) return;
+        var grandPrix = await GetGrandPrixById(id);
+        if (grandPrix == null) return;
         
         _grandsPrix.Remove(grandPrix);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public GrandPrix? GetByIdWithCircuit(Guid id) => _grandsPrix
-        .Include(c => c.Circuit)
-        .FirstOrDefault(c => c.Id == id);
+    public async Task<GrandPrix?> GetByIdWithCircuit(Guid id) => 
+        await _grandsPrix
+            .Include(c => c.Circuit)
+            .FirstOrDefaultAsync(c => c.Id == id);
 
-    public GrandPrix? GetWithAll(Guid id) => _grandsPrix
-        .Include(c => c.Circuit)
-        .Include(c => c.Series)
-        .FirstOrDefault(c => c.Id == id);
+    public async Task<GrandPrix?> GetWithAll(Guid id) => 
+        await _grandsPrix
+            .Include(c => c.Circuit)
+            .Include(c => c.Series)
+            .FirstOrDefaultAsync(c => c.Id == id);
 
-    public List<GrandPrix> GetBySeason(int year) => _grandsPrix
-        .Where(gp => gp.SeasonYear == year)
-        .ToList();
+    public async Task<List<GrandPrix>> GetBySeason(int year) => 
+        await _grandsPrix.Where(gp => gp.SeasonYear == year).ToListAsync();
     
-    public List<GrandPrix> GetByCircuitId(Guid circuitId) => _grandsPrix
-        .Where(gp => gp.CircuitId == circuitId)
-        .ToList();
+    public async Task<List<GrandPrix>> GetByCircuitId(Guid circuitId) => 
+        await _grandsPrix.Where(gp => gp.CircuitId == circuitId).ToListAsync();
     
-    public List<GrandPrix> GetBySeriesAndYear(Guid seriesId, int year) => _grandsPrix
-        .Where(gp => gp.SeriesId == seriesId && gp.SeasonYear == year)
-        .ToList();
+    public async Task<List<GrandPrix>> GetBySeriesAndYear(Guid seriesId, int year) => 
+        await _grandsPrix
+            .Where(gp => gp.SeriesId == seriesId && gp.SeasonYear == year)
+            .ToListAsync();
     
-    public GrandPrix? GetByRoundAndSeason(int round, int season) => _grandsPrix
-        .FirstOrDefault(gp => gp.RoundNumber == round && gp.SeasonYear == season);
+    public async Task<GrandPrix?> GetByRoundAndSeason(int round, int season) => 
+        await _grandsPrix
+            .FirstOrDefaultAsync(gp => gp.RoundNumber == round && gp.SeasonYear == season);
 
-    public bool CheckIfIdExists(Guid id) => _grandsPrix.Any(c => c.Id == id);
+    public async Task<bool> CheckIfIdExists(Guid id) => 
+        await _grandsPrix.AnyAsync(c => c.Id == id);
 }

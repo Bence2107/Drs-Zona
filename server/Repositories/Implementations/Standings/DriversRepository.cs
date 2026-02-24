@@ -9,36 +9,36 @@ public class DriversRepository(EfContext context) : IDriversRepository
 {
     private readonly DbSet<Driver> _drivers = context.Drivers;
     
-    public Driver? GetDriverById(Guid id) => _drivers.FirstOrDefault(d => d.Id == id);
+    public async Task<Driver?> GetDriverById(Guid id) => await _drivers.FirstOrDefaultAsync(d => d.Id == id);
 
-    public List<Driver> GetAllDrivers() => _drivers.ToList();
+    public async Task<List<Driver>> GetAllDrivers() => await _drivers.ToListAsync();
     
-    public void Create(Driver driver)
+    public async Task Create(Driver driver)
     {
-        _drivers.Add(driver);
-        context.SaveChanges();
+        await _drivers.AddAsync(driver);
+        await context.SaveChangesAsync();
     }
 
-    public void Update(Driver driver)
+    public async Task Update(Driver driver)
     {
         _drivers.Update(driver);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        var driver = GetDriverById(id);
+        var driver = await GetDriverById(id);
         if(driver == null) return;
         
         _drivers.Remove(driver);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public List<Driver> GetByNationality(string nationality) => _drivers
+    public async Task<List<Driver>> GetByNationality(string nationality) => await _drivers
         .Where(d => d.Nationality == nationality)
-        .ToList();
+        .ToListAsync();
     
-    public Driver? GetByName(string name) => _drivers.FirstOrDefault(d => d.Name == name);
+    public async Task<Driver?> GetByName(string name) => await _drivers.FirstOrDefaultAsync(d => d.Name == name);
 
-    public bool CheckIfIdExists(Guid id) => _drivers.Any(d => d.Id == id);
+    public async Task<bool> CheckIfIdExists(Guid id) => await _drivers.AnyAsync(d => d.Id == id);
 }

@@ -9,38 +9,42 @@ public class PollOptionsRepository(EfContext context) : IPollOptionsRepository
 {
     private readonly DbSet<PollOption> _pollOptions = context.PollOptions;
     
-    public PollOption? GetPollOptionById(Guid id) => _pollOptions.FirstOrDefault(x => x.Id == id);
+    public async Task<PollOption?> GetPollOptionById(Guid id) => await _pollOptions
+        .FirstOrDefaultAsync(x => x.Id == id);
     
-    public List<PollOption> GetAllPollOptions() =>_pollOptions.ToList();
+    public async Task<List<PollOption>> GetAllPollOptions() => await _pollOptions.ToListAsync();
     
-    public void Create(PollOption pollOption)
+    public async Task Create(PollOption pollOption)
     {
-        _pollOptions.Add(pollOption);
-        context.SaveChanges();
+        await _pollOptions.AddAsync(pollOption);
+        await context.SaveChangesAsync();
     }
 
-    public void Update(PollOption pollOption)
+    public async Task Update(PollOption pollOption)
     {
         _pollOptions.Update(pollOption);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        var pollOption =  GetPollOptionById(id);
+        var pollOption =  await GetPollOptionById(id);
         if(pollOption == null) return;
         
         _pollOptions.Remove(pollOption);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
     }
 
-    public PollOption? GetByIdWithPoll(Guid id) =>_pollOptions
+    public async Task<PollOption?> GetByIdWithPoll(Guid id) => await  _pollOptions
         .Include(po => po.Poll)
-        .FirstOrDefault(po => po.Id == id);
+        .FirstOrDefaultAsync(po => po.Id == id);
 
-    public List<PollOption> GetByPollId(Guid pollId) => _pollOptions
+    public async Task<List<PollOption>> GetByPollId(Guid pollId) => await _pollOptions
         .Where(poll => poll.PollId == pollId)
-        .ToList();
-    
-    public bool CheckIfIdExists(Guid id) => _pollOptions.Any(po => po.Id == id);
+        .ToListAsync();
+
+    public async Task<bool> CheckIfIdExists(Guid id)
+    {
+        return  await _pollOptions.AnyAsync(x => x.Id == id);
+    }
 }

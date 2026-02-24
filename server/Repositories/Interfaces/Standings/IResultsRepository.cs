@@ -4,18 +4,18 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IResultsRepository
 {
-    Result? GetResultById(Guid id);
-    List<Result> GetAllResults();
-    void Create(Result result);
-    void Update(Result result);
-    void Delete(Guid id);
-    Result? GetResultWithAll(Guid id);
-    List<Result> GetByGrandPrixId(Guid grandPrixId);
-    List<Result> GetByDriverId(Guid driverId);
-    List<Result> GetByConstructorId(Guid constructorId);
-    List<Result> GetBySession(Guid grandPrixId, string session);
-    List<Result> GetByDriversChampionshipId(Guid championshipId);
-    List<Result> GetByConstructorsChampionshipId(Guid championshipId);
-    List<string> GetAvailableSessionsByGrandPrixId(Guid grandPrixId);
-    bool CheckIfIdExists(Guid id);
+    Task<Result?> GetResultById(Guid id);
+    Task<List<Result>> GetAllResults();
+    Task Create(Result result);
+    Task Update(Result result);
+    Task Delete(Guid id);
+    Task<Result?> GetResultWithAll(Guid id);
+    Task<List<Result>> GetByGrandPrixId(Guid grandPrixId);
+    Task<List<Result>> GetByDriverId(Guid driverId);
+    Task<List<Result>> GetByConstructorId(Guid constructorId);
+    Task<List<Result>> GetBySession(Guid grandPrixId, string session);
+    Task<List<Result>> GetByDriversChampionshipId(Guid championshipId);
+    Task<List<Result>> GetByConstructorsChampionshipId(Guid championshipId);
+    Task<List<string>> GetAvailableSessionsByGrandPrixId(Guid grandPrixId);
+    Task<bool> CheckIfIdExists(Guid id);
 }
