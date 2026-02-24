@@ -7,13 +7,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { BrandListDto } from '../../models/brand-list-dto';
+import { SeriesListDto } from '../../models/series-list-dto';
 
-export interface ApiBrandGetAllGet$Json$Params {
+export interface ApiSeriesGetAllSeriesGet$Json$Params {
 }
 
-export function apiBrandGetAllGet$Json(http: HttpClient, rootUrl: string, params?: ApiBrandGetAllGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<BrandListDto>> {
-  const rb = new RequestBuilder(rootUrl, apiBrandGetAllGet$Json.PATH, 'get');
+export function apiSeriesGetAllSeriesGet$Json(http: HttpClient, rootUrl: string, params?: ApiSeriesGetAllSeriesGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<SeriesListDto>>> {
+  const rb = new RequestBuilder(rootUrl, apiSeriesGetAllSeriesGet$Json.PATH, 'get');
   if (params) {
   }
 
@@ -22,9 +22,9 @@ export function apiBrandGetAllGet$Json(http: HttpClient, rootUrl: string, params
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<BrandListDto>;
+      return r as StrictHttpResponse<Array<SeriesListDto>>;
     })
   );
 }
 
-apiBrandGetAllGet$Json.PATH = '/api/Brand/getAll';
+apiSeriesGetAllSeriesGet$Json.PATH = '/api/Series/getAllSeries';

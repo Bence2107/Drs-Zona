@@ -7,25 +7,26 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { SeriesDetailDto } from '../../models/series-detail-dto';
 
-export interface ApiSeriesNameNameGet$Params {
+export interface ApiSeriesNameNameGet$Plain$Params {
   name: string;
 }
 
-export function apiSeriesNameNameGet(http: HttpClient, rootUrl: string, params: ApiSeriesNameNameGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiSeriesNameNameGet.PATH, 'get');
+export function apiSeriesNameNameGet$Plain(http: HttpClient, rootUrl: string, params: ApiSeriesNameNameGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<SeriesDetailDto>> {
+  const rb = new RequestBuilder(rootUrl, apiSeriesNameNameGet$Plain.PATH, 'get');
   if (params) {
     rb.path('name', params.name, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'text', accept: 'text/plain', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<SeriesDetailDto>;
     })
   );
 }
 
-apiSeriesNameNameGet.PATH = '/api/Series/name/{name}';
+apiSeriesNameNameGet$Plain.PATH = '/api/Series/name/{name}';

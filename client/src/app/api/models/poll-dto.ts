@@ -3,7 +3,7 @@
 
 import { PollOptionDto } from '../models/poll-option-dto';
 export interface PollDto {
-  authorId?: string;
+  authorId?: string | null;
   authorName?: string | null;
   createdAt?: string;
   description?: string | null;

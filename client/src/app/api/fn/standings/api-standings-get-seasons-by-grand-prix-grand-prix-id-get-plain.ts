@@ -12,7 +12,7 @@ export interface ApiStandingsGetSeasonsByGrandPrixGrandPrixIdGet$Plain$Params {
   grandPrixId: string;
 }
 
-export function apiStandingsGetSeasonsByGrandPrixGrandPrixIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiStandingsGetSeasonsByGrandPrixGrandPrixIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
+export function apiStandingsGetSeasonsByGrandPrixGrandPrixIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiStandingsGetSeasonsByGrandPrixGrandPrixIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
   const rb = new RequestBuilder(rootUrl, apiStandingsGetSeasonsByGrandPrixGrandPrixIdGet$Plain.PATH, 'get');
   if (params) {
     rb.path('grandPrixId', params.grandPrixId, {});
@@ -23,7 +23,7 @@ export function apiStandingsGetSeasonsByGrandPrixGrandPrixIdGet$Plain(http: Http
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<string>>;
+      return r as StrictHttpResponse<string>;
     })
   );
 }

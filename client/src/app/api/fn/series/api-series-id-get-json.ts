@@ -7,25 +7,26 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { SeriesDetailDto } from '../../models/series-detail-dto';
 
-export interface ApiSeriesIdGet$Params {
+export interface ApiSeriesIdGet$Json$Params {
   id: string;
 }
 
-export function apiSeriesIdGet(http: HttpClient, rootUrl: string, params: ApiSeriesIdGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiSeriesIdGet.PATH, 'get');
+export function apiSeriesIdGet$Json(http: HttpClient, rootUrl: string, params: ApiSeriesIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<SeriesDetailDto>> {
+  const rb = new RequestBuilder(rootUrl, apiSeriesIdGet$Json.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<SeriesDetailDto>;
     })
   );
 }
 
-apiSeriesIdGet.PATH = '/api/Series/{id}';
+apiSeriesIdGet$Json.PATH = '/api/Series/{id}';

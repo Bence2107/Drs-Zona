@@ -37,7 +37,6 @@ export class CommentService {
     );
   }
 
-
   getUsersComments(userId: string): Observable<CommentDetailDto[]> {
     return apiCommentsGetUsersCommentsUserIdGet$Json(this.http, this.apiConfig.rootUrl, {userId: userId}).pipe(
       map(response => {
