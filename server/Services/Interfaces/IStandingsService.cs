@@ -4,25 +4,15 @@ namespace Services.Interfaces;
 
 public interface IStandingsService
 {
-    ResponseResult<DefaultFiltersDto> GetDefaultFilters();
-    
-    ResponseResult<List<SeriesLookupDto>> GetAllSeries();
-
-    ResponseResult<List<YearLookupDto>> GetSeasonsBySeries(Guid seriesId);
-
-    ResponseResult<List<GrandPrixLookupDto>> GetGrandsPrixByChampionship(Guid driverChampId);
-
-    ResponseResult<List<string>> GetSessionsByGrandPrix(Guid grandPrixId);
-    
-    ResponseResult<DriverStandingsDto> GetDriverStandings(Guid driverChampId);
-    
-    ResponseResult<ConstructorStandingsDto> GetConstructorStandings(Guid constructorsChampionId);
-
-    ResponseResult<GrandPrixResultsDto> GetGrandPrixResults(Guid grandPrixId, string session);
-
-    ResponseResult<List<DriverSeasonResultDto>> GetDriverResultsBySeason(Guid driverId, Guid driverChampId);
-
-    ResponseResult<List<ConstructorSeasonResultDto>> GetConstructorResultsBySeason(Guid constructorId, Guid constructorChampId);
-    
-    public ResponseResult<List<SeasonOverviewDto>> GetSeasonOverview(Guid driverChampId);
+    Task<ResponseResult<DefaultFiltersDto>> GetDefaultFilters();
+    Task<ResponseResult<List<SeriesLookupDto>>> GetAllSeries();
+    Task<ResponseResult<List<YearLookupDto>>> GetSeasonsBySeries(Guid seriesId);
+    Task<ResponseResult<List<GrandPrixLookupDto>>> GetGrandsPrixByChampionship(Guid driverChampId);
+    Task<ResponseResult<List<string>>> GetSessionsByGrandPrix(Guid grandPrixId);
+    Task<ResponseResult<DriverStandingsDto>> GetDriverStandings(Guid driverChampId);
+    Task<ResponseResult<ConstructorStandingsDto>> GetConstructorStandings(Guid constructorsChampionId);
+    Task<ResponseResult<GrandPrixResultsDto>> GetGrandPrixResults(Guid grandPrixId, string session);
+    Task<ResponseResult<List<DriverSeasonResultDto>>> GetDriverResultsBySeason(Guid driverId, Guid driverChampId);
+    Task<ResponseResult<List<ConstructorSeasonResultDto>>> GetConstructorResultsBySeason(Guid constructorId, Guid constructorChampId);
+    Task<ResponseResult<List<SeasonOverviewDto>>> GetSeasonOverview(Guid driverChampId);
 }

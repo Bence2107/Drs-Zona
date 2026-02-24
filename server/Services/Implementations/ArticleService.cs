@@ -16,9 +16,9 @@ public class ArticleService(
     IUserImageService userImageService
 ) : IArticleService
 {
-    public ResponseResult<ArticleDetailDto> GetArticleById(Guid id)
+    public async Task<ResponseResult<ArticleDetailDto>> GetArticleById(Guid id)
     {
-        var article = articleRepo.GetByIdWithAll(id);
+        var article = await articleRepo.GetByIdWithAll(id);
         if (article == null) return ResponseResult<ArticleDetailDto>.Failure("Article not found.");
 
         var s2 = article.SecondSection;
@@ -49,12 +49,12 @@ public class ArticleService(
             SecondaryImageUrl: article.IsSummary ? articleImageService.GetImageUrl(article.Slug, "secondary.jpg") : null,
             ThirdImageUrl: article.IsSummary ? articleImageService.GetImageUrl(article.Slug, "third.jpg") : null,
             LastImageUrl: articleImageService.GetImageUrl(article.Slug, "last.jpg"),
-            AuthorImageUrl: userImageService.GetAvatarUrl(article.AuthorId)
+            AuthorImageUrl: await userImageService.GetAvatarUrl(article.AuthorId)
         ));
     }
-    public ResponseResult<ArticleDetailDto> GetArticleBySlug(string slug)
+    public async Task<ResponseResult<ArticleDetailDto>> GetArticleBySlug(string slug)
     {
-        var article = articleRepo.GetArticleBySlug(slug);
+        var article = await articleRepo.GetArticleBySlug(slug);
         if (article == null) return ResponseResult<ArticleDetailDto>.Failure("Article not found.");
 
         var s2 = article.SecondSection;
@@ -85,13 +85,15 @@ public class ArticleService(
             SecondaryImageUrl: article.IsSummary ? articleImageService.GetImageUrl(article.Slug, "secondary.jpg") : null,
             ThirdImageUrl: article.IsSummary ? articleImageService.GetImageUrl(article.Slug, "third.jpg") : null,
             LastImageUrl: articleImageService.GetImageUrl(article.Slug, "last.jpg"),
-            AuthorImageUrl: userImageService.GetAvatarUrl(article.AuthorId)
+            AuthorImageUrl: await userImageService.GetAvatarUrl(article.AuthorId)
         ));
     }
 
-    public ResponseResult<List<ArticleListDto>> ListArticles()
+    public async Task<ResponseResult<List<ArticleListDto>>> ListArticles()
     {
-        var articles = articleRepo.GetAllArticles().Select(a => new ArticleListDto(
+        var articles = await articleRepo.GetAllArticles();
+        
+        var dtoS = articles.Select(a => new ArticleListDto(
             Id: a.Id,
             Title: a.Title,
             Lead: a.Lead,
@@ -101,11 +103,13 @@ public class ArticleService(
             PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
         )).ToList();
         
-        return ResponseResult<List<ArticleListDto>>.Success(articles);
+        return ResponseResult<List<ArticleListDto>>.Success(dtoS);
     }
-    public ResponseResult<List<ArticleListDto>> ListAllSummary()
+    public async Task<ResponseResult<List<ArticleListDto>>> ListAllSummary()
     {
-        var articles = articleRepo.GetAllSummary().Select(a => new ArticleListDto(
+        var articles = await articleRepo.GetAllSummary();
+        
+        var dtoS = articles.Select(a => new ArticleListDto(
             Id: a.Id,
             Title: a.Title,
             Lead: a.Lead,
@@ -115,30 +119,32 @@ public class ArticleService(
             PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
         )).ToList();
         
-        return ResponseResult<List<ArticleListDto>>.Success(articles);
-    }
-
-    public ResponseResult<List<ArticleListDto>> GetRecentArticles(int count)
-    {
-        var articles = articleRepo.GetRecentNews(count).Select(a => new ArticleListDto(
-            Id: a.Id,
-            Title: a.Title,
-            Lead: a.Lead,
-            IsReview: a.IsSummary,
-            Slug: a.Slug,
-            DatePublished: a.DatePublished,
-            PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
-        )).ToList();
-        
-        return ResponseResult<List<ArticleListDto>>.Success(articles);
+        return ResponseResult<List<ArticleListDto>>.Success(dtoS);
     }
 
-    public ResponseResult<bool> CreateArticle(ArticleCreateDto dto)
+    public async Task<ResponseResult<List<ArticleListDto>>> GetRecentArticles(int count)
     {
-        if (!userRepo.CheckIfIdExists(dto.AuthorId))
+        var articles = await articleRepo.GetRecentNews(count);
+        
+        var dtoS = articles.Select(a => new ArticleListDto(
+            Id: a.Id,
+            Title: a.Title,
+            Lead: a.Lead,
+            IsReview: a.IsSummary,
+            Slug: a.Slug,
+            DatePublished: a.DatePublished,
+            PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
+        )).ToList();
+        
+        return ResponseResult<List<ArticleListDto>>.Success(dtoS);
+    }
+
+    public async Task<ResponseResult<bool>> CreateArticle(ArticleCreateDto dto)
+    {
+        if (!await userRepo.CheckIfIdExists(dto.AuthorId))
             return ResponseResult<bool>.Failure("AuthorId", "Author not found");
 
-        if (dto.GrandPrixId != null && !gpRepo.CheckIfIdExists(dto.GrandPrixId.Value))
+        if (dto.GrandPrixId != null && !await gpRepo.CheckIfIdExists(dto.GrandPrixId.Value))
             return ResponseResult<bool>.Failure("GrandPrixId", "Grand Prix not found");
         
         var article = new Article
@@ -162,16 +168,16 @@ public class ArticleService(
             article.FourthSection = dto.Summary.FourthSection;
         }
 
-        articleRepo.Create(article);
+        await articleRepo.Create(article);
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> UpdateArticle(ArticleUpdateDto dto)
+    public async Task<ResponseResult<bool>> UpdateArticle(ArticleUpdateDto dto)
     {
-        var article = articleRepo.GetArticleById(dto.Id);
+        var article = await articleRepo.GetArticleById(dto.Id);
         if (article == null) return ResponseResult<bool>.Failure("Article not found");
 
-        if (dto.GrandPrixId.HasValue && !gpRepo.CheckIfIdExists(dto.GrandPrixId.Value))
+        if (dto.GrandPrixId.HasValue && !await gpRepo.CheckIfIdExists(dto.GrandPrixId.Value))
             return ResponseResult<bool>.Failure("GrandPrixId", "Grand Prix not found");
 
         article.GrandPrixId = dto.GrandPrixId;
@@ -189,19 +195,19 @@ public class ArticleService(
             article.FourthSection = dto.Summary.FourthSection;
         }
 
-        articleRepo.Update(article);
+        await articleRepo.Update(article);
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> DeleteArticle(Guid id)
+    public async Task<ResponseResult<bool>> DeleteArticle(Guid id)
     {
-        var article = articleRepo.GetArticleById(id);
+        var article = await articleRepo.GetArticleById(id);
         if (article == null)
         {
             return ResponseResult<bool>.Failure("Article not found");
         }
 
-        articleRepo.Delete(article.Id);
+        await articleRepo.Delete(article.Id);
         return ResponseResult<bool>.Success(true);
     }
 }

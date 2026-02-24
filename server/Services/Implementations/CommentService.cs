@@ -14,93 +14,108 @@ public class CommentService(
     ICommentVotesRepository commentVotesRepo) 
 : ICommentService
 {
-    public ResponseResult<List<CommentDetailDto>> GetArticleCommentsWithoutReplies(Guid articleId, Guid? currentUserId = null)
+    public async Task<ResponseResult<List<CommentDetailDto>>> GetArticleCommentsWithoutReplies(Guid articleId, Guid? currentUserId = null)
     {
-        var comments = commentsRepo.GetCommentsWithoutReplies(articleId).Select(c =>
-        {
-            var vote = commentVotesRepo.GetVoteForACommment(currentUserId, c.Id);
-            var voteStatus = vote == null ? 0 : (vote.IsUpvote ? 1 : -1);
+        var commentsData = await commentsRepo.GetCommentsWithoutReplies(articleId);
+        var comments = new List<CommentDetailDto>();
 
-            return new CommentDetailDto(
+        foreach (var c in commentsData)
+        {
+            var vote = await commentVotesRepo.GetVoteForACommment(currentUserId, c.Id);
+            var voteStatus = vote == null ? 0 : (vote.IsUpvote ? 1 : -1);
+            var replyCount = await commentsRepo.GetNumberOfReplies(c.Id);
+            var avatarUrl = await userImageService.GetAvatarUrl(c.UserId);
+
+            comments.Add(new CommentDetailDto(
                 Id: c.Id,
                 UserId: c.UserId,
                 ArticleId: c.ArticleId,
                 ArticleSlug: c.Article?.Slug ?? "",
                 ReplyToCommentId: c.ReplyToCommentId,
                 Username: c.User!.Username,
-                UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
+                UserAvatarUrl: avatarUrl,
                 Content: c.Content,
                 UpVotes: c.UpVotes,
                 DownVotes: c.DownVotes,
-                ReplyCount: commentsRepo.GetNumberOfReplies(c.Id),
+                ReplyCount: replyCount,
                 DateCreated: c.DateCreated,
                 DateUpdated: c.DateUpdated,
                 CurrentUserVote: voteStatus 
-            );
-        }).ToList();
+            ));
+        }
     
         return ResponseResult<List<CommentDetailDto>>.Success(comments);
     }
 
-    public ResponseResult<List<CommentDetailDto>> GetCommentReplies(Guid commentId, Guid? currentUserId = null)
+    public async Task<ResponseResult<List<CommentDetailDto>>> GetCommentReplies(Guid commentId, Guid? currentUserId = null)
     {
-        var comments = commentsRepo.GetRepliesToAComment(commentId).Select(c =>
+        var commentsData = await commentsRepo.GetRepliesToAComment(commentId);
+        var comments = new List<CommentDetailDto>();
+
+        foreach (var c in commentsData)
         {
-            var vote = commentVotesRepo.GetVoteForACommment(currentUserId, c.Id);
+            var vote = await commentVotesRepo.GetVoteForACommment(currentUserId, c.Id);
             var voteStatus = vote == null ? 0 : (vote.IsUpvote ? 1 : -1);
+            var replyCount = await commentsRepo.GetNumberOfReplies(c.Id);
+            var avatarUrl = await userImageService.GetAvatarUrl(c.UserId);
             
-            return new CommentDetailDto(
+            comments.Add(new CommentDetailDto(
                 Id: c.Id,
                 UserId: c.UserId,
                 ArticleId: c.ArticleId,
                 ArticleSlug: c.Article?.Slug ?? "",
                 ReplyToCommentId: c.ReplyToCommentId,
                 Username: c.User!.Username,
-                UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
+                UserAvatarUrl: avatarUrl,
                 Content: c.Content,
                 UpVotes: c.UpVotes,
                 DownVotes: c.DownVotes,
-                ReplyCount: commentsRepo.GetNumberOfReplies(c.Id),
+                ReplyCount: replyCount,
                 DateCreated: c.DateCreated,
                 DateUpdated: c.DateUpdated,
                 CurrentUserVote: voteStatus
-            );
-        }).ToList();
+            ));
+        }
 
         return ResponseResult<List<CommentDetailDto>>.Success(comments);
     }
 
-    public ResponseResult<List<CommentDetailDto>> GetUsersComments(Guid userId)
+    public async Task<ResponseResult<List<CommentDetailDto>>> GetUsersComments(Guid userId)
     {
-        var comments = commentsRepo.GetUsersComments(userId).Select(c =>
+        var commentsData = await commentsRepo.GetUsersComments(userId);
+        var comments = new List<CommentDetailDto>();
+
+        foreach (var c in commentsData)
         {
-            var vote = commentVotesRepo.GetVoteForACommment(userId, c.Id);
+            var vote = await commentVotesRepo.GetVoteForACommment(userId, c.Id);
             var voteStatus = vote == null ? 0 : (vote.IsUpvote ? 1 : -1);
+            var replyCount = await commentsRepo.GetNumberOfReplies(c.Id);
+            var avatarUrl = await userImageService.GetAvatarUrl(c.UserId);
 
-            return new CommentDetailDto(
+            comments.Add(new CommentDetailDto(
                 Id: c.Id,
                 UserId: c.UserId,
                 ArticleId: c.ArticleId,
                 ArticleSlug: c.Article?.Slug ?? "",
                 ReplyToCommentId: c.ReplyToCommentId,
                 Username: c.User!.Username,
-                UserAvatarUrl: userImageService.GetAvatarUrl(c.UserId),
+                UserAvatarUrl: avatarUrl,
                 Content: c.Content,
                 UpVotes: c.UpVotes,
                 DownVotes: c.DownVotes,
-                ReplyCount: commentsRepo.GetNumberOfReplies(c.Id),
+                ReplyCount: replyCount,
                 DateCreated: c.DateCreated,
                 DateUpdated: c.DateUpdated,
                 CurrentUserVote: voteStatus
-            );
-        }).ToList();
+            ));
+        }
 
         return ResponseResult<List<CommentDetailDto>>.Success(comments);
     }
 
-    public ResponseResult<bool> AddComment(CommentCreateDto commentCreateDto, Guid userId)
+    public async Task<ResponseResult<bool>> AddComment(CommentCreateDto commentCreateDto, Guid userId)
     {
-        if (!usersRepo.CheckIfIdExists(userId)) return ResponseResult<bool>.Failure("User not found");
+        if (!await usersRepo.CheckIfIdExists(userId)) return ResponseResult<bool>.Failure("User not found");
         
         var comment = new Comment
         {
@@ -119,13 +134,13 @@ public class CommentService(
             comment.ReplyToCommentId = commentCreateDto.ReplyToCommentId.Value;
         }
         
-        commentsRepo.Add(comment);
+        await commentsRepo.Add(comment);
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> UpdateCommentsContent(CommentContentUpdateDto dto)
+    public async Task<ResponseResult<bool>> UpdateCommentsContent(CommentContentUpdateDto dto)
     {
-        var existingComment = commentsRepo.GetCommentById(dto.Id);
+        var existingComment = await commentsRepo.GetCommentById(dto.Id);
         if (existingComment == null) return ResponseResult<bool>.Failure("A komment nem található");
 
         if (existingComment.ArticleId != dto.ArticleId) 
@@ -134,36 +149,36 @@ public class CommentService(
         existingComment.Content = dto.Content;
         existingComment.DateUpdated = DateTime.UtcNow;
 
-        commentsRepo.Update(existingComment);
+        await commentsRepo.Update(existingComment);
     
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> UpdateCommentsVote(CommentUpdateVoteDto commentUpdateVoteDto)
+    public async Task<ResponseResult<bool>> UpdateCommentsVote(CommentUpdateVoteDto commentUpdateVoteDto)
     {
         var userId = commentUpdateVoteDto.UserId;
         var commentId = commentUpdateVoteDto.CommentId;
         var isUpvote = commentUpdateVoteDto.IsUpvote;
         
-        var comment = commentsRepo.GetCommentById(commentId);
+        var comment = await commentsRepo.GetCommentById(commentId);
         if (comment == null) return ResponseResult<bool>.Failure("A komment nem található.");
 
-        var existingVote = commentVotesRepo.GetVoteForACommment(userId, commentId);
+        var existingVote = await commentVotesRepo.GetVoteForACommment(userId, commentId);
 
         if (existingVote == null)
         {
-            commentVotesRepo.Add(new CommentVote { UserId = userId, CommentId = commentId, IsUpvote = isUpvote });
+            await commentVotesRepo.Add(new CommentVote { UserId = userId, CommentId = commentId, IsUpvote = isUpvote });
             if (isUpvote) comment.UpVotes++; else comment.DownVotes++;
         }
         else if (existingVote.IsUpvote == isUpvote)
         {
-            commentVotesRepo.Delete(existingVote);
+            await commentVotesRepo.Delete(existingVote);
             if (isUpvote) comment.UpVotes--; else comment.DownVotes--;
         }
         else
         {
             existingVote.IsUpvote = isUpvote;
-            commentVotesRepo.Update(existingVote);
+            await commentVotesRepo.Update(existingVote);
 
             if (isUpvote) {
                 comment.UpVotes++;
@@ -174,25 +189,25 @@ public class CommentService(
             }
         }
 
-        commentsRepo.Update(comment); 
+        await commentsRepo.Update(comment); 
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> DeleteComment(Guid commentId)
+    public async Task<ResponseResult<bool>> DeleteComment(Guid commentId)
     {
-        var comment = commentsRepo.GetCommentById(commentId);
+        var comment = await commentsRepo.GetCommentById(commentId);
         if (comment == null) return ResponseResult<bool>.Failure("Comment not found");
 
-        var replies = commentsRepo.GetRepliesToAComment(commentId);
+        var replies = await commentsRepo.GetRepliesToAComment(commentId);
         if (replies.Count > 0)
         {
             foreach (var reply in replies)
             {
-                commentsRepo.Delete(reply.Id);
+                await commentsRepo.Delete(reply.Id);
             }
         }
         
-        commentsRepo.Delete(commentId);
+        await commentsRepo.Delete(commentId);
         return ResponseResult<bool>.Success(true);
     }
 }

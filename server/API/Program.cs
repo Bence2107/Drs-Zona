@@ -18,7 +18,7 @@ using Repositories.Interfaces.Polls;
 using Repositories.Interfaces.RaceTracks;
 using Repositories.Interfaces.Standings;
 using Services.Implementations;
-using Services.Implementations.image;
+using Services.Implementations.images;
 using Services.Interfaces;
 using Services.Interfaces.images;
 

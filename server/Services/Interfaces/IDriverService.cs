@@ -4,9 +4,9 @@ namespace Services.Interfaces;
 
 public interface IDriverService
 {
-    ResponseResult<DriverDetailDto> GetDriverById(Guid id);
-    ResponseResult<List<DriverListDto>> ListAllDriversByChampionships(Guid championshipId);
-    ResponseResult<bool> CreateDriver(DriverCreateDto dto);
-    ResponseResult<bool> UpdateDriver(DriverUpdateDto dto);
-    ResponseResult<bool> DeleteDriver(Guid id);
+    Task<ResponseResult<DriverDetailDto>> GetDriverById(Guid id);
+    Task<ResponseResult<List<DriverListDto>>> ListAllDriversByChampionships(Guid championshipId);
+    Task<ResponseResult<bool>> CreateDriver(DriverCreateDto dto);
+    Task<ResponseResult<bool>> UpdateDriver(DriverUpdateDto dto);
+    Task<ResponseResult<bool>> DeleteDriver(Guid id);
 }

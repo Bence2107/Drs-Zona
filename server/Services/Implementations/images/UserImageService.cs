@@ -2,21 +2,21 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Services.Interfaces.images;
 
-namespace Services.Implementations.image;
+namespace Services.Implementations.images;
 
 public class UserImageService(IWebHostEnvironment env) : IUserImageService
 {
     private string GetUserFolderPath(Guid userId) => 
         Path.Combine(env.ContentRootPath, "uploads", "images", "avatars", userId.ToString());
     
-    public string? GetAvatarUrl(Guid userId)
+    public Task<string?> GetAvatarUrl(Guid userId)
     {
         var userFolder = GetUserFolderPath(userId);
 
-        if (!Directory.Exists(userFolder)) return null;
+        if (!Directory.Exists(userFolder)) return Task.FromResult<string?>(null);
         
         var existing = Directory.GetFiles(userFolder, "avatar.jpg").FirstOrDefault();
-        return existing == null ? null : $"/uploads/images/avatars/{userId}/avatar.jpg";
+        return Task.FromResult(existing == null ? null : $"/uploads/images/avatars/{userId}/avatar.jpg");
     } 
 
     public async Task<ResponseResult<bool>> SaveAvatar(Guid userId, IFormFile? file)
@@ -68,7 +68,7 @@ public class UserImageService(IWebHostEnvironment env) : IUserImageService
         }
     }
 
-    public ResponseResult<bool> DeleteAvatar(Guid userId)
+    public async Task<ResponseResult<bool>> DeleteAvatar(Guid userId)
     {
         try
         {
@@ -76,7 +76,7 @@ public class UserImageService(IWebHostEnvironment env) : IUserImageService
 
             if (Directory.Exists(userFolder))
             {
-                Directory.Delete(userFolder, true);
+                await Task.Run(() => Directory.Delete(userFolder, true));
                 return ResponseResult<bool>.Success(true);
             }
 

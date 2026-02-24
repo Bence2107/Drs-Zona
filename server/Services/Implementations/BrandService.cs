@@ -7,9 +7,9 @@ namespace Services.Implementations;
 
 public class BrandService(IBrandsRepository brandsRepo) : IBrandService
 {
-    public ResponseResult<BrandDetailDto> GetBrandById(Guid id)
+    public async Task<ResponseResult<BrandDetailDto>> GetBrandById(Guid id)
     {
-        var brand = brandsRepo.GetBrandById(id);
+        var brand = await brandsRepo.GetBrandById(id);
         if (brand == null) return ResponseResult<BrandDetailDto>.Failure("Brand not exist");
         
         return ResponseResult<BrandDetailDto>.Success(new BrandDetailDto(
@@ -21,9 +21,9 @@ public class BrandService(IBrandsRepository brandsRepo) : IBrandService
         ));
     }
     
-    public ResponseResult<BrandDetailDto> GetBrandByName(string name)
+    public async Task<ResponseResult<BrandDetailDto>> GetBrandByName(string name)
     {
-        var brand = brandsRepo.GetByName(name);
+        var brand = await brandsRepo.GetByName(name);
         if (brand == null) return ResponseResult<BrandDetailDto>.Failure("Brand not exist");
         
         return ResponseResult<BrandDetailDto>.Success(new BrandDetailDto(
@@ -35,18 +35,18 @@ public class BrandService(IBrandsRepository brandsRepo) : IBrandService
         ));
     }
 
-    public ResponseResult<List<BrandListDto>> ListBrands()
+    public async Task<ResponseResult<List<BrandListDto>>> ListBrands()
     {
-        var brands = brandsRepo.GetAllBrands().Select(d => new BrandListDto(
+        var brands = (await brandsRepo.GetAllBrands()).Select(d => new BrandListDto(
             Id: d.Id,
             Name: d.Name)
         ).ToList();
         return ResponseResult<List<BrandListDto>>.Success(brands);
     }
     
-    public ResponseResult<bool> CreateBrand(BrandCreateDto dto)
+    public async Task<ResponseResult<bool>> CreateBrand(BrandCreateDto dto)
     {
-        var nameExits = brandsRepo.GetByName(dto.Name);
+        var nameExits = await brandsRepo.GetByName(dto.Name);
         if (nameExits is not null)
         {
             return ResponseResult<bool>.Failure(nameof(dto.Name), "Brand with this name already exist");
@@ -60,13 +60,13 @@ public class BrandService(IBrandsRepository brandsRepo) : IBrandService
             HeadQuarters = dto.HeadQuarters
         };
 
-        brandsRepo.Create(brand);
+        await brandsRepo.Create(brand);
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> UpdateBrand(BrandUpdateDto dto)
+    public async Task<ResponseResult<bool>> UpdateBrand(BrandUpdateDto dto)
     {
-        var editable = brandsRepo.GetBrandById(dto.Id);
+        var editable = await brandsRepo.GetBrandById(dto.Id);
         if (editable is null) return ResponseResult<bool>.Failure("Series not exist");
 
         var brand = new Brand
@@ -78,16 +78,16 @@ public class BrandService(IBrandsRepository brandsRepo) : IBrandService
             HeadQuarters = dto.HeadQuarters
         };
 
-        brandsRepo.Update(brand);
+        await brandsRepo.Update(brand);
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> DeleteBrand(Guid id)
+    public async Task<ResponseResult<bool>> DeleteBrand(Guid id)
     {
-        var brand = brandsRepo.GetBrandById(id);
+        var brand = await brandsRepo.GetBrandById(id);
         if (brand is null) return ResponseResult<bool>.Failure("Series not exist");
 
-        brandsRepo.Delete(id);
+        await brandsRepo.Delete(id);
         return ResponseResult<bool>.Success(true);
     }
 }

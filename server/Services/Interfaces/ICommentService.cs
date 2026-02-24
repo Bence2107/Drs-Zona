@@ -4,17 +4,11 @@ namespace Services.Interfaces;
 
 public interface ICommentService
 {
-    ResponseResult<List<CommentDetailDto>> GetArticleCommentsWithoutReplies(Guid articleId, Guid? currentUserId = null);
-    
-    ResponseResult<List<CommentDetailDto>> GetCommentReplies(Guid commentId, Guid? currentUserId = null);
-    
-    ResponseResult<List<CommentDetailDto>> GetUsersComments(Guid userId);
-    
-    ResponseResult<bool> AddComment(CommentCreateDto commentCreateDto, Guid id);
-    
-    ResponseResult<bool> UpdateCommentsContent(CommentContentUpdateDto commentUpdateContentDto);
-
-    ResponseResult<bool> UpdateCommentsVote(CommentUpdateVoteDto commentUpdateVoteDto);
-    
-    ResponseResult<bool> DeleteComment(Guid commentId);
+    Task<ResponseResult<List<CommentDetailDto>>> GetArticleCommentsWithoutReplies(Guid articleId, Guid? currentUserId = null);
+    Task<ResponseResult<List<CommentDetailDto>>> GetCommentReplies(Guid commentId, Guid? currentUserId = null);
+    Task<ResponseResult<List<CommentDetailDto>>> GetUsersComments(Guid userId);
+    Task<ResponseResult<bool>> AddComment(CommentCreateDto commentCreateDto, Guid id);
+    Task<ResponseResult<bool>> UpdateCommentsContent(CommentContentUpdateDto commentUpdateContentDto);
+    Task<ResponseResult<bool>> UpdateCommentsVote(CommentUpdateVoteDto commentUpdateVoteDto);
+    Task<ResponseResult<bool>> DeleteComment(Guid commentId);
 }

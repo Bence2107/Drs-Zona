@@ -45,7 +45,7 @@ public class ArticleTests
     }
 
     [Fact]
-    public void US_03_AC_01_02_GetArticleBySlug_ShouldReturnCorrectArticleContentAndAuthor()
+    public async Task US_03_AC_01_02_GetArticleBySlug_ShouldReturnCorrectArticleContentAndAuthor()
     {
         var context = InMemoryDbFactory.CreateContext();
         var mockImageService = new Mock<IArticleImageService>();
@@ -87,11 +87,11 @@ public class ArticleTests
             Author = author
         };
 
-        context.Users.Add(author);
-        context.Articles.Add(article);
-        context.SaveChanges();
+        await context.Users.AddAsync(author);
+        await context.Articles.AddAsync(article);
+        await context.SaveChangesAsync();
 
-        var result = service.GetArticleBySlug(testSlug);
+        var result = await service.GetArticleBySlug(testSlug);
 
         result.IsSuccess.Should().BeTrue();
         result.Value!.Title.Should().Be("F1 at Hungaroring");
@@ -103,9 +103,8 @@ public class ArticleTests
         result.Value.AuthorName.Should().Be("Author Alex");
     }
  
-    
     [Fact]
-    public void US_02_AC_02_GetRecentArticles_ShouldReturnArticles_SortedByDateDescending()
+    public async Task US_02_AC_02_GetRecentArticles_ShouldReturnArticles_SortedByDateDescending()
     {
         var context = InMemoryDbFactory.CreateContext();
         var mockImageService = new Mock<IArticleImageService>();
@@ -161,10 +160,10 @@ public class ArticleTests
             }
         };
 
-        context.Articles.AddRange(articles);
-        context.SaveChanges();
+        await context.Articles.AddRangeAsync(articles);
+        await context.SaveChangesAsync();
 
-        var result = service.GetRecentArticles(3);
+        var result = await service.GetRecentArticles(3);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().HaveCount(3);
@@ -175,95 +174,88 @@ public class ArticleTests
             .Should().BeInDescendingOrder();
     }
     
-    
     [Fact]
-    public void GetArticleBySlug_ShouldReturnArticle()
+    public async Task GetArticleBySlug_ShouldReturnArticle()
     {
         var author = CreateAuthor();
         var article = CreateArticle(author);
 
-        _context.Users.Add(author);
-        _context.Articles.Add(article);
-        _context.SaveChanges();
+        await _context.Users.AddAsync(author);
+        await _context.Articles.AddAsync(article);
+        await _context.SaveChangesAsync();
 
-        var result = _service.GetArticleBySlug(article.Slug);
+        var result = await _service.GetArticleBySlug(article.Slug);
 
         result.IsSuccess.Should().BeTrue();
         result.Value!.AuthorName.Should().Be(author.Username);
     }
 
     [Fact]
-    public void GetRecentArticles_ShouldReturnSorted()
+    public async Task GetRecentArticles_ShouldReturnSorted()
     {
-        _context.Articles.AddRange(
+        await _context.Articles.AddRangeAsync(
             CreateArticle(null, DateTime.UtcNow.AddDays(-1)),
             CreateArticle(null, DateTime.UtcNow)
         );
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
-        var result = _service.GetRecentArticles(2);
+        var result = await _service.GetRecentArticles(2);
 
         result.IsSuccess.Should().BeTrue();
         result.Value![0].DatePublished.Should().BeAfter(result.Value![1].DatePublished);
     }
     
     [Fact]
-    public void UpdateArticle_ShouldFail_WhenArticleNotFound()
+    public async Task UpdateArticle_ShouldFail_WhenArticleNotFound()
     {
-        // Arrange
-        var dto = new ArticleUpdateDto(Guid.NewGuid(), null, "Title", "Slug", false, "Lead","First", "Last", null);
+        var dto = new ArticleUpdateDto(Guid.NewGuid(), null, "Title", "Slug", false, "Lead", "First", "Last", null);
 
-        // Act
-        var result = _service.UpdateArticle(dto);
+        var result = await _service.UpdateArticle(dto);
 
-        // Assert
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("Article not found");
     }
 
     [Fact]
-    public void UpdateArticle_ShouldSucceed_And_UpdateFields()
+    public async Task UpdateArticle_ShouldSucceed_And_UpdateFields()
     {
-        // Arrange
         var article = CreateArticle();
-        _context.Articles.Add(article);
-        _context.SaveChanges();
+        await _context.Articles.AddAsync(article);
+        await _context.SaveChangesAsync();
 
         var updateDto = new ArticleUpdateDto(
-            article.Id, null, "Updated Title", "Slug",true,"updated lead","Updated First", "Updated Last", 
+            article.Id, null, "Updated Title", "Slug", true, "updated lead", "Updated First", "Updated Last",
             new SummaryDto("Sec", "Third", "Fourth")
         );
 
-        // Act
-        var result = _service.UpdateArticle(updateDto);
+        var result = await _service.UpdateArticle(updateDto);
 
-        // Assert
         result.IsSuccess.Should().BeTrue();
-        var updated = _context.Articles.Find(article.Id);
+        var updated = await _context.Articles.FindAsync(article.Id);
         updated?.Title.Should().Be("Updated Title");
         updated?.IsSummary.Should().BeTrue();
         updated?.SecondSection.Should().Be("Sec");
     }
 
     [Fact]
-    public void CreateArticle_ShouldFail_WhenAuthorNotFound()
+    public async Task CreateArticle_ShouldFail_WhenAuthorNotFound()
     {
         var dto = new ArticleCreateDto(Guid.NewGuid(), Guid.NewGuid(), "T", "S", false, "L", "F", "L", null);
 
-        var result = _service.CreateArticle(dto);
+        var result = await _service.CreateArticle(dto);
 
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("Author not found");
     }
     
     [Fact]
-    public void DeleteArticle_ShouldSucceed()
+    public async Task DeleteArticle_ShouldSucceed()
     {
         var article = CreateArticle();
-        _context.Articles.Add(article);
-        _context.SaveChanges();
+        await _context.Articles.AddAsync(article);
+        await _context.SaveChangesAsync();
 
-        var result = _service.DeleteArticle(article.Id);
+        var result = await _service.DeleteArticle(article.Id);
 
         result.IsSuccess.Should().BeTrue();
         _context.Articles.Should().BeEmpty();
@@ -288,7 +280,7 @@ public class ArticleTests
         FirstSection = "First",
         LastSection = "Last",
         Author = author,
-        AuthorId = author!.Id,
+        AuthorId = author?.Id ?? Guid.Empty,
         DatePublished = published ?? DateTime.UtcNow
     };
 }

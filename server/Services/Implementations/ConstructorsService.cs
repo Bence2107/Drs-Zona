@@ -12,15 +12,15 @@ public class ConstructorsService(
     IContractsRepository contractsRepo
 ) : IConstructorsService
 {
-    public ResponseResult<ConstructorDetailDto> GetById(Guid id)
+    public async Task<ResponseResult<ConstructorDetailDto>> GetById(Guid id)
     {
-        if (constructorRepo.CheckIfIdExists(id)) return ResponseResult<ConstructorDetailDto>.Failure("Constructor not found");
+        if (!await constructorRepo.CheckIfIdExists(id)) return ResponseResult<ConstructorDetailDto>.Failure("Constructor not found");
 
-        var constructor = constructorRepo.GetByIdWithBrand(id);
+        var constructor = await constructorRepo.GetByIdWithBrand(id);
         if (constructor is { Brand: null }) return ResponseResult<ConstructorDetailDto>.Failure("Brand is invalid");
-        if (constructor != null && !brandsRepo.CheckIfIdExists(constructor.BrandId)) return ResponseResult<ConstructorDetailDto>.Failure("Brand not found");
+        if (constructor != null && !await brandsRepo.CheckIfIdExists(constructor.BrandId)) return ResponseResult<ConstructorDetailDto>.Failure("Brand not found");
 
-        var contracts = contractsRepo.GetByTeamId(id);
+        var contracts = await contractsRepo.GetByTeamId(id);
         var driverNameRecord = new List<DriverNameRecord>();
         if (contracts.Count > 0)
         {
@@ -46,9 +46,9 @@ public class ConstructorsService(
         return ResponseResult<ConstructorDetailDto>.Success(dto);
     }
 
-    public ResponseResult<List<ConstructorListDto>> ListAllConstructorsByChampionship(Guid championshipId)
+    public async Task<ResponseResult<List<ConstructorListDto>>> ListAllConstructorsByChampionship(Guid championshipId)
     {
-        var constructors = constructorCompetitionRepo.GetConstructorsByChampionshipId(championshipId);
+        var constructors = await constructorCompetitionRepo.GetConstructorsByChampionshipId(championshipId);
         if (constructors.Count == 0) return ResponseResult<List<ConstructorListDto>>.Failure("Championship does not have any constructors");
         
         var dto = constructors.Select(c => new ConstructorListDto(
@@ -60,9 +60,9 @@ public class ConstructorsService(
         return ResponseResult<List<ConstructorListDto>>.Success(dto);
     }
 
-    public ResponseResult<bool> CreateConstructor(ConstructorCreateDto constructorCreateDto)
+    public async Task<ResponseResult<bool>> CreateConstructor(ConstructorCreateDto constructorCreateDto)
     {
-        var existingConstructor = constructorRepo.GetByName(constructorCreateDto.Name);
+        var existingConstructor = await constructorRepo.GetByName(constructorCreateDto.Name);
         if (existingConstructor != null) return ResponseResult<bool>.Failure("Constructor already is in the Championship");
         
         var constructor = new Constructor
@@ -79,23 +79,23 @@ public class ConstructorsService(
             Seasons = constructorCreateDto.Seasons
         };
 
-        if (brandsRepo.CheckIfIdExists(constructorCreateDto.BrandId))
+        if (await brandsRepo.CheckIfIdExists(constructorCreateDto.BrandId))
         {
-            constructor.BrandId = constructor.BrandId;
+            constructor.BrandId = constructorCreateDto.BrandId;
         }
 
-        constructorRepo.Create(constructor);
+        await constructorRepo.Create(constructor);
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> UpdateConstructor(ConstructorUpdateDto constructorUpdateDto)
+    public async Task<ResponseResult<bool>> UpdateConstructor(ConstructorUpdateDto constructorUpdateDto)
     {
-        var constructor = constructorRepo.GetConstructorById(constructorUpdateDto.Id);
+        var constructor = await constructorRepo.GetConstructorById(constructorUpdateDto.Id);
         if (constructor == null) return ResponseResult<bool>.Failure("Constructor not found");
 
         if (constructorUpdateDto.BrandId != constructor.BrandId)
         {
-            if (!brandsRepo.CheckIfIdExists(constructorUpdateDto.BrandId))
+            if (!await brandsRepo.CheckIfIdExists(constructorUpdateDto.BrandId))
             {
                 return ResponseResult<bool>.Failure("Brand not found");
             }
@@ -114,8 +114,7 @@ public class ConstructorsService(
         constructor.Podiums = constructorUpdateDto.Podiums;
         constructor.Seasons = constructorUpdateDto.Seasons;
         
-        
-        constructorRepo.Update(constructor);
+        await constructorRepo.Update(constructor);
         return ResponseResult<bool>.Success(true);
     }
 }

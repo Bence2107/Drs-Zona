@@ -11,12 +11,13 @@ public class DriverService(
     IContractsRepository contractsDepo
 ): IDriverService
 {
-    public ResponseResult<DriverDetailDto> GetDriverById(Guid id)
+    public async Task<ResponseResult<DriverDetailDto>> GetDriverById(Guid id)
     {
-        var driver = driverRepo.GetDriverById(id);
+        var driver = await driverRepo.GetDriverById(id);
         if (driver == null) return ResponseResult<DriverDetailDto>.Failure("Driver not found.");
 
-        var contractIds = contractsDepo.GetByDriverId(id).Select(c => c.Id).ToList();
+        var contracts = await contractsDepo.GetByDriverId(id);
+        var contractIds = contracts.Select(c => c.Id).ToList();
 
         return ResponseResult<DriverDetailDto>.Success(new DriverDetailDto(
             driver.Id,
@@ -33,33 +34,33 @@ public class DriverService(
         ));
     }
 
-    public ResponseResult<List<DriverListDto>> ListAllDriversByChampionships(Guid championshipId)
+    public async Task<ResponseResult<List<DriverListDto>>> ListAllDriversByChampionships(Guid championshipId)
     {
-        var drivers = driverParticipationRepo.GetDriversByChampionship(championshipId);
+        var drivers = await driverParticipationRepo.GetDriversByChampionship(championshipId);
         if (drivers.Count == 0)
         {
             return ResponseResult<List<DriverListDto>>.Success([]);
         }
 
-        var dto = drivers.Select(d =>
+        var dto = new List<DriverListDto>();
+        foreach (var d in drivers)
         {
-            var currentContracts = contractsDepo.GetByDriverId(d!.Id);
+            var currentContracts = await contractsDepo.GetByDriverId(d!.Id);
             var currentTeamName = currentContracts.LastOrDefault()?.Constructor?.Name;
 
-            return new DriverListDto(
+            dto.Add(new DriverListDto(
                 d.Id,
                 d.Name,
                 d.Nationality,
                 GetDriversAge(d.BirthDate),
                 currentTeamName
-            );
-        }).ToList();
-
+            ));
+        }
 
         return ResponseResult<List<DriverListDto>>.Success(dto);
     }
 
-    public ResponseResult<bool> CreateDriver(DriverCreateDto dto)
+    public async Task<ResponseResult<bool>> CreateDriver(DriverCreateDto dto)
     {
         if (dto.BirthDate.Year > 2005)
         {
@@ -84,13 +85,13 @@ public class DriverService(
             Seasons = dto.Seasons
         };
 
-        driverRepo.Create(driver);
+        await driverRepo.Create(driver);
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> UpdateDriver(DriverUpdateDto dto)
+    public async Task<ResponseResult<bool>> UpdateDriver(DriverUpdateDto dto)
     {
-        var driver = driverRepo.GetDriverById(dto.Id);
+        var driver = await driverRepo.GetDriverById(dto.Id);
         if (driver == null) return ResponseResult<bool>.Failure("Driver not found.");
         
         if (dto.BirthDate.Year > 2005)
@@ -114,16 +115,16 @@ public class DriverService(
         driver.PolePositions = dto.PolePositions;
         driver.Seasons = dto.Seasons;
 
-        driverRepo.Update(driver);
+        await driverRepo.Update(driver);
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> DeleteDriver(Guid id)
+    public async Task<ResponseResult<bool>> DeleteDriver(Guid id)
     {
-        var driver = driverRepo.GetDriverById(id);
+        var driver = await driverRepo.GetDriverById(id);
         if (driver == null) return ResponseResult<bool>.Failure("Driver not found.");
 
-        driverRepo.Delete(driver.Id);
+        await driverRepo.Delete(driver.Id);
         return ResponseResult<bool>.Success(true);
     }
 

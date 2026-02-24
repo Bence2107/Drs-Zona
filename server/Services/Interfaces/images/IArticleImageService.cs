@@ -6,6 +6,5 @@ public interface IArticleImageService
 {
     string GetImageUrl(string slug, string imageName);
     Task<string> SaveImage(string slug, IFormFile file, string imageName);
-    void DeleteArticleImages(string slug);
-
+    Task DeleteArticleImages(string slug);
 }

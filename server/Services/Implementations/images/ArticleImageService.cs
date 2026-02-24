@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Services.Interfaces.images;
 
-namespace Services.Implementations.image;
+namespace Services.Implementations.images;
 
 public class ArticleImageService(IWebHostEnvironment env): IArticleImageService
 {
@@ -27,12 +27,12 @@ public class ArticleImageService(IWebHostEnvironment env): IArticleImageService
         return GetImageUrl(slug, imageName);
     }
     
-    public void DeleteArticleImages(string slug)
+    public async Task DeleteArticleImages(string slug)
     {
         var folderPath = Path.Combine(env.ContentRootPath, "uploads", "images", "articles", slug);
         if (Directory.Exists(folderPath))
         {
-            Directory.Delete(folderPath, true);
+            await Task.Run(() => Directory.Delete(folderPath, true));
         }
     }
 }

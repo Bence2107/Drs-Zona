@@ -4,10 +4,10 @@ namespace Services.Interfaces;
 
 public interface ISeriesService
 {
-    ResponseResult<SeriesDetailDto> GetSeriesById(Guid seriesId);
-    ResponseResult<SeriesDetailDto> GetSeriesByName(string name);
-    ResponseResult<List<SeriesListDto>> ListSeries();
-    ResponseResult<bool> CreateSeries(SeriesCreateDto dto);
-    ResponseResult<bool> Update(SeriesUpdateDto dto);
-    ResponseResult<bool> Delete(Guid id);
+    Task<ResponseResult<SeriesDetailDto>> GetSeriesById(Guid seriesId);
+    Task<ResponseResult<SeriesDetailDto>> GetSeriesByName(string name);
+    Task<ResponseResult<List<SeriesListDto>>> ListSeries();
+    Task<ResponseResult<bool>> CreateSeries(SeriesCreateDto dto);
+    Task<ResponseResult<bool>> Update(SeriesUpdateDto dto);
+    Task<ResponseResult<bool>> Delete(Guid id);
 }

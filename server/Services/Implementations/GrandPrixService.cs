@@ -12,15 +12,15 @@ public class GrandPrixService (
     ISeriesRepository seriesRepository)
 : IGrandPrixService
 {
-    public ResponseResult<GrandPrixDetailDto> GetGrandPrixById(Guid id)
+    public async Task<ResponseResult<GrandPrixDetailDto>> GetGrandPrixById(Guid id)
     {
-        var grandPrix = grandsPrixRepository.GetWithAll(id);
+        var grandPrix = await grandsPrixRepository.GetWithAll(id);
         if (grandPrix == null) return ResponseResult<GrandPrixDetailDto>.Failure("Grand Prix not found");
         
         var circuit = grandPrix.Circuit;
         if (circuit == null) return ResponseResult<GrandPrixDetailDto>.Failure("Circuit is not found");
         
-        var series =  grandPrix.Series;
+        var series = grandPrix.Series;
         if (series == null) return ResponseResult<GrandPrixDetailDto>.Failure("Series is not found");
 
         var circuitDto = new CircuitDetailDto(
@@ -50,9 +50,10 @@ public class GrandPrixService (
         return ResponseResult<GrandPrixDetailDto>.Success(detailDto);
     }
 
-    public ResponseResult<List<GrandPrixListDto>> GetSeasonGrandPrixList(Guid seriesId, int year)
+    public async Task<ResponseResult<List<GrandPrixListDto>>> GetSeasonGrandPrixList(Guid seriesId, int year)
     {
-        var grandsPrix = grandsPrixRepository.GetBySeriesAndYear(seriesId, year).Select(gp => new GrandPrixListDto(
+        var grandsPrixList = await grandsPrixRepository.GetBySeriesAndYear(seriesId, year);
+        var grandsPrix = grandsPrixList.Select(gp => new GrandPrixListDto(
             Id: gp.Id,
             Name: gp.Name,
             RoundNumber: gp.RoundNumber,
@@ -63,14 +64,14 @@ public class GrandPrixService (
         return ResponseResult<List<GrandPrixListDto>>.Success(grandsPrix);
     }
 
-    public ResponseResult<bool> CreateGrandPrix(GrandPrixCreateDto grandPrixCreateDto)
+    public async Task<ResponseResult<bool>> CreateGrandPrix(GrandPrixCreateDto grandPrixCreateDto)
     {
-        if (circuitsRepository.GetCircuitById(grandPrixCreateDto.CircuitId) == null)
+        if (await circuitsRepository.GetCircuitById(grandPrixCreateDto.CircuitId) == null)
         {
             return ResponseResult<bool>.Failure(nameof(grandPrixCreateDto.CircuitId), "The specified circuit does not exist.");
         }
         
-        if (seriesRepository.GetSeriesById(grandPrixCreateDto.SeriesId) == null)
+        if (await seriesRepository.GetSeriesById(grandPrixCreateDto.SeriesId) == null)
         {
             return ResponseResult<bool>.Failure(nameof(grandPrixCreateDto.CircuitId), "The specified series does not exist.");
         }
@@ -88,29 +89,29 @@ public class GrandPrixService (
             LapsCompleted = grandPrixCreateDto.LapsCompleted
         };
 
-        grandsPrixRepository.Create(grandPrix);
+        await grandsPrixRepository.Create(grandPrix);
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> UpdateGrandPrix(GrandPrixUpdateDto grandPrixUpdateDto)
+    public async Task<ResponseResult<bool>> UpdateGrandPrix(GrandPrixUpdateDto grandPrixUpdateDto)
     {
-        var existing = grandsPrixRepository.GetGrandPrixById(grandPrixUpdateDto.Id);
+        var existing = await grandsPrixRepository.GetGrandPrixById(grandPrixUpdateDto.Id);
         if (existing == null) return ResponseResult<bool>.Failure("Grand Prix not found");
 
         existing.StartTime = grandPrixUpdateDto.StartTime;
         existing.EndTime = grandPrixUpdateDto.EndTime;
         existing.LapsCompleted = grandPrixUpdateDto.LapsCompleted;
 
-        grandsPrixRepository.Update(existing);
+        await grandsPrixRepository.Update(existing);
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> DeleteGrandPrix(Guid id)
+    public async Task<ResponseResult<bool>> DeleteGrandPrix(Guid id)
     {
-        var existing = grandsPrixRepository.GetGrandPrixById(id);
+        var existing = await grandsPrixRepository.GetGrandPrixById(id);
         if (existing == null) return ResponseResult<bool>.Failure("Grand Prix not found");
 
-        grandsPrixRepository.Delete(id);
+        await grandsPrixRepository.Delete(id);
         return ResponseResult<bool>.Success(true);
     }
 }

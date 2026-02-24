@@ -11,16 +11,16 @@ public class SeriesService(
     IConstructorsChampionshipsRepository constructorsChampRepo
 ) : ISeriesService
 {
-    public ResponseResult<SeriesDetailDto> GetSeriesById(Guid seriesId)
+    public async Task<ResponseResult<SeriesDetailDto>> GetSeriesById(Guid seriesId)
     {
-        var series = seriesRepo.GetSeriesById(seriesId);
+        var series = await seriesRepo.GetSeriesById(seriesId);
         if (series == null) return ResponseResult<SeriesDetailDto>.Failure("Series not exist");
 
-        var driverSeasons = driversChampRepo.GetBySeriesId(seriesId)
-            .Select(dc => dc.Season);
+        var driverChamps = await driversChampRepo.GetBySeriesId(seriesId);
+        var driverSeasons = driverChamps.Select(dc => dc.Season);
 
-        var constructorSeasons = constructorsChampRepo.GetBySeriesId(seriesId)
-            .Select(cc => cc.Season);
+        var constructorChamps = await constructorsChampRepo.GetBySeriesId(seriesId);
+        var constructorSeasons = constructorChamps.Select(cc => cc.Season);
 
         var availableSeasons = driverSeasons
             .Union(constructorSeasons)
@@ -38,16 +38,16 @@ public class SeriesService(
         ));
     }
 
-    public ResponseResult<SeriesDetailDto> GetSeriesByName(string name)
+    public async Task<ResponseResult<SeriesDetailDto>> GetSeriesByName(string name)
     {
-        var series = seriesRepo.GetByName(name);
+        var series = await seriesRepo.GetByName(name);
         if (series == null) return ResponseResult<SeriesDetailDto>.Failure("Series not exist");
 
-        var driverSeasons = driversChampRepo.GetBySeriesId(series.Id)
-            .Select(dc => dc.Season);
+        var driverChamps = await driversChampRepo.GetBySeriesId(series.Id);
+        var driverSeasons = driverChamps.Select(dc => dc.Season);
 
-        var constructorSeasons = constructorsChampRepo.GetBySeriesId(series.Id)
-            .Select(cc => cc.Season);
+        var constructorChamps = await constructorsChampRepo.GetBySeriesId(series.Id);
+        var constructorSeasons = constructorChamps.Select(cc => cc.Season);
 
         var availableSeasons = driverSeasons
             .Union(constructorSeasons)
@@ -65,9 +65,9 @@ public class SeriesService(
         ));
     }
 
-    public ResponseResult<List<SeriesListDto>> ListSeries()
+    public async Task<ResponseResult<List<SeriesListDto>>> ListSeries()
     {
-        var series = seriesRepo.GetAllSeries();
+        var series = await seriesRepo.GetAllSeries();
         var dto = series.Select(d => new SeriesListDto(
             Id: d.Id,
             Name: d.Name)
@@ -76,9 +76,9 @@ public class SeriesService(
         return ResponseResult<List<SeriesListDto>>.Success(dto);
     }
 
-    public ResponseResult<bool> CreateSeries(SeriesCreateDto dto)
+    public async Task<ResponseResult<bool>> CreateSeries(SeriesCreateDto dto)
     {
-        var nameExits = seriesRepo.GetByName(dto.Name);
+        var nameExits = await seriesRepo.GetByName(dto.Name);
         if (nameExits is not null)
         {
             return ResponseResult<bool>.Failure(nameof(dto.Name), "Series with this name already exist");
@@ -93,13 +93,13 @@ public class SeriesService(
             LastYear = dto.LastYear
         };
 
-        seriesRepo.Create(series);
+        await seriesRepo.Create(series);
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> Update(SeriesUpdateDto dto)
+    public async Task<ResponseResult<bool>> Update(SeriesUpdateDto dto)
     {
-        var editable = seriesRepo.GetSeriesById(dto.Id);
+        var editable = await seriesRepo.GetSeriesById(dto.Id);
         if (editable is null) return ResponseResult<bool>.Failure("Series not exist");
 
         var series = new Series
@@ -112,16 +112,16 @@ public class SeriesService(
             LastYear = dto.LastYear
         };
 
-        seriesRepo.Create(series);
+        await seriesRepo.Create(series);
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> Delete(Guid id)
+    public async Task<ResponseResult<bool>> Delete(Guid id)
     {
-        var series = seriesRepo.GetSeriesById(id);
+        var series = await seriesRepo.GetSeriesById(id);
         if (series is null) return ResponseResult<bool>.Failure("Series not exist");
 
-        seriesRepo.Delete(id);
+        await seriesRepo.Delete(id);
         return ResponseResult<bool>.Success(true);
     }
 }

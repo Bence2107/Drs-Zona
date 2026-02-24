@@ -15,19 +15,43 @@ public class PollService(
     IAuthRepository userRepository
 ) : IPollService
 {
-    public ResponseResult<PollDto> GetPollById(Guid id, Guid? currentUserId = null)
+    public async Task<ResponseResult<PollDto>> GetPollById(Guid id, Guid? currentUserId = null)
     {
-        var poll = pollRepository.GetByIdWithAuthor(id);
+        var poll = await pollRepository.GetByIdWithAuthor(id);
         if (poll == null) return ResponseResult<PollDto>.Failure("Poll not found");
 
-        var options = pollOptionsRepository.GetByPollId(id);
-        var totalVotes = options.Sum(o => pollVoteRepository.GetVoteCount(o.Id));
+        var options = await pollOptionsRepository.GetByPollId(id);
+        
+        int totalVotes = 0;
+        foreach (var opt in options)
+        {
+            totalVotes += await pollVoteRepository.GetVoteCount(opt.Id);
+        }
+
         var isExpired = DateTime.Now > poll.ExpiresAt;
         
         Guid? userVoteOptionId = null;
         if (currentUserId.HasValue)
         {
-            userVoteOptionId = pollVoteRepository.GetUserVoteForPoll(id, currentUserId.Value)?.PollOptionId;
+            var userVote = await pollVoteRepository.GetUserVoteForPoll(id, currentUserId.Value);
+            userVoteOptionId = userVote?.PollOptionId;
+        }
+
+        var pollOptionsDto = new List<PollOptionDto>();
+        foreach(var o in options)
+        {
+            var voteCount = await pollVoteRepository.GetVoteCount(o.Id);
+            var percentage = totalVotes > 0
+                ? Math.Round((double)voteCount / totalVotes * 100, 2)
+                : 0;
+
+            pollOptionsDto.Add(new PollOptionDto(
+                Id: o.Id,
+                Text: o.Text,
+                VoteCount: voteCount,
+                VotePercentage: percentage,
+                IsUserChoice: o.Id == userVoteOptionId
+            ));
         }
 
         return ResponseResult<PollDto>.Success(new PollDto(
@@ -38,30 +62,16 @@ public class PollService(
             CreatedAt: poll.CreatedAt,
             ExpiresAt: poll.ExpiresAt,
             IsActive: poll.IsActive,
-            PollOptions: options.Select(o =>
-            {
-                var voteCount = pollVoteRepository.GetVoteCount(o.Id);
-                var percentage = totalVotes > 0
-                    ? Math.Round((double)voteCount / totalVotes * 100, 2)
-                    : 0;
-
-                return new PollOptionDto(
-                    Id: o.Id,
-                    Text: o.Text,
-                    VoteCount: voteCount,
-                    VotePercentage: percentage,
-                    IsUserChoice: o.Id == userVoteOptionId
-                );
-            }).ToList(),
+            PollOptions: pollOptionsDto,
             IsExpired: isExpired,
             TotalVotes: totalVotes,
             UserVoteOptionId: userVoteOptionId
         ));
     }
 
-    public ResponseResult<List<PollListDto>> GetPollByCreatorId(Guid creatorId)
+    public async Task<ResponseResult<List<PollListDto>>> GetPollByCreatorId(Guid creatorId)
     {
-        var polls = pollRepository.GetByCreatorId(creatorId);
+        var polls = await pollRepository.GetByCreatorId(creatorId);
         var dto = polls.Select(poll => new PollListDto(
             Id: poll.Id,
             Title: poll.Title
@@ -70,11 +80,13 @@ public class PollService(
         return ResponseResult<List<PollListDto>>.Success(dto);
     }
 
-    public ResponseResult<List<PollListDto>> GetActivePolls()
+    public async Task<ResponseResult<List<PollListDto>>> GetActivePolls()
     {
-        var activePools = pollRepository.GetActive()
+        var allActivePolls = await pollRepository.GetActive();
+        var activePools = allActivePolls
             .Where(p => p.ExpiresAt > DateTime.Now) 
             .ToList();
+
         var dto = activePools.Select(poll => new PollListDto(
             Id: poll.Id,
             Title: poll.Title
@@ -83,9 +95,9 @@ public class PollService(
         return ResponseResult<List<PollListDto>>.Success(dto);
     }
 
-    public ResponseResult<List<PollListDto>> GetExpiredPolls()
+    public async Task<ResponseResult<List<PollListDto>>> GetExpiredPolls()
     {
-        var expiredPolls = pollRepository.GetExpired();
+        var expiredPolls = await pollRepository.GetExpired();
         var dto = expiredPolls.Select(poll => new PollListDto(
             Id: poll.Id,
             Title: poll.Title
@@ -94,9 +106,9 @@ public class PollService(
         return ResponseResult<List<PollListDto>>.Success(dto);
     }
 
-    public ResponseResult<List<PollListDto>> ListAllPolls()
+    public async Task<ResponseResult<List<PollListDto>>> ListAllPolls()
     {
-        var polls = pollRepository.GetAll();
+        var polls = await pollRepository.GetAll();
         var dto = polls.Select(poll => new PollListDto(
             Id: poll.Id,
             Title: poll.Title
@@ -105,12 +117,12 @@ public class PollService(
         return ResponseResult<List<PollListDto>>.Success(dto);
     }
 
-    public ResponseResult<bool> Create(PollCreateDto dto, Guid currentUserId)
+    public async Task<ResponseResult<bool>> Create(PollCreateDto dto, Guid currentUserId)
     {
-        if (!userRepository.CheckIfIdExists(currentUserId))
+        if (!await userRepository.CheckIfIdExists(currentUserId))
             return ResponseResult<bool>.Failure("User not found");
 
-        using var transaction = context.Database.BeginTransaction();
+        await using var transaction = await context.Database.BeginTransactionAsync();
 
         try
         {
@@ -124,8 +136,8 @@ public class PollService(
                 IsActive = true
             };
 
-            pollRepository.Add(poll);
-            context.SaveChanges();
+            await pollRepository.Add(poll);
+            await context.SaveChangesAsync();
 
             foreach (var optionText in dto.Options)
             {
@@ -136,24 +148,24 @@ public class PollService(
                     Text = trimmedText
                 };
 
-                pollOptionsRepository.Create(option);
+                await pollOptionsRepository.Create(option);
             }
 
-            context.SaveChanges();
-            transaction.Commit();
+            await context.SaveChangesAsync();
+            await transaction.CommitAsync();
 
             return ResponseResult<bool>.Success(true);
         }
         catch (Exception)
         {
-            transaction.Rollback();
+            await transaction.RollbackAsync();
             throw;
         }
     }
 
-    public ResponseResult<bool> Delete(Guid id, Guid currentUserId)
+    public async Task<ResponseResult<bool>> Delete(Guid id, Guid currentUserId)
     {
-        var poll = pollRepository.GetPollById(id);
+        var poll = await pollRepository.GetPollById(id);
         if (poll == null)
             return ResponseResult<bool>.Failure("Poll not found");
 
@@ -162,13 +174,13 @@ public class PollService(
             return ResponseResult<bool>.Failure("You are not the author!");
         }
         
-        pollRepository.Delete(id);
+        await pollRepository.Delete(id);
         return ResponseResult<bool>.Success(true);
     }
     
-    public ResponseResult<bool> Vote(Guid pollId, Guid pollOptionId, Guid userId)
+    public async Task<ResponseResult<bool>> Vote(Guid pollId, Guid pollOptionId, Guid userId)
     {
-        var poll = pollRepository.GetPollById(pollId);
+        var poll = await pollRepository.GetPollById(pollId);
         if (poll == null)
             return ResponseResult<bool>.Failure("Poll not found");
 
@@ -178,11 +190,11 @@ public class PollService(
         if (poll.ExpiresAt < DateTime.Now)
             return ResponseResult<bool>.Failure("Poll has expired");
 
-        var option = pollOptionsRepository.GetPollOptionById(pollOptionId);
+        var option = await pollOptionsRepository.GetPollOptionById(pollOptionId);
         if (option == null || option.PollId != pollId)
             return ResponseResult<bool>.Failure("Invalid poll option");
 
-        if (HasUserVoted(pollId, userId))
+        if (await HasUserVoted(pollId, userId))
             return ResponseResult<bool>.Failure("User has already voted on this poll");
 
         var vote = new PollVote
@@ -191,31 +203,30 @@ public class PollService(
             PollOptionId = pollOptionId
         };
 
-        pollVoteRepository.Create(vote);
+        await pollVoteRepository.Create(vote);
         return ResponseResult<bool>.Success(true);
     }
 
-    public ResponseResult<bool> RemoveVote(Guid pollId, Guid pollOptionId, Guid userId)
+    public async Task<ResponseResult<bool>> RemoveVote(Guid pollId, Guid pollOptionId, Guid userId)
     {
-        var vote = pollVoteRepository.GetUserVoteForPoll(userId, pollOptionId);
+        var vote = await pollVoteRepository.GetUserVoteForPoll(userId, pollOptionId);
         if (vote == null)
             return ResponseResult<bool>.Failure("Vote not found");
 
-        var option = pollOptionsRepository.GetPollOptionById(pollOptionId);
+        var option = await pollOptionsRepository.GetPollOptionById(pollOptionId);
         if (option == null || option.PollId != pollId)
             return ResponseResult<bool>.Failure("Poll option not found");
 
-        pollVoteRepository.Delete(userId, pollOptionId);
+        await pollVoteRepository.Delete(userId, pollOptionId);
         return ResponseResult<bool>.Success(true);
     }
     
-    private bool HasUserVoted(Guid pollId, Guid userId)
+    private async Task<bool> HasUserVoted(Guid pollId, Guid userId)
     {
-        var optionIds = pollOptionsRepository.GetByPollId(pollId)
-            .Select(o => o.Id)
-            .ToList();
+        var options = await pollOptionsRepository.GetByPollId(pollId);
+        var optionIds = options.Select(o => o.Id).ToList();
 
-        var userVotes = pollVoteRepository.GetByUserId(userId);
+        var userVotes = await pollVoteRepository.GetByUserId(userId);
         return userVotes.Any(v => optionIds.Contains(v.PollOptionId));
     }
 }

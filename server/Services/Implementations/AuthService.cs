@@ -212,7 +212,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
             Email = user.Email,
             Role = user.Role,
             HasAvatar = user.HasAvatar,
-            AvatarUrl = userImageService.GetAvatarUrl(user.Id),
+            AvatarUrl = await userImageService.GetAvatarUrl(user.Id),
             CreatedAt = user.Created,
         });
     }
