@@ -39,13 +39,16 @@ public record PollCreateDto(
 
 public record PollListDto(
     [Required] Guid Id,
-    string Title
+    string Title,
+    string Description,
+    DateTime ExpiresAt
 );
 
 public record PollDto(
     [Required] Guid Id,
     [Required] Guid? AuthorId,
     string AuthorName,
+    string Title,
     string Description,
     DateTime CreatedAt,
     DateTime ExpiresAt,

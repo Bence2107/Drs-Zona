@@ -64,7 +64,11 @@ app-root {
 
 @include mat.fab-overrides((
   container-color: var(--accent-color),
-  foreground-color: var(--text-secondary),
+  foreground-color: white,
+  state-layer-color: white,
+  container-shape: 50%,
+  small-container-color: var(--accent-color),
+  small-foreground-color: white,
 ));
 
 @include mat.progress-bar-overrides((
@@ -195,7 +199,7 @@ app-root {
 }
 
 .custom-nav-panel .mat-mdc-option.mdc-list-item--selected {
-  background-color: var(--accent-color) !important; /* Itt javítva accent-color-ra! */
+  background-color: var(--accent-color) !important;
 }
 
 .custom-nav-panel .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text {

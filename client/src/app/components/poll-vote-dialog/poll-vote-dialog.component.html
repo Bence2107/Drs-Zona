@@ -1,0 +1,43 @@
+<div class="poll-dialog-container">
+  @if (poll) {
+    <h2 mat-dialog-title>{{ poll.title }}</h2>
+
+    <mat-dialog-content>
+      <p class="poll-desc">{{ poll.description }}</p>
+
+      <div class="options-list"
+           [class.already-voted]="voted"
+           [class.read-only]="!userId">
+
+        @for (option of poll.pollOptions; track option.id) {
+          <div class="poll-option-row"
+               [class.selected]="option.isUserChoice"
+               (click)="onVote(option.id!)">
+
+            <div class="option-header">
+              <div class="radio-indicator">
+                @if(option.isUserChoice) {
+                  <div class="inner-circle"></div>
+                }
+              </div>
+              <span class="option-text">{{ option.text }}</span>
+              <span class="percentage-text">{{ option.votePercentage }}%</span>
+            </div>
+
+            <div class="progress-container">
+              <div class="progress-fill" [style.width.%]="option.votePercentage"></div>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (!userId) {
+        <p class="login-warning">Jelentkezz be a szavazáshoz!</p>
+      }
+    </mat-dialog-content>
+  }
+
+  <mat-dialog-actions align="end">
+    <button mat-flat-button (click)="dialogRef.close()">BEZÁRÁS</button>
+  </mat-dialog-actions>
+</div>

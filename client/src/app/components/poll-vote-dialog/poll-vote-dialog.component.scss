@@ -1,0 +1,116 @@
+/* poll-vote-dialog.component.scss */
+
+.poll-dialog-container {
+  padding: 12px;
+  background-color: var(--primary-bg);
+  color: var(--text-main);
+  min-width: 400px;
+
+  .poll-desc {
+    margin-bottom: 20px;
+    opacity: 0.8;
+  }
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &.read-only {
+    opacity: 0.7;
+    .poll-option-row {
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+}
+
+.poll-option-row {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: transparent;
+
+  &:hover {
+    background-color: var(--hover-bg);
+    border-color: var(--accent-color);
+  }
+
+  /* Kijelölt állapot (ha a user erre szavazott) */
+  &.selected {
+    border-color: var(--accent-color);
+    background-color: rgba(248, 39, 79, 0.08);
+
+    .radio-indicator {
+      border-color: var(--accent-color);
+      background-color: transparent;
+
+      .inner-circle {
+        width: 12px;
+        height: 12px;
+        background-color: var(--accent-color); /* Aktív kitöltés */
+        border-radius: 50%;
+        display: block;
+      }
+    }
+
+    .option-text {
+      color: var(--accent-color);
+    }
+  }
+}
+
+.option-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+
+  .radio-indicator {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .option-text {
+    flex: 1;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  /* Százalék színe mostantól accent color */
+  .percentage-text {
+    font-weight: 700;
+    color: var(--accent-color);
+  }
+}
+
+.progress-container {
+  height: 8px;
+  background-color: var(--secondary-bg);
+  border-radius: 4px;
+  overflow: hidden;
+
+  .progress-fill {
+    height: 100%;
+    background-color: var(--accent-color);
+    border-radius: 4px;
+    transition: width 0.8s ease-out;
+  }
+}
+
+.login-warning {
+  margin-top: 15px;
+  color: #ff4444;
+  font-size: 0.9rem;
+  text-align: center;
+}

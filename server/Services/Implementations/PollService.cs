@@ -15,12 +15,12 @@ public class PollService(
     IAuthRepository userRepository
 ) : IPollService
 {
-    public async Task<ResponseResult<PollDto>> GetPollById(Guid id, Guid? currentUserId = null)
+    public async Task<ResponseResult<PollDto>> GetPollById(Guid pollId, Guid? currentUserId = null)
     {
-        var poll = await pollRepository.GetByIdWithAuthor(id);
+        var poll = await pollRepository.GetByIdWithAuthor(pollId);
         if (poll == null) return ResponseResult<PollDto>.Failure("Poll not found");
 
-        var options = await pollOptionsRepository.GetByPollId(id);
+        var options = await pollOptionsRepository.GetByPollId(pollId);
         
         int totalVotes = 0;
         foreach (var opt in options)
@@ -33,7 +33,7 @@ public class PollService(
         Guid? userVoteOptionId = null;
         if (currentUserId.HasValue)
         {
-            var userVote = await pollVoteRepository.GetUserVoteForPoll(id, currentUserId.Value);
+            var userVote = await pollVoteRepository.GetUserVoteForPoll(currentUserId.Value, pollId);
             userVoteOptionId = userVote?.PollOptionId;
         }
 
@@ -58,6 +58,7 @@ public class PollService(
             Id: poll.Id,
             AuthorId: poll.AuthorId,
             AuthorName: poll.Author!.Username,
+            Title: poll.Title,
             Description: poll.Description,
             CreatedAt: poll.CreatedAt,
             ExpiresAt: poll.ExpiresAt,
@@ -74,7 +75,9 @@ public class PollService(
         var polls = await pollRepository.GetByCreatorId(creatorId);
         var dto = polls.Select(poll => new PollListDto(
             Id: poll.Id,
-            Title: poll.Title
+            Title: poll.Title,
+            Description: poll.Description,
+            ExpiresAt: poll.ExpiresAt
         )).ToList();
 
         return ResponseResult<List<PollListDto>>.Success(dto);
@@ -89,7 +92,9 @@ public class PollService(
 
         var dto = activePools.Select(poll => new PollListDto(
             Id: poll.Id,
-            Title: poll.Title
+            Title: poll.Title,
+            Description: poll.Description,
+            ExpiresAt: poll.ExpiresAt
         )).ToList();
 
         return ResponseResult<List<PollListDto>>.Success(dto);
@@ -100,7 +105,9 @@ public class PollService(
         var expiredPolls = await pollRepository.GetExpired();
         var dto = expiredPolls.Select(poll => new PollListDto(
             Id: poll.Id,
-            Title: poll.Title
+            Title: poll.Title,
+            Description: poll.Description,
+            ExpiresAt: poll.ExpiresAt
         )).ToList();
 
         return ResponseResult<List<PollListDto>>.Success(dto);
@@ -111,7 +118,9 @@ public class PollService(
         var polls = await pollRepository.GetAll();
         var dto = polls.Select(poll => new PollListDto(
             Id: poll.Id,
-            Title: poll.Title
+            Title: poll.Title,
+            Description: poll.Description,
+            ExpiresAt: poll.ExpiresAt
         )).ToList();
 
         return ResponseResult<List<PollListDto>>.Success(dto);

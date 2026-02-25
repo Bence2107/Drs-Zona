@@ -1,0 +1,17 @@
+<div class="carousel-wrapper">
+  <button mat-mini-fab color="primary" class="nav-btn prev" (click)="scroll(-1)">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+
+  <div class="polls-carousel" #carousel>
+    @for (poll of polls; track poll.id) {
+      <div class="carousel-item" (click)="openPollDetails(poll.id!)">
+        <app-poll-item [poll]="poll"></app-poll-item>
+      </div>
+    }
+  </div>
+
+  <button mat-mini-fab color="primary" class="nav-btn next" (click)="scroll(1)">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>

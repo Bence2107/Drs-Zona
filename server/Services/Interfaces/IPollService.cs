@@ -4,7 +4,7 @@ namespace Services.Interfaces;
 
 public interface IPollService
 {
-    Task<ResponseResult<PollDto>> GetPollById(Guid id, Guid? currentUserId = null);
+    Task<ResponseResult<PollDto>> GetPollById(Guid pollId, Guid? currentUserId = null);
     Task<ResponseResult<List<PollListDto>>> GetPollByCreatorId(Guid creatorId);
     Task<ResponseResult<List<PollListDto>>> GetActivePolls();
     Task<ResponseResult<List<PollListDto>>> GetExpiredPolls();

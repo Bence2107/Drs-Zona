@@ -8,10 +8,17 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class PollController(IPollService pollService): ControllerBase
 {
+    private Guid? GetCurrentUserId()
+    {
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        return Guid.TryParse(userIdClaim, out var guid) ? guid : null;
+    }
+    
     [HttpGet("get/{id:guid}")]
     public async Task<ActionResult<PollDto>> GetById([FromRoute] Guid id)
     {
-        var response = await pollService.GetPollById(id);
+        var userId = GetCurrentUserId();
+        var response = await pollService.GetPollById(id, userId);
         if (!response.IsSuccess)
         {
             return BadRequest(new

@@ -1,0 +1,30 @@
+.carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 20px 0;
+
+  .polls-carousel {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    gap: 24px;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .carousel-item {
+    flex: 0 0 350px;
+    cursor: pointer;
+  }
+
+  .nav-btn {
+    position: absolute;
+    z-index: 10;
+    &.prev { left: -20px; }
+    &.next { right: -20px; }
+  }
+}
