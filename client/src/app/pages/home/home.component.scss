@@ -79,6 +79,45 @@ h1, h2, h3, p {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.loading-container, .error-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  padding: 60px 0;
+  background-color: transparent !important;
+
+  h3 {
+    color: var(--text-main);
+    font-size: 1.4em;
+    margin: 0;
+  }
+
+  mat-progress-bar {
+    width: 100%;
+    max-width: 600px;
+    height: 8px;
+    border-radius: 4px;
+
+    ::ng-deep .mdc-linear-progress__buffer {
+      background-color: var(--secondary-bg) !important;
+    }
+
+    ::ng-deep .mdc-linear-progress__track {
+      background-color: var(--secondary-bg) !important;
+      opacity: 1 !important;
+    }
+
+    ::ng-deep .mdc-linear-progress__bar-inner {
+      border-color: var(--accent-color, #f8274f) !important;
+    }
+  }
+
+}
+
+
 @media (max-width: 600px) {
   .inner-card {
     padding: 10px;

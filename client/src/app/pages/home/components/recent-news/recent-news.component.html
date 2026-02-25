@@ -1,5 +1,4 @@
-@if (!isLoading && !errorOccurred) {
-  <div class="primary_news-container">
+<div class="primary_news-container">
     @for (new_item of articles; track new_item) {
       <mat-card class="new-item" [routerLink]="['/article', new_item.slug]">
         <img mat-card-image
@@ -15,23 +14,9 @@
           </mat-card-content>
         </mat-card>
       }
-      @if (articles.length === 0) {
+    @if (articles.length === 0) {
         <p class="empty-msg">
           Nem találtunk híreket.
         </p>
       }
-    </div>
-  } @else {
-    @if (errorOccurred) {
-      <app-error-display
-        (retry)="fetchArticles()">
-      </app-error-display>
-    }
-    @if (isLoading && !errorOccurred) {
-      <div class="loading-container">
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        <h3>Hírek betöltése...</h3>
-      </div>
-    }
-  }
-
+</div>

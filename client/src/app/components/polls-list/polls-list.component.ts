@@ -20,7 +20,7 @@ import {UserProfileResponse} from '../../api/models/user-profile-response';
 export class PollListComponent implements OnInit {
   @ViewChild('carousel', { static: false }) carousel!: ElementRef;
   @Input() userData: UserProfileResponse | null = null;
-  polls: PollListDto[] = [];
+  @Input() polls: PollListDto[] = [];
 
   constructor(private pollService: PollService, private dialog: MatDialog, private authService: AuthService) {}
 

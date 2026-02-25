@@ -1,10 +1,19 @@
 <main>
   <div class="content-container">
-    <h2>Aktuális Szavazások:</h2>
-    <app-poll-list></app-poll-list>
+    @if (isLoading && !errorOccurred) {
+      <div class="loading-container">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <h3>Tartalom betöltése...</h3>
+      </div>
+    } @else if (errorOccurred) {
+      <app-error-display (retry)="fetchAllData()"></app-error-display>
+    } @else {
+      <h2>Aktuális Szavazások:</h2>
+      <app-poll-list [polls]="polls"></app-poll-list>
 
-    <h2>Friss hírek:</h2>
-    <app-recent-news></app-recent-news>
+      <h2>Friss hírek:</h2>
+      <app-recent-news [articles]="articles"></app-recent-news>
+    }
 
     <mat-card class="outer-card">
       <mat-card-header></mat-card-header>
@@ -24,7 +33,7 @@
           <mat-card-title><h2>Hírek és fontos információk</h2></mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <p>A kezdőoldalon megtalálod a legfrissebb híreket, így elsőként értesülhetsz a legújabb fejleményekről. Amennyiben csak egy kategóriát követsz, a kezdőoldalon lehetőséged van szűrni is, ezáltal megkönnyítve a keresést és az olvasás élményét. </p>
+          <p>A kezdőoldalon megtalálod a legfrissebb híreket, így elsőként értesülhetsz a legújabb fejleményekről. Amennyiben csak egy kategóriát követsz, a kezdőoldalon lehetőséged van szűrni is, ezáltal megkönnyítve a keresést és az olvasás élményét. </p>
         </mat-card-content>
       </mat-card>
 
