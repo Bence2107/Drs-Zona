@@ -11,6 +11,7 @@ import {BreakpointObserver} from '@angular/cdk/layout';
 import {MatFormField} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {ProfileDeleteComponent} from './components/profile-delete/profile-delete.component';
+import {ProfilePollsComponent} from './components/profile-polls/profile-polls.component';
 
 @Component({
   selector: 'app-profile-content',
@@ -24,7 +25,8 @@ import {ProfileDeleteComponent} from './components/profile-delete/profile-delete
     MatFormField,
     MatSelect,
     MatOption,
-    ProfileDeleteComponent
+    ProfileDeleteComponent,
+    ProfilePollsComponent
   ],
   templateUrl: './profile-content.component.html',
   styleUrl: './profile-content.component.scss',

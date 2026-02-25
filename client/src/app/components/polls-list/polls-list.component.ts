@@ -17,16 +17,11 @@ import {UserProfileResponse} from '../../api/models/user-profile-response';
   templateUrl: './polls-list.component.html',
   styleUrl: './polls-list.component.scss'
 })
-export class PollListComponent implements OnInit {
+export class PollListComponent {
   @ViewChild('carousel', { static: false }) carousel!: ElementRef;
   @Input() userData: UserProfileResponse | null = null;
   @Input() polls: PollListDto[] = [];
-
   constructor(private pollService: PollService, private dialog: MatDialog, private authService: AuthService) {}
-
-  ngOnInit(): void {
-    this.pollService.getAllActive().subscribe(data => this.polls = data);
-  }
 
   get userId(): string | null {
     return this.authService.currentProfile()?.userId ?? null;
@@ -44,7 +39,7 @@ export class PollListComponent implements OnInit {
           width: '500px',
           data: {
             poll: pollData,
-            userId: this.userId // Itt adjuk át az Id-t
+            userId: this.userId
           },
           autoFocus: false,
         });

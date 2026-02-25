@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ApiConfiguration} from '../api/api-configuration';
 import {
-  apiPollGetAllActiveGet$Json, apiPollGetIdGet$Json,
+  apiPollGetAllActiveGet$Json, apiPollGetByCreatorIdIdGet$Json, apiPollGetIdGet$Json,
   apiPollRemoveVotePollIdPollOptionIdUserIdPost, apiPollVotePollIdPollOptionIdUserIdPost
 } from '../api/functions';
 import {map} from 'rxjs/operators';
@@ -22,6 +22,14 @@ export class PollService {
       map(response => {
         const body = response.body as any;
         return body.value as PollListDto[] ?? []
+      })
+    )
+  }
+  getPollsByUser(id: string): Observable<PollListDto[]> {
+    return apiPollGetByCreatorIdIdGet$Json(this.http, this.apiConfig.rootUrl, {id: id }).pipe(
+      map(response => {
+        return response.body as PollListDto[];
+
       })
     )
   }

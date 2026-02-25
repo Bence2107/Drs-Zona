@@ -46,6 +46,9 @@
         @case ('my-comments') {
           <app-profile-comments [userData]="userData"/>
         }
+        @case ('my-polls') {
+          <app-profile-polls [userData]="userData"></app-profile-polls>
+        }
         @case ('profile-delete') {
           <app-profile-delete [userData]="userData"></app-profile-delete>
         }
