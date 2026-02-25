@@ -1,5 +1,3 @@
-/* poll-vote-dialog.component.scss */
-
 .poll-dialog-container {
   padding: 12px;
   background-color: var(--primary-bg);
@@ -39,7 +37,6 @@
     border-color: var(--accent-color);
   }
 
-  /* Kijelölt állapot (ha a user erre szavazott) */
   &.selected {
     border-color: var(--accent-color);
     background-color: rgba(248, 39, 79, 0.08);
@@ -51,7 +48,7 @@
       .inner-circle {
         width: 12px;
         height: 12px;
-        background-color: var(--accent-color); /* Aktív kitöltés */
+        background-color: var(--accent-color);
         border-radius: 50%;
         display: block;
       }
@@ -87,7 +84,6 @@
     font-size: 1.1rem;
   }
 
-  /* Százalék színe mostantól accent color */
   .percentage-text {
     font-weight: 700;
     color: var(--accent-color);
@@ -113,4 +109,24 @@
   color: #ff4444;
   font-size: 0.9rem;
   text-align: center;
+}
+
+::ng-deep .polls-menu-panel {
+  background-color: var(--header-bg) !important;
+  border: 1px solid var(--border-color);
+
+  .header-menu-item {
+    font-size: 16px !important;
+    font-family: 'Kanit', sans-serif;
+    color: var(--text-main);
+
+    mat-icon {
+      color: var(--text-main);
+    }
+
+    &:hover {
+      color: #f8274f;
+      mat-icon { color: #f8274f; }
+    }
+  }
 }

@@ -120,8 +120,9 @@ public class PollController(IPollService pollService): ControllerBase
     }
 
     [HttpDelete("delete/{id:guid}")]
-    public async Task<ActionResult> Delete([FromRoute]Guid id, [FromQuery]Guid userId)
+    public async Task<ActionResult> Delete([FromRoute]Guid id)
     {
+        var userId = GetCurrentUserId();
         var response = await pollService.Delete(id, userId);
         if (!response.IsSuccess) return NotFound(response.Message);
 

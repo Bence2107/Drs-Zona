@@ -38,6 +38,19 @@
   }
 
   <mat-dialog-actions align="end">
+    @if(isMyPoll(poll.authorId)) {
+      <button mat-icon-button [matMenuTriggerFor]="pollsMenu" class="mini-menu-btn">
+        <mat-icon>more_horiz</mat-icon>
+      </button>
+    }
     <button mat-flat-button (click)="dialogRef.close()">BEZÁRÁS</button>
   </mat-dialog-actions>
 </div>
+
+<mat-menu #pollsMenu="matMenu" class="header-menu polls-menu-panel">
+  <button mat-menu-item class="header-menu-item" (click)="removePoll()">
+    <span>Törlés</span>
+    <mat-icon>delete_outline</mat-icon>
+  </button>
+</mat-menu>
+

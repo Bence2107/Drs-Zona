@@ -2,8 +2,11 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ApiConfiguration} from '../api/api-configuration';
 import {
-  apiPollGetAllActiveGet$Json, apiPollGetByCreatorIdIdGet$Json, apiPollGetIdGet$Json,
-  apiPollRemoveVotePollIdPollOptionIdUserIdPost, apiPollVotePollIdPollOptionIdUserIdPost
+  apiPollDeleteIdDelete,
+  apiPollGetAllActiveGet$Json,
+  apiPollGetByCreatorIdIdGet$Json,
+  apiPollGetIdGet$Json,
+  apiPollVotePollIdPollOptionIdUserIdPost
 } from '../api/functions';
 import {map} from 'rxjs/operators';
 import {PollListDto} from '../api/models/poll-list-dto';
@@ -48,9 +51,9 @@ export class PollService {
     });
   }
 
-  removeVote(pollId: string, pollOptionId: string, userId: string): Observable<any> {
-    return apiPollRemoveVotePollIdPollOptionIdUserIdPost(this.http, this.apiConfig.rootUrl, {
-      pollId, pollOptionId, userId
-    });
+  removePoll(id: string){
+    return apiPollDeleteIdDelete(this.http, this.apiConfig.rootUrl, {id: id}).pipe(
+      map(() => void 0)
+    );
   }
 }

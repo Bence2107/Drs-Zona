@@ -172,7 +172,7 @@ public class PollService(
         }
     }
 
-    public async Task<ResponseResult<bool>> Delete(Guid id, Guid currentUserId)
+    public async Task<ResponseResult<bool>> Delete(Guid id, Guid? currentUserId = null)
     {
         var poll = await pollRepository.GetPollById(id);
         if (poll == null)
