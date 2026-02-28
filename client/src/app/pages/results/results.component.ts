@@ -15,10 +15,15 @@ import { DriverStandingsResultDto } from '../../api/models/driver-standings-resu
 import { ConstructorStandingsResultDto } from '../../api/models/constructor-standings-result-dto';
 import { ResultsService } from '../../services/results.service';
 import { SeasonOverviewDto } from '../../api/models/season-overview-dto';
+import { DriverLookUpDto } from '../../api/models/driver-look-up-dto';
+import { ConstructorLookUpDto } from '../../api/models/constructor-look-up-dto';
+import { DriverSeasonResultDto } from '../../api/models/driver-season-result-dto';
+import { ConstructorSeasonResultDto } from '../../api/models/constructor-season-result-dto';
 
 
 type ViewMode = 'results' | 'drivers' | 'constructors';
 const ALL_GP_ID = 'all-season-overview';
+const AGGREGATED_ID = 'aggregated';
 
 @Component({
   selector: 'app-results',
@@ -51,12 +56,25 @@ export class ResultsComponent implements OnInit {
   driverStandings = signal<DriverStandingsResultDto[]>([]);
   constructorStandings = signal<ConstructorStandingsResultDto[]>([]);
 
+  driverList = signal<DriverLookUpDto[]>([]);
+  constructorList = signal<ConstructorLookUpDto[]>([]);
+  selectedDriverId = signal<string>(AGGREGATED_ID);
+  selectedConstructorId = signal<string>(AGGREGATED_ID);
+
+  driverSeasonResults = signal<DriverSeasonResultDto[]>([]);
+  constructorSeasonResults = signal<ConstructorSeasonResultDto[]>([]);
+
   isLoading = signal(false);
 
   raceColumns = ['position', 'driver', 'constructor', 'time', 'points'];
   driverColumns = ['position', 'driver', 'constructor', 'points'];
   constructorColumns = ['position', 'constructor', 'points'];
   overviewColumns = ['grandPrixName', 'winnerName', 'teamName', 'laps', 'time'];
+  driverSeasonColumns = ['grandPrixName', 'date', 'teamName', 'position', 'points'];
+  constructorSeasonColumns = ['grandPrixName', 'date', 'points'];
+
+  readonly ALL_GP_ID = ALL_GP_ID;
+  readonly AGGREGATED_ID = AGGREGATED_ID;
 
   ngOnInit() {
     this.loadAllSeries();
@@ -89,6 +107,18 @@ export class ResultsComponent implements OnInit {
     this.viewMode.set(mode);
     const drChampId = this.selectedDriversChampId();
 
+    this.selectedDriverId.set(AGGREGATED_ID);
+    this.selectedConstructorId.set(AGGREGATED_ID);
+    this.driverSeasonResults.set([]);
+    this.constructorSeasonResults.set([]);
+
+    if (mode === 'drivers' && drChampId) {
+      this.loadDriverList(drChampId);
+    } else if (mode === 'constructors') {
+      const coChampId = this.selectedConstructorsChampId();
+      if (coChampId) this.loadConstructorList(coChampId);
+    }
+
     if (mode === 'results' && drChampId && !this.selectedGrandPrixId()) {
       this.loadLatestGrandPrix(drChampId);
     } else {
@@ -103,6 +133,10 @@ export class ResultsComponent implements OnInit {
 
     this.selectedGrandPrixId.set(ALL_GP_ID);
     this.selectedSession.set(null);
+    this.selectedDriverId.set(AGGREGATED_ID);
+    this.selectedConstructorId.set(AGGREGATED_ID);
+    this.driverSeasonResults.set([]);
+    this.constructorSeasonResults.set([]);
 
     if (this.viewMode() === 'results') {
       this.loadSeasonOverview(season.driversChampId!);
@@ -110,8 +144,64 @@ export class ResultsComponent implements OnInit {
       this.standingsService.getGrandPrixByChampionship(season.driversChampId!).subscribe(res => {
         this.grandsPrix.set(res);
       });
+    } else if (this.viewMode() === 'drivers') {
+      this.loadDriverList(season.driversChampId!);
+      this.refreshData();
+    } else if (this.viewMode() === 'constructors') {
+      this.loadConstructorList(season.constructorsChampId!);
+      this.refreshData();
     } else {
       this.refreshData();
+    }
+  }
+
+  private loadDriverList(drChampId: string) {
+    this.standingsService.getDriversByDriversChampionship(drChampId).subscribe(res => {
+      this.driverList.set(res);
+    });
+  }
+
+  private loadConstructorList(coChampId: string) {
+    this.standingsService.getConstructorsByConstChampionship(coChampId).subscribe(res => {
+      this.constructorList.set(res);
+    });
+  }
+
+  onDriverFilterChange(driverId: string) {
+    this.selectedDriverId.set(driverId);
+    if (driverId === AGGREGATED_ID) {
+      this.driverSeasonResults.set([]);
+      this.refreshData();
+    } else {
+      const drChampId = this.selectedDriversChampId();
+      if (!drChampId) return;
+      this.isLoading.set(true);
+      this.standingsService.getDriverResultsBySeason(driverId, drChampId).subscribe({
+        next: (res) => {
+          this.driverSeasonResults.set(res || []);
+          this.isLoading.set(false);
+        },
+        error: () => this.isLoading.set(false)
+      });
+    }
+  }
+
+  onConstructorFilterChange(constructorId: string) {
+    this.selectedConstructorId.set(constructorId);
+    if (constructorId === AGGREGATED_ID) {
+      this.constructorSeasonResults.set([]);
+      this.refreshData();
+    } else {
+      const coChampId = this.selectedConstructorsChampId();
+      if (!coChampId) return;
+      this.isLoading.set(true);
+      this.standingsService.getConstructorsResultsBySeason(constructorId, coChampId).subscribe({
+        next: (res) => {
+          this.constructorSeasonResults.set(res || []);
+          this.isLoading.set(false);
+        },
+        error: () => this.isLoading.set(false)
+      });
     }
   }
 
@@ -219,6 +309,4 @@ export class ResultsComponent implements OnInit {
       error: () => this.isLoading.set(false)
     });
   }
-
-  readonly ALL_GP_ID = ALL_GP_ID;
 }
