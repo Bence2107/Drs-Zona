@@ -22,10 +22,12 @@
   <div class="filter-row">
     <mat-form-field appearance="outline">
       <mat-label>Szezon</mat-label>
-      <mat-select (selectionChange)="onSeasonChange($event.value)">
-        @for (s of seasons(); track s.driversChampId) {
-          <mat-option [value]="s">{{ s.season }}</mat-option>
-        }
+      <mat-select
+        [ngModel]="selectedSeason()"
+        (selectionChange)="onSeasonChange($event.value)"
+        [compareWith]="compareSeasons"> @for (s of seasons(); track s.driversChampId) {
+        <mat-option [value]="s">{{ s.season }}</mat-option>
+      }
       </mat-select>
     </mat-form-field>
 

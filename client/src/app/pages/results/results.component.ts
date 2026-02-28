@@ -30,7 +30,6 @@ type ViewMode = 'results' | 'drivers' | 'constructors';
 export class ResultsComponent implements OnInit {
   private standingsService = inject(ResultsService);
 
-  // --- State Signals ---
   viewMode = signal<ViewMode>('results');
   seriesList = signal<SeriesLookupDto[]>([]);
   seasons = signal<YearLookupDto[]>([]);
@@ -42,6 +41,7 @@ export class ResultsComponent implements OnInit {
   selectedConstructorsChampId = signal<string | null>(null);
   selectedGrandPrixId = signal<string | null>(null);
   selectedSession = signal<string | null>(null);
+  selectedSeason = signal<YearLookupDto | null>(null);
 
   raceResults = signal<GrandRrixResultDto[]>([]);
   driverStandings = signal<DriverStandingsResultDto[]>([]);
@@ -64,26 +64,71 @@ export class ResultsComponent implements OnInit {
     });
   }
 
+  compareSeasons(o1: YearLookupDto, o2: YearLookupDto): boolean {
+    return o1 && o2 ? o1.driversChampId === o2.driversChampId : o1 === o2;
+  }
+
   onSeriesChange(seriesId: string) {
     this.selectedSeriesId.set(seriesId);
-    this.selectedDriversChampId.set(null);
     this.standingsService.getSeasonsBySeries(seriesId).subscribe(res => {
       this.seasons.set(res);
+      if (res.length > 0) {
+        const latestSeason = res[res.length - 1];
+        this.selectedSeason.set(latestSeason);
+        this.onSeasonChange(latestSeason);
+      }
     });
   }
 
   onViewModeChange(mode: ViewMode) {
     this.viewMode.set(mode);
-    this.refreshData();
+    const drChampId = this.selectedDriversChampId();
+
+    if (mode === 'results' && drChampId && !this.selectedGrandPrixId()) {
+      this.loadLatestGrandPrix(drChampId);
+    } else {
+      this.refreshData();
+    }
   }
 
   onSeasonChange(season: YearLookupDto) {
+    this.selectedSeason.set(season);
     this.selectedDriversChampId.set(season.driversChampId!);
     this.selectedConstructorsChampId.set(season.constructorsChampId!);
-
     this.selectedGrandPrixId.set(null);
     this.selectedSession.set(null);
-    this.refreshData();
+
+    if (this.viewMode() === 'results') {
+      this.loadLatestGrandPrix(season.driversChampId!);
+    } else {
+      this.refreshData();
+    }
+  }
+
+  private loadLatestGrandPrix(drChampId: string) {
+    this.isLoading.set(true);
+    this.standingsService.getGrandPrixByChampionship(drChampId).subscribe(res => {
+      this.grandsPrix.set(res);
+      if (res.length > 0) {
+        const latestGP = res[res.length - 1];
+        this.selectedGrandPrixId.set(latestGP.id!);
+
+        this.standingsService.getSessionsByGrandPrix(latestGP.id!).subscribe(sessions => {
+          this.sessions.set(sessions);
+          if (sessions.length > 0) {
+            let defaultSession = sessions.find(s => s === 'Race') ||
+              sessions.find(s => s === 'Sprint') ||
+              sessions[sessions.length - 1];
+
+            this.loadResults(defaultSession);
+          } else {
+            this.isLoading.set(false);
+          }
+        });
+      } else {
+        this.isLoading.set(false);
+      }
+    });
   }
 
   refreshData() {
@@ -102,7 +147,6 @@ export class ResultsComponent implements OnInit {
       });
     } else if (this.viewMode() === 'constructors' && coChampId) {
       this.isLoading.set(true);
-      // Itt most már a helyes, különálló konstruktőri ID-t használjuk!
       this.standingsService.getConstructorStandings(coChampId).subscribe(res => {
         this.constructorStandings.set(res.results || []);
         this.isLoading.set(false);
@@ -113,8 +157,23 @@ export class ResultsComponent implements OnInit {
   onGrandPrixChange(gpId: string) {
     this.selectedGrandPrixId.set(gpId);
     this.selectedSession.set(null);
-    this.standingsService.getSessionsByGrandPrix(gpId).subscribe(res => {
-      this.sessions.set(res);
+    this.isLoading.set(true);
+
+    this.standingsService.getSessionsByGrandPrix(gpId).subscribe({
+      next: (sessions) => {
+        this.sessions.set(sessions);
+
+        if (sessions.length > 0) {
+          const preferredSession = sessions.find(s => s === 'Race') ||
+            sessions.find(s => s === 'Sprint') ||
+            sessions[sessions.length - 1];
+
+          this.loadResults(preferredSession);
+        } else {
+          this.isLoading.set(false);
+        }
+      },
+      error: () => this.isLoading.set(false)
     });
   }
 
