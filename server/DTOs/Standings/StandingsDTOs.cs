@@ -281,7 +281,11 @@ public record ConstructorStandingsResultDto(
 );
 
 public record SeriesLookupDto(Guid Id, string Name);
-public record YearLookupDto(string Season, Guid DriversChampId, Guid ConstructorsChampId); 
+public record YearLookupDto(string Season, Guid DriversChampId, Guid ConstructorsChampId);
+
+public record DriverLookUpDto(Guid Id, string Name);
+public record ConstructorLookUpDto(Guid Id, string Name);
+
 public record GrandPrixLookupDto(Guid Id, string Name);
 
 public record DefaultFiltersDto(

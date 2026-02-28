@@ -43,6 +43,7 @@ public class ConstructorCompetitionRepository(EfContext context) : IConstructorC
         .ToListAsync();
 
     public async Task<List<ConstructorCompetition>> GetByChampionshipId(Guid champId) => await _constructorCompetitions
+        .Include(cc => cc.Constructor)
         .Where(cc => cc.ConstChampId == champId)
         .ToListAsync();
 

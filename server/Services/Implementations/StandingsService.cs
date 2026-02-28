@@ -11,6 +11,8 @@ public class StandingsService (
     IConstructorsChampionshipsRepository constructorChampRepo,
     IResultsRepository resultsRepo,
     IGrandsPrixRepository grandsPrixRepo,
+    IDriverParticipationRepository driverParticipationRepo,
+    IConstructorCompetitionRepository constructorCompetitionRepo,
     ISeriesRepository seriesRepo
 )
 : IStandingsService
@@ -71,6 +73,40 @@ public class StandingsService (
             .ToList();
 
         return ResponseResult<List<YearLookupDto>>.Success(dtoS);
+    }
+
+    public async Task<ResponseResult<List<DriverLookUpDto>>> GetDriversBySeason(Guid driversChampId)
+    {
+        var driverParticipationsOnChampionship =
+            await driverParticipationRepo.GetByChampionshipId(driversChampId);
+
+        var dto = driverParticipationsOnChampionship.Select(dp =>
+                new DriverLookUpDto(
+                    Id: dp.Driver!.Id,
+                    Name: dp.Driver!.Name
+                )
+            )
+            .OrderBy(dp => dp.Name)
+            .ToList();
+
+        return ResponseResult<List<DriverLookUpDto>>.Success(dto);
+    }
+
+    public async Task<ResponseResult<List<ConstructorLookUpDto>>> GetConstructorsBySeason(Guid constructorId)
+    {
+        var constructorParticipationsOnChampionship =
+            await constructorCompetitionRepo.GetByChampionshipId(constructorId);
+
+        var dto = constructorParticipationsOnChampionship.Select(cp =>
+                new ConstructorLookUpDto(
+                    Id: cp.Constructor!.Id,
+                    Name: cp.Constructor!.Name
+                )
+            )
+            .OrderBy(cp => cp.Name)
+            .ToList();
+
+        return ResponseResult<List<ConstructorLookUpDto>>.Success(dto);
     }
 
     public async Task<ResponseResult<List<GrandPrixLookupDto>>> GetGrandsPrixByChampionship(Guid driverChampId)

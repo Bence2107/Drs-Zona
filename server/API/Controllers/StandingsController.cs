@@ -56,6 +56,38 @@ public class StandingsController(IStandingsService standingsService): Controller
         return Ok(response.Value);
     }
 
+    [HttpGet("getDriversByDriversChampionship/{driverChampId:guid}")]
+    public async Task<ActionResult<List<DriverLookUpDto>>> GetDriversByDriversChamp(Guid driverChampId)
+    {
+        var response = await standingsService.GetDriversBySeason(driverChampId);
+        if (!response.IsSuccess)
+        {
+            return BadRequest(new
+            {
+                response.ErrorField, 
+                response.Message
+            });
+        }
+        
+        return Ok(response.Value);
+    }
+    
+    [HttpGet("getConstructorsByConstructorsChampionship/{constChampId:guid}")]
+    public async Task<ActionResult<List<ConstructorLookUpDto>>> GetConstructorsByConstructorsChamp(Guid constChampId)
+    {
+        var response = await standingsService.GetConstructorsBySeason(constChampId);
+        if (!response.IsSuccess)
+        {
+            return BadRequest(new
+            {
+                response.ErrorField, 
+                response.Message
+            });
+        }
+        
+        return Ok(response.Value);
+    }
+
     [HttpGet("getGrandPrixByChampionship/{driverChampId:guid}")]
     public async Task<ActionResult<List<GrandPrixLookupDto>>> GetGrandsPrixByChampionship(Guid driverChampId)
     {

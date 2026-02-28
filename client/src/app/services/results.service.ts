@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiConfiguration } from '../api/api-configuration';
 import { SeriesLookupDto } from '../api/models/series-lookup-dto';
@@ -10,6 +10,8 @@ import { GrandPrixResultsDto } from '../api/models/grand-prix-results-dto';
 import {
   apiStandingsGetAllSeriesGet$Json, apiStandingsGetByConstructorChampionshipIdConstructsChampIdGet$Json,
   apiStandingsGetByDriversChampionshipIdDriversChampIdGet$Json,
+  apiStandingsGetConstructorsResultsBySeasonConstructorIdConstructorChampIdGet$Json,
+  apiStandingsGetDriverResultsBySeasonDriverIdDriverChampIdGet$Json,
   apiStandingsGetGrandPrixByChampionshipDriverChampIdGet$Json,
   apiStandingsGetGrandPrixResultsGrandPrixIdSessionGet$Json, apiStandingsGetSeasonOverviewDriverChampIdGet$Json,
   apiStandingsGetSeasonsBySeriesSeriesIdGet$Json,
@@ -18,6 +20,13 @@ import {
 import {DriverStandingsDto} from '../api/models/driver-standings-dto';
 import {ConstructorStandingsDto} from '../api/models/constructor-standings-dto';
 import { SeasonOverviewDto } from '../api/models/season-overview-dto';
+import {DriverSeasonResultDto} from '../api/models/driver-season-result-dto';
+import {ConstructorSeasonResultDto} from '../api/models/constructor-season-result-dto';
+import { DriverLookUpDto } from "../api/models";
+import { ConstructorLookUpDto } from "../api/models";
+import {
+  apiStandingsGetConstructorsByConstructorsChampionshipConstChampIdGet$Json
+} from '../api/fn/standings/api-standings-get-constructors-by-constructors-championship-const-champ-id-get-json';
 
 @Injectable({
   providedIn: 'root'
@@ -85,8 +94,34 @@ export class ResultsService {
   }
 
   getSeasonOverview(driversChampId: string): Observable<SeasonOverviewDto[]> {
-    return apiStandingsGetSeasonOverviewDriverChampIdGet$Json(this.http, this.apiConfig.rootUrl, {driverChampId: driversChampId}).pipe(
+    return apiStandingsGetSeasonOverviewDriverChampIdGet$Json(this.http, this.apiConfig.rootUrl, { driverChampId: driversChampId}).pipe(
       map(r => r.body as SeasonOverviewDto[])
     )
+  }
+
+  getDriversByDriversChampionship(driversChampId: string): Observable<DriverLookUpDto[]> {
+    return apiStandingsGetByDriversChampionshipIdDriversChampIdGet$Json(this.http, this.apiConfig.rootUrl, { driversChampId: driversChampId}).pipe(
+      map(r => r.body as DriverLookUpDto[])
+    )
+  }
+
+  getConstructorsByConstChampionship(constChampId: string): Observable<ConstructorLookUpDto[]> {
+    return apiStandingsGetConstructorsByConstructorsChampionshipConstChampIdGet$Json(this.http, this.apiConfig.rootUrl, { constChampId: constChampId}).pipe(
+      map(r => r.body as ConstructorLookUpDto[])
+    )
+  }
+
+  getDriverResultsBySeason(driverId:string, driversChampId: string): Observable<DriverSeasonResultDto[]> {
+      return apiStandingsGetDriverResultsBySeasonDriverIdDriverChampIdGet$Json(this.http, this.apiConfig.rootUrl,
+        {driverId: driverId, driverChampId: driversChampId}).pipe(
+        map(r => r.body as DriverSeasonResultDto[])
+      );
+  }
+
+  getConstructorsResultsBySeason(constructorId: string, constructorChampId: string): Observable<ConstructorSeasonResultDto[]> {
+    return apiStandingsGetConstructorsResultsBySeasonConstructorIdConstructorChampIdGet$Json(this.http, this.apiConfig.rootUrl,
+      {constructorId: constructorId, constructorChampId: constructorChampId }).pipe(
+      map(r => r.body as DriverSeasonResultDto[])
+    );
   }
 }

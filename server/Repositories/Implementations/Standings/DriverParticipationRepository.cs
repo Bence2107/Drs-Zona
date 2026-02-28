@@ -40,6 +40,7 @@ public class DriverParticipationRepository(EfContext context) : IDriverParticipa
         .ToListAsync();
 
     public async Task<List<DriverParticipation>> GetByChampionshipId(Guid champId) => await _driverParticipates
+        .Include(cc => cc.Driver)
         .Where(d => d.DriverChampId == champId)
         .ToListAsync();
     
