@@ -63,7 +63,7 @@ public class AuthRepository(EfContext context) : IAuthRepository
         }
     }
 
-    public async Task<bool> CheckIfIdExists(Guid id)
+    public async Task<bool> CheckIfIdExists(Guid? id)
     {
         return await _users.AnyAsync(u => u.Id == id);
     }

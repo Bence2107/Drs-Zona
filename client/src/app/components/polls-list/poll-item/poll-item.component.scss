@@ -54,18 +54,18 @@
 .poll-title {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(-text-main);
   line-height: 1.3;
   margin-bottom: 4px;
 }
 
 .poll-description {
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.95rem;
   line-height: 1.5;
   margin: 16px 0;
   display: -webkit-box;
-  -webkit-line-clamp: 3; // Maximum 3 sor, utána három pont
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

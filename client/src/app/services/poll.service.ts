@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ApiConfiguration} from '../api/api-configuration';
 import {
+  apiPollCreateUserIdPost,
   apiPollDeleteIdDelete,
   apiPollGetAllActiveGet$Json,
   apiPollGetByCreatorIdIdGet$Json,
@@ -12,13 +13,13 @@ import {map} from 'rxjs/operators';
 import {PollListDto} from '../api/models/poll-list-dto';
 import {Observable} from 'rxjs';
 import {PollDto} from '../api/models/poll-dto';
+import {PollCreateDto} from '../api/models/poll-create-dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PollService {
   constructor(private http: HttpClient, private apiConfig: ApiConfiguration) {}
-
 
   getAllActive(): Observable<PollListDto[]> {
     return apiPollGetAllActiveGet$Json(this.http, this.apiConfig.rootUrl).pipe(
@@ -49,6 +50,12 @@ export class PollService {
     return apiPollVotePollIdPollOptionIdUserIdPost(this.http, this.apiConfig.rootUrl, {
       pollId, pollOptionId, userId
     });
+  }
+
+  createPoll(dto: PollCreateDto, userId: string) {
+    return apiPollCreateUserIdPost(this.http, this.apiConfig.rootUrl, {body: dto, userId: userId}).pipe(
+      map(response => void 0)
+    );
   }
 
   removePoll(id: string){

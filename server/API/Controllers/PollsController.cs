@@ -69,8 +69,9 @@ public class PollController(IPollService pollService): ControllerBase
     }
     
     [HttpPost("create/{userId:guid}")]
-    public async Task<ActionResult> Create([FromBody]PollCreateDto dto, Guid userId)
+    public async Task<ActionResult> Create([FromBody]PollCreateDto dto)
     {
+        var userId = GetCurrentUserId();
         var result = await pollService.Create(dto, userId);
 
         if (!result.IsSuccess)

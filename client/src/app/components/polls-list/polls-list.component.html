@@ -1,3 +1,11 @@
+<div class="list-header">
+  @if (userId) {
+    <button mat-flat-button color="primary" (click)="openCreatePollDialog()">
+      <mat-icon>add</mat-icon> ÚJ SZAVAZÁS
+    </button>
+  }
+</div>
+
 <div class="carousel-wrapper">
   <button mat-mini-fab color="primary" class="nav-btn prev" (click)="scroll(-1)">
     <mat-icon>chevron_left</mat-icon>

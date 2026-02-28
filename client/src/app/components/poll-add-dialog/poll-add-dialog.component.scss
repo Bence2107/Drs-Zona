@@ -1,0 +1,45 @@
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; // Középre rendezi a mezőket
+  gap: 8px;
+  padding: 20px 0;
+  min-width: 450px;
+}
+
+// Itt állítjuk be, hogy a mezők ne legyenek túl szélesek
+.narrow-field {
+  width: 85%;
+  max-width: 380px;
+}
+
+.options-box {
+  width: 85%;
+  max-width: 380px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 94, 94, 0.2);
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    h3 { margin: 0; font-size: 0.85rem; color: var(--text-secondary); }
+  }
+
+  .option-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    mat-form-field { flex: 1; }
+  }
+}
+
+h2[mat-dialog-title] {
+  text-align: center;
+  color: var(--accent-color);
+  font-weight: 800;
+  text-transform: uppercase;
+}

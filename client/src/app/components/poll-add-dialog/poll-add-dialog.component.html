@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>Új szavazás létrehozása</h2>
+
+<mat-dialog-content [formGroup]="pollForm" class="dialog-container">
+
+  <mat-form-field appearance="outline" class="narrow-field">
+    <mat-label>Cím</mat-label>
+    <input matInput formControlName="title" placeholder="Szavazás címe">
+    @if (pollForm.get('title')?.invalid && pollForm.get('title')?.touched) {
+      <mat-error>A cím kötelező (min. 10 karakter)</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="narrow-field">
+    <mat-label>Leírás</mat-label>
+    <textarea matInput formControlName="description" rows="3" placeholder="Miről szól a szavazás?"></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="narrow-field">
+    <mat-label>Lejárat dátuma</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="expiresAt" [min]="minDate" readonly (click)="picker.open()">
+    <mat-hint>ÉÉÉÉ.HH.NN</mat-hint>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    @if (pollForm.get('expiresAt')?.invalid && pollForm.get('expiresAt')?.touched) {
+      <mat-error>A dátum megadása kötelező</mat-error>
+    }
+  </mat-form-field>
+
+  <div formArrayName="options" class="options-box">
+    <div class="header">
+      <h3>Válaszlehetőségek ({{options.length}}/10)</h3>
+      <button mat-icon-button color="primary" type="button" (click)="addOption()" [disabled]="options.length >= 10">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+    </div>
+
+    @for (option of options.controls; track $index) {
+      <div class="option-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{$index + 1}}. opció</mat-label>
+          <input matInput [formControlName]="$index">
+        </mat-form-field>
+        <button mat-icon-button color="warn" type="button" (click)="removeOption($index)" [disabled]="options.length <= 2">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>MÉGSE</button>
+  <button mat-flat-button color="primary" (click)="submit()" [disabled]="pollForm.invalid">LÉTREHOZÁS</button>
+</mat-dialog-actions>

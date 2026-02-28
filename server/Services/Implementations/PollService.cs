@@ -126,9 +126,9 @@ public class PollService(
         return ResponseResult<List<PollListDto>>.Success(dto);
     }
 
-    public async Task<ResponseResult<bool>> Create(PollCreateDto dto, Guid currentUserId)
+    public async Task<ResponseResult<bool>> Create(PollCreateDto dto, Guid? currentUserId = null)
     {
-        if (!await userRepository.CheckIfIdExists(currentUserId))
+        if (currentUserId is not null && await userRepository.CheckIfIdExists(currentUserId))
             return ResponseResult<bool>.Failure("User not found");
 
         await using var transaction = await context.Database.BeginTransactionAsync();

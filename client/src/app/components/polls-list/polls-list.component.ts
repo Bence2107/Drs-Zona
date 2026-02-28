@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, ElementRef, Input} from '@angular/core';
+import {Component, ViewChild, ElementRef, Input} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PollService } from '../../services/poll.service';
 import { PollListDto } from '../../api/models/poll-list-dto';
@@ -9,6 +9,7 @@ import {PollVoteDialogComponent} from '../poll-vote-dialog/poll-vote-dialog.comp
 import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../../services/auth.service';
 import {UserProfileResponse} from '../../api/models/user-profile-response';
+import {PollAddDialogComponent} from '../poll-add-dialog/poll-add-dialog.component';
 
 @Component({
   selector: 'app-poll-list',
@@ -36,7 +37,7 @@ export class PollListComponent {
     this.pollService.getPoll(pollId).subscribe({
       next: (pollData) => {
         const dialogRef = this.dialog.open(PollVoteDialogComponent, {
-          width: '500px',
+          width: '700px',
           data: {
             poll: pollData,
             userId: this.userId
@@ -50,5 +51,18 @@ export class PollListComponent {
       },
       error: (err) => console.error('Hiba a szavazás betöltésekor', err)
     });
+  }
+
+  protected openCreatePollDialog() {
+      const dialogRef = this.dialog.open(PollAddDialogComponent, {
+        width: '1000px',
+        disableClose: true
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.pollService.getAllActive().subscribe(data => this.polls = data);
+        }
+      });
   }
 }
