@@ -14,8 +14,11 @@ import { GrandRrixResultDto } from '../../api/models/grand-rrix-result-dto';
 import { DriverStandingsResultDto } from '../../api/models/driver-standings-result-dto';
 import { ConstructorStandingsResultDto } from '../../api/models/constructor-standings-result-dto';
 import { ResultsService } from '../../services/results.service';
+import { SeasonOverviewDto } from '../../api/models/season-overview-dto';
+
 
 type ViewMode = 'results' | 'drivers' | 'constructors';
+const ALL_GP_ID = 'all-season-overview';
 
 @Component({
   selector: 'app-results',
@@ -35,6 +38,7 @@ export class ResultsComponent implements OnInit {
   seasons = signal<YearLookupDto[]>([]);
   grandsPrix = signal<GrandPrixLookupDto[]>([]);
   sessions = signal<string[]>([]);
+  seasonOverview = signal<SeasonOverviewDto[]>([]);
 
   selectedSeriesId = signal<string | null>(null);
   selectedDriversChampId = signal<string | null>(null);
@@ -52,6 +56,7 @@ export class ResultsComponent implements OnInit {
   raceColumns = ['position', 'driver', 'constructor', 'time', 'points'];
   driverColumns = ['position', 'driver', 'constructor', 'points'];
   constructorColumns = ['position', 'constructor', 'points'];
+  overviewColumns = ['grandPrixName', 'winnerName', 'teamName', 'laps', 'time'];
 
   ngOnInit() {
     this.loadAllSeries();
@@ -95,14 +100,33 @@ export class ResultsComponent implements OnInit {
     this.selectedSeason.set(season);
     this.selectedDriversChampId.set(season.driversChampId!);
     this.selectedConstructorsChampId.set(season.constructorsChampId!);
-    this.selectedGrandPrixId.set(null);
+
+    this.selectedGrandPrixId.set(ALL_GP_ID);
     this.selectedSession.set(null);
 
     if (this.viewMode() === 'results') {
-      this.loadLatestGrandPrix(season.driversChampId!);
+      this.loadSeasonOverview(season.driversChampId!);
+
+      this.standingsService.getGrandPrixByChampionship(season.driversChampId!).subscribe(res => {
+        this.grandsPrix.set(res);
+      });
     } else {
       this.refreshData();
     }
+  }
+
+  loadSeasonOverview(drChampId: string) {
+    this.isLoading.set(true);
+    this.selectedGrandPrixId.set(ALL_GP_ID);
+    this.selectedSession.set(null);
+
+    this.standingsService.getSeasonOverview(drChampId).subscribe({
+      next: (res) => {
+        this.seasonOverview.set(res || []);
+        this.isLoading.set(false);
+      },
+      error: () => this.isLoading.set(false)
+    });
   }
 
   private loadLatestGrandPrix(drChampId: string) {
@@ -155,6 +179,11 @@ export class ResultsComponent implements OnInit {
   }
 
   onGrandPrixChange(gpId: string) {
+    if (gpId === ALL_GP_ID) {
+      this.loadSeasonOverview(this.selectedDriversChampId()!);
+      return;
+    }
+
     this.selectedGrandPrixId.set(gpId);
     this.selectedSession.set(null);
     this.isLoading.set(true);
@@ -162,7 +191,6 @@ export class ResultsComponent implements OnInit {
     this.standingsService.getSessionsByGrandPrix(gpId).subscribe({
       next: (sessions) => {
         this.sessions.set(sessions);
-
         if (sessions.length > 0) {
           const preferredSession = sessions.find(s => s === 'Race') ||
             sessions.find(s => s === 'Sprint') ||
@@ -191,4 +219,6 @@ export class ResultsComponent implements OnInit {
       error: () => this.isLoading.set(false)
     });
   }
+
+  readonly ALL_GP_ID = ALL_GP_ID;
 }

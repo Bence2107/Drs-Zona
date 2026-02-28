@@ -55,9 +55,11 @@
       font-style: italic;
     }
 
-    tr:nth-child(1) td { font-weight: bold; color: #d4af37; }
-    tr:nth-child(2) td { font-weight: bold; color: #aaa9ad; }
-    tr:nth-child(3) td { font-weight: bold; color: #b08d57; }
+    table.is-result-table {
+      tr:nth-child(1) td { font-weight: bold; color: #d4af37; }
+      tr:nth-child(2) td { font-weight: bold; color: #aaa9ad; }
+      tr:nth-child(3) td { font-weight: bold; color: #b08d57; }
+    }
   }
 }
 

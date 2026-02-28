@@ -169,7 +169,7 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
     
     [HttpGet("getSeasonOverview/{driverChampId:guid}")]
-    public async Task<ActionResult<List<ConstructorSeasonResultDto>>> GetSeasonOverview(Guid driverChampId)
+    public async Task<ActionResult<List<SeasonOverviewDto>>> GetSeasonOverview(Guid driverChampId)
     {
         var response = await standingsService.GetSeasonOverview(driverChampId);
         if (!response.IsSuccess)

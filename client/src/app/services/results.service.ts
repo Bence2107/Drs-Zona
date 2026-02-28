@@ -11,12 +11,13 @@ import {
   apiStandingsGetAllSeriesGet$Json, apiStandingsGetByConstructorChampionshipIdConstructsChampIdGet$Json,
   apiStandingsGetByDriversChampionshipIdDriversChampIdGet$Json,
   apiStandingsGetGrandPrixByChampionshipDriverChampIdGet$Json,
-  apiStandingsGetGrandPrixResultsGrandPrixIdSessionGet$Json,
+  apiStandingsGetGrandPrixResultsGrandPrixIdSessionGet$Json, apiStandingsGetSeasonOverviewDriverChampIdGet$Json,
   apiStandingsGetSeasonsBySeriesSeriesIdGet$Json,
   apiStandingsGetSessionsByGrandPrixGrandPrixIdGet$Json
 } from '../api/functions';
 import {DriverStandingsDto} from '../api/models/driver-standings-dto';
 import {ConstructorStandingsDto} from '../api/models/constructor-standings-dto';
+import { SeasonOverviewDto } from '../api/models/season-overview-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -81,5 +82,11 @@ export class ResultsService {
     return apiStandingsGetByConstructorChampionshipIdConstructsChampIdGet$Json(this.http, this.apiConfig.rootUrl, { constructsChampId }).pipe(
       map(r => r.body as ConstructorStandingsDto)
     );
+  }
+
+  getSeasonOverview(driversChampId: string): Observable<SeasonOverviewDto[]> {
+    return apiStandingsGetSeasonOverviewDriverChampIdGet$Json(this.http, this.apiConfig.rootUrl, {driverChampId: driversChampId}).pipe(
+      map(r => r.body as SeasonOverviewDto[])
+    )
   }
 }

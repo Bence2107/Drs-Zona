@@ -43,6 +43,7 @@ export type { PollDto } from './models/poll-dto';
 export type { PollListDto } from './models/poll-list-dto';
 export type { PollOptionDto } from './models/poll-option-dto';
 export type { RegisterRequest } from './models/register-request';
+export type { SeasonOverviewDto } from './models/season-overview-dto';
 export type { SeriesCreateDto } from './models/series-create-dto';
 export type { SeriesDetailDto } from './models/series-detail-dto';
 export type { SeriesListDto } from './models/series-list-dto';

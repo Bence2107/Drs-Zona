@@ -7,13 +7,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ConstructorSeasonResultDto } from '../../models/constructor-season-result-dto';
+import { SeasonOverviewDto } from '../../models/season-overview-dto';
 
 export interface ApiStandingsGetSeasonOverviewDriverChampIdGet$Plain$Params {
   driverChampId: string;
 }
 
-export function apiStandingsGetSeasonOverviewDriverChampIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiStandingsGetSeasonOverviewDriverChampIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ConstructorSeasonResultDto>>> {
+export function apiStandingsGetSeasonOverviewDriverChampIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiStandingsGetSeasonOverviewDriverChampIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<SeasonOverviewDto>>> {
   const rb = new RequestBuilder(rootUrl, apiStandingsGetSeasonOverviewDriverChampIdGet$Plain.PATH, 'get');
   if (params) {
     rb.path('driverChampId', params.driverChampId, {});
@@ -24,7 +24,7 @@ export function apiStandingsGetSeasonOverviewDriverChampIdGet$Plain(http: HttpCl
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<ConstructorSeasonResultDto>>;
+      return r as StrictHttpResponse<Array<SeasonOverviewDto>>;
     })
   );
 }
