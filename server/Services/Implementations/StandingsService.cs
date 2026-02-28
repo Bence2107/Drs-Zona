@@ -53,12 +53,24 @@ public class StandingsService (
 
     public async Task<ResponseResult<List<YearLookupDto>>> GetSeasonsBySeries(Guid seriesId)
     {
-        var championships = await driverChampRepo.GetBySeriesId(seriesId); 
-        var dtoS = championships
-            .Select(c => new YearLookupDto(c.Season.ToString(), c.Id))
+        var driversChamps = await driverChampRepo.GetBySeriesId(seriesId);
+        var constructorChamps = await constructorChampRepo.GetBySeriesId(seriesId);
+
+        var dtoS = driversChamps
+            .Join(
+                constructorChamps,
+                d => d.Season,
+                c => c.Season,
+                (d, c) => new YearLookupDto(
+                    d.Season.ToString(),
+                    d.Id,
+                    c.Id
+                )
+            )
             .OrderByDescending(y => y.Season)
             .ToList();
-        return ResponseResult<List<YearLookupDto>>.Success(dtoS);    
+
+        return ResponseResult<List<YearLookupDto>>.Success(dtoS);
     }
 
     public async Task<ResponseResult<List<GrandPrixLookupDto>>> GetGrandsPrixByChampionship(Guid driverChampId)

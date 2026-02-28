@@ -72,8 +72,8 @@ public class StandingsController(IStandingsService standingsService): Controller
         return Ok(response.Value);
     }
 
-    [HttpGet("getSeasonsByGrandPrix/{grandPrixId:guid}")]
-    public async Task<ActionResult<string>> GetSessionsByGrandPrix(Guid grandPrixId)
+    [HttpGet("getSessionsByGrandPrix/{grandPrixId:guid}")]
+    public async Task<ActionResult<List<string>>> GetSessionsByGrandPrix(Guid grandPrixId)
     {
         var response = await standingsService.GetSessionsByGrandPrix(grandPrixId);
         if (!response.IsSuccess)

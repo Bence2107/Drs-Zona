@@ -8,12 +8,12 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface ApiStandingsGetSeasonsByGrandPrixGrandPrixIdGet$Plain$Params {
+export interface ApiStandingsGetSessionsByGrandPrixGrandPrixIdGet$Plain$Params {
   grandPrixId: string;
 }
 
-export function apiStandingsGetSeasonsByGrandPrixGrandPrixIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiStandingsGetSeasonsByGrandPrixGrandPrixIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
-  const rb = new RequestBuilder(rootUrl, apiStandingsGetSeasonsByGrandPrixGrandPrixIdGet$Plain.PATH, 'get');
+export function apiStandingsGetSessionsByGrandPrixGrandPrixIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiStandingsGetSessionsByGrandPrixGrandPrixIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
+  const rb = new RequestBuilder(rootUrl, apiStandingsGetSessionsByGrandPrixGrandPrixIdGet$Plain.PATH, 'get');
   if (params) {
     rb.path('grandPrixId', params.grandPrixId, {});
   }
@@ -23,9 +23,9 @@ export function apiStandingsGetSeasonsByGrandPrixGrandPrixIdGet$Plain(http: Http
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<string>;
+      return r as StrictHttpResponse<Array<string>>;
     })
   );
 }
 
-apiStandingsGetSeasonsByGrandPrixGrandPrixIdGet$Plain.PATH = '/api/Standings/getSeasonsByGrandPrix/{grandPrixId}';
+apiStandingsGetSessionsByGrandPrixGrandPrixIdGet$Plain.PATH = '/api/Standings/getSessionsByGrandPrix/{grandPrixId}';
