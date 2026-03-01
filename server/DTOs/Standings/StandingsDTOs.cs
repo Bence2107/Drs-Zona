@@ -220,7 +220,7 @@ public record ResultCreateDto(
     [Required(ErrorMessage = "Helyezés kötelező")] 
     [Range(1, 30, ErrorMessage = "A helyezés 1-30 között lehet")] int FinishPosition,
     [Required(ErrorMessage = "Munkamenet típus kötelező")]
-    [RegularExpression("^(Race|Sprint)$", ErrorMessage = "Érvénytelen típus (Race, Sprint)")]
+    [RegularExpression("^(Verseny|Sprint)$", ErrorMessage = "Érvénytelen típus (Verseny, Sprint)")]
     string Session,
     [Required] [Range(0, long.MaxValue, ErrorMessage = "Érvénytelen időeredmény")] long RaceTime,
     [Required] [Range(0, 26, ErrorMessage = "A pontszám 0-26 lehet")] int DriverPoints,
@@ -229,8 +229,8 @@ public record ResultCreateDto(
 {
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (Session is not ("Race" or "Sprint") && DriverPoints > 0)
-            yield return new ValidationResult("Pont csak Race vagy Sprint munkamenetben szerezhető!", [nameof(DriverPoints)]);
+        if (Session is not ("Verseny" or "Sprint") && DriverPoints > 0)
+            yield return new ValidationResult("Pont csak Verseny vagy Sprint munkamenetben szerezhető!", [nameof(DriverPoints)]);
     }
 }
 
@@ -277,15 +277,14 @@ public record ConstructorStandingsResultDto(
     int Position,
     Guid ConstructorId,
     string ConstructorName,
+    string ConstructorShortName,
     int Points
 );
 
 public record SeriesLookupDto(Guid Id, string Name);
 public record YearLookupDto(string Season, Guid DriversChampId, Guid ConstructorsChampId);
-
 public record DriverLookUpDto(Guid Id, string Name);
-public record ConstructorLookUpDto(Guid Id, string Name);
-
+public record ConstructorLookUpDto(Guid Id, string Name, string ShortName);
 public record GrandPrixLookupDto(Guid Id, string Name);
 
 public record DefaultFiltersDto(
@@ -295,6 +294,6 @@ public record DefaultFiltersDto(
     string Session
 );
 
-public record DriverSeasonResultDto(string GrandPrixName, DateTime Date, string TeamName, int Position, double Points);
-public record ConstructorSeasonResultDto(string GrandPrixName, DateTime Date, double Points);
-public record SeasonOverviewDto(string GrandPrixName, DateTime Date, string WinnerName, string TeamName, int Laps, string Time);
+public record DriverSeasonResultDto(string GrandPrixName, string GrandPrixShortName, DateTime Date, string TeamName, int Position, double Points);
+public record ConstructorSeasonResultDto(string GrandPrixName, string GrandPrixShortName,  DateTime Date, double Points);
+public record SeasonOverviewDto(string GrandPrixName, string GrandPrixShortName, DateTime Date, string WinnerName, string TeamName, int Laps, string Time);

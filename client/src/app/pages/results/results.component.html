@@ -3,6 +3,7 @@
     <mat-button-toggle-group
       [ngModel]="selectedSeriesId()"
       (ngModelChange)="onSeriesChange($event)"
+      hideSingleSelectionIndicator="true"
       class="series-toggle">
       @for (series of seriesList(); track series.id) {
         <mat-button-toggle [value]="series.id">{{ series.name }}</mat-button-toggle>
@@ -12,6 +13,7 @@
     <mat-button-toggle-group
       [ngModel]="viewMode()"
       (ngModelChange)="onViewModeChange($event)"
+      hideSingleSelectionIndicator="true"
       class="view-toggle">
       <mat-button-toggle value="results">Eredmények</mat-button-toggle>
       <mat-button-toggle value="drivers">Egyéni</mat-button-toggle>
@@ -39,7 +41,7 @@
           <mat-option [value]="ALL_GP_ID">Összes (Szezon áttekintés)</mat-option>
 
           @for (gp of grandsPrix(); track gp.id) {
-            <mat-option [value]="gp.id">{{ gp.name }}</mat-option>
+            <mat-option [value]="gp.id">{{ gp.name! | countryFlag}} {{ gp.name }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -96,7 +98,13 @@
               <table mat-table [dataSource]="seasonOverview()">
                 <ng-container matColumnDef="grandPrixName">
                   <th mat-header-cell *matHeaderCellDef> Nagydíj </th>
-                  <td mat-cell *matCellDef="let r">{{r.grandPrixName | countryFlag}} {{r.grandPrixName}}</td>
+                  <td  class="gp-name" mat-cell *matCellDef="let r">
+                    @if(isMobile()) {
+                      {{r.grandPrixName | countryFlag}} {{r.grandPrixShortName}}
+                    } @else {
+                      {{r.grandPrixName | countryFlag}} {{r.grandPrixName}}
+                    }
+                  </td>
                 </ng-container>
                 <ng-container matColumnDef="winnerName">
                   <th mat-header-cell *matHeaderCellDef> Győztes </th>
@@ -125,11 +133,12 @@
                 </ng-container>
                 <ng-container matColumnDef="driver">
                   <th mat-header-cell *matHeaderCellDef> Versenyző </th>
-                  <td mat-cell *matCellDef="let r"> {{r.driverName}} </td>
-                </ng-container>
-                <ng-container matColumnDef="constructor">
-                  <th mat-header-cell *matHeaderCellDef> Csapat </th>
-                  <td mat-cell *matCellDef="let r"> {{r.constructorName}} </td>
+                  <td mat-cell *matCellDef="let r">
+                    <div class="driver-cell">
+                      <span class="driver-name">{{r.driverName}}</span>
+                      <span class="driver-team">{{r.constructorName}}</span>
+                    </div>
+                  </td>
                 </ng-container>
                 <ng-container matColumnDef="time">
                   <th mat-header-cell *matHeaderCellDef> Idő/Kül. </th>
@@ -154,11 +163,12 @@
                 </ng-container>
                 <ng-container matColumnDef="driver">
                   <th mat-header-cell *matHeaderCellDef> Versenyző </th>
-                  <td mat-cell *matCellDef="let r"> {{r.driverName}} </td>
-                </ng-container>
-                <ng-container matColumnDef="constructor">
-                  <th mat-header-cell *matHeaderCellDef> Csapat </th>
-                  <td mat-cell *matCellDef="let r"> {{r.constructorName}} </td>
+                  <td mat-cell *matCellDef="let r">
+                    <div class="driver-cell">
+                      <span class="driver-name">{{r.driverName}}</span>
+                      <span class="driver-team">{{r.constructorName}}</span>
+                    </div>
+                  </td>
                 </ng-container>
                 <ng-container matColumnDef="points">
                   <th mat-header-cell *matHeaderCellDef> Pont </th>
@@ -171,7 +181,12 @@
               <table mat-table [dataSource]="driverSeasonResults()">
                 <ng-container matColumnDef="grandPrixName">
                   <th mat-header-cell *matHeaderCellDef> Nagydíj </th>
-                  <td mat-cell *matCellDef="let r">{{r.grandPrixName | countryFlag}} {{r.grandPrixName}}</td>
+                  <td class="gp-name" mat-cell *matCellDef="let r">
+                    @if(isMobile()) {
+                      {{r.grandPrixName | countryFlag}} {{r.grandPrixShortName}}
+                    } @else {
+                    {{r.grandPrixName | countryFlag}} {{r.grandPrixName}}
+                    }</td>
                 </ng-container>
                 <ng-container matColumnDef="date">
                   <th mat-header-cell *matHeaderCellDef> Dátum </th>
@@ -204,7 +219,13 @@
                 </ng-container>
                 <ng-container matColumnDef="constructor">
                   <th mat-header-cell *matHeaderCellDef> Csapat </th>
-                  <td mat-cell *matCellDef="let r"> {{r.constructorName}} </td>
+                  <td mat-cell *matCellDef="let r">
+                    @if(isMobile()) {
+                      {{r.constructorShortName}}
+                    } @else {
+                    {{r.constructorName}}
+                    }
+                  </td>
                 </ng-container>
                 <ng-container matColumnDef="points">
                   <th mat-header-cell *matHeaderCellDef> Pont </th>
@@ -217,7 +238,13 @@
               <table mat-table [dataSource]="constructorSeasonResults()">
                 <ng-container matColumnDef="grandPrixName">
                   <th mat-header-cell *matHeaderCellDef> Nagydíj </th>
-                  <td mat-cell *matCellDef="let r"> {{r.grandPrixName | countryFlag}} {{r.grandPrixName}}</td>
+                  <td mat-cell *matCellDef="let r">
+                    @if(isMobile()) {
+                      {{r.grandPrixName | countryFlag}} {{r.grandPrixShortName}}
+                    } @else {
+                      {{r.grandPrixName | countryFlag}} {{r.grandPrixName}}
+                    }
+                  </td>
                 </ng-container>
                 <ng-container matColumnDef="date">
                   <th mat-header-cell *matHeaderCellDef> Dátum </th>

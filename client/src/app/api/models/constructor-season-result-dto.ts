@@ -4,5 +4,6 @@
 export interface ConstructorSeasonResultDto {
   date?: string;
   grandPrixName?: string | null;
+  grandPrixShortName?: string | null;
   points?: number;
 }

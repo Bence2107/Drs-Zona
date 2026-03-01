@@ -10,5 +10,6 @@ export interface GrandPrixCreateDto {
   roundNumber?: number;
   seasonYear?: number;
   seriesId?: string;
+  shortName?: string | null;
   startTime?: string;
 }

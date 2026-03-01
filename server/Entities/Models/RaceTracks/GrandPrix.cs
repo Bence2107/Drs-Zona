@@ -27,6 +27,10 @@ public class GrandPrix
     public required string Name { get; set; }
     
     [Required]
+    [Column("short_name")]
+    public string? ShortName { get; set; }
+
+    [Required]
     [Column("round_number")]
     public int RoundNumber { get; set; }
     

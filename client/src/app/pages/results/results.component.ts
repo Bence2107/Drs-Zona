@@ -20,6 +20,9 @@ import { ConstructorLookUpDto } from '../../api/models/constructor-look-up-dto';
 import { DriverSeasonResultDto } from '../../api/models/driver-season-result-dto';
 import { ConstructorSeasonResultDto } from '../../api/models/constructor-season-result-dto';
 import {CountryFlagPipe} from '../../pipes/country-flag.pipe';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {map} from 'rxjs/operators';
+import {BreakpointObserver} from '@angular/cdk/layout';
 
 
 type ViewMode = 'results' | 'drivers' | 'constructors';
@@ -37,7 +40,16 @@ const AGGREGATED_ID = 'aggregated';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent implements OnInit {
-  private standingsService = inject(ResultsService);
+
+  constructor(private standingsService: ResultsService) {}
+
+  private breakpointObserver = inject(BreakpointObserver);
+
+  isMobile = toSignal(
+    this.breakpointObserver.observe('(max-width: 768px)').pipe(
+      map(result => result.matches)
+    )
+  );
 
   viewMode = signal<ViewMode>('results');
   seriesList = signal<SeriesLookupDto[]>([]);
@@ -67,8 +79,8 @@ export class ResultsComponent implements OnInit {
 
   isLoading = signal(false);
 
-  raceColumns = ['position', 'driver', 'constructor', 'time', 'points'];
-  driverColumns = ['position', 'driver', 'constructor', 'points'];
+  raceColumns = ['position', 'driver', 'time', 'points'];
+  driverColumns = ['position', 'driver', 'points'];
   constructorColumns = ['position', 'constructor', 'points'];
   overviewColumns = ['grandPrixName', 'winnerName', 'teamName', 'laps', 'time'];
   driverSeasonColumns = ['grandPrixName', 'date', 'teamName', 'position', 'points'];
@@ -233,7 +245,7 @@ export class ResultsComponent implements OnInit {
         this.standingsService.getSessionsByGrandPrix(latestGP.id!).subscribe(sessions => {
           this.sessions.set(sessions);
           if (sessions.length > 0) {
-            let defaultSession = sessions.find(s => s === 'Race') ||
+            let defaultSession = sessions.find(s => s === 'Verseny') ||
               sessions.find(s => s === 'Sprint') ||
               sessions[sessions.length - 1];
 
@@ -286,7 +298,7 @@ export class ResultsComponent implements OnInit {
       next: (sessions) => {
         this.sessions.set(sessions);
         if (sessions.length > 0) {
-          const preferredSession = sessions.find(s => s === 'Race') ||
+          const preferredSession = sessions.find(s => s === 'Verseny') ||
             sessions.find(s => s === 'Sprint') ||
             sessions[sessions.length - 1];
 

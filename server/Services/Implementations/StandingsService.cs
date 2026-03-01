@@ -100,7 +100,8 @@ public class StandingsService (
         var dto = constructorParticipationsOnChampionship.Select(cp =>
                 new ConstructorLookUpDto(
                     Id: cp.Constructor!.Id,
-                    Name: cp.Constructor!.Name
+                    Name: cp.Constructor!.Name,
+                    ShortName: cp.Constructor!.Nickname
                 )
             )
             .OrderBy(cp => cp.Name)
@@ -115,7 +116,7 @@ public class StandingsService (
         if (champ == null) return ResponseResult<List<GrandPrixLookupDto>>.Failure("Bajnokság nem található");
         
         var gps = await grandsPrixRepo.GetBySeriesAndYear(champ.SeriesId, int.Parse(champ.Season));
-        var dtoS = gps.Select(g => new GrandPrixLookupDto(g.Id, g.Name)).ToList();
+        var dtoS = gps.Select(g => new GrandPrixLookupDto(g.Id, g.ShortName!)).ToList();
         return ResponseResult<List<GrandPrixLookupDto>>.Success(dtoS);
     }
     
@@ -196,6 +197,7 @@ public class StandingsService (
                 {
                     ConstructorId = group.Key,
                     Name = latestResult.Constructor?.Name ?? "Ismeretlen",
+                    ShortName = latestResult.Constructor?.Nickname ?? "Ismeretlen",
                     Points = group.Sum(r => r.ConstructorPoints),
                     BestFinish = group.Min(r => r.FinishPosition) 
                 };
@@ -206,6 +208,7 @@ public class StandingsService (
                 index + 1, 
                 x.ConstructorId,
                 x.Name,
+                x.ShortName,
                 x.Points
             ))
             .ToArray();
@@ -254,10 +257,11 @@ public class StandingsService (
     {
         var rawResults = await resultsRepo.GetByDriversChampionshipId(driverChampId);
         var results = rawResults
-            .Where(r => r.DriverId == driverId &&  string.Equals(r.Session, "Race", StringComparison.OrdinalIgnoreCase))
+            .Where(r => r.DriverId == driverId &&  string.Equals(r.Session, "Verseny", StringComparison.OrdinalIgnoreCase))
             .OrderBy(r => r.GrandPrix?.RoundNumber)
             .Select(r => new DriverSeasonResultDto(
-                r.GrandPrix?.Name ?? "N/A GP",
+                r.GrandPrix?.Name ?? "N/A Grand Prix",
+                r.GrandPrix?.ShortName ?? "N/A GP",
                 r.GrandPrix?.EndTime ?? DateTime.MinValue,
                 r.Constructor?.Nickname ?? "N/A",
                 r.FinishPosition,
@@ -272,11 +276,12 @@ public class StandingsService (
     {
         var rawResults = await resultsRepo.GetByConstructorsChampionshipId(constructorChampId);
         var results = rawResults
-            .Where(r => r.ConstructorId == constructorId &&  string.Equals(r.Session, "Race", StringComparison.OrdinalIgnoreCase))
-            .GroupBy(r => new { r.GrandPrixId, r.GrandPrix?.Name, r.GrandPrix?.EndTime, r.GrandPrix?.RoundNumber })
+            .Where(r => r.ConstructorId == constructorId &&  string.Equals(r.Session, "Verseny", StringComparison.OrdinalIgnoreCase))
+            .GroupBy(r => new { r.GrandPrixId, r.GrandPrix?.Name, r.GrandPrix?.ShortName,r.GrandPrix?.EndTime, r.GrandPrix?.RoundNumber })
             .OrderBy(g => g.Key.RoundNumber)
             .Select(group => new ConstructorSeasonResultDto(
-                group.Key.Name ?? "N/A GP",
+                group.Key.Name ?? "N/A Grand Prix",
+                group.Key.ShortName ?? "N/A GP",
                 group.Key.EndTime ?? DateTime.MinValue,
                 group.Sum(r => r.ConstructorPoints) 
             ))
@@ -290,12 +295,13 @@ public class StandingsService (
         var rawResults = await resultsRepo.GetByDriversChampionshipId(driverChampId);
         var results = rawResults
             .Where(r => r.FinishPosition == 1 && 
-                        string.Equals(r.Session, "Race", StringComparison.OrdinalIgnoreCase))
+                        string.Equals(r.Session, "Verseny", StringComparison.OrdinalIgnoreCase))
             .OrderBy(r => r.GrandPrix?.RoundNumber)
             .ToList();
 
         var overview = results.Select(r => new SeasonOverviewDto(
-            r.GrandPrix?.Name ?? "Ismeretlen GP",
+            r.GrandPrix?.Name ?? "Ismeretlen Grand Prix",
+            r.GrandPrix?.ShortName ?? "Ismeretlen GP",
             r.GrandPrix?.EndTime ?? DateTime.MinValue,
             r.Driver?.Name ?? "Ismeretlen",
             r.Constructor?.Nickname ?? "N/A",

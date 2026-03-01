@@ -24,6 +24,7 @@ export class CountryFlagPipe implements PipeTransform {
     'italian': 'IT',
     'italia': 'IT',
     'azerbaijani': 'AZ',
+    'azerbaijan': 'AZ',
     'singapore': 'SG',
     'united states': 'US',
     'mexican': 'MX',

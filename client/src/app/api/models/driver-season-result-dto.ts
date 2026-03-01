@@ -4,6 +4,7 @@
 export interface DriverSeasonResultDto {
   date?: string;
   grandPrixName?: string | null;
+  grandPrixShortName?: string | null;
   points?: number;
   position?: number;
   teamName?: string | null;

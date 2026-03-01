@@ -19,6 +19,9 @@ public record GrandPrixCreateDto(
     [Required(ErrorMessage = "A név megadása kötelező")] 
     [StringLength(100, ErrorMessage = "A név maximum 100 karakter lehet")] 
     string Name,
+    [Required(ErrorMessage = "A rövidebb név megadása kötelező")] 
+    [StringLength(100, ErrorMessage = "A név maximum 100 karakter lehet")] 
+    string ShortName,
     [Required(ErrorMessage = "A forduló száma kötelező")] 
     [Range(1, 30, ErrorMessage = "A forduló 1 és 30 között kell legyen")] 
     int RoundNumber,

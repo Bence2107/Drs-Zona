@@ -29,27 +29,40 @@
     margin-bottom: 2rem;
   }
 
-
   .table-container {
     position: relative;
     background: transparent;
     border-radius: 8px;
     min-height: 200px;
-    overflow: hidden;
-
+    overflow-x: auto;
 
     .table-wrapper {
       animation: fadeIn 0.2s ease-out;
     }
 
-      table {
-      width: 100%;
+    table {
+        width: 100%;
+        min-width: 400px;
+    }
+
+    .driver-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      .driver-name {
+        font-weight: 500;
+      }
+
+      .driver-team {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+      }
     }
 
     .mat-mdc-header-row {
       background-color: var(--secondary-bg);
     }
-
 
     .no-data {
       padding: 3rem;
@@ -75,10 +88,6 @@
       mat-icon { color: white !important; }
     }
   }
-}
-
-.mat-button-toggle-status-indicator svg {
-  display: none !important;
 }
 
 .mat-button-toggle-checked .mat-button-toggle-status-indicator {

@@ -166,12 +166,16 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
         //------------RACETRACKS------------
         // GrandPrix -> Circuit (Many-to-One)
         modelBuilder.Entity<GrandPrix>(options =>
+        {
+            options.Property(gp => gp.ShortName).HasDefaultValue(null);
+
             options
                 .HasOne(gp => gp.Circuit)
                 .WithMany()
                 .HasForeignKey(gp => gp.CircuitId)
-                .OnDelete(DeleteBehavior.NoAction)
-        );
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+            
         
         //------------STANDINGS------------
         // Contract relationships

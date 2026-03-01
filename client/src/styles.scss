@@ -211,9 +211,12 @@ mat-option.mat-mdc-option .mat-pseudo-checkbox {
 @include mat.table-overrides((
   background-color: var(--primary-bg),
   header-headline-color: var(--accent-color),
-  row-item-label-text-color: var(--text-main)
-
+  row-item-label-text-color: var(--text-main),
 ));
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: var(--hover-bg);
+}
 
 .custom-nav-panel {
   background-color: var(--secondary-bg);

@@ -4,6 +4,7 @@
 export interface ConstructorStandingsResultDto {
   constructorId?: string;
   constructorName?: string | null;
+  constructorShortName?: string | null;
   points?: number;
   position?: number;
 }

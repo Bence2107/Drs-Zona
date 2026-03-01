@@ -81,6 +81,7 @@ public class GrandPrixService (
             CircuitId = grandPrixCreateDto.CircuitId,
             SeriesId = grandPrixCreateDto.SeriesId, 
             Name = grandPrixCreateDto.Name,
+            ShortName = grandPrixCreateDto.ShortName,
             RoundNumber = grandPrixCreateDto.RoundNumber,
             SeasonYear = grandPrixCreateDto.SeasonYear,
             StartTime = grandPrixCreateDto.StartTime,

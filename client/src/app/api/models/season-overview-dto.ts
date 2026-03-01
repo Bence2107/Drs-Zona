@@ -4,6 +4,7 @@
 export interface SeasonOverviewDto {
   date?: string;
   grandPrixName?: string | null;
+  grandPrixShortName?: string | null;
   laps?: number;
   teamName?: string | null;
   time?: string | null;

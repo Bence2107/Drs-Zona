@@ -4,4 +4,5 @@
 export interface ConstructorLookUpDto {
   id?: string;
   name?: string | null;
+  shortName?: string | null;
 }
