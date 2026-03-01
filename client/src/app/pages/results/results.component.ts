@@ -19,6 +19,7 @@ import { DriverLookUpDto } from '../../api/models/driver-look-up-dto';
 import { ConstructorLookUpDto } from '../../api/models/constructor-look-up-dto';
 import { DriverSeasonResultDto } from '../../api/models/driver-season-result-dto';
 import { ConstructorSeasonResultDto } from '../../api/models/constructor-season-result-dto';
+import {CountryFlagPipe} from '../../pipes/country-flag.pipe';
 
 
 type ViewMode = 'results' | 'drivers' | 'constructors';
@@ -30,7 +31,7 @@ const AGGREGATED_ID = 'aggregated';
   standalone: true,
   imports: [
     CommonModule, FormsModule, MatButtonToggleModule,
-    MatFormFieldModule, MatSelectModule, MatTableModule, MatProgressSpinnerModule
+    MatFormFieldModule, MatSelectModule, MatTableModule, MatProgressSpinnerModule, CountryFlagPipe
   ],
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.scss']
@@ -111,6 +112,8 @@ export class ResultsComponent implements OnInit {
     this.selectedConstructorId.set(AGGREGATED_ID);
     this.driverSeasonResults.set([]);
     this.constructorSeasonResults.set([]);
+
+    this.isLoading.set(true);
 
     if (mode === 'drivers' && drChampId) {
       this.loadDriverList(drChampId);
@@ -252,6 +255,7 @@ export class ResultsComponent implements OnInit {
     if (this.viewMode() === 'results' && drChampId) {
       this.standingsService.getGrandPrixByChampionship(drChampId).subscribe(res => {
         this.grandsPrix.set(res);
+        this.isLoading.set(false);
       });
     } else if (this.viewMode() === 'drivers' && drChampId) {
       this.isLoading.set(true);

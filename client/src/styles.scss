@@ -29,6 +29,7 @@ body {
   --text-secondary: #606060;
   --border-color: #d7dade;
   --accent-color: #f8274f;
+  --selected-color: #f85271;
   --hover-bg: #f0f0f0;
 }
 
@@ -42,6 +43,7 @@ body {
   --text-secondary: #878a8c;
   --border-color: #333333;
   --accent-color: #f8274f;
+  --selected-color: #fb395c;
   --hover-bg: #2d2d3a;
 }
 
@@ -117,7 +119,7 @@ app-root {
   outlined-focus-label-text-color: var(--accent-color),
   outlined-input-text-color: var(--text-main),
   outlined-outline-color: var(--border-color),
-  outlined-focus-outline-color: var(--accent-color)
+  outlined-focus-outline-color: var(--accent-color),
 ));
 
 @include mat.tabs-overrides((
@@ -182,8 +184,39 @@ app-root {
   selected-checkmark-color: white,
 ));
 
+@include mat.select-overrides((
+  panel-background-color: var(--secondary-bg),
+  enabled-trigger-text-color: var(--accent-color),
+  disabled-trigger-text-color: var(--text-main),
+  placeholder-text-color: var(--accent-color),
+  focused-arrow-color: var(--accent-color),
+));
+
+@include mat.option-overrides((
+  label-text-color: var(--text-main),
+  selected-state-layer-color: transparent,
+  selected-state-label-text-color: var(--accent-color),
+  hover-state-layer-color: var(--accent-color),
+  focus-state-layer-color: var(--selected-color),
+));
+
+mat-option.mat-mdc-option .mat-pseudo-checkbox {
+  display: none !important;
+}
+
+.mat-mdc-option .mat-pseudo-checkbox {
+  display: none !important;
+}
+
+@include mat.table-overrides((
+  background-color: var(--primary-bg),
+  header-headline-color: var(--accent-color),
+  row-item-label-text-color: var(--text-main)
+
+));
+
 .custom-nav-panel {
-  background-color: var(--secondary-bg) !important;
+  background-color: var(--secondary-bg);
   border-radius: 8px !important;
   margin-top: 4px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.5) !important;

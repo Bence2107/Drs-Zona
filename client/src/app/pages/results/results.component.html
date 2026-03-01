@@ -46,7 +46,7 @@
 
       @if (selectedGrandPrixId() !== ALL_GP_ID) {
         <mat-form-field appearance="outline">
-          <mat-label>Session</mat-label>
+          <mat-label>Esemény</mat-label>
           <mat-select [ngModel]="selectedSession()" (ngModelChange)="loadResults($event)" [disabled]="!selectedGrandPrixId()">
             @for (sess of sessions(); track sess) {
               <mat-option [value]="sess">{{ sess }}</mat-option>
@@ -88,148 +88,152 @@
       </div>
     }
 
-    @switch (viewMode()) {
-      @case ('results') {
-        @if (selectedGrandPrixId() === ALL_GP_ID) {
-          <table mat-table [dataSource]="seasonOverview()">
-            <ng-container matColumnDef="grandPrixName">
-              <th mat-header-cell *matHeaderCellDef> Nagydíj </th>
-              <td mat-cell *matCellDef="let r"> {{r.grandPrixName}} </td>
-            </ng-container>
-            <ng-container matColumnDef="winnerName">
-              <th mat-header-cell *matHeaderCellDef> Győztes </th>
-              <td mat-cell *matCellDef="let r"> {{r.winnerName}} </td>
-            </ng-container>
-            <ng-container matColumnDef="teamName">
-              <th mat-header-cell *matHeaderCellDef> Csapat </th>
-              <td mat-cell *matCellDef="let r"> {{r.teamName}} </td>
-            </ng-container>
-            <ng-container matColumnDef="laps">
-              <th mat-header-cell *matHeaderCellDef> Körök </th>
-              <td mat-cell *matCellDef="let r"> {{r.laps}} </td>
-            </ng-container>
-            <ng-container matColumnDef="time">
-              <th mat-header-cell *matHeaderCellDef> Idő </th>
-              <td mat-cell *matCellDef="let r"> {{r.time}} </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="overviewColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: overviewColumns;"></tr>
-          </table>
-        } @else {
-          <table mat-table [dataSource]="raceResults()" [class.is-result-table]="true">
-            <ng-container matColumnDef="position">
-              <th mat-header-cell *matHeaderCellDef> Poz. </th>
-              <td mat-cell *matCellDef="let r"> {{r.position}}. </td>
-            </ng-container>
-            <ng-container matColumnDef="driver">
-              <th mat-header-cell *matHeaderCellDef> Versenyző </th>
-              <td mat-cell *matCellDef="let r"> {{r.driverName}} </td>
-            </ng-container>
-            <ng-container matColumnDef="constructor">
-              <th mat-header-cell *matHeaderCellDef> Csapat </th>
-              <td mat-cell *matCellDef="let r"> {{r.constructorName}} </td>
-            </ng-container>
-            <ng-container matColumnDef="time">
-              <th mat-header-cell *matHeaderCellDef> Idő/Kül. </th>
-              <td mat-cell *matCellDef="let r"> {{r.timeOrCompleted}} </td>
-            </ng-container>
-            <ng-container matColumnDef="points">
-              <th mat-header-cell *matHeaderCellDef> Pont </th>
-              <td mat-cell *matCellDef="let r"> {{r.points}} </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="raceColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: raceColumns;"></tr>
-          </table>
-        }
-      }
+    @if(!isLoading()) {
+      <div class="table-wrapper">
+        @switch (viewMode()) {
+          @case ('results') {
+            @if (selectedGrandPrixId() === ALL_GP_ID) {
+              <table mat-table [dataSource]="seasonOverview()">
+                <ng-container matColumnDef="grandPrixName">
+                  <th mat-header-cell *matHeaderCellDef> Nagydíj </th>
+                  <td mat-cell *matCellDef="let r">{{r.grandPrixName | countryFlag}} {{r.grandPrixName}}</td>
+                </ng-container>
+                <ng-container matColumnDef="winnerName">
+                  <th mat-header-cell *matHeaderCellDef> Győztes </th>
+                  <td mat-cell *matCellDef="let r"> {{r.winnerName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="teamName">
+                  <th mat-header-cell *matHeaderCellDef> Csapat </th>
+                  <td mat-cell *matCellDef="let r"> {{r.teamName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="laps">
+                  <th mat-header-cell *matHeaderCellDef> Körök </th>
+                  <td mat-cell *matCellDef="let r"> {{r.laps}} </td>
+                </ng-container>
+                <ng-container matColumnDef="time">
+                  <th mat-header-cell *matHeaderCellDef> Idő </th>
+                  <td mat-cell *matCellDef="let r"> {{r.time}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="overviewColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: overviewColumns;"></tr>
+              </table>
+            } @else {
+              <table mat-table [dataSource]="raceResults()" [class.is-result-table]="true">
+                <ng-container matColumnDef="position">
+                  <th mat-header-cell *matHeaderCellDef> Poz. </th>
+                  <td mat-cell *matCellDef="let r"> {{r.position}}. </td>
+                </ng-container>
+                <ng-container matColumnDef="driver">
+                  <th mat-header-cell *matHeaderCellDef> Versenyző </th>
+                  <td mat-cell *matCellDef="let r"> {{r.driverName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="constructor">
+                  <th mat-header-cell *matHeaderCellDef> Csapat </th>
+                  <td mat-cell *matCellDef="let r"> {{r.constructorName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="time">
+                  <th mat-header-cell *matHeaderCellDef> Idő/Kül. </th>
+                  <td mat-cell *matCellDef="let r"> {{r.timeOrCompleted}} </td>
+                </ng-container>
+                <ng-container matColumnDef="points">
+                  <th mat-header-cell *matHeaderCellDef> Pont </th>
+                  <td mat-cell *matCellDef="let r"> {{r.points}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="raceColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: raceColumns;"></tr>
+              </table>
+            }
+          }
 
-      @case ('drivers') {
-        @if (selectedDriverId() === AGGREGATED_ID) {
-          <table mat-table [dataSource]="driverStandings()" [class.is-result-table]="true">
-            <ng-container matColumnDef="position">
-              <th mat-header-cell *matHeaderCellDef> Hely </th>
-              <td mat-cell *matCellDef="let r"> {{r.position}}. </td>
-            </ng-container>
-            <ng-container matColumnDef="driver">
-              <th mat-header-cell *matHeaderCellDef> Versenyző </th>
-              <td mat-cell *matCellDef="let r"> {{r.driverName}} </td>
-            </ng-container>
-            <ng-container matColumnDef="constructor">
-              <th mat-header-cell *matHeaderCellDef> Csapat </th>
-              <td mat-cell *matCellDef="let r"> {{r.constructorName}} </td>
-            </ng-container>
-            <ng-container matColumnDef="points">
-              <th mat-header-cell *matHeaderCellDef> Pont </th>
-              <td mat-cell *matCellDef="let r"> <strong>{{r.points}}</strong> </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="driverColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: driverColumns;"></tr>
-          </table>
-        } @else {
-          <table mat-table [dataSource]="driverSeasonResults()">
-            <ng-container matColumnDef="grandPrixName">
-              <th mat-header-cell *matHeaderCellDef> Nagydíj </th>
-              <td mat-cell *matCellDef="let r"> {{r.grandPrixName}} </td>
-            </ng-container>
-            <ng-container matColumnDef="date">
-              <th mat-header-cell *matHeaderCellDef> Dátum </th>
-              <td mat-cell *matCellDef="let r"> {{r.date | date:'yyyy.MM.dd'}} </td>
-            </ng-container>
-            <ng-container matColumnDef="teamName">
-              <th mat-header-cell *matHeaderCellDef> Csapat </th>
-              <td mat-cell *matCellDef="let r"> {{r.teamName}} </td>
-            </ng-container>
-            <ng-container matColumnDef="position">
-              <th mat-header-cell *matHeaderCellDef> Helyezés </th>
-              <td mat-cell *matCellDef="let r"> {{r.position}}. </td>
-            </ng-container>
-            <ng-container matColumnDef="points">
-              <th mat-header-cell *matHeaderCellDef> Pont </th>
-              <td mat-cell *matCellDef="let r"> <strong>{{r.points}}</strong> </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="driverSeasonColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: driverSeasonColumns;"></tr>
-          </table>
-        }
-      }
+          @case ('drivers') {
+            @if (selectedDriverId() === AGGREGATED_ID) {
+              <table mat-table [dataSource]="driverStandings()" [class.is-result-table]="true">
+                <ng-container matColumnDef="position">
+                  <th mat-header-cell *matHeaderCellDef> Hely </th>
+                  <td mat-cell *matCellDef="let r"> {{r.position}}. </td>
+                </ng-container>
+                <ng-container matColumnDef="driver">
+                  <th mat-header-cell *matHeaderCellDef> Versenyző </th>
+                  <td mat-cell *matCellDef="let r"> {{r.driverName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="constructor">
+                  <th mat-header-cell *matHeaderCellDef> Csapat </th>
+                  <td mat-cell *matCellDef="let r"> {{r.constructorName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="points">
+                  <th mat-header-cell *matHeaderCellDef> Pont </th>
+                  <td mat-cell *matCellDef="let r"> <strong>{{r.points}}</strong> </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="driverColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: driverColumns;"></tr>
+              </table>
+            } @else {
+              <table mat-table [dataSource]="driverSeasonResults()">
+                <ng-container matColumnDef="grandPrixName">
+                  <th mat-header-cell *matHeaderCellDef> Nagydíj </th>
+                  <td mat-cell *matCellDef="let r">{{r.grandPrixName | countryFlag}} {{r.grandPrixName}}</td>
+                </ng-container>
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef> Dátum </th>
+                  <td mat-cell *matCellDef="let r"> {{r.date | date:'yyyy.MM.dd'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="teamName">
+                  <th mat-header-cell *matHeaderCellDef> Csapat </th>
+                  <td mat-cell *matCellDef="let r"> {{r.teamName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="position">
+                  <th mat-header-cell *matHeaderCellDef> Helyezés </th>
+                  <td mat-cell *matCellDef="let r"> {{r.position}}. </td>
+                </ng-container>
+                <ng-container matColumnDef="points">
+                  <th mat-header-cell *matHeaderCellDef> Pont </th>
+                  <td mat-cell *matCellDef="let r"> <strong>{{r.points}}</strong> </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="driverSeasonColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: driverSeasonColumns;"></tr>
+              </table>
+            }
+          }
 
-      @case ('constructors') {
-        @if (selectedConstructorId() === AGGREGATED_ID) {
-          <table mat-table [dataSource]="constructorStandings()" [class.is-result-table]="true">
-            <ng-container matColumnDef="position">
-              <th mat-header-cell *matHeaderCellDef> Hely </th>
-              <td mat-cell *matCellDef="let r"> {{r.position}}. </td>
-            </ng-container>
-            <ng-container matColumnDef="constructor">
-              <th mat-header-cell *matHeaderCellDef> Csapat </th>
-              <td mat-cell *matCellDef="let r"> {{r.constructorName}} </td>
-            </ng-container>
-            <ng-container matColumnDef="points">
-              <th mat-header-cell *matHeaderCellDef> Pont </th>
-              <td mat-cell *matCellDef="let r"> <strong>{{r.points}}</strong> </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="constructorColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: constructorColumns;"></tr>
-          </table>
-        } @else {
-          <table mat-table [dataSource]="constructorSeasonResults()">
-            <ng-container matColumnDef="grandPrixName">
-              <th mat-header-cell *matHeaderCellDef> Nagydíj </th>
-              <td mat-cell *matCellDef="let r"> {{r.grandPrixName}} </td>
-            </ng-container>
-            <ng-container matColumnDef="date">
-              <th mat-header-cell *matHeaderCellDef> Dátum </th>
-              <td mat-cell *matCellDef="let r"> {{r.date | date:'yyyy.MM.dd'}} </td>
-            </ng-container>
-            <ng-container matColumnDef="points">
-              <th mat-header-cell *matHeaderCellDef> Pont </th>
-              <td mat-cell *matCellDef="let r"> <strong>{{r.points}}</strong> </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="constructorSeasonColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: constructorSeasonColumns;"></tr>
-          </table>
+          @case ('constructors') {
+            @if (selectedConstructorId() === AGGREGATED_ID) {
+              <table mat-table [dataSource]="constructorStandings()" [class.is-result-table]="true">
+                <ng-container matColumnDef="position">
+                  <th mat-header-cell *matHeaderCellDef> Hely </th>
+                  <td mat-cell *matCellDef="let r"> {{r.position}}. </td>
+                </ng-container>
+                <ng-container matColumnDef="constructor">
+                  <th mat-header-cell *matHeaderCellDef> Csapat </th>
+                  <td mat-cell *matCellDef="let r"> {{r.constructorName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="points">
+                  <th mat-header-cell *matHeaderCellDef> Pont </th>
+                  <td mat-cell *matCellDef="let r"> <strong>{{r.points}}</strong> </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="constructorColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: constructorColumns;"></tr>
+              </table>
+            } @else {
+              <table mat-table [dataSource]="constructorSeasonResults()">
+                <ng-container matColumnDef="grandPrixName">
+                  <th mat-header-cell *matHeaderCellDef> Nagydíj </th>
+                  <td mat-cell *matCellDef="let r"> {{r.grandPrixName | countryFlag}} {{r.grandPrixName}}</td>
+                </ng-container>
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef> Dátum </th>
+                  <td mat-cell *matCellDef="let r"> {{r.date | date:'yyyy.MM.dd'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="points">
+                  <th mat-header-cell *matHeaderCellDef> Pont </th>
+                  <td mat-cell *matCellDef="let r"> <strong>{{r.points}}</strong> </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="constructorSeasonColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: constructorSeasonColumns;"></tr>
+              </table>
+            }
+          }
         }
-      }
+      </div>
     }
 
     @if (!isLoading() &&
