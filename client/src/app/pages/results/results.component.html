@@ -115,7 +115,7 @@
                   <td mat-cell *matCellDef="let r"> {{r.time}} </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="overviewColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: overviewColumns;"></tr>
+                <tr mat-row *matRowDef="let _; columns: overviewColumns;"></tr>
               </table>
             } @else {
               <table mat-table [dataSource]="raceResults()" [class.is-result-table]="true">
@@ -140,7 +140,7 @@
                   <td mat-cell *matCellDef="let r"> {{r.points}} </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="raceColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: raceColumns;"></tr>
+                <tr mat-row *matRowDef="let _; columns: raceColumns;"></tr>
               </table>
             }
           }
@@ -165,7 +165,7 @@
                   <td mat-cell *matCellDef="let r"> <strong>{{r.points}}</strong> </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="driverColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: driverColumns;"></tr>
+                <tr mat-row *matRowDef="let _; columns: driverColumns;"></tr>
               </table>
             } @else {
               <table mat-table [dataSource]="driverSeasonResults()">
@@ -190,7 +190,7 @@
                   <td mat-cell *matCellDef="let r"> <strong>{{r.points}}</strong> </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="driverSeasonColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: driverSeasonColumns;"></tr>
+                <tr mat-row *matRowDef="let _; columns: driverSeasonColumns;"></tr>
               </table>
             }
           }
@@ -211,7 +211,7 @@
                   <td mat-cell *matCellDef="let r"> <strong>{{r.points}}</strong> </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="constructorColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: constructorColumns;"></tr>
+                <tr mat-row *matRowDef="let _; columns: constructorColumns;"></tr>
               </table>
             } @else {
               <table mat-table [dataSource]="constructorSeasonResults()">
@@ -228,7 +228,7 @@
                   <td mat-cell *matCellDef="let r"> <strong>{{r.points}}</strong> </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="constructorSeasonColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: constructorSeasonColumns;"></tr>
+                <tr mat-row *matRowDef="let _; columns: constructorSeasonColumns;"></tr>
               </table>
             }
           }
