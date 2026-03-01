@@ -4,5 +4,5 @@ namespace DTOs.Auth;
 
 public class ProfilePictureUpload 
 {
-    public IFormFile File { get; set; }
+    public required IFormFile File { get; set; }
 }
