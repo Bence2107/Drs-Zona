@@ -23,25 +23,39 @@ import {CountryFlagPipe} from '../../pipes/country-flag.pipe';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {map} from 'rxjs/operators';
 import {BreakpointObserver} from '@angular/cdk/layout';
-
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import {MatButton, MatFabButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {RouterLink} from '@angular/router';
+import {AuthService} from '../../services/auth.service';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatDivider} from '@angular/material/list';
 
 type ViewMode = 'results' | 'drivers' | 'constructors';
 const ALL_GP_ID = 'all-season-overview';
 const AGGREGATED_ID = 'aggregated';
+
 
 @Component({
   selector: 'app-results',
   standalone: true,
   imports: [
     CommonModule, FormsModule, MatButtonToggleModule,
-    MatFormFieldModule, MatSelectModule, MatTableModule, MatProgressSpinnerModule, CountryFlagPipe
+    MatFormFieldModule, MatSelectModule, MatTableModule, MatProgressSpinnerModule, CountryFlagPipe, MatButton, MatIcon, RouterLink, MatFabButton, MatTooltip, MatMenuTrigger, MatMenu, MatMenuItem, MatDivider
   ],
   templateUrl: './results.component.html',
-  styleUrls: ['./results.component.scss']
+  styleUrls: ['./results.component.scss'],
+  animations: [
+    trigger('slideDown', [
+      state('void', style({ height: '0px', opacity: 0, overflow: 'hidden' })),
+      state('*',    style({ height: '*',  opacity: 1, overflow: 'hidden' })),
+      transition('void <=> *', animate('250ms ease-in-out'))
+    ])
+  ]
 })
 export class ResultsComponent implements OnInit {
-
-  constructor(private standingsService: ResultsService) {}
+  constructor(private standingsService: ResultsService, private authService: AuthService) {}
 
   private breakpointObserver = inject(BreakpointObserver);
 
@@ -78,6 +92,10 @@ export class ResultsComponent implements OnInit {
   constructorSeasonResults = signal<ConstructorSeasonResultDto[]>([]);
 
   isLoading = signal(false);
+
+  isAdminPanelOpen = signal(false);
+  toggleAdminPanel() { this.isAdminPanelOpen.update(v => !v); }
+
 
   raceColumns = ['position', 'driver', 'time', 'points'];
   driverColumns = ['position', 'driver', 'points'];
@@ -324,5 +342,9 @@ export class ResultsComponent implements OnInit {
       },
       error: () => this.isLoading.set(false)
     });
+  }
+
+  isAdmin(): boolean {
+      return this.authService.currentProfile()?.role === 'Admin' || this.authService.currentProfile()?.role === 'Manager';
   }
 }

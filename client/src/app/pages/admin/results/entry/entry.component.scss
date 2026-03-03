@@ -1,0 +1,202 @@
+.entry-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.series-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.season-section {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 2rem;
+
+  .season-field {
+    width: 180px;
+  }
+}
+
+// Grid
+.gp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.25rem;
+}
+
+// Kártya
+.gp-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px !important;
+  background: var(--secondary-bg) !important;
+  border: 1px solid var(--border-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  // Bal oldali színes csík
+  .card-stripe {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--border-color);
+    transition: background 0.2s;
+  }
+
+  &.has-results .card-stripe {
+    background: #4caf50;
+  }
+
+  &:not(.has-results) .card-stripe {
+    background: var(--accent-color);
+  }
+
+  mat-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 16px 8px 20px;
+  }
+
+  .round-badge {
+    min-width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--accent-color);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .header-content {
+    flex: 1;
+
+    mat-card-title {
+      font-size: 15px !important;
+      font-weight: 600;
+      color: var(--text-main) !important;
+      line-height: 1.3;
+    }
+
+    mat-card-subtitle {
+      font-size: 12px !important;
+      color: var(--text-secondary) !important;
+      margin-top: 2px;
+    }
+  }
+
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+
+    &.done {
+      background: rgba(76, 175, 80, 0.15);
+      color: #4caf50;
+    }
+
+    &.pending {
+      background: rgba(248, 39, 79, 0.12);
+      color: var(--accent-color);
+    }
+  }
+
+  mat-card-content {
+    padding: 0 16px 8px 20px !important;
+  }
+
+  .gp-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 13px;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      color: var(--text-secondary);
+    }
+  }
+
+  mat-card-actions {
+    padding: 8px 16px 14px 20px !important;
+
+    button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
+
+// Loading / empty
+.loading-state {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 4rem 0;
+  color: var(--text-secondary);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.4;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0.3; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .entry-container {
+    padding: 1rem;
+  }
+
+  .gp-grid {
+    grid-template-columns: 1fr;
+  }
+}

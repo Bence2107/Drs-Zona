@@ -274,3 +274,48 @@
     }
   </div>
 </div>
+
+
+@if (isAdmin()) {
+  <button mat-fab color="primary"
+          class="fab-edit"
+          [mat-menu-trigger-for]="adminMenu"
+          matTooltip="Szerkesztés">
+    <mat-icon>edit</mat-icon>
+  </button>
+
+  <mat-menu #adminMenu="matMenu" yPosition="above" class="admin-fab-menu">
+
+    <div class="admin-menu-section" (click)="$event.stopPropagation()">
+      <span class="admin-section-label">Eredmények</span>
+    </div>
+    <button mat-menu-item routerLink="/admin/results/entry">
+      <mat-icon>add_circle</mat-icon> Eredmény felvitel
+    </button>
+
+    <mat-divider></mat-divider>
+
+    <div class="admin-menu-section" (click)="$event.stopPropagation()">
+      <span class="admin-section-label">Bajnokság</span>
+    </div>
+    <button mat-menu-item routerLink="/admin/championships">
+      <mat-icon>emoji_events</mat-icon> Bajnokság kezelés
+    </button>
+    <button mat-menu-item routerLink="/admin/participations">
+      <mat-icon>group</mat-icon> Résztvevők
+    </button>
+
+    <mat-divider></mat-divider>
+
+    <div class="admin-menu-section" (click)="$event.stopPropagation()">
+      <span class="admin-section-label">Törzsadatok</span>
+    </div>
+    <button mat-menu-item routerLink="/admin/drivers">
+      <mat-icon>person</mat-icon> Versenyzők
+    </button>
+    <button mat-menu-item routerLink="/admin/constructors">
+      <mat-icon>directions_car</mat-icon> Konstruktőrök
+    </button>
+
+  </mat-menu>
+}

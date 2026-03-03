@@ -44,6 +44,11 @@
                   <a>Profilom</a>
                 </li>
 
+                <li [routerLink]="['/manage-results']" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+                  <mat-icon>manage_accounts</mat-icon>
+                  <a>Eredmények szerkesztése</a>
+                </li>
+
                 @if (isAuthor()) {
                   <li routerLink="/my-articles" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
                     <mat-icon>article</mat-icon>

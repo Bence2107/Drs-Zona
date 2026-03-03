@@ -1,0 +1,90 @@
+<div class="entry-container">
+  <div class="series-section">
+    <mat-button-toggle-group
+      [ngModel]="selectedSeriesId()"
+      (ngModelChange)="onSeriesChange($event)"
+      hideSingleSelectionIndicator="true"
+      class="series-toggle">
+      @for (series of seriesList(); track series.id) {
+        <mat-button-toggle [value]="series.id">{{ series.name }}</mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+  </div>
+
+  <div class="season-section">
+    <mat-form-field appearance="outline" class="season-field">
+      <mat-label>Szezon</mat-label>
+      <mat-select
+        [ngModel]="selectedYear()"
+        (ngModelChange)="onYearChange($event)">
+        @for (year of years(); track year) {
+          <mat-option [value]="year">{{ year }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  }
+
+  @if (!isLoading() && grandsPrix().length === 0) {
+    <div class="empty-state">
+      <mat-icon>flag</mat-icon>
+      <p>Nincs nagydíj a kiválasztott szezónban.</p>
+    </div>
+  }
+
+  @if (!isLoading() && grandsPrix().length > 0) {
+    <div class="gp-grid">
+      @for (gp of grandsPrix(); track gp.id) {
+        <mat-card class="gp-card" [class.has-results]="gp.hasResults">
+
+          <div class="card-stripe"></div>
+
+          <mat-card-header>
+            <div class="round-badge">R{{ gp.roundNumber }}</div>
+            <div class="header-content">
+              <mat-card-title>{{ gp.name | countryFlag }} {{ gp.name }}</mat-card-title>
+              <mat-card-subtitle>{{ gp.circuitName }} · {{ gp.location }}</mat-card-subtitle>
+            </div>
+            @if (gp.hasResults) {
+              <div class="status-badge done">
+                <mat-icon>check_circle</mat-icon> Kész
+              </div>
+            } @else {
+              <div class="status-badge pending">
+                <mat-icon>pending</mat-icon> Hiányzik
+              </div>
+            }
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="gp-meta">
+              <div class="meta-item">
+                <mat-icon>calendar_today</mat-icon>
+                <span>{{ gp.startTime | date:'yyyy. MMM d.' }} – {{ gp.endTime | date:'MMM d.' }}</span>
+              </div>
+              <div class="meta-item">
+                <mat-icon>speed</mat-icon>
+                <span>{{ gp.raceDistance }} km · {{ gp.lapsCompleted }} kör</span>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-flat-button
+                    [routerLink]="['/admin/results/entry', gp.id]">
+              <mat-icon>{{ gp.hasResults ? 'edit' : 'add_circle' }}</mat-icon>
+              {{ gp.hasResults ? 'Szerkesztés' : 'Eredmény felvitel' }}
+            </button>
+          </mat-card-actions>
+
+        </mat-card>
+      }
+    </div>
+  }
+
+</div>

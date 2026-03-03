@@ -139,8 +139,9 @@ app-root {
 
 @include mat.menu-overrides((
   container-shape: 12px,
-  container-color: var(--primary-bg),
+  container-color: var(--secondary-bg),
   divider-color: var(--text-secondary),
+  item-label-text-color: var(--text-main),
 ));
 
 @include mat.button-toggle-overrides((
@@ -248,4 +249,48 @@ mat-option.mat-mdc-option .mat-pseudo-checkbox {
 
 .custom-nav-panel .mat-mdc-option:hover:not(.mdc-list-item--selected) {
   background-color: var(--hover-bg) !important;
+}
+
+.admin-fab-menu {
+  .admin-menu-section {
+    padding: 4px 16px 2px;
+    pointer-events: none;
+    color: var(--text-main) !important;
+
+    .admin-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-main) !important;
+      letter-spacing: 0.08em;
+      opacity: 0.6;
+    }
+  }
+
+  .mat-mdc-menu-item .mdc-list-item__primary-text {
+    color: var(--text-main) !important;
+  }
+
+  .mat-mdc-menu-item .mat-icon {
+    color: var(--text-main) !important;
+  }
+}
+
+.admin-fab-menu.mat-mdc-menu-panel {
+  .mdc-list-item__primary-text {
+    color: var(--text-main) !important;
+  }
+
+  .mat-icon {
+    color: var(--text-main) !important;
+  }
+
+  .admin-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.6;
+    color: var(--text-main) !important;
+  }
 }

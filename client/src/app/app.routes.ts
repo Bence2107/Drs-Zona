@@ -7,6 +7,11 @@ import {AuthComponent} from './pages/auth/auth/auth.component';
 import {ProfileComponent} from './pages/auth/profile/profile.component';
 import {authGuard, guestGuard} from './guards/auth.guard';
 import {ResultsComponent} from './pages/results/results.component';
+import {EntryComponent} from './pages/admin/results/entry/entry.component';
+import {ChampionshipsComponent} from './pages/admin/results/championships/championships.component';
+import {ParticipationsComponent} from './pages/admin/results/participations/participations.component';
+import {DriversComponent} from './pages/admin/results/drivers/drivers.component';
+import {ConstructorsComponent} from './pages/admin/results/constructors/constructors.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -15,6 +20,11 @@ export const routes: Routes = [
   { path: "reviews", component: ReviewsComponent },
   { path: "article/:slug", component: ArticleComponent },
   { path: "results", component: ResultsComponent },
+  { path: "admin/results/entry", component:  EntryComponent },
+  { path: "admin/championships", component:  ChampionshipsComponent },
+  { path: "admin/participations", component:  ParticipationsComponent },
+  { path: "admin/drivers", component:  DriversComponent },
+  { path: "admin/constructors", component:  ConstructorsComponent },
   {
     path: "auth",
     component: AuthComponent,
