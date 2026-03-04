@@ -40,6 +40,22 @@ public class StandingsController(IStandingsService standingsService): Controller
         return Ok(response.Value);   
     }
 
+    [HttpGet("getAllChampionshipsBySeries/{seriesId:guid}")]
+    public async Task<ActionResult<List<ChampionshipRowDto>>> GetAllChampionshipsBySeries(Guid seriesId)
+    {
+        var response = await standingsService.GetAllChampionshipsBySeries(seriesId);
+        if (!response.IsSuccess)
+        {
+            return BadRequest(new
+            {
+                response.ErrorField, 
+                response.Message
+            });
+        }
+        
+        return Ok(response.Value);   
+    }
+
     [HttpGet("getSeasonsBySeries/{seriesId:guid}")]
     public async Task<ActionResult<List<YearLookupDto>>> GetSeasonsBySeries(Guid seriesId)
     {

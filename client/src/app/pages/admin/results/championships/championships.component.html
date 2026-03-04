@@ -1,1 +1,106 @@
-<p>championships works!</p>
+<div class="championship-container">
+
+  <div class="series-section">
+    <mat-button-toggle-group
+      [ngModel]="selectedSeriesId()"
+      (ngModelChange)="onSeriesChange($event)"
+      hideSingleSelectionIndicator="true"
+      class="series-toggle">
+      @for (series of seriesList(); track series.id) {
+        <mat-button-toggle [value]="series.id">{{ series.name }}</mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+  </div>
+
+  <div class="season-section">
+    <mat-form-field appearance="outline" class="season-field">
+      <mat-label>Szezon</mat-label>
+      <mat-select [ngModel]="selectedSeason()" (ngModelChange)="onSeasonChange($event)">
+        <mat-option [value]="null">Összes</mat-option>
+        @for (season of seasons(); track season) {
+          <mat-option [value]="season">{{ season }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  }
+
+  @if (!isLoading() && championships().length === 0) {
+    <div class="empty-state">
+      <mat-icon>emoji_events</mat-icon>
+      <p>Nincs bajnokság a kiválasztott szűrőre.</p>
+    </div>
+  }
+
+  @if (!isLoading() && championships().length > 0) {
+    <div class="championship-list">
+      @for (champ of championships(); track champ.driversChampId) {
+        <mat-card class="champ-card" [class]="'status-' + champ.status.toLowerCase()">
+          <div class="card-stripe"></div>
+
+          <mat-card-header>
+            <div class="season-badge">{{ champ.season }}</div>
+            <div class="header-content">
+              <mat-card-title>{{ champ.name }}</mat-card-title>
+              <mat-card-subtitle>{{ champ.seriesName }}</mat-card-subtitle>
+            </div>
+            <button mat-stroked-button
+                    class="status-chip"
+                    [class]="'status-' + champ.status.toLowerCase()"
+                    [matMenuTriggerFor]="statusMenu"
+                    (click)="$event.stopPropagation()">
+              <mat-icon>{{ statusIcon(champ.status) }}</mat-icon>
+              {{ champ.status }}
+            </button>
+            <mat-menu #statusMenu="matMenu">
+              <button mat-menu-item (click)="updateStatus(champ, 'Upcoming')">
+                <mat-icon>schedule</mat-icon> Upcoming
+              </button>
+              <button mat-menu-item (click)="updateStatus(champ, 'Active')">
+                <mat-icon>play_circle</mat-icon> Active
+              </button>
+              <button mat-menu-item (click)="updateStatus(champ, 'Finished')">
+                <mat-icon>check_circle</mat-icon> Finished
+              </button>
+            </mat-menu>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="champ-meta">
+              <div class="meta-block">
+                <mat-icon>person</mat-icon>
+                <span class="meta-label">Egyéni</span>
+                <span class="meta-value">{{ champ.driversChampName }}</span>
+              </div>
+              <mat-divider [vertical]="true"></mat-divider>
+              <div class="meta-block">
+                <mat-icon>directions_car</mat-icon>
+                <span class="meta-label">Konstruktőri</span>
+                <span class="meta-value">{{ champ.constructorsChampName }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-button [routerLink]="['/admin/participations', champ.driversChampId]">
+              <mat-icon>group</mat-icon> Résztvevők
+            </button>
+            <button mat-button [routerLink]="['/admin/results/entry']" [queryParams]="{ season: champ.season }">
+              <mat-icon>add_circle</mat-icon> Eredmény felvitel
+            </button>
+          </mat-card-actions>
+
+        </mat-card>
+      }
+    </div>
+  }
+</div>
+
+<button mat-fab color="primary" class="fab-add" (click)="openCreateDialog()" matTooltip="Új bajnokság">
+  <mat-icon>add</mat-icon>
+</button>

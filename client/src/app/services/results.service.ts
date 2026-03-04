@@ -23,8 +23,7 @@ import {ConstructorStandingsDto} from '../api/models/constructor-standings-dto';
 import { SeasonOverviewDto } from '../api/models/season-overview-dto';
 import {DriverSeasonResultDto} from '../api/models/driver-season-result-dto';
 import {ConstructorSeasonResultDto} from '../api/models/constructor-season-result-dto';
-import { DriverLookUpDto } from "../api/models";
-import { ConstructorLookUpDto } from "../api/models";
+import {ConstructorLookUpDto, DriverLookUpDto} from "../api/models";
 import {
   apiStandingsGetConstructorsByConstructorsChampionshipConstChampIdGet$Json
 } from '../api/fn/standings/api-standings-get-constructors-by-constructors-championship-const-champ-id-get-json';
@@ -43,6 +42,9 @@ export class ResultsService {
     return apiStandingsGetAllSeriesGet$Json(this.http, this.apiConfig.rootUrl, {}).pipe(
       map(r => r.body as SeriesLookupDto[])
     );
+  }
+
+  getAllChampionshipsBySeries(seriesId: string): Observable<ChampionshipRowDto[]> {
   }
 
   getSeasonsBySeries(seriesId: string): Observable<YearLookupDto[]> {

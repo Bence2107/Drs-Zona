@@ -6,6 +6,7 @@ public interface IStandingsService
 {
     Task<ResponseResult<DefaultFiltersDto>> GetDefaultFilters();
     Task<ResponseResult<List<SeriesLookupDto>>> GetAllSeries();
+    Task<ResponseResult<List<ChampionshipRowDto>>> GetAllChampionshipsBySeries(Guid seriesId);
     Task<ResponseResult<List<YearLookupDto>>> GetSeasonsBySeries(Guid seriesId);
     Task<ResponseResult<List<DriverLookUpDto>>> GetDriversBySeason(Guid driversChampId);
     Task<ResponseResult<List<ConstructorLookUpDto>>> GetConstructorsBySeason(Guid driversChampId);

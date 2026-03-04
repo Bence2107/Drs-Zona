@@ -14,7 +14,9 @@ public class DriversChampionshipsRepository(EfContext context) : IDriversChampio
     public async Task<List<DriversChampionship>> GetAll() => await _driversChampionships.ToListAsync();
 
     public async Task<List<DriversChampionship>> GetBySeriesId(Guid seriesId) =>
-        await _driversChampionships.Where(c => c.SeriesId == seriesId).ToListAsync();
+        await _driversChampionships
+            .Include(c => c.Series)
+            .Where(c => c.SeriesId == seriesId).ToListAsync();
 
     public async Task Add(DriversChampionship championship)
     {

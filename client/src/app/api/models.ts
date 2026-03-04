@@ -10,6 +10,7 @@ export type { BrandCreateDto } from './models/brand-create-dto';
 export type { BrandDetailDto } from './models/brand-detail-dto';
 export type { BrandListDto } from './models/brand-list-dto';
 export type { BrandUpdateDto } from './models/brand-update-dto';
+export type { ChampionshipRowDto } from './models/championship-row-dto';
 export type { ChangePasswordRequest } from './models/change-password-request';
 export type { CircuitDetailDto } from './models/circuit-detail-dto';
 export type { CommentContentUpdateDto } from './models/comment-content-update-dto';

@@ -53,6 +53,30 @@ public class StandingsService (
         return ResponseResult<List<SeriesLookupDto>>.Success(dtoS);
     }
 
+    public async Task<ResponseResult<List<ChampionshipRowDto>>> GetAllChampionshipsBySeries(Guid seriesId)
+    {
+        var driversChamps = await driverChampRepo.GetBySeriesId(seriesId);
+        var constChamps = await constructorChampRepo.GetBySeriesId(seriesId);
+
+        var result = driversChamps
+            .Join(constChamps,
+                d => d.Season,
+                c => c.Season,
+                (d, c) => new ChampionshipRowDto(
+                    DriversChampId: d.Id,
+                    ConstructorsChampId: c.Id,
+                    Season: d.Season,
+                    Status: d.Status,
+                    SeriesName: d.Series?.Name ?? string.Empty,
+                    DriversChampName: d.Name,
+                    ConstructorsChampName: c.Name
+                ))
+            .OrderByDescending(x => x.Season)
+            .ToList();
+
+        return ResponseResult<List<ChampionshipRowDto>>.Success(result);
+    }
+
     public async Task<ResponseResult<List<YearLookupDto>>> GetSeasonsBySeries(Guid seriesId)
     {
         var driversChamps = await driverChampRepo.GetBySeriesId(seriesId);

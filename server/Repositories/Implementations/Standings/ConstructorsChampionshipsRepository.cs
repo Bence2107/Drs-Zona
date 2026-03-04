@@ -16,7 +16,9 @@ public class ConstructorsChampionshipsRepository(EfContext context) : IConstruct
         await _constructorsChampionships.ToListAsync();
     
     public async Task<List<ConstructorsChampionship>> GetBySeriesId(Guid seriesId) =>
-        await _constructorsChampionships.Where(c => c.SeriesId == seriesId).ToListAsync();
+        await _constructorsChampionships
+            .Include(c => c.Series)
+            .Where(c => c.SeriesId == seriesId).ToListAsync();
 
     public async Task Create(ConstructorsChampionship constructorsChampionship)
     {

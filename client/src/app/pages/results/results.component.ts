@@ -24,7 +24,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {map} from 'rxjs/operators';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import {MatButton, MatFabButton} from '@angular/material/button';
+import {MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {RouterLink} from '@angular/router';
 import {AuthService} from '../../services/auth.service';

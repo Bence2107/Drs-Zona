@@ -79,3 +79,14 @@ public record SeriesDetailDto(
     List<string>? AvailableSeasons
 );
 
+public record ChampionshipRowDto(
+    Guid DriversChampId,
+    Guid ConstructorsChampId,
+
+    string Season,
+    string Status,
+    string SeriesName,
+
+    string DriversChampName,
+    string ConstructorsChampName
+);

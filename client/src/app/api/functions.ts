@@ -185,6 +185,10 @@ export type { ApiStandingsGetAllSeriesGet$Plain$Params as ApiStandingsGetAllSeri
 export { apiStandingsGetAllSeriesGet$Plain as apiStandingsGetAllSeriesGet$Plain } from './fn/standings/api-standings-get-all-series-get-plain';
 export type { ApiStandingsGetAllSeriesGet$Json$Params as ApiStandingsGetAllSeriesGet$Json$Params } from './fn/standings/api-standings-get-all-series-get-json';
 export { apiStandingsGetAllSeriesGet$Json as apiStandingsGetAllSeriesGet$Json } from './fn/standings/api-standings-get-all-series-get-json';
+export type { ApiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Plain$Params as ApiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Plain$Params } from './fn/standings/api-standings-get-all-championships-by-series-series-id-get-plain';
+export { apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Plain as apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Plain } from './fn/standings/api-standings-get-all-championships-by-series-series-id-get-plain';
+export type { ApiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json$Params as ApiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json$Params } from './fn/standings/api-standings-get-all-championships-by-series-series-id-get-json';
+export { apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json as apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json } from './fn/standings/api-standings-get-all-championships-by-series-series-id-get-json';
 export type { ApiStandingsGetSeasonsBySeriesSeriesIdGet$Plain$Params as ApiStandingsGetSeasonsBySeriesSeriesIdGet$Plain$Params } from './fn/standings/api-standings-get-seasons-by-series-series-id-get-plain';
 export { apiStandingsGetSeasonsBySeriesSeriesIdGet$Plain as apiStandingsGetSeasonsBySeriesSeriesIdGet$Plain } from './fn/standings/api-standings-get-seasons-by-series-series-id-get-plain';
 export type { ApiStandingsGetSeasonsBySeriesSeriesIdGet$Json$Params as ApiStandingsGetSeasonsBySeriesSeriesIdGet$Json$Params } from './fn/standings/api-standings-get-seasons-by-series-series-id-get-json';
