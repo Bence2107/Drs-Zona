@@ -55,6 +55,7 @@ public class GrandsPrixRepository(EfContext context) : IGrandsPrixRepository
     
     public async Task<List<GrandPrix>> GetBySeriesAndYear(Guid seriesId, int year) => 
         await _grandsPrix
+            .Include(gp => gp.Circuit)
             .Where(gp => gp.SeriesId == seriesId && gp.SeasonYear == year)
             .ToListAsync();
     

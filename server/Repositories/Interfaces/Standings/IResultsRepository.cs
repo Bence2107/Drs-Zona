@@ -1,3 +1,4 @@
+using Entities.Models.RaceTracks;
 using Entities.Models.Standings;
 
 namespace Repositories.Interfaces.Standings;
@@ -18,4 +19,5 @@ public interface IResultsRepository
     Task<List<Result>> GetByConstructorsChampionshipId(Guid championshipId);
     Task<List<string>> GetAvailableSessionsByGrandPrixId(Guid grandPrixId);
     Task<bool> CheckIfIdExists(Guid id);
+    Task<bool> HasGrandPrixResults(GrandPrix gp);
 }

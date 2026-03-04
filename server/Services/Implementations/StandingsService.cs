@@ -116,7 +116,25 @@ public class StandingsService (
         if (champ == null) return ResponseResult<List<GrandPrixLookupDto>>.Failure("Bajnokság nem található");
         
         var gps = await grandsPrixRepo.GetBySeriesAndYear(champ.SeriesId, int.Parse(champ.Season));
-        var dtoS = gps.Select(g => new GrandPrixLookupDto(g.Id, g.ShortName!)).ToList();
+        var dtoS = gps.Select(gp =>
+        {
+            var hasResults = resultsRepo.HasGrandPrixResults(gp);
+            var dto = new GrandPrixLookupDto(
+                gp.Id,
+                gp.ShortName!,
+                hasResults.Result,
+                gp.Circuit!.Name,
+                gp.RoundNumber,
+                gp.Circuit!.Location,
+                gp.StartTime,
+                gp.EndTime,
+                gp.RaceDistance,
+                gp.LapsCompleted
+            );
+
+            return dto;
+        }).ToList();
+       
         return ResponseResult<List<GrandPrixLookupDto>>.Success(dtoS);
     }
     

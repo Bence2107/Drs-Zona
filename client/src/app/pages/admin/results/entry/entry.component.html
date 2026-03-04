@@ -47,7 +47,7 @@
           <mat-card-header>
             <div class="round-badge">R{{ gp.roundNumber }}</div>
             <div class="header-content">
-              <mat-card-title>{{ gp.name | countryFlag }} {{ gp.name }}</mat-card-title>
+              <mat-card-title>{{ gp.name! | countryFlag }} {{ gp.name }}</mat-card-title>
               <mat-card-subtitle>{{ gp.circuitName }} · {{ gp.location }}</mat-card-subtitle>
             </div>
             @if (gp.hasResults) {
@@ -65,7 +65,7 @@
             <div class="gp-meta">
               <div class="meta-item">
                 <mat-icon>calendar_today</mat-icon>
-                <span>{{ gp.startTime | date:'yyyy. MMM d.' }} – {{ gp.endTime | date:'MMM d.' }}</span>
+                <span>{{ gp.startTime | date:'yyyy. MMM d.' }} – {{ gp.endtime | date:'MMM d.' }}</span>
               </div>
               <div class="meta-item">
                 <mat-icon>speed</mat-icon>

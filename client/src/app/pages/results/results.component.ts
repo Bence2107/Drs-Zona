@@ -42,7 +42,7 @@ const AGGREGATED_ID = 'aggregated';
   standalone: true,
   imports: [
     CommonModule, FormsModule, MatButtonToggleModule,
-    MatFormFieldModule, MatSelectModule, MatTableModule, MatProgressSpinnerModule, CountryFlagPipe, MatButton, MatIcon, RouterLink, MatFabButton, MatTooltip, MatMenuTrigger, MatMenu, MatMenuItem, MatDivider
+    MatFormFieldModule, MatSelectModule, MatTableModule, MatProgressSpinnerModule, CountryFlagPipe, MatIcon, RouterLink, MatFabButton, MatTooltip, MatMenuTrigger, MatMenu, MatMenuItem, MatDivider
   ],
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.scss'],

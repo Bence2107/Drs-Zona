@@ -1,4 +1,5 @@
 ﻿using Context;
+using Entities.Models.RaceTracks;
 using Entities.Models.Standings;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces.Standings;
@@ -85,4 +86,9 @@ public class ResultsRepository(EfContext context) : IResultsRepository
     }
     
     public async Task<bool> CheckIfIdExists(Guid id) => await _results.AnyAsync(d => d.Id == id);
+    public async Task<bool> HasGrandPrixResults(GrandPrix gp)
+    {
+        return await _results.AnyAsync(r => r.GrandPrixId == gp.Id);
+    }
+    
 }

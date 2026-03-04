@@ -285,7 +285,18 @@ public record SeriesLookupDto(Guid Id, string Name);
 public record YearLookupDto(string Season, Guid DriversChampId, Guid ConstructorsChampId);
 public record DriverLookUpDto(Guid Id, string Name);
 public record ConstructorLookUpDto(Guid Id, string Name, string ShortName);
-public record GrandPrixLookupDto(Guid Id, string Name);
+public record GrandPrixLookupDto(
+    Guid Id, 
+    string Name,
+    bool HasResults,
+    string CircuitName,
+    int RoundNumber,
+    string Location,
+    DateTime StartTime,
+    DateTime Endtime,
+    int RaceDistance,
+    int LapsCompleted
+);
 
 public record DefaultFiltersDto(
     Guid SeriesId,
