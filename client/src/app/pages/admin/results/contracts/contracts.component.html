@@ -1,0 +1,64 @@
+<div class="manage-container">
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  }
+
+  @if (!isLoading() && contracts().length === 0) {
+    <div class="empty-state">
+      <mat-icon>description_off</mat-icon>
+      <p>Nincs szerződés az adatbázisban.</p>
+    </div>
+  }
+
+  @if (!isLoading() && contracts().length > 0) {
+    <mat-card class="table-card">
+      <table mat-table [dataSource]="contracts()" class="contracts-table">
+
+        <ng-container matColumnDef="driver">
+          <th mat-header-cell *matHeaderCellDef>Versenyző</th>
+          <td mat-cell *matCellDef="let c">
+            <div class="cell-content">
+              <mat-icon class="cell-icon">person</mat-icon>
+              <span>{{ c.driverName }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="team">
+          <th mat-header-cell *matHeaderCellDef>Csapat</th>
+          <td mat-cell *matCellDef="let c">
+            <div class="cell-content">
+              <mat-icon class="cell-icon">directions_car</mat-icon>
+              <span>{{ c.teamName }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let c" class="actions-cell">
+            <button mat-icon-button (click)="openEditDialog(c)" matTooltip="Szerkesztés">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deleteContract(c)" matTooltip="Törlés">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let _; columns: columns;"></tr>
+      </table>
+    </mat-card>
+  }
+
+</div>
+
+<button mat-fab color="primary" class="fab-add"
+        (click)="openCreateDialog()"
+        matTooltip="Új szerződés">
+  <mat-icon>add</mat-icon>
+</button>

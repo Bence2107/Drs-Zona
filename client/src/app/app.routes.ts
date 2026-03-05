@@ -12,6 +12,7 @@ import {ChampionshipsComponent} from './pages/admin/results/championships/champi
 import {ParticipationsComponent} from './pages/admin/results/participations/participations.component';
 import {DriversComponent} from './pages/admin/results/drivers/drivers.component';
 import {ConstructorsComponent} from './pages/admin/results/constructors/constructors.component';
+import {ContractsComponent} from './pages/admin/results/contracts/contracts.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: "admin/participations", component:  ParticipationsComponent },
   { path: "admin/drivers", component:  DriversComponent },
   { path: "admin/constructors", component:  ConstructorsComponent },
+  { path: "admin/contracts", component: ContractsComponent},
   {
     path: "auth",
     component: AuthComponent,

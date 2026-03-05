@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Új szerződés</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Versenyző</mat-label>
+      <mat-select formControlName="driverId">
+        @for (d of drivers(); track d.id) {
+          <mat-option [value]="d.id">{{ d.name }} · {{ d.nationality }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Csapat</mat-label>
+      <mat-select formControlName="teamId">
+        @for (c of constructors(); track c.id) {
+          <mat-option [value]="c.id">{{ c.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Mégse</button>
+  <button mat-flat-button (click)="submit()" [disabled]="isSubmitting">
+    <mat-icon>add</mat-icon>
+    {{ isSubmitting ? 'Mentés...' : 'Létrehozás' }}
+  </button>
+</mat-dialog-actions>

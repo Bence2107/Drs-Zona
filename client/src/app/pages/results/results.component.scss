@@ -115,6 +115,14 @@
   background-color: var(--secondary-bg) !important;
 }
 
+.cell-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--accent-color);
+  font-feature-settings: 'liga';
+}
+
 .fab-edit {
   position: fixed;
   bottom: 24px;

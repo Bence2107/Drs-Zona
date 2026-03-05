@@ -65,22 +65,28 @@ public class StandingsService (
         foreach (var dp in driverParticipations)
         {
             var contracts = await contractsRepo.GetByDriverId(dp.DriverId);
-            var teamName = contracts.LastOrDefault()?.Constructor?.Name;
+            var currentConstructorId = contracts.LastOrDefault()?.ConstructorId;
+        
+            var teamSnapshot = constructorCompetitions
+                .FirstOrDefault(cc => cc.ConstructorId == currentConstructorId)
+                ?.ConstructorNameSnapshot;
 
             drivers.Add(new DriverParticipationDto(
                 DriverId: dp.DriverId,
-                Name: dp.Driver?.Name ?? "N/A",
+                Name: dp.DriverNameSnapshot,
                 Nationality: dp.Driver?.Nationality ?? "N/A",
                 Age: dp.Driver != null ? GetAge(dp.Driver.BirthDate) : 0,
                 DriverNumber: dp.DriverNumber,
-                TeamName: teamName
+                TeamName: teamSnapshot ?? "N/A"
             ));
         }
 
-        var constructors = constructorCompetitions.Select(cc => new ConstructorListDto(
-            Id: cc.Constructor!.Id,
-            Name: cc.Constructor.Name
-        )).ToList();
+        var constructors = constructorCompetitions
+            .Where(cc => cc.Constructor != null)
+            .Select(cc => new ConstructorListDto(
+                Id: cc.ConstructorId,
+                Name: cc.ConstructorNameSnapshot
+            )).ToList();
 
         return ResponseResult<ParticipationListDto>.Success(new ParticipationListDto(
             driversChampId,
@@ -89,7 +95,7 @@ public class StandingsService (
             constructors
         ));
     }
-
+    
     public async Task<ResponseResult<List<ChampionshipRowDto>>> GetAllChampionshipsBySeries(Guid seriesId)
     {
         var driversChamps = await driverChampRepo.GetBySeriesId(seriesId);

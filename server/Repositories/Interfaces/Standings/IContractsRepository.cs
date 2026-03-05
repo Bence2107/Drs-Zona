@@ -5,8 +5,10 @@ namespace Repositories.Interfaces.Standings;
 public interface IContractsRepository
 {
     Task<Contract?> GetContractById(Guid id);
+    
     Task<Contract?> GetContractByDriverAndTConstructorId(Guid driverId, Guid constructorId);
     Task<List<Contract>> GetContracts();
+    Task<List<Contract>> GetAllWithAll();
     Task Create(Contract contract);
     Task Update(Contract contract);
     Task Delete(Guid id);

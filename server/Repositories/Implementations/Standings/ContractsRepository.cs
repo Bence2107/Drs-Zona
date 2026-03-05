@@ -36,6 +36,11 @@ public class ContractsRepository(EfContext context) : IContractsRepository
         _contracts.Remove(contract);
         await context.SaveChangesAsync();
     }
+    
+    public async Task<List<Contract>> GetAllWithAll() => await _contracts
+        .Include(c => c.Driver)
+        .Include(c => c.Constructor)
+        .ToListAsync();
 
     public async Task<Contract?> GetByIdWithAll(Guid id) => await _contracts
         .Include(c => c.Driver)

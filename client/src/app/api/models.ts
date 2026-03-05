@@ -28,6 +28,8 @@ export type { ConstructorSeasonResultDto } from './models/constructor-season-res
 export type { ConstructorStandingsDto } from './models/constructor-standings-dto';
 export type { ConstructorStandingsResultDto } from './models/constructor-standings-result-dto';
 export type { ConstructorUpdateDto } from './models/constructor-update-dto';
+export type { ContractCreateDto } from './models/contract-create-dto';
+export type { ContractListDto } from './models/contract-list-dto';
 export type { DefaultFiltersDto } from './models/default-filters-dto';
 export type { DriverCreateDto } from './models/driver-create-dto';
 export type { DriverDetailDto } from './models/driver-detail-dto';

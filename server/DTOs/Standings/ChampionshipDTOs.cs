@@ -125,3 +125,11 @@ public record DriverParticipationDto(
     int DriverNumber,
     string? TeamName
 );
+
+public record ContractListDto(
+    Guid Id,
+    Guid DriverId,
+    string DriverName,
+    Guid TeamId,
+    string TeamName
+);
