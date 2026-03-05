@@ -1,0 +1,99 @@
+<h2 mat-dialog-title>Új nagydíj létrehozása</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Széria</mat-label>
+        <mat-select formControlName="seriesId">
+          @for (series of seriesList; track series.id) {
+            <mat-option [value]="series.id">{{ series.name }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('seriesId')?.hasError('required') && form.get('seriesId')?.touched) {
+          <mat-error>Kötelező mező</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Szezon éve</mat-label>
+        <input matInput type="number" formControlName="seasonYear" placeholder="pl. 2025">
+        @if (form.get('seasonYear')?.hasError('required') && form.get('seasonYear')?.touched) {
+          <mat-error>Kötelező mező</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Pálya</mat-label>
+      <mat-select formControlName="circuitId">
+        @for (circuit of circuits(); track circuit.id) {
+          <mat-option [value]="circuit.id">
+            {{ circuit.location! | countryFlag }} {{ circuit.name }} · {{ circuit.location }}
+          </mat-option>
+        }
+      </mat-select>
+      @if (form.get('circuitId')?.hasError('required') && form.get('circuitId')?.touched) {
+        <mat-error>Kötelező mező</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nagydíj neve</mat-label>
+      <input matInput formControlName="name" placeholder="pl. Formula 1 Australian Grand Prix 2025">
+      @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+        <mat-error>Kötelező mező</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Rövid név</mat-label>
+        <input matInput formControlName="shortName" placeholder="pl. Australian GP">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Forduló száma</mat-label>
+        <input matInput type="number" formControlName="roundNumber" placeholder="pl. 1">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Kezdés</mat-label>
+        <input matInput [matDatepicker]="startPicker" formControlName="startTime">
+        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Vége</mat-label>
+        <input matInput [matDatepicker]="endPicker" formControlName="endTime">
+        <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Verseny távolság (km)</mat-label>
+        <input matInput type="number" formControlName="raceDistance">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Körök száma</mat-label>
+        <input matInput type="number" formControlName="lapsCompleted">
+      </mat-form-field>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Mégse</button>
+  <button mat-flat-button (click)="submit()" [disabled]="form.invalid || isSubmitting">
+    <mat-icon>add_circle</mat-icon>
+    {{ isSubmitting ? 'Létrehozás...' : 'Létrehozás' }}
+  </button>
+</mat-dialog-actions>

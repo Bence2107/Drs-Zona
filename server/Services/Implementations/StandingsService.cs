@@ -353,7 +353,50 @@ public class StandingsService (
 
         return ResponseResult<List<SeasonOverviewDto>>.Success(overview);
     }
+
+    public async Task<ResponseResult<bool>> CreateChampionship(ChampionshipCreateDto dto)
+    {
+        var driversChamp = new DriversChampionship
+        {
+            Id = Guid.NewGuid(),
+            SeriesId = dto.SeriesId,
+            Season = dto.Season,
+            Name = dto.DriversName,
+            Status = "Upcoming"
+        };
+
+        var constructorsChamp = new ConstructorsChampionship
+        {
+            Id = Guid.NewGuid(),
+            SeriesId = dto.SeriesId,
+            Season = dto.Season,
+            Name = dto.ConstructorsName,
+            Status = "Upcoming"
+        };
+
+        await driverChampRepo.Add(driversChamp);
+        await constructorChampRepo.Create(constructorsChamp);
+
+        return ResponseResult<bool>.Success(true);
+    }
     
+    public async Task<ResponseResult<bool>> UpdateChampionshipStatus(Guid driversChampId, Guid constructorsChampId, string status)
+    {
+        var driversChamp = await driverChampRepo.GetById(driversChampId);
+        if (driversChamp == null) return ResponseResult<bool>.Failure("Egyéni bajnokság nem található");
+
+        var constructorsChamp = await constructorChampRepo.GetByIdWithSeries(constructorsChampId);
+        if (constructorsChamp == null) return ResponseResult<bool>.Failure("Konstruktőri bajnokság nem található");
+
+        driversChamp.Status = status;
+        constructorsChamp.Status = status;
+
+        await driverChampRepo.Modify(driversChamp);
+        await constructorChampRepo.Update(constructorsChamp);
+
+        return ResponseResult<bool>.Success(true);
+    }
+
     private static string FormatTimeOrStatus(Result result, long leaderTime, int leaderLaps)
     {
         if (!result.Status.Equals("Finished", StringComparison.CurrentCultureIgnoreCase))

@@ -50,6 +50,19 @@ public class GrandPrixService (
         return ResponseResult<GrandPrixDetailDto>.Success(detailDto);
     }
 
+    public async Task<ResponseResult<List<CircuitListDto>>> GetAllCircuits()
+    {
+        var circuits = await circuitsRepository.GetAllCircuits();
+            
+        var dtoS = circuits.Select(c => new CircuitListDto(
+            c.Id,
+            c.Location,
+            c.Name
+        )).ToList();
+
+        return ResponseResult<List<CircuitListDto>>.Success(dtoS);
+    }
+
     public async Task<ResponseResult<List<GrandPrixListDto>>> GetSeasonGrandPrixList(Guid seriesId, int year)
     {
         var grandsPrixList = await grandsPrixRepository.GetBySeriesAndYear(seriesId, year);

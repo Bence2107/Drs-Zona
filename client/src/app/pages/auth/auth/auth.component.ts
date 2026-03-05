@@ -101,7 +101,6 @@ export class AuthComponent implements OnInit{
 
       this.authService.login(request).subscribe({
           next: () => {
-            console.log(localStorage.getItem('auth_token'));
             this.router.navigate(['/home'])
             this.snackBar.openFromComponent(CustomSnackbarComponent, {
               data: { message: 'Sikeres Bejelentkezés', actionLabel: 'Rendben' },
@@ -125,7 +124,6 @@ export class AuthComponent implements OnInit{
 
       this.authService.register(request).subscribe({
         next: () => {
-          console.log(localStorage.getItem('auth_token'));
           this.router.navigate(['/home']);
           this.snackBar.openFromComponent(CustomSnackbarComponent, {
             data: { message: 'Sikeres Regisztráció', actionLabel: 'Rendben' },

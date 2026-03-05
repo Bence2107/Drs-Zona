@@ -88,12 +88,8 @@ export class PollAddDialogComponent {
       };
 
       this.pollService.createPoll(pollDto, userId).subscribe({
-        next: (response) => {
-          console.log('Sikeres mentés:', response);
+        next: () => {
           this.dialogRef.close(true);
-        },
-        error: (err) => {
-          console.error('Szerver hiba:', err);
         }
       });
     } else {

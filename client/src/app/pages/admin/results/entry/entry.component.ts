@@ -13,7 +13,7 @@ import {
   MatCardSubtitle,
   MatCardTitle
 } from '@angular/material/card';
-import {MatButton} from '@angular/material/button';
+import {MatButton, MatFabButton} from '@angular/material/button';
 import {RouterLink} from '@angular/router';
 import {DatePipe} from '@angular/common';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
@@ -21,6 +21,11 @@ import {CountryFlagPipe} from '../../../../pipes/country-flag.pipe';
 import {ResultsService} from '../../../../services/results.service';
 import {YearLookupDto} from '../../../../api/models/year-lookup-dto';
 import {GrandPrixLookupDto} from '../../../../api/models/grand-prix-lookup-dto';
+import {MatTooltip} from '@angular/material/tooltip';
+import {
+  GrandPrixCreateDialogComponent
+} from '../../../../components/grand-prix-creation-dialog/grand-prix-creation-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-entry',
@@ -43,7 +48,9 @@ import {GrandPrixLookupDto} from '../../../../api/models/grand-prix-lookup-dto';
     MatButton,
     RouterLink,
     DatePipe,
-    CountryFlagPipe
+    CountryFlagPipe,
+    MatFabButton,
+    MatTooltip
   ],
   templateUrl: './entry.component.html',
   styleUrl: './entry.component.scss',
@@ -59,7 +66,7 @@ export class EntryComponent implements OnInit {
   grandsPrix = signal<GrandPrixLookupDto[]>([]);
   isLoading = signal(false);
 
-  constructor(private resultService: ResultsService) {}
+  constructor(private resultService: ResultsService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.loadSeries();
@@ -113,6 +120,18 @@ export class EntryComponent implements OnInit {
     });
   }
 
-
+  openCreateDialog() {
+    const ref = this.dialog.open(GrandPrixCreateDialogComponent, {
+      width: '560px',
+      data: {
+        seriesList: this.seriesList(),
+        preselectedSeriesId: this.selectedSeriesId(),
+        preselectedYear: this.selectedYear()
+      }
+    });
+    ref.afterClosed().subscribe(result => {
+      if (result) this.loadGrandsPrix(this.selectedChampionship()!);
+    });
+  }
 
 }

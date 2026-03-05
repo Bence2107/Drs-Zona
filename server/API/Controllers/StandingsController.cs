@@ -231,4 +231,22 @@ public class StandingsController(IStandingsService standingsService): Controller
         
         return Ok(response.Value);
     }
+    
+    [HttpPost("createChampionship")]
+    public async Task<ActionResult> CreateChampionship([FromBody] ChampionshipCreateDto dto)
+    {
+        var response = await standingsService.CreateChampionship(dto);
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok();
+    }
+    
+    [HttpPost("updateChampionshipStatus/{driversChampId:guid}/{constructorsChampId:guid}/{status}")]
+    public async Task<ActionResult> UpdateChampionshipStatus(Guid driversChampId, Guid constructorsChampId, string status)
+    {
+        var response = await standingsService.UpdateChampionshipStatus(driversChampId, constructorsChampId, status);
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok();
+    }
 }

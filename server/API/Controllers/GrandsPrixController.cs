@@ -23,6 +23,23 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
         
         return Ok(response.Value);
     }
+
+    [HttpGet("getAllCircuits")]
+    public async Task<ActionResult<CircuitListDto>> GetAllCircuits()
+    {
+        var response = await grandPrixService.GetAllCircuits();
+        if (!response.IsSuccess)
+        {
+            return BadRequest(new
+            {
+                response.ErrorField, 
+                response.Message
+            });
+        }
+        
+        return Ok(response.Value);
+    }
+
     
     [HttpGet("getSeasonGrandsPrix/{seriesId:guid}/{year:int}")]
     public async Task<ActionResult<GrandPrixDetailDto>> GetSeasonGrandsPrix([FromRoute] Guid seriesId, [FromRoute] int year)

@@ -11,6 +11,12 @@ public record CircuitDetailDto(
     string FastestLap
 );
 
+public record CircuitListDto(
+    Guid Id,
+    string Location,
+    string Name
+);
+
 public record GrandPrixCreateDto(
     [Required(ErrorMessage = "A pálya kiválasztása kötelező")] 
     Guid CircuitId,

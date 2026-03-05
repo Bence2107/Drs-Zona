@@ -90,3 +90,10 @@ public record ChampionshipRowDto(
     string DriversChampName,
     string ConstructorsChampName
 );
+
+public record ChampionshipCreateDto(
+    Guid SeriesId,
+    string Season,
+    string DriversName,
+    string ConstructorsName
+);

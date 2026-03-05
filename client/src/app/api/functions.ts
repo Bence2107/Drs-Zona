@@ -119,6 +119,10 @@ export type { ApiGrandPrixGetGrandPrixIdGet$Plain$Params as ApiGrandPrixGetGrand
 export { apiGrandPrixGetGrandPrixIdGet$Plain as apiGrandPrixGetGrandPrixIdGet$Plain } from './fn/grand-prix/api-grand-prix-get-grand-prix-id-get-plain';
 export type { ApiGrandPrixGetGrandPrixIdGet$Json$Params as ApiGrandPrixGetGrandPrixIdGet$Json$Params } from './fn/grand-prix/api-grand-prix-get-grand-prix-id-get-json';
 export { apiGrandPrixGetGrandPrixIdGet$Json as apiGrandPrixGetGrandPrixIdGet$Json } from './fn/grand-prix/api-grand-prix-get-grand-prix-id-get-json';
+export type { ApiGrandPrixGetAllCircuitsGet$Plain$Params as ApiGrandPrixGetAllCircuitsGet$Plain$Params } from './fn/grand-prix/api-grand-prix-get-all-circuits-get-plain';
+export { apiGrandPrixGetAllCircuitsGet$Plain as apiGrandPrixGetAllCircuitsGet$Plain } from './fn/grand-prix/api-grand-prix-get-all-circuits-get-plain';
+export type { ApiGrandPrixGetAllCircuitsGet$Json$Params as ApiGrandPrixGetAllCircuitsGet$Json$Params } from './fn/grand-prix/api-grand-prix-get-all-circuits-get-json';
+export { apiGrandPrixGetAllCircuitsGet$Json as apiGrandPrixGetAllCircuitsGet$Json } from './fn/grand-prix/api-grand-prix-get-all-circuits-get-json';
 export type { ApiGrandPrixGetSeasonGrandsPrixSeriesIdYearGet$Plain$Params as ApiGrandPrixGetSeasonGrandsPrixSeriesIdYearGet$Plain$Params } from './fn/grand-prix/api-grand-prix-get-season-grands-prix-series-id-year-get-plain';
 export { apiGrandPrixGetSeasonGrandsPrixSeriesIdYearGet$Plain as apiGrandPrixGetSeasonGrandsPrixSeriesIdYearGet$Plain } from './fn/grand-prix/api-grand-prix-get-season-grands-prix-series-id-year-get-plain';
 export type { ApiGrandPrixGetSeasonGrandsPrixSeriesIdYearGet$Json$Params as ApiGrandPrixGetSeasonGrandsPrixSeriesIdYearGet$Json$Params } from './fn/grand-prix/api-grand-prix-get-season-grands-prix-series-id-year-get-json';
@@ -233,3 +237,7 @@ export type { ApiStandingsGetSeasonOverviewDriverChampIdGet$Plain$Params as ApiS
 export { apiStandingsGetSeasonOverviewDriverChampIdGet$Plain as apiStandingsGetSeasonOverviewDriverChampIdGet$Plain } from './fn/standings/api-standings-get-season-overview-driver-champ-id-get-plain';
 export type { ApiStandingsGetSeasonOverviewDriverChampIdGet$Json$Params as ApiStandingsGetSeasonOverviewDriverChampIdGet$Json$Params } from './fn/standings/api-standings-get-season-overview-driver-champ-id-get-json';
 export { apiStandingsGetSeasonOverviewDriverChampIdGet$Json as apiStandingsGetSeasonOverviewDriverChampIdGet$Json } from './fn/standings/api-standings-get-season-overview-driver-champ-id-get-json';
+export type { ApiStandingsCreateChampionshipPost$Params as ApiStandingsCreateChampionshipPost$Params } from './fn/standings/api-standings-create-championship-post';
+export { apiStandingsCreateChampionshipPost as apiStandingsCreateChampionshipPost } from './fn/standings/api-standings-create-championship-post';
+export type { ApiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost$Params as ApiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost$Params } from './fn/standings/api-standings-update-championship-status-drivers-champ-id-constructors-champ-id-status-post';
+export { apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost as apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost } from './fn/standings/api-standings-update-championship-status-drivers-champ-id-constructors-champ-id-status-post';

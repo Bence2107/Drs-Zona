@@ -8,6 +8,10 @@ import { YearLookupDto } from '../api/models/year-lookup-dto';
 import { GrandPrixLookupDto } from '../api/models/grand-prix-lookup-dto';
 import { GrandPrixResultsDto } from '../api/models/grand-prix-results-dto';
 import {
+  apiGrandPrixCreatePost,
+  apiGrandPrixGetAllCircuitsGet$Json,
+  apiStandingsCreateChampionshipPost,
+  apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json,
   apiStandingsGetAllSeriesGet$Json, apiStandingsGetByConstructorChampionshipIdConstructsChampIdGet$Json,
   apiStandingsGetByDriversChampionshipIdDriversChampIdGet$Json,
   apiStandingsGetConstructorsResultsBySeasonConstructorIdConstructorChampIdGet$Json,
@@ -16,14 +20,20 @@ import {
   apiStandingsGetGrandPrixByChampionshipDriverChampIdGet$Json,
   apiStandingsGetGrandPrixResultsGrandPrixIdSessionGet$Json, apiStandingsGetSeasonOverviewDriverChampIdGet$Json,
   apiStandingsGetSeasonsBySeriesSeriesIdGet$Json,
-  apiStandingsGetSessionsByGrandPrixGrandPrixIdGet$Json
+  apiStandingsGetSessionsByGrandPrixGrandPrixIdGet$Json,
+  apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost
 } from '../api/functions';
 import {DriverStandingsDto} from '../api/models/driver-standings-dto';
 import {ConstructorStandingsDto} from '../api/models/constructor-standings-dto';
 import { SeasonOverviewDto } from '../api/models/season-overview-dto';
 import {DriverSeasonResultDto} from '../api/models/driver-season-result-dto';
 import {ConstructorSeasonResultDto} from '../api/models/constructor-season-result-dto';
-import {ConstructorLookUpDto, DriverLookUpDto} from "../api/models";
+import {
+  ChampionshipCreateDto,
+  ChampionshipRowDto, CircuitListDto,
+  ConstructorLookUpDto,
+  DriverLookUpDto, GrandPrixCreateDto,
+} from "../api/models";
 import {
   apiStandingsGetConstructorsByConstructorsChampionshipConstChampIdGet$Json
 } from '../api/fn/standings/api-standings-get-constructors-by-constructors-championship-const-champ-id-get-json';
@@ -45,6 +55,9 @@ export class ResultsService {
   }
 
   getAllChampionshipsBySeries(seriesId: string): Observable<ChampionshipRowDto[]> {
+    return apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json(this.http, this.apiConfig.rootUrl, {seriesId: seriesId}).pipe(
+      map(r => r.body as ChampionshipRowDto[])
+    )
   }
 
   getSeasonsBySeries(seriesId: string): Observable<YearLookupDto[]> {
@@ -127,5 +140,27 @@ export class ResultsService {
       {constructorId: constructorId, constructorChampId: constructorChampId }).pipe(
       map(r => r.body as ConstructorSeasonResultDto[])
     );
+  }
+
+  createChampionship(dto: ChampionshipCreateDto) {
+    return apiStandingsCreateChampionshipPost(this.http, this.apiConfig.rootUrl, {
+      body: dto
+    }).pipe(map(() => void 0));
+  }
+
+  updateChampionship(driversChampId: string, constructorsChampId: string, status: string) {
+    return apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost(this.http, this.apiConfig.rootUrl, {
+      driversChampId: driversChampId, constructorsChampId: constructorsChampId, status: status
+    }).pipe(map(() => void 0));
+  }
+
+  getAllCircuitsToList(): Observable<CircuitListDto[]> {
+    return apiGrandPrixGetAllCircuitsGet$Json(this.http, this.apiConfig.rootUrl).pipe(
+      map(r => r.body as CircuitListDto[])
+    );
+  }
+
+  createGrandPrix(dto: GrandPrixCreateDto) {
+    return apiGrandPrixCreatePost(this.http, this.apiConfig.rootUrl, {body: dto}).pipe(map(() => void 0));
   }
 }

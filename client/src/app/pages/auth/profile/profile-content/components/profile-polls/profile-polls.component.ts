@@ -23,7 +23,6 @@ export class ProfilePollsComponent implements OnInit {
         this.pollService.getPollsByUser(this.userData.userId).subscribe(
           (polls: PollListDto[]) => {
             this.polls = polls;
-            console.log(polls);
           }
         )
       }

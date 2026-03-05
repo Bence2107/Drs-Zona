@@ -12,18 +12,6 @@
     </mat-button-toggle-group>
   </div>
 
-  <div class="season-section">
-    <mat-form-field appearance="outline" class="season-field">
-      <mat-label>Szezon</mat-label>
-      <mat-select [ngModel]="selectedSeason()" (ngModelChange)="onSeasonChange($event)">
-        <mat-option [value]="null">Összes</mat-option>
-        @for (season of seasons(); track season) {
-          <mat-option [value]="season">{{ season }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-  </div>
-
   @if (isLoading()) {
     <div class="loading-state">
       <mat-spinner diameter="48"></mat-spinner>
@@ -40,21 +28,21 @@
   @if (!isLoading() && championships().length > 0) {
     <div class="championship-list">
       @for (champ of championships(); track champ.driversChampId) {
-        <mat-card class="champ-card" [class]="'status-' + champ.status.toLowerCase()">
+        <mat-card class="champ-card" [class]="'status-' + champ.status!.toLowerCase()">
           <div class="card-stripe"></div>
 
           <mat-card-header>
             <div class="season-badge">{{ champ.season }}</div>
             <div class="header-content">
-              <mat-card-title>{{ champ.name }}</mat-card-title>
+              <mat-card-title>{{ champ.seriesName }}</mat-card-title>
               <mat-card-subtitle>{{ champ.seriesName }}</mat-card-subtitle>
             </div>
             <button mat-stroked-button
                     class="status-chip"
-                    [class]="'status-' + champ.status.toLowerCase()"
+                    [class]="'status-' + champ.status!.toLowerCase()"
                     [matMenuTriggerFor]="statusMenu"
                     (click)="$event.stopPropagation()">
-              <mat-icon>{{ statusIcon(champ.status) }}</mat-icon>
+              <mat-icon>{{ statusIcon(champ.status!) }}</mat-icon>
               {{ champ.status }}
             </button>
             <mat-menu #statusMenu="matMenu">
@@ -93,6 +81,7 @@
             <button mat-button [routerLink]="['/admin/results/entry']" [queryParams]="{ season: champ.season }">
               <mat-icon>add_circle</mat-icon> Eredmény felvitel
             </button>
+            <span class="spacer"></span>
           </mat-card-actions>
 
         </mat-card>

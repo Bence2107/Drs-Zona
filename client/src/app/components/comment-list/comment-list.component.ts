@@ -28,9 +28,6 @@ export class CommentListComponent implements OnInit {
 
   submitComment() {
     const userId = this.authService.currentProfile()?.userId;
-    console.log('userId:', userId);
-    console.log('articleId:', this.articleId);
-    console.log('text:', this.newCommentText);
 
     if (!this.newCommentText.trim() || !userId) {
       console.warn('Hiányzó adat – nem küld');
