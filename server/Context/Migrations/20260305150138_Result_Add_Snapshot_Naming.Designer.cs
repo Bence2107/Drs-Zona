@@ -3,6 +3,7 @@ using System;
 using Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Context.Migrations
 {
     [DbContext(typeof(EfContext))]
-    partial class EfContextModelSnapshot : ModelSnapshot
+    [Migration("20260305150138_Result_Add_Snapshot_Naming")]
+    partial class Result_Add_Snapshot_Naming
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -475,16 +478,6 @@ namespace Context.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("constructors_championship_id");
 
-                    b.Property<string>("ConstructorNameSnapshot")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("constructor_name_snapshot");
-
-                    b.Property<string>("ConstructorNicknameSnapshot")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("constructor_nickname_snapshot");
-
                     b.HasKey("ConstructorId", "ConstChampId");
 
                     b.HasIndex("ConstChampId");
@@ -612,11 +605,6 @@ namespace Context.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("drivers_championship_id");
 
-                    b.Property<string>("DriverNameSnapshot")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("driver_name_snapshot");
-
                     b.Property<int>("DriverNumber")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
@@ -690,13 +678,6 @@ namespace Context.Migrations
                         .HasColumnType("text")
                         .HasDefaultValue("")
                         .HasColumnName("constructor_name_snapshot");
-
-                    b.Property<string>("ConstructorNicknameSnapshot")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasDefaultValue("")
-                        .HasColumnName("constructor_nickname_snapshot");
 
                     b.Property<int>("ConstructorPoints")
                         .HasColumnType("integer")

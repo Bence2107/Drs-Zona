@@ -215,6 +215,10 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
         // Result relationships
         modelBuilder.Entity<Result>(options =>
         {
+            options.Property(r => r.DriverNameSnapshot).HasDefaultValue("");
+            options.Property(r => r.ConstructorNameSnapshot).HasDefaultValue("");
+            options.Property(r => r.ConstructorNicknameSnapshot).HasDefaultValue("");
+            
             options
                 .HasOne(r => r.GrandPrix)
                 .WithMany()

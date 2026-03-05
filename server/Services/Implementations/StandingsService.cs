@@ -8,7 +8,9 @@ namespace Services.Implementations;
 
 public class StandingsService (
     IDriversChampionshipsRepository driverChampRepo,
+    IDriversRepository driversRepo,
     IConstructorsChampionshipsRepository constructorChampRepo,
+    IConstructorsRepository constructorsRepo,
     IResultsRepository resultsRepo,
     IGrandsPrixRepository grandsPrixRepo,
     IDriverParticipationRepository driverParticipationRepo,
@@ -142,7 +144,7 @@ public class StandingsService (
         var dto = driverParticipationsOnChampionship.Select(dp =>
                 new DriverLookUpDto(
                     Id: dp.Driver!.Id,
-                    Name: dp.Driver!.Name
+                    Name: dp.DriverNameSnapshot
                 )
             )
             .OrderBy(dp => dp.Name)
@@ -159,8 +161,8 @@ public class StandingsService (
         var dto = constructorParticipationsOnChampionship.Select(cp =>
                 new ConstructorLookUpDto(
                     Id: cp.Constructor!.Id,
-                    Name: cp.Constructor!.Name,
-                    ShortName: cp.Constructor!.Nickname
+                    Name: cp.ConstructorNameSnapshot,
+                    ShortName: cp.ConstructorNicknameSnapshot
                 )
             )
             .OrderBy(cp => cp.Name)
@@ -224,12 +226,10 @@ public class StandingsService (
                 return new
                 {
                     DriverId = group.Key,
-                    DriverName = latestResult.Driver != null 
-                        ? $"{latestResult.Driver.Name}" 
-                        : "Unknown",
+                    DriverName = latestResult.DriverNameSnapshot,
                     Nationality = latestResult.Driver?.Nationality ?? "N/A",
                     ConstructId = latestResult.ConstructorId,
-                    ConstructorName = latestResult.Constructor?.Nickname ?? "N/A",
+                    ConstructorName = latestResult.ConstructorNicknameSnapshot,
                     Points = group.Sum(r => r.DriverPoints),
                     BestFinish = group.Min(r => r.FinishPosition)
                 };
@@ -273,8 +273,8 @@ public class StandingsService (
                 return new
                 {
                     ConstructorId = group.Key,
-                    Name = latestResult.Constructor?.Name ?? "Ismeretlen",
-                    ShortName = latestResult.Constructor?.Nickname ?? "Ismeretlen",
+                    Name = latestResult.ConstructorNameSnapshot,
+                    ShortName = latestResult.ConstructorNicknameSnapshot,
                     Points = group.Sum(r => r.ConstructorPoints),
                     BestFinish = group.Min(r => r.FinishPosition) 
                 };
@@ -318,9 +318,9 @@ public class StandingsService (
             r.FinishPosition,
             r.DriverId,
             r.CarNumber,
-            r.Driver?.Name ?? "N/A",
+            r.DriverNameSnapshot,
             r.ConstructorId,
-            r.Constructor?.Nickname ?? "N/A",
+            r.ConstructorNicknameSnapshot,
             FormatTimeOrStatus(r, leaderTime, leaderLaps), 
             r.DriverPoints
         )).ToArray();
@@ -340,7 +340,7 @@ public class StandingsService (
                 r.GrandPrix?.Name ?? "N/A Grand Prix",
                 r.GrandPrix?.ShortName ?? "N/A GP",
                 r.GrandPrix?.EndTime ?? DateTime.MinValue,
-                r.Constructor?.Nickname ?? "N/A",
+                r.ConstructorNicknameSnapshot,
                 r.FinishPosition,
                 r.DriverPoints
             ))
@@ -380,8 +380,8 @@ public class StandingsService (
             r.GrandPrix?.Name ?? "Ismeretlen Grand Prix",
             r.GrandPrix?.ShortName ?? "Ismeretlen GP",
             r.GrandPrix?.EndTime ?? DateTime.MinValue,
-            r.Driver?.Name ?? "Ismeretlen",
-            r.Constructor?.Nickname ?? "N/A",
+            r.DriverNameSnapshot,
+            r.ConstructorNicknameSnapshot,
             r.LapsCompleted,
             FormatTimeOrStatus(r, r.RaceTime, r.LapsCompleted) 
         )).ToList();
@@ -437,28 +437,34 @@ public class StandingsService (
         foreach (var constructorId in dto.ConstructorIds)
         {
             var alreadyExists = await constructorCompetitionRepo.CheckIfExists(constructorId, dto.ConstructorsChampId);
-            if (!alreadyExists)
+            if (alreadyExists) continue;
+            
+            var constructor = await constructorsRepo.GetByIdWithBrand(constructorId);
+            if (constructor == null) return ResponseResult<bool>.Failure("Constructor dosen't exist");
+                
+            await constructorCompetitionRepo.Create(new ConstructorCompetition
             {
-                await constructorCompetitionRepo.Create(new ConstructorCompetition
-                {
-                    ConstructorId = constructorId,
-                    ConstChampId = dto.ConstructorsChampId
-                });
-            }
+                ConstructorId = constructorId,
+                ConstChampId = dto.ConstructorsChampId,
+                ConstructorNameSnapshot = constructor.Name,
+                ConstructorNicknameSnapshot = constructor.Nickname
+            });
         }
 
         foreach (var driver in dto.Drivers)
         {
             var alreadyExists = await driverParticipationRepo.CheckIfExists(driver.DriverId, dto.DriversChampId);
-            if (!alreadyExists)
+            if (alreadyExists) continue;
+            var driverEntity = await driversRepo.GetDriverById(driver.DriverId);
+            if (driverEntity == null) return ResponseResult<bool>.Failure("Driver dosen't exist");
+                
+            await driverParticipationRepo.Create(new DriverParticipation
             {
-                await driverParticipationRepo.Create(new DriverParticipation
-                {
-                    DriverId = driver.DriverId,
-                    DriverChampId = dto.DriversChampId,
-                    DriverNumber = driver.DriverNumber
-                });
-            }
+                DriverId = driver.DriverId,
+                DriverChampId = dto.DriversChampId,
+                DriverNumber = driver.DriverNumber,
+                DriverNameSnapshot = driverEntity.Name
+            });
         }
 
         return ResponseResult<bool>.Success(true);

@@ -24,10 +24,19 @@ public class Result
     [JsonIgnore]
     public virtual Driver? Driver {get; set;}
     
+    [Column("driver_name_snapshot")]
+    public required string DriverNameSnapshot { get; set; }
+    
     [Column("constructor_id")]
     public Guid ConstructorId {get; set;}
     [JsonIgnore]
     public virtual Constructor? Constructor {get; set;}
+    
+    [Column("constructor_name_snapshot")]  
+    public required string ConstructorNameSnapshot { get; set; }
+    
+    [Column("constructor_nickname_snapshot")]  
+    public required string ConstructorNicknameSnapshot { get; set; }
     
     [Column("drivers_championship_id")]
     public Guid DriversChampId {get; set;}

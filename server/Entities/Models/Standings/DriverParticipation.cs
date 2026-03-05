@@ -18,4 +18,7 @@ public class DriverParticipation
     
     [Column("driver_number")]
     public int DriverNumber { get; set; }
+    
+    [Column("driver_name_snapshot")]
+    public required string DriverNameSnapshot { get; set; }
 }

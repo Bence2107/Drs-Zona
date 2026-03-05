@@ -56,8 +56,6 @@ public class ResultsRepository(EfContext context) : IResultsRepository
 
     public async Task<List<Result>> GetBySession(Guid grandPrixId, string session) => await _results
         .Include(r => r.GrandPrix)
-        .Include(r => r.Driver)
-        .Include(r => r.Constructor)
         .Where(r => r.GrandPrixId == grandPrixId && r.Session == session)
         .ToListAsync();
 
