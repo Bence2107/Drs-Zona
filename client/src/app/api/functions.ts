@@ -97,6 +97,10 @@ export type { ApiConstructorsGetAllByChampionshipChampionshipIdGet$Plain$Params 
 export { apiConstructorsGetAllByChampionshipChampionshipIdGet$Plain as apiConstructorsGetAllByChampionshipChampionshipIdGet$Plain } from './fn/constructors/api-constructors-get-all-by-championship-championship-id-get-plain';
 export type { ApiConstructorsGetAllByChampionshipChampionshipIdGet$Json$Params as ApiConstructorsGetAllByChampionshipChampionshipIdGet$Json$Params } from './fn/constructors/api-constructors-get-all-by-championship-championship-id-get-json';
 export { apiConstructorsGetAllByChampionshipChampionshipIdGet$Json as apiConstructorsGetAllByChampionshipChampionshipIdGet$Json } from './fn/constructors/api-constructors-get-all-by-championship-championship-id-get-json';
+export type { ApiConstructorsGetAllConstructorsGet$Plain$Params as ApiConstructorsGetAllConstructorsGet$Plain$Params } from './fn/constructors/api-constructors-get-all-constructors-get-plain';
+export { apiConstructorsGetAllConstructorsGet$Plain as apiConstructorsGetAllConstructorsGet$Plain } from './fn/constructors/api-constructors-get-all-constructors-get-plain';
+export type { ApiConstructorsGetAllConstructorsGet$Json$Params as ApiConstructorsGetAllConstructorsGet$Json$Params } from './fn/constructors/api-constructors-get-all-constructors-get-json';
+export { apiConstructorsGetAllConstructorsGet$Json as apiConstructorsGetAllConstructorsGet$Json } from './fn/constructors/api-constructors-get-all-constructors-get-json';
 export type { ApiConstructorsCreatePost$Params as ApiConstructorsCreatePost$Params } from './fn/constructors/api-constructors-create-post';
 export { apiConstructorsCreatePost as apiConstructorsCreatePost } from './fn/constructors/api-constructors-create-post';
 export type { ApiConstructorsUpdatePost$Params as ApiConstructorsUpdatePost$Params } from './fn/constructors/api-constructors-update-post';
@@ -109,6 +113,10 @@ export type { ApiDriversGetAllByChampionshipChampionshipIdGet$Plain$Params as Ap
 export { apiDriversGetAllByChampionshipChampionshipIdGet$Plain as apiDriversGetAllByChampionshipChampionshipIdGet$Plain } from './fn/drivers/api-drivers-get-all-by-championship-championship-id-get-plain';
 export type { ApiDriversGetAllByChampionshipChampionshipIdGet$Json$Params as ApiDriversGetAllByChampionshipChampionshipIdGet$Json$Params } from './fn/drivers/api-drivers-get-all-by-championship-championship-id-get-json';
 export { apiDriversGetAllByChampionshipChampionshipIdGet$Json as apiDriversGetAllByChampionshipChampionshipIdGet$Json } from './fn/drivers/api-drivers-get-all-by-championship-championship-id-get-json';
+export type { ApiDriversGetAllDriversGet$Plain$Params as ApiDriversGetAllDriversGet$Plain$Params } from './fn/drivers/api-drivers-get-all-drivers-get-plain';
+export { apiDriversGetAllDriversGet$Plain as apiDriversGetAllDriversGet$Plain } from './fn/drivers/api-drivers-get-all-drivers-get-plain';
+export type { ApiDriversGetAllDriversGet$Json$Params as ApiDriversGetAllDriversGet$Json$Params } from './fn/drivers/api-drivers-get-all-drivers-get-json';
+export { apiDriversGetAllDriversGet$Json as apiDriversGetAllDriversGet$Json } from './fn/drivers/api-drivers-get-all-drivers-get-json';
 export type { ApiDriversCreatePost$Params as ApiDriversCreatePost$Params } from './fn/drivers/api-drivers-create-post';
 export { apiDriversCreatePost as apiDriversCreatePost } from './fn/drivers/api-drivers-create-post';
 export type { ApiDriversUpdatePost$Params as ApiDriversUpdatePost$Params } from './fn/drivers/api-drivers-update-post';
@@ -189,6 +197,10 @@ export type { ApiStandingsGetAllSeriesGet$Plain$Params as ApiStandingsGetAllSeri
 export { apiStandingsGetAllSeriesGet$Plain as apiStandingsGetAllSeriesGet$Plain } from './fn/standings/api-standings-get-all-series-get-plain';
 export type { ApiStandingsGetAllSeriesGet$Json$Params as ApiStandingsGetAllSeriesGet$Json$Params } from './fn/standings/api-standings-get-all-series-get-json';
 export { apiStandingsGetAllSeriesGet$Json as apiStandingsGetAllSeriesGet$Json } from './fn/standings/api-standings-get-all-series-get-json';
+export type { ApiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Plain$Params as ApiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Plain$Params } from './fn/standings/api-standings-get-participations-drivers-champ-id-constructors-champ-id-get-plain';
+export { apiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Plain as apiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Plain } from './fn/standings/api-standings-get-participations-drivers-champ-id-constructors-champ-id-get-plain';
+export type { ApiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Json$Params as ApiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Json$Params } from './fn/standings/api-standings-get-participations-drivers-champ-id-constructors-champ-id-get-json';
+export { apiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Json as apiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Json } from './fn/standings/api-standings-get-participations-drivers-champ-id-constructors-champ-id-get-json';
 export type { ApiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Plain$Params as ApiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Plain$Params } from './fn/standings/api-standings-get-all-championships-by-series-series-id-get-plain';
 export { apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Plain as apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Plain } from './fn/standings/api-standings-get-all-championships-by-series-series-id-get-plain';
 export type { ApiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json$Params as ApiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json$Params } from './fn/standings/api-standings-get-all-championships-by-series-series-id-get-json';
@@ -241,3 +253,9 @@ export type { ApiStandingsCreateChampionshipPost$Params as ApiStandingsCreateCha
 export { apiStandingsCreateChampionshipPost as apiStandingsCreateChampionshipPost } from './fn/standings/api-standings-create-championship-post';
 export type { ApiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost$Params as ApiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost$Params } from './fn/standings/api-standings-update-championship-status-drivers-champ-id-constructors-champ-id-status-post';
 export { apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost as apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost } from './fn/standings/api-standings-update-championship-status-drivers-champ-id-constructors-champ-id-status-post';
+export type { ApiStandingsAddParticipationsPost$Params as ApiStandingsAddParticipationsPost$Params } from './fn/standings/api-standings-add-participations-post';
+export { apiStandingsAddParticipationsPost as apiStandingsAddParticipationsPost } from './fn/standings/api-standings-add-participations-post';
+export type { ApiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete$Params as ApiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete$Params } from './fn/standings/api-standings-remove-driver-participation-driver-id-drivers-champ-id-delete';
+export { apiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete as apiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete } from './fn/standings/api-standings-remove-driver-participation-driver-id-drivers-champ-id-delete';
+export type { ApiStandingsRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete$Params as ApiStandingsRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete$Params } from './fn/standings/api-standings-remove-constructor-competition-constructor-id-constructors-champ-id-delete';
+export { apiStandingsRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete as apiStandingsRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete } from './fn/standings/api-standings-remove-constructor-competition-constructor-id-constructors-champ-id-delete';

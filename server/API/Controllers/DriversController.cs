@@ -30,6 +30,15 @@ public class DriversController(IDriverService driverService): ControllerBase
         var response = await driverService.ListAllDriversByChampionships(championshipId);
         return Ok(response.Value);
     }
+    
+    [HttpGet("getAllDrivers")]
+    public async Task<ActionResult<List<DriverListDto>>> GetAllDrivers()
+    {
+        var response = await driverService.GetAllDrivers();
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok(response.Value);
+    }
 
     [HttpPost("create")]
     public async Task<ActionResult> Create([FromBody] DriverCreateDto dto)

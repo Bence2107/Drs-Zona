@@ -1,0 +1,98 @@
+<h2 mat-dialog-title>Résztvevők hozzáadása</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <div class="section-header">
+      <mat-icon>directions_car</mat-icon>
+      <span>Konstruktőrök</span>
+    </div>
+
+    <div formArrayName="constructors">
+      @for (row of constructorRows.controls; track $index) {
+        <div [formGroupName]="$index" class="dynamic-row">
+          <mat-form-field appearance="outline" class="flex-field">
+            <mat-label>Konstruktőr</mat-label>
+            <mat-select formControlName="constructorId">
+              @for (c of allConstructors(); track c.id) {
+                <mat-option [value]="c.id">{{ c.name }}</mat-option>
+              }
+            </mat-select>
+            @if (row.get('constructorId')?.hasError('required') && row.get('constructorId')?.touched) {
+              <mat-error>Kötelező</mat-error>
+            }
+          </mat-form-field>
+
+          @if (constructorRows.length > 1) {
+            <button mat-icon-button type="button" (click)="removeConstructorRow($index)" matTooltip="Eltávolítás">
+              <mat-icon color="warn">remove_circle</mat-icon>
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <button mat-flat-button type="button" class="add-row-btn" (click)="addConstructorRow()">
+      <mat-icon>add</mat-icon> Konstruktőr hozzáadása
+    </button>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <div class="section-header">
+      <mat-icon>person</mat-icon>
+      <span>Versenyzők</span>
+    </div>
+
+    <div formArrayName="drivers">
+      @for (row of driverRows.controls; track $index) {
+        <div [formGroupName]="$index" class="dynamic-row">
+
+          <mat-form-field appearance="outline" class="flex-field">
+            <mat-label>Versenyző</mat-label>
+            <mat-select formControlName="driverId">
+              @for (d of allDrivers(); track d.id) {
+                <mat-option [value]="d.id">
+                  {{ d.name }} · {{ d.nationality }}
+                </mat-option>
+              }
+            </mat-select>
+            @if (row.get('driverId')?.hasError('required') && row.get('driverId')?.touched) {
+              <mat-error>Kötelező</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="number-field">
+            <mat-label>#</mat-label>
+            <input matInput type="number" formControlName="driverNumber" min="1" max="99">
+            @if (row.get('driverNumber')?.hasError('required') && row.get('driverNumber')?.touched) {
+              <mat-error>Kötelező</mat-error>
+            }
+            @if (row.get('driverNumber')?.hasError('min') || row.get('driverNumber')?.hasError('max')) {
+              <mat-error>1–99</mat-error>
+            }
+          </mat-form-field>
+
+          @if (driverRows.length > 1) {
+            <button mat-icon-button type="button" (click)="removeDriverRow($index)" matTooltip="Eltávolítás">
+              <mat-icon color="warn">remove_circle</mat-icon>
+            </button>
+          }
+
+        </div>
+      }
+    </div>
+
+    <button mat-flat-button type="button" class="add-row-btn" (click)="addDriverRow()">
+      <mat-icon>add</mat-icon> Versenyző hozzáadása
+    </button>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Mégse</button>
+  <button mat-flat-button (click)="submit()" [disabled]="form.invalid || isSubmitting">
+    <mat-icon>save</mat-icon>
+    {{ isSubmitting ? 'Mentés...' : 'Mentés' }}
+  </button>
+</mat-dialog-actions>

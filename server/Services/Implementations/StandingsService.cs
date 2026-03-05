@@ -13,7 +13,8 @@ public class StandingsService (
     IGrandsPrixRepository grandsPrixRepo,
     IDriverParticipationRepository driverParticipationRepo,
     IConstructorCompetitionRepository constructorCompetitionRepo,
-    ISeriesRepository seriesRepo
+    ISeriesRepository seriesRepo,
+    IContractsRepository contractsRepo
 )
 : IStandingsService
 {
@@ -51,6 +52,40 @@ public class StandingsService (
         var series = await seriesRepo.GetAllSeries();
         var dtoS = series.Select(s => new SeriesLookupDto(s.Id, s.Name)).ToList();
         return ResponseResult<List<SeriesLookupDto>>.Success(dtoS);
+    }
+    
+    public async Task<ResponseResult<ParticipationListDto>> GetParticipations(Guid driversChampId, Guid constructorsChampId)
+    {
+        var driverParticipations = await driverParticipationRepo.GetByChampionshipId(driversChampId);
+        var constructorCompetitions = await constructorCompetitionRepo.GetByChampionshipId(constructorsChampId);
+
+        var drivers = new List<DriverParticipationDto>();
+        foreach (var dp in driverParticipations)
+        {
+            var contracts = await contractsRepo.GetByDriverId(dp.DriverId);
+            var teamName = contracts.LastOrDefault()?.Constructor?.Name;
+
+            drivers.Add(new DriverParticipationDto(
+                DriverId: dp.DriverId,
+                Name: dp.Driver?.Name ?? "N/A",
+                Nationality: dp.Driver?.Nationality ?? "N/A",
+                Age: dp.Driver != null ? GetAge(dp.Driver.BirthDate) : 0,
+                DriverNumber: dp.DriverNumber,
+                TeamName: teamName
+            ));
+        }
+
+        var constructors = constructorCompetitions.Select(cc => new ConstructorListDto(
+            Id: cc.Constructor!.Id,
+            Name: cc.Constructor.Name
+        )).ToList();
+
+        return ResponseResult<ParticipationListDto>.Success(new ParticipationListDto(
+            driversChampId,
+            constructorsChampId,
+            drivers,
+            constructors
+        ));
     }
 
     public async Task<ResponseResult<List<ChampionshipRowDto>>> GetAllChampionshipsBySeries(Guid seriesId)
@@ -396,6 +431,50 @@ public class StandingsService (
 
         return ResponseResult<bool>.Success(true);
     }
+    
+    public async Task<ResponseResult<bool>> AddParticipations(AddParticipationsDto dto)
+    {
+        foreach (var constructorId in dto.ConstructorIds)
+        {
+            var alreadyExists = await constructorCompetitionRepo.CheckIfExists(constructorId, dto.ConstructorsChampId);
+            if (!alreadyExists)
+            {
+                await constructorCompetitionRepo.Create(new ConstructorCompetition
+                {
+                    ConstructorId = constructorId,
+                    ConstChampId = dto.ConstructorsChampId
+                });
+            }
+        }
+
+        foreach (var driver in dto.Drivers)
+        {
+            var alreadyExists = await driverParticipationRepo.CheckIfExists(driver.DriverId, dto.DriversChampId);
+            if (!alreadyExists)
+            {
+                await driverParticipationRepo.Create(new DriverParticipation
+                {
+                    DriverId = driver.DriverId,
+                    DriverChampId = dto.DriversChampId,
+                    DriverNumber = driver.DriverNumber
+                });
+            }
+        }
+
+        return ResponseResult<bool>.Success(true);
+    }
+
+    public async Task<ResponseResult<bool>> RemoveDriverParticipation(Guid driverId, Guid driversChampId)
+    {
+        await driverParticipationRepo.Delete(driverId, driversChampId);
+        return ResponseResult<bool>.Success(true);
+    }
+
+    public async Task<ResponseResult<bool>> RemoveConstructorCompetition(Guid constructorId, Guid constructorsChampId)
+    {
+        await constructorCompetitionRepo.Delete(constructorId, constructorsChampId);
+        return ResponseResult<bool>.Success(true);
+    }
 
     private static string FormatTimeOrStatus(Result result, long leaderTime, int leaderLaps)
     {
@@ -422,5 +501,12 @@ public class StandingsService (
         var d = TimeSpan.FromMilliseconds(Math.Abs(diffMs));
 
         return d.TotalMinutes >= 1 ? $"+{(int)d.TotalMinutes}:{d.Seconds:D2}:{d.Milliseconds:D3}s" : $"+{d.Seconds}.{d.Milliseconds:D3}s";
+    }
+    
+    private static int GetAge(DateTime birthDate)
+    {
+        var years = DateTime.Now.Year - birthDate.Year;
+        if (DateTime.Now < birthDate.AddYears(years)) years--;
+        return years;
     }
 }

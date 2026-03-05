@@ -31,6 +31,15 @@ public class ConstructorsController(IConstructorsService constructorsService): C
         return Ok(response.Value);
     }
     
+    [HttpGet("getAllConstructors")]
+    public async Task<ActionResult<List<ConstructorListDto>>> GetAllConstructors()
+    {
+        var response = await constructorsService.GetAllConstructors();
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok(response.Value);
+    }
+    
     [HttpPost("create")]
     public async Task<ActionResult> Create([FromBody] ConstructorCreateDto dto)
     {

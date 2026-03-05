@@ -10,17 +10,23 @@ import { GrandPrixResultsDto } from '../api/models/grand-prix-results-dto';
 import {
   apiGrandPrixCreatePost,
   apiGrandPrixGetAllCircuitsGet$Json,
+  apiStandingsAddParticipationsPost,
   apiStandingsCreateChampionshipPost,
   apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json,
-  apiStandingsGetAllSeriesGet$Json, apiStandingsGetByConstructorChampionshipIdConstructsChampIdGet$Json,
+  apiStandingsGetAllSeriesGet$Json,
+  apiStandingsGetByConstructorChampionshipIdConstructsChampIdGet$Json,
   apiStandingsGetByDriversChampionshipIdDriversChampIdGet$Json,
   apiStandingsGetConstructorsResultsBySeasonConstructorIdConstructorChampIdGet$Json,
   apiStandingsGetDriverResultsBySeasonDriverIdDriverChampIdGet$Json,
   apiStandingsGetDriversByDriversChampionshipDriverChampIdGet$Json,
   apiStandingsGetGrandPrixByChampionshipDriverChampIdGet$Json,
-  apiStandingsGetGrandPrixResultsGrandPrixIdSessionGet$Json, apiStandingsGetSeasonOverviewDriverChampIdGet$Json,
+  apiStandingsGetGrandPrixResultsGrandPrixIdSessionGet$Json,
+  apiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Json,
+  apiStandingsGetSeasonOverviewDriverChampIdGet$Json,
   apiStandingsGetSeasonsBySeriesSeriesIdGet$Json,
   apiStandingsGetSessionsByGrandPrixGrandPrixIdGet$Json,
+  apiStandingsRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete,
+  apiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete,
   apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost
 } from '../api/functions';
 import {DriverStandingsDto} from '../api/models/driver-standings-dto';
@@ -29,6 +35,7 @@ import { SeasonOverviewDto } from '../api/models/season-overview-dto';
 import {DriverSeasonResultDto} from '../api/models/driver-season-result-dto';
 import {ConstructorSeasonResultDto} from '../api/models/constructor-season-result-dto';
 import {
+  AddParticipationsDto,
   ChampionshipCreateDto,
   ChampionshipRowDto, CircuitListDto,
   ConstructorLookUpDto,
@@ -37,6 +44,7 @@ import {
 import {
   apiStandingsGetConstructorsByConstructorsChampionshipConstChampIdGet$Json
 } from '../api/fn/standings/api-standings-get-constructors-by-constructors-championship-const-champ-id-get-json';
+import {ParticipationListDto} from '../api/models/participation-list-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -163,4 +171,25 @@ export class ResultsService {
   createGrandPrix(dto: GrandPrixCreateDto) {
     return apiGrandPrixCreatePost(this.http, this.apiConfig.rootUrl, {body: dto}).pipe(map(() => void 0));
   }
+
+  addParticipation(dto: AddParticipationsDto) {
+    return apiStandingsAddParticipationsPost(this.http, this.apiConfig.rootUrl, {body: dto}).pipe(map(() => void 0));
+  }
+
+  removeDriverParticipation(driverId: string, driversChampId: string) {
+    return apiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete(this.http, this.apiConfig.rootUrl,
+      {driverId: driverId, driversChampId: driversChampId},).pipe(map(() => void 0));
+  }
+
+  removeConstructorParticipation(constId: string, constChampId: string) {
+    return apiStandingsRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete(this.http, this.apiConfig.rootUrl,
+      {constructorId: constId, constructorsChampId: constChampId},).pipe(map(() => void 0));
+  }
+
+  getParticipations(driversChampId: string, constructorsChampId: string): Observable<ParticipationListDto> {
+    return apiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Json(this.http, this.apiConfig.rootUrl,
+      { driversChampId, constructorsChampId }
+    ).pipe(map(r => r.body as ParticipationListDto));
+  }
+
 }

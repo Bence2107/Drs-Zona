@@ -1,0 +1,44 @@
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+  min-width: 520px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-main);
+  margin: 8px 0 4px;
+
+  mat-icon {
+    color: var(--accent-color);
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.section-divider {
+  margin: 16px 0 8px;
+}
+
+.dynamic-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  .flex-field { flex: 1; }
+
+  .number-field { width: 80px; }
+}
+
+.add-row-btn {
+  align-self: flex-start;
+  margin-top: 4px;
+  font-size: 13px;
+}

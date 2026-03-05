@@ -45,7 +45,19 @@ public class ConstructorsService(
         
         return ResponseResult<ConstructorDetailDto>.Success(dto);
     }
-
+    
+    public async Task<ResponseResult<List<ConstructorListDto>>> GetAllConstructors()
+    {
+        var constructors = await constructorRepo.GetAllConstructor();
+    
+        var dto = constructors.Select(c => new ConstructorListDto(
+            Id: c.Id,
+            Name: c.Name
+        )).ToList();
+    
+        return ResponseResult<List<ConstructorListDto>>.Success(dto);
+    }
+    
     public async Task<ResponseResult<List<ConstructorListDto>>> ListAllConstructorsByChampionship(Guid championshipId)
     {
         var constructors = await constructorCompetitionRepo.GetConstructorsByChampionshipId(championshipId);

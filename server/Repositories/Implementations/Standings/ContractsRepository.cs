@@ -43,6 +43,7 @@ public class ContractsRepository(EfContext context) : IContractsRepository
         .FirstOrDefaultAsync(c => c.Id == id);
 
     public async Task<List<Contract>> GetByDriverId(Guid driverId) => await _contracts
+        .Include(c => c.Constructor)
         .Where(c => c.DriverId == driverId)
         .ToListAsync();
 

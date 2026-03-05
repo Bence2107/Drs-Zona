@@ -39,6 +39,15 @@ public class StandingsController(IStandingsService standingsService): Controller
         
         return Ok(response.Value);   
     }
+    
+    [HttpGet("getParticipations/{driversChampId:guid}/{constructorsChampId:guid}")]
+    public async Task<ActionResult<ParticipationListDto>> GetParticipations(Guid driversChampId, Guid constructorsChampId)
+    {
+        var response = await standingsService.GetParticipations(driversChampId, constructorsChampId);
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok(response.Value);
+    }
 
     [HttpGet("getAllChampionshipsBySeries/{seriesId:guid}")]
     public async Task<ActionResult<List<ChampionshipRowDto>>> GetAllChampionshipsBySeries(Guid seriesId)
@@ -245,6 +254,33 @@ public class StandingsController(IStandingsService standingsService): Controller
     public async Task<ActionResult> UpdateChampionshipStatus(Guid driversChampId, Guid constructorsChampId, string status)
     {
         var response = await standingsService.UpdateChampionshipStatus(driversChampId, constructorsChampId, status);
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok();
+    }
+    
+    [HttpPost("addParticipations")]
+    public async Task<ActionResult> AddParticipations([FromBody] AddParticipationsDto dto)
+    {
+        var response = await standingsService.AddParticipations(dto);
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok();
+    }
+
+    [HttpDelete("removeDriverParticipation/{driverId:guid}/{driversChampId:guid}")]
+    public async Task<ActionResult> RemoveDriverParticipation(Guid driverId, Guid driversChampId)
+    {
+        var response = await standingsService.RemoveDriverParticipation(driverId, driversChampId);
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok();
+    }
+
+    [HttpDelete("removeConstructorCompetition/{constructorId:guid}/{constructorsChampId:guid}")]
+    public async Task<ActionResult> RemoveConstructorCompetition(Guid constructorId, Guid constructorsChampId)
+    {
+        var response = await standingsService.RemoveConstructorCompetition(constructorId, constructorsChampId);
         if (!response.IsSuccess)
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();

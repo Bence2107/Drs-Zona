@@ -97,3 +97,31 @@ public record ChampionshipCreateDto(
     string DriversName,
     string ConstructorsName
 );
+
+public record AddParticipationsDto(
+    Guid DriversChampId,
+    Guid ConstructorsChampId,
+    List<DriverParticipationRowDto> Drivers,
+    List<Guid> ConstructorIds
+);
+
+public record DriverParticipationRowDto(
+    Guid DriverId,
+    int DriverNumber
+);
+
+public record ParticipationListDto(
+    Guid DriversChampId,
+    Guid ConstructorsChampId,
+    List<DriverParticipationDto> Drivers,
+    List<ConstructorListDto> Constructors
+);
+
+public record DriverParticipationDto(
+    Guid DriverId,
+    string Name,
+    string Nationality,
+    int Age,
+    int DriverNumber,
+    string? TeamName
+);

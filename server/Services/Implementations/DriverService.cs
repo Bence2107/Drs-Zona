@@ -59,6 +59,28 @@ public class DriverService(
 
         return ResponseResult<List<DriverListDto>>.Success(dto);
     }
+    
+    public async Task<ResponseResult<List<DriverListDto>>> GetAllDrivers()
+    {
+        var drivers = await driverRepo.GetAllDrivers();
+    
+        var dto = new List<DriverListDto>();
+        foreach (var d in drivers)
+        {
+            var contracts = await contractsDepo.GetByDriverId(d.Id);
+            var currentTeamName = contracts.LastOrDefault()?.Constructor?.Name;
+        
+            dto.Add(new DriverListDto(
+                d.Id,
+                d.Name,
+                d.Nationality,
+                GetDriversAge(d.BirthDate),
+                currentTeamName
+            ));
+        }
+    
+        return ResponseResult<List<DriverListDto>>.Success(dto);
+    }
 
     public async Task<ResponseResult<bool>> CreateDriver(DriverCreateDto dto)
     {
