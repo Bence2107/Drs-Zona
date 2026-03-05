@@ -18,7 +18,6 @@ public class DriverService(
 
         var contracts = await contractsDepo.GetByDriverId(id);
         var contractIds = contracts.Select(c => c.Id).ToList();
-
         return ResponseResult<DriverDetailDto>.Success(new DriverDetailDto(
             driver.Id,
             driver.Name,
@@ -30,7 +29,8 @@ public class DriverService(
             driver.Podiums,
             driver.Championships,
             driver.PolePositions,
-            GetDriversAge(driver.BirthDate)
+            GetDriversAge(driver.BirthDate),
+            driver.Seasons
         ));
     }
 
@@ -78,13 +78,16 @@ public class DriverService(
                 currentTeamName
             ));
         }
-    
-        return ResponseResult<List<DriverListDto>>.Success(dto);
+
+        var orderedDto = dto
+            .OrderBy(dt => dt.Name)
+            .ToList();
+        return ResponseResult<List<DriverListDto>>.Success(orderedDto);
     }
 
     public async Task<ResponseResult<bool>> CreateDriver(DriverCreateDto dto)
     {
-        if (dto.BirthDate.Year > 2005)
+        if (dto.BirthDate > DateTime.Today.AddYears(-15))
         {
             return ResponseResult<bool>.Failure(nameof(dto.BirthDate), "Driver cannot be younger than 15 year");
         }
@@ -116,7 +119,7 @@ public class DriverService(
         var driver = await driverRepo.GetDriverById(dto.Id);
         if (driver == null) return ResponseResult<bool>.Failure("Driver not found.");
         
-        if (dto.BirthDate.Year > 2005)
+        if (dto.BirthDate > DateTime.Today.AddYears(-15))
         {
             return ResponseResult<bool>.Failure(nameof(driver.BirthDate), "Driver cannot be younger than 15 year");
         }

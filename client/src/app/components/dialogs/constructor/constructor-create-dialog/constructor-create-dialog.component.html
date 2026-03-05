@@ -1,0 +1,81 @@
+<h2 mat-dialog-title>Új konstruktőr hozzáadása</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Brand</mat-label>
+      <mat-select formControlName="brandId">
+        @for (brand of brands(); track brand.id) {
+          <mat-option [value]="brand.id">{{ brand.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Teljes név</mat-label>
+        <input matInput formControlName="name" placeholder="pl. Oracle Red Bull Racing">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Rövid név</mat-label>
+        <input matInput formControlName="nickname" placeholder="pl. Red Bull">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Alapítás éve</mat-label>
+        <input matInput type="number" formControlName="foundedYear">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Székhely</mat-label>
+        <input matInput formControlName="headQuarters" placeholder="pl. Milton Keynes, UK">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Csapatvezető</mat-label>
+        <input matInput formControlName="teamChief">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Technikai vezető</mat-label>
+        <input matInput formControlName="technicalChief">
+      </mat-form-field>
+    </div>
+
+    <div class="section-label">Karrierstatisztikák</div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Bajnoki címek</mat-label>
+        <input matInput type="number" formControlName="championships">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Győzelmek</mat-label>
+        <input matInput type="number" formControlName="wins">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Dobogók</mat-label>
+        <input matInput type="number" formControlName="podiums">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Szezonok száma</mat-label>
+        <input matInput type="number" formControlName="seasons">
+      </mat-form-field>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Mégse</button>
+  <button mat-flat-button (click)="submit()" [disabled]="form.invalid || isSubmitting">
+    <mat-icon>add</mat-icon>
+    {{ isSubmitting ? 'Mentés...' : 'Hozzáadás' }}
+  </button>
+</mat-dialog-actions>

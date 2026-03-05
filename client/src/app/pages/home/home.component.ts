@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardImage, MatCardTitle} from '@angular/material/card';
 import {RecentNewsComponent} from './components/recent-news/recent-news.component';
-import {PollListComponent} from '../../components/polls-list/polls-list.component';
+import {PollListComponent} from '../../components/lists/polls-list/polls-list.component';
 import {ArticleService} from '../../services/article.service';
 import {PollService} from '../../services/poll.service';
 import {forkJoin} from 'rxjs';

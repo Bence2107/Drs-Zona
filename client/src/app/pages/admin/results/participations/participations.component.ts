@@ -3,10 +3,10 @@ import {MatDialog} from '@angular/material/dialog';
 import {ResultsService} from '../../../../services/results.service';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
 import {YearLookupDto} from '../../../../api/models/year-lookup-dto';
-import {ConfirmDialogComponent} from '../../../../components/confirmdialog/confirmdialog.component';
+import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirmdialog.component';
 import {
   ParticipationAddDialogComponent
-} from '../../../../components/participation-add-dialog/participation-add-dialog.component';
+} from '../../../../components/dialogs/participations/participation-add-dialog/participation-add-dialog.component';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {FormsModule} from '@angular/forms';
 import {MatFormField, MatLabel} from '@angular/material/input';

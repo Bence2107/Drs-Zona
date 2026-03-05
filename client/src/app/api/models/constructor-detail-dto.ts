@@ -12,6 +12,8 @@ export interface ConstructorDetailDto {
   headQuarters?: string | null;
   id?: string;
   name?: string | null;
+  nickname?: string | null;
+  seasons?: number;
   teamChief?: string | null;
   technicalChief?: string | null;
   totalPodiums?: number;

@@ -4,7 +4,6 @@
 export interface DriverCreateDto {
   birthDate?: string;
   championships?: number;
-  driverNumber?: number;
   name?: string | null;
   nationality?: string | null;
   polePositions?: number;

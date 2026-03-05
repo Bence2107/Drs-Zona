@@ -5,7 +5,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { UserProfileResponse } from '../../../../api/models/user-profile-response';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {ConfirmDialogComponent} from '../../../../components/confirmdialog/confirmdialog.component';
+import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirmdialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {CustomSnackbarComponent} from '../../../../components/custom-snackbar/custom-snackbar.component';
 import {MatSnackBar} from '@angular/material/snack-bar';

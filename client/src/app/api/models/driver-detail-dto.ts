@@ -10,6 +10,7 @@ export interface DriverDetailDto {
   name?: string | null;
   nationality?: string | null;
   polePositions?: number;
+  seasons?: number;
   totalPodiums?: number;
   totalRaces?: number;
   totalWins?: number;

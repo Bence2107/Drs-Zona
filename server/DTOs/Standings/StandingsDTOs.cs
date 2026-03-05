@@ -65,7 +65,7 @@ public record ConstructorCreateDto(
     [StringLength(100)] string TechnicalChief,
     [Required] [Range(0, 300, ErrorMessage = "Érvénytelen bajnoki cím szám")] int Championships,
     [Required] [Range(0, 500, ErrorMessage = "Érvénytelen győzelem szám")] int Wins,
-    [Required] [Range(0, 500, ErrorMessage = "Érvénytelen dobogó szám")] int Podiums,
+    [Required] [Range(0, 1000, ErrorMessage = "Érvénytelen dobogó szám")] int Podiums,
     [Required] [Range(1, 99, ErrorMessage = "A szezonok száma 1-99 lehet")] int Seasons
 );
 
@@ -91,7 +91,7 @@ public record ConstructorUpdateDto(
     [StringLength(100)] string TechnicalChief,
     [Required] [Range(0, 300, ErrorMessage = "Érvénytelen bajnoki cím szám")] int Championships,
     [Required] [Range(0, 500, ErrorMessage = "Érvénytelen győzelem szám")] int Wins,
-    [Required] [Range(0, 500, ErrorMessage = "Érvénytelen dobogó szám")] int Podiums,
+    [Required] [Range(0, 1000, ErrorMessage = "Érvénytelen dobogó szám")] int Podiums,
     [Required] [Range(1, 99, ErrorMessage = "A szezonok száma 1-99 lehet")] int Seasons
 );
 
@@ -107,6 +107,7 @@ public record ConstructorDetailDto(
     string BrandName,
     string BrandDescription,
     string? Name,
+    string Nickname,
     int FoundedYear,
     string? HeadQuarters,
     string? TeamChief,
@@ -114,7 +115,8 @@ public record ConstructorDetailDto(
     List<DriverNameRecord>? DriverNames,
     int TotalWins,
     int TotalPodiums,
-    int Championships
+    int Championships,
+    int Seasons
 );
 
 public record DriverCreateDto(
@@ -125,9 +127,6 @@ public record DriverCreateDto(
     [StringLength(50)] string Nationality,
     [Required(ErrorMessage = "A születési dátum kötelező")] 
     DateTime BirthDate,
-    [Required(ErrorMessage = "A rajtszám kötelező")] 
-    [Range(1, 99, ErrorMessage = "A rajtszám 1 és 99 között lehet")] 
-    int DriverNumber,
     [Required] [Range(0, 500)] int TotalRaces,
     [Required] [Range(0, 500)] int TotalWins,
     [Required] [Range(0, 1000)] int TotalPodiums,
@@ -154,9 +153,6 @@ public record DriverUpdateDto(
     [StringLength(50)] string Nationality,
     [Required(ErrorMessage = "A születési dátum kötelező")] 
     DateTime BirthDate,
-    [Required(ErrorMessage = "A rajtszám kötelező")] 
-    [Range(1, 99, ErrorMessage = "A rajtszám 1 és 99 között lehet")] 
-    int DriverNumber,
     [Required] [Range(0, 500)] int TotalRaces,
     [Required] [Range(0, 500)] int TotalWins,
     [Required] [Range(0, 1000)] int TotalPodiums,
@@ -196,7 +192,8 @@ public record DriverDetailDto(
     [Required] [Range(1, 1000)] int TotalPodiums,
     [Required] [Range(1, 99)] int Championships,
     [Required] [Range(1, 200)] int PolePositions,
-    int Age
+    int Age,
+    int Seasons
 );
 
 public record ContractCreateDto(

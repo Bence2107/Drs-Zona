@@ -1,0 +1,75 @@
+<h2 mat-dialog-title>Új versenyző hozzáadása</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Név</mat-label>
+        <input matInput formControlName="name">
+        @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+          <mat-error>Kötelező mező</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nemzetiség</mat-label>
+        <input matInput formControlName="nationality" placeholder="pl. Hungarian">
+        @if (form.get('nationality')?.hasError('required') && form.get('nationality')?.touched) {
+          <mat-error>Kötelező mező</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Születési dátum</mat-label>
+      <input matInput [matDatepicker]="birthPicker" formControlName="birthDate">
+      <mat-datepicker-toggle matIconSuffix [for]="birthPicker"></mat-datepicker-toggle>
+      <mat-datepicker #birthPicker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="section-label">Karrierstatisztikák</div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Összes verseny</mat-label>
+        <input matInput type="number" formControlName="totalRaces">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Győzelmek</mat-label>
+        <input matInput type="number" formControlName="totalWins">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Dobogók</mat-label>
+        <input matInput type="number" formControlName="totalPodiums">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Bajnoki címek</mat-label>
+        <input matInput type="number" formControlName="championships">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Pole pozíciók</mat-label>
+        <input matInput type="number" formControlName="polePositions">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Szezonok száma</mat-label>
+        <input matInput type="number" formControlName="seasons">
+      </mat-form-field>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Mégse</button>
+  <button mat-flat-button (click)="submit()" [disabled]="form.invalid || isSubmitting">
+    <mat-icon>person_add</mat-icon>
+    {{ isSubmitting ? 'Mentés...' : 'Hozzáadás' }}
+  </button>
+</mat-dialog-actions>

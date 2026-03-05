@@ -50,6 +50,7 @@
               <span class="participant-name">{{ constructor.name }}</span>
               <button mat-icon-button
                       (click)="removeConstructor(constructor.id!)"
+                      [disabled]="!constructor.id"
                       matTooltip="Eltávolítás">
                 <mat-icon color="warn">remove_circle</mat-icon>
               </button>

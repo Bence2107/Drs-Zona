@@ -11,7 +11,7 @@ public class ConstructorCompetitionRepository(EfContext context) : IConstructorC
 
     public async Task<ConstructorCompetition?> GetConstructorCompetitionById(Guid constructorId, Guid championshipId) => 
         await _constructorCompetitions
-            .FirstOrDefaultAsync(cc => cc.ConstructorId == constructorId && cc.ConstructorId == championshipId);
+            .FirstOrDefaultAsync(cc => cc.ConstructorId == constructorId && cc.ConstChampId == championshipId);
 
     public async Task<List<ConstructorCompetition>> GetAllConstructorCompetitions() => 
         await _constructorCompetitions.ToListAsync();

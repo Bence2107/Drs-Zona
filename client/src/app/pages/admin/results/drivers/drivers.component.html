@@ -1,1 +1,52 @@
-<p>drivers works!</p>
+<div class="manage-container">
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  }
+
+  @if (!isLoading() && drivers().length === 0) {
+    <div class="empty-state">
+      <mat-icon>person_off</mat-icon>
+      <p>Nincs versenyző az adatbázisban.</p>
+    </div>
+  }
+
+  @if (!isLoading() && drivers().length > 0) {
+    <div class="driver-grid">
+      @for (driver of drivers(); track driver.id) {
+        <mat-card class="driver-card">
+          <div class="card-stripe"></div>
+          <mat-card-header>
+            <div class="driver-avatar">
+              <mat-icon>person</mat-icon>
+            </div>
+            <div class="header-content">
+              <mat-card-title>{{ driver.name }}</mat-card-title>
+              <mat-card-subtitle>{{ driver.nationality }} · {{ driver.age }} év</mat-card-subtitle>
+            </div>
+            <button mat-icon-button (click)="openEditDialog(driver)" matTooltip="Szerkesztés">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="driver-meta">
+              <div class="meta-item">
+                <mat-icon>directions_car</mat-icon>
+                <span>{{ driver.currentTeam ?? 'Nincs csapat' }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+
+</div>
+
+<button mat-fab color="primary" class="fab-add"
+        (click)="openCreateDialog()"
+        matTooltip="Új versenyző">
+  <mat-icon>person_add</mat-icon>
+</button>

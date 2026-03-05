@@ -24,7 +24,7 @@ import {GrandPrixLookupDto} from '../../../../api/models/grand-prix-lookup-dto';
 import {MatTooltip} from '@angular/material/tooltip';
 import {
   GrandPrixCreateDialogComponent
-} from '../../../../components/grand-prix-creation-dialog/grand-prix-creation-dialog.component';
+} from '../../../../components/dialogs/grand-prix/grand-prix-creation-dialog/grand-prix-creation-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 
 @Component({

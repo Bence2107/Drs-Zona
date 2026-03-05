@@ -33,6 +33,7 @@ public class ConstructorsService(
             BrandName: constructor.Brand!.Name,
             BrandDescription: constructor.Brand.Description,
             Name: constructor.Name,
+            Nickname: constructor.Nickname,
             FoundedYear: constructor.FoundedYear,
             HeadQuarters: constructor.HeadQuarters,
             TeamChief: constructor.TeamChief,
@@ -40,7 +41,8 @@ public class ConstructorsService(
             TotalPodiums: constructor.Podiums,
             TotalWins: constructor.Wins,
             Championships: constructor.Championships,
-            DriverNames: driverNameRecord
+            DriverNames: driverNameRecord,
+            Seasons: constructor.Seasons
         );
         
         return ResponseResult<ConstructorDetailDto>.Success(dto);
@@ -53,7 +55,9 @@ public class ConstructorsService(
         var dto = constructors.Select(c => new ConstructorListDto(
             Id: c.Id,
             Name: c.Name
-        )).ToList();
+        ))
+            .OrderBy(c => c.Name)
+            .ToList();
     
         return ResponseResult<List<ConstructorListDto>>.Success(dto);
     }

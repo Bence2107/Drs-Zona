@@ -1,7 +1,7 @@
 import {ChampionshipRowDto, SeriesLookupDto} from "../../../../api/models";
 import {
   ChampionshipcreatedialogComponent
-} from '../../../../components/championshipcreatedialog/championshipcreatedialog.component';
+} from '../../../../components/dialogs/championship/championshipcreatedialog/championshipcreatedialog.component';
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ResultsService} from '../../../../services/results.service';

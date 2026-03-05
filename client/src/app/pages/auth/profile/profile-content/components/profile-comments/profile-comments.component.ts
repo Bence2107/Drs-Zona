@@ -3,7 +3,7 @@ import {UIComment} from '../../../../../../models/ui-comment';
 import {CommentService} from '../../../../../../services/comment.service';
 import {UserProfileResponse} from '../../../../../../api/models/user-profile-response';
 import {MatCard} from '@angular/material/card';
-import {CommentItemComponent} from '../../../../../../components/comment-list/comment-item/comment-item.component';
+import {CommentItemComponent} from '../../../../../../components/lists/comment-list/comment-item/comment-item.component';
 import {MatIcon} from '@angular/material/icon';
 
 @Component({

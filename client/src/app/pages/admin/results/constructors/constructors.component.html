@@ -1,1 +1,43 @@
-<p>constructors works!</p>
+<div class="manage-container">
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  }
+
+  @if (!isLoading() && constructors().length === 0) {
+    <div class="empty-state">
+      <mat-icon>no_crash</mat-icon>
+      <p>Nincs konstruktőr az adatbázisban.</p>
+    </div>
+  }
+
+  @if (!isLoading() && constructors().length > 0) {
+    <div class="constructor-grid">
+      @for (constructor of constructors(); track constructor.id) {
+        <mat-card class="constructor-card">
+          <div class="card-stripe"></div>
+          <mat-card-header>
+            <div class="constructor-avatar">
+              <mat-icon>directions_car</mat-icon>
+            </div>
+            <div class="header-content">
+              <mat-card-title>{{ constructor.name }}</mat-card-title>
+            </div>
+            <button mat-icon-button (click)="openEditDialog(constructor)" matTooltip="Szerkesztés">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </mat-card-header>
+        </mat-card>
+      }
+    </div>
+  }
+
+</div>
+
+<button mat-fab color="primary" class="fab-add"
+        (click)="openCreateDialog()"
+        matTooltip="Új konstruktőr">
+  <mat-icon>add</mat-icon>
+</button>

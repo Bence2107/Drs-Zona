@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {PollListComponent} from '../../../../../../components/polls-list/polls-list.component';
+import {PollListComponent} from '../../../../../../components/lists/polls-list/polls-list.component';
 import {PollListDto} from '../../../../../../api/models/poll-list-dto';
 import {PollService} from '../../../../../../services/poll.service';
 import {UserProfileResponse} from '../../../../../../api/models/user-profile-response';
