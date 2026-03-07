@@ -24,4 +24,7 @@ public interface IStandingsService
     Task<ResponseResult<bool>> AddParticipations(AddParticipationsDto dto);
     Task<ResponseResult<bool>> RemoveDriverParticipation(Guid driverId, Guid driversChampId);
     Task<ResponseResult<bool>> RemoveConstructorCompetition(Guid constructorId, Guid constructorsChampId);
+    Task<ResponseResult<bool>> InsertResults(BatchResultCreateDto dto);
+    Task<ResponseResult<bool>> UpdateSingleResult(SingleResultUpdateDto dto);
+    Task<ResponseResult<bool>> RecalculateSession(Guid grandPrixId, string session);
 }

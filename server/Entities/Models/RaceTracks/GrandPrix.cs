@@ -53,4 +53,7 @@ public class GrandPrix
     [Required]
     [Column("laps_completed")]
     public int LapsCompleted { get; set; }
+    
+    [Column("race_duration_minutes")]
+    public int? RaceDurationMinutes { get; set; }
 }

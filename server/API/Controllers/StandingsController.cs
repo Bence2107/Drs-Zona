@@ -285,4 +285,32 @@ public class StandingsController(IStandingsService standingsService): Controller
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
     }
+
+    [HttpPost("insertResults")]
+    public async Task<ActionResult> InsertResults([FromBody]BatchResultCreateDto dto)
+    {
+        var response = await standingsService.InsertResults(dto);
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok();
+    }
+    
+    [HttpPost("updateSingleResult")]
+    public async Task<ActionResult> UpdateSingleResult([FromBody] SingleResultUpdateDto dto)
+    {
+        var response = await standingsService.UpdateSingleResult(dto);
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok();
+    }
+    
+     
+    [HttpPost("recalculateSession/{grandPrixId:guid}/{session}")]
+    public async Task<ActionResult> RecalculateSession(Guid grandPrixId, string session)
+    {
+        var response = await standingsService.RecalculateSession(grandPrixId, session);
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok();
+    }
 }

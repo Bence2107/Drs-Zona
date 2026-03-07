@@ -90,7 +90,8 @@ public class SeriesService(
             Description = dto.Description,
             GoverningBody = dto.GoverningBody,
             FirstYear = dto.FirstYear,
-            LastYear = dto.LastYear
+            LastYear = dto.LastYear,
+            PointSystem = dto.PointSystem
         };
 
         await seriesRepo.Create(series);
@@ -109,7 +110,8 @@ public class SeriesService(
             Description = dto.Description,
             GoverningBody = dto.GoverningBody,
             FirstYear = dto.FirstYear,
-            LastYear = dto.LastYear
+            LastYear = dto.LastYear,
+            PointSystem = dto.PointSystem
         };
 
         await seriesRepo.Create(series);

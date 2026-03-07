@@ -201,35 +201,31 @@ public record ContractCreateDto(
     Guid TeamId
 );
 
-public record ContractDto(int Id, int DriverId, string DriverName, int TeamId, string TeamName);
-
-public record ResultCreateDto(
-    [Required(ErrorMessage = "Nagydíj azonosító kötelező")] 
+public record BatchResultCreateDto(
     Guid GrandPrixId,
-    [Required(ErrorMessage = "Versenyző azonosító kötelező")] 
-    Guid DriverId,
-    [Required(ErrorMessage = "Konstruktőr azonosító kötelező")] 
-    Guid ConstructorId,
     Guid DriversChampId,
     Guid ConsChampId,
-    [Required(ErrorMessage = "Rajthely kötelező")] 
-    [Range(1, 30, ErrorMessage = "A rajthely 1-30 között lehet")] int StartPosition,
-    [Required(ErrorMessage = "Helyezés kötelező")] 
-    [Range(1, 30, ErrorMessage = "A helyezés 1-30 között lehet")] int FinishPosition,
-    [Required(ErrorMessage = "Munkamenet típus kötelező")]
-    [RegularExpression("^(Verseny|Sprint)$", ErrorMessage = "Érvénytelen típus (Verseny, Sprint)")]
     string Session,
-    [Required] [Range(0, long.MaxValue, ErrorMessage = "Érvénytelen időeredmény")] long RaceTime,
-    [Required] [Range(0, 26, ErrorMessage = "A pontszám 0-26 lehet")] int DriverPoints,
-    [Required] [Range(0, 44, ErrorMessage = "A pontszám 0-44 lehet")] int ConstructorPoints
-) : IValidatableObject
-{
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        if (Session is not ("Verseny" or "Sprint") && DriverPoints > 0)
-            yield return new ValidationResult("Pont csak Verseny vagy Sprint munkamenetben szerezhető!", [nameof(DriverPoints)]);
-    }
-}
+    List<SingleResultDto> Results
+);
+
+public abstract record SingleResultDto(
+    Guid DriverId,
+    Guid ConstructorId,
+    int StartPosition,
+    int FinishPosition,
+    long RaceTime,
+    int LapsCompleted,
+    string Status
+);
+
+public record SingleResultUpdateDto(
+    Guid ResultId,
+    int FinishPosition,
+    long RaceTime,
+    int LapsCompleted,
+    string Status
+);
 
 
 public record GrandPrixResultsDto(
@@ -247,7 +243,7 @@ public record GrandRrixResultDto(
     Guid ConstructorId,
     string ConstructorName,
     string TimeOrCompleted,
-    int Points
+    double Points
 );
 
 public record DriverStandingsDto(
@@ -262,7 +258,7 @@ public record DriverStandingsResultDto(
     string Nationality,
     Guid ConstructorId,
     string ConstructorName,
-    int Points
+    double Points
 );
 
 public record ConstructorStandingsDto(
@@ -275,7 +271,7 @@ public record ConstructorStandingsResultDto(
     Guid ConstructorId,
     string ConstructorName,
     string ConstructorShortName,
-    int Points
+    double Points
 );
 
 public record SeriesLookupDto(Guid Id, string Name);

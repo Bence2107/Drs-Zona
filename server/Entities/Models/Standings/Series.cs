@@ -29,4 +29,8 @@ public class Series
     [Required]
     [Column("last_year")]
     public int LastYear {get; set;}
+    
+    [Required]
+    [Column("point_system")]
+    public required string PointSystem { get; set; }
 }

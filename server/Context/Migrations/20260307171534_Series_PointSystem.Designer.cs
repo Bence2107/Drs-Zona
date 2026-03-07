@@ -3,6 +3,7 @@ using System;
 using Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Context.Migrations
 {
     [DbContext(typeof(EfContext))]
-    partial class EfContextModelSnapshot : ModelSnapshot
+    [Migration("20260307171534_Series_PointSystem")]
+    partial class Series_PointSystem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -337,10 +340,6 @@ namespace Context.Migrations
                     b.Property<int>("RaceDistance")
                         .HasColumnType("integer")
                         .HasColumnName("race_distance");
-
-                    b.Property<int?>("RaceDurationMinutes")
-                        .HasColumnType("integer")
-                        .HasColumnName("race_duration_minutes");
 
                     b.Property<int>("RoundNumber")
                         .HasColumnType("integer")
@@ -702,8 +701,8 @@ namespace Context.Migrations
                         .HasDefaultValue("")
                         .HasColumnName("constructor_nickname_snapshot");
 
-                    b.Property<double>("ConstructorPoints")
-                        .HasColumnType("double precision")
+                    b.Property<int>("ConstructorPoints")
+                        .HasColumnType("integer")
                         .HasColumnName("constructor_points");
 
                     b.Property<Guid>("DriverId")
@@ -717,8 +716,8 @@ namespace Context.Migrations
                         .HasDefaultValue("")
                         .HasColumnName("driver_name_snapshot");
 
-                    b.Property<double>("DriverPoints")
-                        .HasColumnType("double precision")
+                    b.Property<int>("DriverPoints")
+                        .HasColumnType("integer")
                         .HasColumnName("driver_points");
 
                     b.Property<Guid>("DriversChampId")

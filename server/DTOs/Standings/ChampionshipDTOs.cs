@@ -20,7 +20,9 @@ public record SeriesCreateDto(
     [Required(ErrorMessage = "Az első év megadása kötelező")]
     int FirstYear,
     [Required(ErrorMessage = "Az utolsó év megadása kötelező")]
-    int LastYear
+    int LastYear,
+    [Required(ErrorMessage = "Pontszámítási rendszer megadása kötelező")]
+    string PointSystem
 ) : IValidatableObject
 {
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -52,7 +54,9 @@ public record SeriesUpdateDto(
     [Required(ErrorMessage = "Az első év megadása kötelező")]
     int FirstYear,
     [Required(ErrorMessage = "Az utolsó év megadása kötelező")]
-    int LastYear
+    int LastYear,
+    [Required(ErrorMessage = "Pontszámítási rendszer megadása kötelező")]
+    string PointSystem
 ) : IValidatableObject
 {
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

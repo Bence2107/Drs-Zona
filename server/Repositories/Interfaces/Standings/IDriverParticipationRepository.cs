@@ -4,7 +4,7 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IDriverParticipationRepository
 {
-    Task<DriverParticipation?> GetDriverParticipationById(Guid driverId, Guid championshipId);
+    Task<DriverParticipation?> GetByDriverAndChampionship(Guid driverId, Guid championshipId);
     Task<List<DriverParticipation>> GetAllDriverParticipation(Guid id);
     Task Create(DriverParticipation driverParticipation);
     Task Update(DriverParticipation driverParticipation);

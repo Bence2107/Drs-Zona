@@ -78,9 +78,9 @@ public class Result
     
     [Required]
     [Column("driver_points")]
-    public int DriverPoints {get; set;}
+    public double DriverPoints {get; set;}
     
     [Required]
     [Column("constructor_points")]
-    public int ConstructorPoints {get; set;}
+    public double ConstructorPoints {get; set;}
 }

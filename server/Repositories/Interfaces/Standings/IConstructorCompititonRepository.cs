@@ -4,7 +4,7 @@ namespace Repositories.Interfaces.Standings;
 
 public interface IConstructorCompetitionRepository
 {
-    Task<ConstructorCompetition?> GetConstructorCompetitionById(Guid constructorId, Guid championshipId);
+    Task<ConstructorCompetition?> GetByConstructorAndChampionship(Guid constructorId, Guid championshipId);
     Task<List<ConstructorCompetition>> GetAllConstructorCompetitions();
     Task Create(ConstructorCompetition constructorCompetition);
     Task Update(ConstructorCompetition constructorCompetition);

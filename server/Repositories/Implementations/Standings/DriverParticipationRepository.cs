@@ -9,7 +9,7 @@ public class DriverParticipationRepository(EfContext context) : IDriverParticipa
 {
     private readonly DbSet<DriverParticipation> _driverParticipates = context.DriverParticipates;
     
-    public async Task<DriverParticipation?> GetDriverParticipationById(Guid driverId, Guid championshipId) => await _driverParticipates
+    public async Task<DriverParticipation?> GetByDriverAndChampionship(Guid driverId, Guid championshipId) => await _driverParticipates
         .FirstOrDefaultAsync(d => d.DriverId == driverId && d.DriverChampId == championshipId);
 
     public async Task<List<DriverParticipation>> GetAllDriverParticipation(Guid id) => await _driverParticipates.ToListAsync();
@@ -28,7 +28,7 @@ public class DriverParticipationRepository(EfContext context) : IDriverParticipa
 
     public async Task Delete(Guid driverId, Guid championshipId)
     {
-        var driverParticipation = await GetDriverParticipationById(driverId, championshipId);
+        var driverParticipation = await GetByDriverAndChampionship(driverId, championshipId);
         if(driverParticipation == null) return;
         
         _driverParticipates.Remove(driverParticipation);

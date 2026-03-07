@@ -9,7 +9,7 @@ public class ConstructorCompetitionRepository(EfContext context) : IConstructorC
 {
     private readonly DbSet<ConstructorCompetition> _constructorCompetitions = context.ConstructorCompetitions;
 
-    public async Task<ConstructorCompetition?> GetConstructorCompetitionById(Guid constructorId, Guid championshipId) => 
+    public async Task<ConstructorCompetition?> GetByConstructorAndChampionship(Guid constructorId, Guid championshipId) => 
         await _constructorCompetitions
             .FirstOrDefaultAsync(cc => cc.ConstructorId == constructorId && cc.ConstChampId == championshipId);
 
@@ -30,7 +30,7 @@ public class ConstructorCompetitionRepository(EfContext context) : IConstructorC
 
     public async Task Delete(Guid constructorId, Guid championshipId)
     {
-        var constCompetition = await GetConstructorCompetitionById(constructorId, championshipId);
+        var constCompetition = await GetByConstructorAndChampionship(constructorId, championshipId);
         if(constCompetition == null) return;
         
         _constructorCompetitions.Remove(constCompetition);
