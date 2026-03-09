@@ -7,4 +7,5 @@ export interface SeriesCreateDto {
   governingBody?: string | null;
   lastYear?: number;
   name?: string | null;
+  pointSystem?: string | null;
 }

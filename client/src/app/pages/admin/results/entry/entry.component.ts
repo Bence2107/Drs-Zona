@@ -13,8 +13,8 @@ import {
   MatCardSubtitle,
   MatCardTitle
 } from '@angular/material/card';
-import {MatButton, MatFabButton} from '@angular/material/button';
-import {RouterLink} from '@angular/router';
+import {MatButton, MatFabButton, MatIconButton} from '@angular/material/button';
+import {Router, RouterLink} from '@angular/router';
 import {DatePipe} from '@angular/common';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
 import {CountryFlagPipe} from '../../../../pipes/country-flag.pipe';
@@ -50,7 +50,8 @@ import {MatDialog} from '@angular/material/dialog';
     DatePipe,
     CountryFlagPipe,
     MatFabButton,
-    MatTooltip
+    MatTooltip,
+    MatIconButton
   ],
   templateUrl: './entry.component.html',
   styleUrl: './entry.component.scss',
@@ -66,7 +67,7 @@ export class EntryComponent implements OnInit {
   grandsPrix = signal<GrandPrixLookupDto[]>([]);
   isLoading = signal(false);
 
-  constructor(private resultService: ResultsService, private dialog: MatDialog) {}
+  constructor(private resultService: ResultsService, private dialog: MatDialog, private router: Router) {}
 
   ngOnInit() {
     this.loadSeries();
@@ -134,4 +135,7 @@ export class EntryComponent implements OnInit {
     });
   }
 
+  protected goBack() {
+    this.router.navigate(['/results']);
+  }
 }

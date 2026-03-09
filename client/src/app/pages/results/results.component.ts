@@ -6,7 +6,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
 import { SeriesLookupDto } from '../../api/models/series-lookup-dto';
 import { YearLookupDto } from '../../api/models/year-lookup-dto';
 import { GrandPrixLookupDto } from '../../api/models/grand-prix-lookup-dto';
@@ -23,7 +22,6 @@ import {CountryFlagPipe} from '../../pipes/country-flag.pipe';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {map} from 'rxjs/operators';
 import {BreakpointObserver} from '@angular/cdk/layout';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import {MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {RouterLink} from '@angular/router';
@@ -45,14 +43,7 @@ const AGGREGATED_ID = 'aggregated';
     MatFormFieldModule, MatSelectModule, MatTableModule, MatProgressSpinnerModule, CountryFlagPipe, MatIcon, RouterLink, MatFabButton, MatTooltip, MatMenuTrigger, MatMenu, MatMenuItem, MatDivider
   ],
   templateUrl: './results.component.html',
-  styleUrls: ['./results.component.scss'],
-  animations: [
-    trigger('slideDown', [
-      state('void', style({ height: '0px', opacity: 0, overflow: 'hidden' })),
-      state('*',    style({ height: '*',  opacity: 1, overflow: 'hidden' })),
-      transition('void <=> *', animate('250ms ease-in-out'))
-    ])
-  ]
+  styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent implements OnInit {
   constructor(private standingsService: ResultsService, private authService: AuthService) {}
@@ -93,10 +84,6 @@ export class ResultsComponent implements OnInit {
 
   isLoading = signal(false);
 
-  isAdminPanelOpen = signal(false);
-  toggleAdminPanel() { this.isAdminPanelOpen.update(v => !v); }
-
-
   raceColumns = ['position', 'driver', 'time', 'points'];
   driverColumns = ['position', 'driver', 'points'];
   constructorColumns = ['position', 'constructor', 'points'];
@@ -127,7 +114,7 @@ export class ResultsComponent implements OnInit {
     this.standingsService.getSeasonsBySeries(seriesId).subscribe(res => {
       this.seasons.set(res);
       if (res.length > 0) {
-        const latestSeason = res[res.length - 1];
+        const latestSeason = res[0];
         this.selectedSeason.set(latestSeason);
         this.onSeasonChange(latestSeason);
       }

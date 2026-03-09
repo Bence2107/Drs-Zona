@@ -19,15 +19,16 @@ import {
   apiStandingsGetConstructorsResultsBySeasonConstructorIdConstructorChampIdGet$Json,
   apiStandingsGetDriverResultsBySeasonDriverIdDriverChampIdGet$Json,
   apiStandingsGetDriversByDriversChampionshipDriverChampIdGet$Json,
-  apiStandingsGetGrandPrixByChampionshipDriverChampIdGet$Json,
+  apiStandingsGetGrandPrixByChampionshipDriverChampIdGet$Json, apiStandingsGetGrandPrixContextGrandPrixIdGet$Json,
   apiStandingsGetGrandPrixResultsGrandPrixIdSessionGet$Json,
   apiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Json,
   apiStandingsGetSeasonOverviewDriverChampIdGet$Json,
-  apiStandingsGetSeasonsBySeriesSeriesIdGet$Json,
+  apiStandingsGetSeasonsBySeriesSeriesIdGet$Json, apiStandingsGetSessionForEditGrandPrixIdSessionGet$Json,
   apiStandingsGetSessionsByGrandPrixGrandPrixIdGet$Json,
+  apiStandingsInsertResultsPost, apiStandingsRecalculateSessionGrandPrixIdSessionPost,
   apiStandingsRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete,
-  apiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete,
-  apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost
+  apiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete, apiStandingsSaveSessionResultsPost,
+  apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost, apiStandingsUpdateSingleResultPost
 } from '../api/functions';
 import {DriverStandingsDto} from '../api/models/driver-standings-dto';
 import {ConstructorStandingsDto} from '../api/models/constructor-standings-dto';
@@ -35,11 +36,11 @@ import { SeasonOverviewDto } from '../api/models/season-overview-dto';
 import {DriverSeasonResultDto} from '../api/models/driver-season-result-dto';
 import {ConstructorSeasonResultDto} from '../api/models/constructor-season-result-dto';
 import {
-  AddParticipationsDto,
+  AddParticipationsDto, BatchResultCreateDto,
   ChampionshipCreateDto,
   ChampionshipRowDto, CircuitListDto,
   ConstructorLookUpDto,
-  DriverLookUpDto, GrandPrixCreateDto,
+  DriverLookUpDto, GrandPrixChampionshipContextDto, GrandPrixCreateDto, SessionEditDto, SingleResultUpdateDto,
 } from "../api/models";
 import {
   apiStandingsGetConstructorsByConstructorsChampionshipConstChampIdGet$Json
@@ -192,4 +193,32 @@ export class ResultsService {
     ).pipe(map(r => r.body as ParticipationListDto));
   }
 
+  getSessionForEdit(gpId: string, session: string): Observable<SessionEditDto> {
+    return apiStandingsGetSessionForEditGrandPrixIdSessionGet$Json(this.http, this.apiConfig.rootUrl,
+      {grandPrixId: gpId, session: session}).pipe(
+        map(r => r.body as SessionEditDto));
+  }
+
+  getGrandPrixContext(grandPrixId: string): Observable<GrandPrixChampionshipContextDto> {
+    return apiStandingsGetGrandPrixContextGrandPrixIdGet$Json(this.http, this.apiConfig.rootUrl, {grandPrixId: grandPrixId})
+      .pipe(map(r => r.body as GrandPrixChampionshipContextDto));
+  }
+
+  insertResults(dto: BatchResultCreateDto): Observable<void> {
+    return apiStandingsInsertResultsPost(this.http, this.apiConfig.rootUrl, {body: dto}).pipe(map(() => void 0));
+  }
+
+  saveSessionResults(dto: BatchResultCreateDto): Observable<void> {
+    return apiStandingsSaveSessionResultsPost(this.http, this.apiConfig.rootUrl, {body: dto}).pipe(map(() => void 0));
+  }
+
+  updateSingleResult(dto: SingleResultUpdateDto): Observable<void> {
+    return apiStandingsUpdateSingleResultPost(this.http, this.apiConfig.rootUrl,
+      {body: dto}).pipe(map(() => void 0));
+  }
+
+  recalculateSession(gpId: string, session: string): Observable<void> {
+    return apiStandingsRecalculateSessionGrandPrixIdSessionPost(this.http, this.apiConfig.rootUrl,
+      {grandPrixId: gpId, session: session}).pipe(map(() => void 0));
+  }
 }

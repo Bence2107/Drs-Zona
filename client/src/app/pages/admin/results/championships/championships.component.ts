@@ -17,10 +17,10 @@ import {
   MatCardSubtitle,
   MatCardTitle
 } from '@angular/material/card';
-import {MatButton, MatFabButton} from '@angular/material/button';
+import {MatButton, MatFabButton, MatIconButton} from '@angular/material/button';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatDivider} from '@angular/material/list';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {MatTooltip} from '@angular/material/tooltip';
 
 @Component({
@@ -44,7 +44,8 @@ import {MatTooltip} from '@angular/material/tooltip';
     RouterLink,
     MatCardActions,
     MatFabButton,
-    MatTooltip
+    MatTooltip,
+    MatIconButton
   ],
   templateUrl: './championships.component.html',
   styleUrl: './championships.component.scss',
@@ -52,6 +53,7 @@ import {MatTooltip} from '@angular/material/tooltip';
 export class ChampionshipsComponent implements OnInit {
   private dialog = inject(MatDialog);
   private resultService = inject(ResultsService);
+  private router = inject(Router);
 
   seriesList = signal<SeriesLookupDto[]>([]);
   selectedSeriesId = signal<string | null>(null);
@@ -111,4 +113,7 @@ export class ChampionshipsComponent implements OnInit {
     });
   }
 
+  protected goBack() {
+    this.router.navigate(["results"]);
+  }
 }

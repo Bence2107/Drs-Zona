@@ -38,18 +38,18 @@ export class PollListComponent {
       next: (pollData) => {
         const dialogRef = this.dialog.open(PollVoteDialogComponent, {
           width: '700px',
-          data: {
-            poll: pollData,
-            userId: this.userId
-          },
-          autoFocus: false,
+          data: { poll: pollData, userId: this.userId }
         });
 
-        dialogRef.afterClosed().subscribe(() => {
-          this.pollService.getAllActive().subscribe(data => this.polls = data);
+        dialogRef.afterClosed().subscribe((updatedPoll) => {
+          if (updatedPoll) {
+            const index = this.polls.findIndex(p => p.id === updatedPoll.id);
+            if (index !== -1) {
+              this.polls[index] = updatedPoll;
+            }
+          }
         });
-      },
-      error: (err) => console.error('Hiba a szavazás betöltésekor', err)
+      }
     });
   }
 

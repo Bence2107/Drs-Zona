@@ -209,20 +209,43 @@ public record BatchResultCreateDto(
     List<SingleResultDto> Results
 );
 
-public abstract record SingleResultDto(
+public record SingleResultDto(
     Guid DriverId,
     Guid ConstructorId,
+    int FinishPosition,
+    string RaceTime, 
+    int LapsCompleted,
+    string Status,
+    bool Pole = false,
+    int StartPosition = 0
+);
+
+public record ResultEditDto(
+    Guid ResultId,
+    Guid DriverId,
+    int CarNumber,
+    string DriverName,
+    Guid ConstructorId,
+    string ConstructorName,
     int StartPosition,
     int FinishPosition,
-    long RaceTime,
+    string RaceTime, 
     int LapsCompleted,
-    string Status
+    string Status,
+    double DriverPoints,
+    double ConstructorPoints
+);
+
+public record SessionEditDto(
+    Guid GrandPrixId,
+    string Session,
+    List<ResultEditDto> Results
 );
 
 public record SingleResultUpdateDto(
     Guid ResultId,
     int FinishPosition,
-    long RaceTime,
+    string RaceTime,
     int LapsCompleted,
     string Status
 );
@@ -244,6 +267,13 @@ public record GrandRrixResultDto(
     string ConstructorName,
     string TimeOrCompleted,
     double Points
+);
+
+public record GrandPrixChampionshipContextDto(
+    Guid DriversChampId,
+    Guid ConsChampId,
+    string PointSystem,
+    List<string> AvailableSessions
 );
 
 public record DriverStandingsDto(
@@ -276,7 +306,7 @@ public record ConstructorStandingsResultDto(
 
 public record SeriesLookupDto(Guid Id, string Name);
 public record YearLookupDto(string Season, Guid DriversChampId, Guid ConstructorsChampId);
-public record DriverLookUpDto(Guid Id, string Name);
+public record DriverLookUpDto(Guid Id, string Name, Guid? ConstructorId = null);
 public record ConstructorLookUpDto(Guid Id, string Name, string ShortName);
 public record GrandPrixLookupDto(
     Guid Id, 

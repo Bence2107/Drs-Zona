@@ -18,6 +18,7 @@ import {MatDivider} from '@angular/material/list';
 import {MatFabButton, MatIconButton} from '@angular/material/button';
 import {MatTooltip} from '@angular/material/tooltip';
 import {ParticipationListDto} from '../../../../api/models/participation-list-dto';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -47,6 +48,7 @@ import {ParticipationListDto} from '../../../../api/models/participation-list-dt
 export class ParticipationsComponent {
   private dialog = inject(MatDialog);
   private resultService = inject(ResultsService);
+  private router = inject(Router);
 
   seriesList = signal<SeriesLookupDto[]>([]);
   selectedSeriesId = signal<string | null>(null);
@@ -149,5 +151,9 @@ export class ParticipationsComponent {
     ref.afterClosed().subscribe(result => {
       if (result) this.loadParticipations(lookup);
     });
+  }
+
+  protected goBack() {
+    this.router.navigate(["results"]);
   }
 }

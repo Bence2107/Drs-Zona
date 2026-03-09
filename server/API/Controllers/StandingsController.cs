@@ -295,6 +295,34 @@ public class StandingsController(IStandingsService standingsService): Controller
         return Ok();
     }
     
+    [HttpPost("saveSessionResults")]
+    public async Task<ActionResult> SaveSessionResults([FromBody]BatchResultCreateDto dto)
+    {
+        var response = await standingsService.SaveSessionResults(dto);
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok();
+    }
+    
+    
+    [HttpGet("getSessionForEdit/{grandPrixId:guid}/{session}")]
+    public async Task<ActionResult<SessionEditDto>> GetSessionForEdit(Guid grandPrixId, string session)
+    {
+        var response = await standingsService.GetSessionForEdit(grandPrixId, session);
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok(response.Value);
+    }
+    
+    [HttpGet("getGrandPrixContext/{grandPrixId:guid}")]
+    public async Task<ActionResult<GrandPrixChampionshipContextDto>> GetGrandPrixContext(Guid grandPrixId)
+    {
+        var response = await standingsService.GetGrandPrixContext(grandPrixId);
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
+        return Ok(response.Value);
+    }
+    
     [HttpPost("updateSingleResult")]
     public async Task<ActionResult> UpdateSingleResult([FromBody] SingleResultUpdateDto dto)
     {
@@ -304,7 +332,6 @@ public class StandingsController(IStandingsService standingsService): Controller
         return Ok();
     }
     
-     
     [HttpPost("recalculateSession/{grandPrixId:guid}/{session}")]
     public async Task<ActionResult> RecalculateSession(Guid grandPrixId, string session)
     {

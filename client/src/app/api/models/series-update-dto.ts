@@ -8,4 +8,5 @@ export interface SeriesUpdateDto {
   id?: string;
   lastYear?: number;
   name?: string | null;
+  pointSystem?: string | null;
 }

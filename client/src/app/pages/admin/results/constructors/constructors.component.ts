@@ -11,6 +11,7 @@ import {
   ConstructorCreateDialogComponent
 } from '../../../../components/dialogs/constructor/constructor-create-dialog/constructor-create-dialog.component';
 import ConstructorEditDialogComponent from '../../../../components/dialogs/constructor/constructor-edit-dialog/constructor-edit-dialog.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-constructors',
@@ -30,6 +31,7 @@ import ConstructorEditDialogComponent from '../../../../components/dialogs/const
 export class ConstructorsComponent {
   private dialog = inject(MatDialog);
   private constructorService = inject(ConstructorsService);
+  private router = inject(Router);
 
   constructors = signal<ConstructorListDto[]>([]);
   isLoading = signal(false);
@@ -66,5 +68,9 @@ export class ConstructorsComponent {
         if (result) this.loadConstructors();
       });
     });
+  }
+
+  protected goBack() {
+    this.router.navigate(["results"]);
   }
 }

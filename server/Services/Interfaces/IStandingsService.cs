@@ -25,6 +25,9 @@ public interface IStandingsService
     Task<ResponseResult<bool>> RemoveDriverParticipation(Guid driverId, Guid driversChampId);
     Task<ResponseResult<bool>> RemoveConstructorCompetition(Guid constructorId, Guid constructorsChampId);
     Task<ResponseResult<bool>> InsertResults(BatchResultCreateDto dto);
+    Task<ResponseResult<bool>> SaveSessionResults(BatchResultCreateDto dto);
+    Task<ResponseResult<GrandPrixChampionshipContextDto>> GetGrandPrixContext(Guid grandPrixId);
+    Task<ResponseResult<SessionEditDto>> GetSessionForEdit(Guid grandPrixId, string session);
     Task<ResponseResult<bool>> UpdateSingleResult(SingleResultUpdateDto dto);
     Task<ResponseResult<bool>> RecalculateSession(Guid grandPrixId, string session);
 }

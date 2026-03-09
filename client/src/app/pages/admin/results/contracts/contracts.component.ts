@@ -23,6 +23,7 @@ import {
 } from '../../../../components/dialogs/contract/contract-edit-dialog/contract-edit-dialog.component';
 import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirmdialog.component';
 import {ContractsService} from '../../../../services/contracts.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-contracts',
@@ -50,6 +51,7 @@ import {ContractsService} from '../../../../services/contracts.service';
 export class ContractsComponent implements OnInit{
   private dialog = inject(MatDialog);
   private contractsService = inject(ContractsService);
+  private router = inject(Router);
 
   contracts = signal<ContractListDto[]>([]);
   isLoading = signal(false);
@@ -104,5 +106,9 @@ export class ContractsComponent implements OnInit{
         next: () => this.loadContracts()
       });
     });
+  }
+
+  protected goBack() {
+    this.router.navigate(["results"]);
   }
 }

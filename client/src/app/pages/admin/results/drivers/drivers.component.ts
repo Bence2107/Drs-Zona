@@ -13,6 +13,7 @@ import {
 import {
   DriverEditDialogComponent
 } from '../../../../components/dialogs/driver/driver-edit-dialog/driver-edit-dialog.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-drivers',
@@ -34,6 +35,7 @@ import {
 export class DriversComponent implements OnInit{
   private dialog = inject(MatDialog);
   private driverService = inject(DriverService);
+  private router = inject(Router);
 
   drivers = signal<DriverListDto[]>([]);
   isLoading = signal(false);
@@ -70,5 +72,9 @@ export class DriversComponent implements OnInit{
         if (result) this.loadDrivers();
       });
     });
+  }
+
+  protected goBack() {
+    this.router.navigate(["results"]);
   }
 }

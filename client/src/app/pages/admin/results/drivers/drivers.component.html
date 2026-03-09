@@ -1,4 +1,11 @@
 <div class="manage-container">
+  <div class="page-header">
+    <button mat-icon-button (click)="goBack()" matTooltip="Vissza">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2 class="page-title">Pilóták szerkesztése</h2>
+  </div>
+
 
   @if (isLoading()) {
     <div class="loading-state">
