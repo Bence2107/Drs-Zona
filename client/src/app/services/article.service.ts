@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {ApiConfiguration} from '../api/api-configuration';
 import {Observable} from 'rxjs';
 import {
+  apiArticleCreatePost,
   apiArticleGetAllArticlesGet$Json,
   apiArticleGetAllSummaryGet$Json,
   apiArticleGetRecentNumberGet$Json, apiArticleGetSlugGet$Json
@@ -10,6 +11,7 @@ import {
 import {map} from 'rxjs/operators';
 import {ArticleListDto} from '../api/models/article-list-dto';
 import {ArticleDetailDto} from '../api/models/article-detail-dto';
+import {ArticleCreateDto} from '../api/models/article-create-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -51,5 +53,9 @@ export class ArticleService {
         return response.body as ArticleDetailDto ?? [];
       })
     )
+  }
+
+  create(payload: ArticleCreateDto) {
+    return apiArticleCreatePost(this.http, this.apiConfig.rootUrl, {body: payload}).pipe(map(() => void 0));
   }
 }

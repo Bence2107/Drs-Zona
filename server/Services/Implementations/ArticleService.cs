@@ -180,9 +180,11 @@ public class ArticleService(
         if (dto.GrandPrixId.HasValue && !await gpRepo.CheckIfIdExists(dto.GrandPrixId.Value))
             return ResponseResult<bool>.Failure("GrandPrixId", "Grand Prix not found");
 
+        article.Id = dto.Id;
         article.GrandPrixId = dto.GrandPrixId;
         article.Title = dto.Title;
         article.Lead = dto.Lead;
+        article.Slug = dto.Slug;
         article.IsSummary = dto.IsReview;
         article.FirstSection = dto.FirstSection;
         article.LastSection = dto.LastSection;

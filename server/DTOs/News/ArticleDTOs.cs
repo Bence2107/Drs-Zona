@@ -74,7 +74,7 @@ public record ArticleListDto(
     bool IsReview,
     [StringLength(200, MinimumLength = 5)] string Slug,
     DateTime DatePublished,
-    string PrimaryImageUrl
+    string? PrimaryImageUrl
 );
 
 public record SummaryDto(
@@ -98,9 +98,9 @@ public record ArticleDetailDto(
     [StringLength(100)] string? GrandPrixName,
     DateTime DatePublished,
     DateTime DateUpdated,
-    string PrimaryImageUrl,
+    string? PrimaryImageUrl,
     string? SecondaryImageUrl,
     string? ThirdImageUrl,
-    string LastImageUrl,
+    string? LastImageUrl,
     string? AuthorImageUrl
 );

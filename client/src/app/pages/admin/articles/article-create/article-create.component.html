@@ -1,0 +1,118 @@
+<main>
+  <div class="container">
+    <div class="page-header">
+      <h1 class="mat-headline-3">Cikk Írása</h1>
+    </div>
+
+    <mat-card class="form-card">
+      <mat-card-content>
+        <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
+
+          <section class="form-section">
+            <div class="image-upload-section">
+              <label class="editor-label">Fő borítókép</label>
+              <div class="upload-placeholder" [class.has-image]="imagePreviews['primary']" (click)="primaryInput.click()">
+                @if (isUploading['primary']) { <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner> }
+                @else if (imagePreviews['primary']) {
+                  <img [src]="imagePreviews['primary']" alt="Primary Image">
+                  <div class="change-overlay"><mat-icon>edit</mat-icon></div>
+                } @else { <mat-icon>cloud_upload</mat-icon> <span>Fő kép feltöltése</span> }
+              </div>
+              <input #primaryInput type="file" (change)="onFileSelected($event, 'primary')" hidden>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Cikk címe</mat-label>
+              <input matInput formControlName="title" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Lead (Bevezető)</mat-label>
+              <textarea matInput formControlName="lead" rows="3"></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Slug (URL azonosító)</mat-label>
+              <input matInput formControlName="slug" placeholder="pl: monaco-nagydij-2025" />
+              <mat-hint>Csak kisbetűk és kötőjel</mat-hint>
+            </mat-form-field>
+          </section>
+
+          <section class="form-section">
+            <div class="editor-container full-width">
+              <label class="editor-label">Első szöveges blokk</label>
+              <angular-editor formControlName="firstSection" [config]="editorConfig" (blur)="onEditorBlur('firstSection')">></angular-editor>
+            </div>
+          </section>
+
+          <div class="toggle-row">
+            <mat-slide-toggle formControlName="isReview" color="primary">Race Review elrendezés</mat-slide-toggle>
+          </div>
+
+          @if (isReview) {
+            <section class="form-section review-container" formGroupName="summary">
+
+              <div class="editor-container full-width">
+                <label class="editor-label">Második szöveges blokk</label>
+                <angular-editor formControlName="secondSection" [config]="editorConfig" (blur)="onEditorBlur('firstSection')">></angular-editor>
+              </div>
+              <div class="image-upload-section mini">
+                <label class="editor-label">Kép a második blokk után (Secondary)</label>
+                <div class="upload-placeholder" (click)="secondaryInput.click()">
+                  @if (imagePreviews['secondary']) { <img [src]="imagePreviews['secondary']" alt="Secondary Image"> }
+                  @else { <mat-icon>image</mat-icon> }
+                </div>
+                <input #secondaryInput type="file" (change)="onFileSelected($event, 'secondary')" hidden>
+              </div>
+
+              <div class="editor-container full-width">
+                <label class="editor-label">Harmadik szöveges blokk</label>
+                <angular-editor formControlName="thirdSection" [config]="editorConfig" (blur)="onEditorBlur('firstSection')">></angular-editor>
+              </div>
+              <div class="image-upload-section mini">
+                <label class="editor-label">Kép a harmadik blokk után (Third)</label>
+                <div class="upload-placeholder" (click)="thirdInput.click()">
+                  @if (imagePreviews['third']) { <img [src]="imagePreviews['third']" alt="Third Image"> }
+                  @else { <mat-icon>image</mat-icon> }
+                </div>
+                <input #thirdInput type="file" (change)="onFileSelected($event, 'third')" hidden>
+              </div>
+
+              <div class="editor-container full-width">
+                <label class="editor-label">Negyedik szöveges blokk</label>
+                <angular-editor formControlName="fourthSection" [config]="editorConfig" (blur)="onEditorBlur('firstSection')">></angular-editor>
+              </div>
+            </section>
+          }
+
+          <section class="form-section">
+            <div class="image-upload-section">
+              <label class="editor-label">Záró kép (Az utolsó szöveg felett)</label>
+              <div class="upload-placeholder" (click)="lastInput.click()">
+                @if (imagePreviews['last']) { <img [src]="imagePreviews['last']" alt="Last Image"> }
+                @else { <mat-icon>add_photo_alternate</mat-icon> }
+              </div>
+              <input #lastInput type="file" (change)="onFileSelected($event, 'last')" hidden>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <div class="editor-container full-width">
+              <label class="editor-label">Befejező szöveges blokk</label>
+              <angular-editor formControlName="lastSection" [config]="editorConfig" (blur)="onEditorBlur('firstSection')">></angular-editor>
+            </div>
+          </section>
+
+          <div class="form-actions">
+            <button mat-button type="button" (click)="onCancel()">Mégse</button>
+            <button mat-flat-button color="primary" type="submit" [disabled]="articleForm.invalid || isLoading">
+              <mat-icon>publish</mat-icon> Mentés és közzététel
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</main>

@@ -27,6 +27,12 @@ export type { ApiArticleUpdatePost$Params as ApiArticleUpdatePost$Params } from 
 export { apiArticleUpdatePost as apiArticleUpdatePost } from './fn/article/api-article-update-post';
 export type { ApiArticleDeleteIdDelete$Params as ApiArticleDeleteIdDelete$Params } from './fn/article/api-article-delete-id-delete';
 export { apiArticleDeleteIdDelete as apiArticleDeleteIdDelete } from './fn/article/api-article-delete-id-delete';
+export type { ApiArticleDraftsDraftIdImagesSlotPost$Params as ApiArticleDraftsDraftIdImagesSlotPost$Params } from './fn/article-draft/api-article-drafts-draft-id-images-slot-post';
+export { apiArticleDraftsDraftIdImagesSlotPost as apiArticleDraftsDraftIdImagesSlotPost } from './fn/article-draft/api-article-drafts-draft-id-images-slot-post';
+export type { ApiArticleDraftsDraftIdDelete$Params as ApiArticleDraftsDraftIdDelete$Params } from './fn/article-draft/api-article-drafts-draft-id-delete';
+export { apiArticleDraftsDraftIdDelete as apiArticleDraftsDraftIdDelete } from './fn/article-draft/api-article-drafts-draft-id-delete';
+export type { ApiArticleDraftsDraftIdPromoteSlugPost$Params as ApiArticleDraftsDraftIdPromoteSlugPost$Params } from './fn/article-draft/api-article-drafts-draft-id-promote-slug-post';
+export { apiArticleDraftsDraftIdPromoteSlugPost as apiArticleDraftsDraftIdPromoteSlugPost } from './fn/article-draft/api-article-drafts-draft-id-promote-slug-post';
 export type { ApiAuthRegisterPost$Plain$Params as ApiAuthRegisterPost$Plain$Params } from './fn/auth/api-auth-register-post-plain';
 export { apiAuthRegisterPost$Plain as apiAuthRegisterPost$Plain } from './fn/auth/api-auth-register-post-plain';
 export type { ApiAuthRegisterPost$Json$Params as ApiAuthRegisterPost$Json$Params } from './fn/auth/api-auth-register-post-json';

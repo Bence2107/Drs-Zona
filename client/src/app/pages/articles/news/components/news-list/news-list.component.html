@@ -2,10 +2,14 @@
   <div class="news-container">
     @for (new_item of articles; track new_item) {
       <mat-card class="new-item" [routerLink]="['/article', new_item.slug]">
-        <img mat-card-image
-          [src]="new_item.primaryImageUrl"
-          [alt]="new_item.title"
-          loading="lazy">
+        @if (new_item?.primaryImageUrl !== null){
+          <img mat-card-image
+               [src]="new_item.primaryImageUrl"
+               [alt]="new_item.title"
+               loading="lazy">
+        } @else {
+          <img mat-card-image [src]="'img/articles/image-not-found.png'" alt="No image" loading="lazy">
+        }
           <mat-card-content class="text-content">
             <h2 class="news-label">{{ new_item.title }}</h2>
             <p class="news-desc">{{ new_item.lead }}</p>
@@ -36,7 +40,7 @@
 }
 
 @if (isAuthorOrAdmin() && !isLoading) {
-  <a mat-fab color="primary" class="fab-edit" [routerLink]="['/news/add']" matTooltip="Cikk hozzáadása">
+  <a mat-fab color="primary" class="fab-edit" [routerLink]="['/admin/articles/create']" matTooltip="Cikk hozzáadása">
     <mat-icon>add</mat-icon>
   </a>
 }

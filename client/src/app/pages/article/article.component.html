@@ -3,9 +3,11 @@
     <div class="container">
       <mat-card class="article-card">
         <header class="article-header">
-          <img [src]="article?.primaryImageUrl"
-            [alt]="article?.title"
-            class="img-fluid primary-img">
+          @if (article?.primaryImageUrl !== null){
+            <img [src]="article?.primaryImageUrl"
+                 [alt]="article?.title"
+                 class="img-fluid primary-img">
+          }
             <div class="title-group">
               <h1 class="mat-headline-3">{{ article?.title }}</h1>
               <h2 class="mat-headline-6">{{ article?.lead }}</h2>
@@ -28,12 +30,16 @@
                   <div class="content-block" [innerHTML]="section"></div>
                   @if (i === 0) {
                     <figure class="article-figure">
-                      <img [src]="article?.secondaryImageUrl" class="img-fluid" alt="">
+                      @if (article?.secondaryImageUrl !== null){
+                        <img [src]="article?.secondaryImageUrl" class="img-fluid" alt="">
+                      }
                     </figure>
                   }
                   @if (i === 1) {
                     <figure class="article-figure">
-                      <img [src]="article?.thirdImageUrl" class="img-fluid" alt="">
+                      @if (article?.thirdImageUrl !== null){
+                        <img [src]="article?.thirdImageUrl" class="img-fluid" alt="">
+                      }
                     </figure>
                   }
                 </div>
@@ -41,9 +47,11 @@
             }
             @if (article.id) {
               <figure class="article-figure">
-                <img [src]="article?.lastImageUrl"
-                  [alt]="article.title"
-                  class="img-fluid">
+                @if (article.lastImageUrl !== null){
+                  <img [src]="article?.lastImageUrl"
+                       [alt]="article.title"
+                       class="img-fluid">
+                }
                 </figure>
               }
               @if (article?.lastSection) {
