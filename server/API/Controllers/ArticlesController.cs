@@ -1,6 +1,7 @@
 ﻿using DTOs.News;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
+using Services.Types;
 
 namespace Drs_Zona.API.Controllers;
 
@@ -41,16 +42,16 @@ public class ArticleController(IArticleService articleService): ControllerBase
     }
     
     [HttpGet("getAllArticles")]
-    public async Task<ActionResult<List<ArticleListDto>>> GetAllArticles()
+    public async Task<ActionResult<PagedResult<ArticleListDto>>> GetAllArticles(int page, int pageSize)
     {
-        var response = await articleService.ListArticles();
+        var response = await articleService.ListArticles(page, pageSize);
         return Ok(response);
     }
     
     [HttpGet("getAllSummary")]
-    public async Task<ActionResult<List<ArticleListDto>>> GetAllSummary()
+    public async Task<ActionResult<PagedResult<ArticleListDto>>> GetAllSummary(int page, int pageSize)
     {
-        var response = await articleService.ListAllSummary();
+        var response = await articleService.ListAllSummary(page, pageSize);
         return Ok(response);
     }
 

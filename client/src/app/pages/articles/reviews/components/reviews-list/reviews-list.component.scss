@@ -106,6 +106,37 @@ mat-progress-bar {
   color: var(--primary-text);
 }
 
+mat-paginator {
+  background-color: var(--secondary-bg) !important;
+  color: var(--text-main) !important;
+  margin-top: 20px;
+  border-radius: 0 0 30px 12px;
+
+  ::ng-deep .mat-mdc-paginator-container {
+    justify-content: center !important;
+  }
+
+  @media (max-width: 768px) {
+    ::ng-deep .mat-mdc-paginator-container {
+      justify-content: flex-start !important;
+    }
+
+    padding-left: 5px !important;
+    padding-right: 70px !important;
+  }
+
+  ::ng-deep {
+    .mat-mdc-paginator-range-label,
+    .mat-mdc-select-value,
+    .mat-mdc-paginator-navigation-next,
+    .mat-mdc-paginator-navigation-previous {
+      color: var(--text-main) !important;
+    }
+    .mat-mdc-paginator-icon {
+      fill: var(--text-main) !important;
+    }
+  }
+}
 // Tablet - 1 oszlop
 @media (max-width: 1200px) {
   .news-container,
@@ -157,7 +188,7 @@ mat-progress-bar {
 
   .text-content .news-desc {
     font-size: 1em;
-    color: var(--secondary-text);
+    color: var(--text-secondary);
   }
 }
 

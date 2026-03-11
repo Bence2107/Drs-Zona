@@ -56,7 +56,7 @@ export class ProfileDeleteComponent {
               });
             },
             error: err => {
-              console.error('Hiba a törlésnél', err);
+              console.error(err);
             }
           }
         )

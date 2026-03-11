@@ -3,15 +3,17 @@ import {HttpClient} from '@angular/common/http';
 import {ApiConfiguration} from '../api/api-configuration';
 import {Observable} from 'rxjs';
 import {
-  apiArticleCreatePost,
+  apiArticleCreatePost, apiArticleDeleteIdDelete,
   apiArticleGetAllArticlesGet$Json,
   apiArticleGetAllSummaryGet$Json,
-  apiArticleGetRecentNumberGet$Json, apiArticleGetSlugGet$Json
+  apiArticleGetRecentNumberGet$Json, apiArticleGetSlugGet$Json, apiArticleUpdatePost
 } from '../api/functions';
 import {map} from 'rxjs/operators';
 import {ArticleListDto} from '../api/models/article-list-dto';
 import {ArticleDetailDto} from '../api/models/article-detail-dto';
 import {ArticleCreateDto} from '../api/models/article-create-dto';
+import {ArticleUpdateDto} from '../api/models/article-update-dto';
+import {ArticleListDtoPagedResult} from '../api/models/article-list-dto-paged-result';
 
 @Injectable({
   providedIn: 'root'
@@ -20,20 +22,20 @@ export class ArticleService {
 
   constructor(private http: HttpClient, private apiConfig: ApiConfiguration) { }
 
-  getAllArticles() : Observable<ArticleListDto[]> {
-    return apiArticleGetAllArticlesGet$Json(this.http, this.apiConfig.rootUrl).pipe(
+  getAllArticles(page: number, pageSize:number) : Observable<ArticleListDtoPagedResult> {
+    return apiArticleGetAllArticlesGet$Json(this.http, this.apiConfig.rootUrl, {page: page, pageSize: pageSize}).pipe(
       map(response => {
         const body = response.body as any;
-        return body.value as ArticleListDto[] ?? []
+        return body.value as ArticleListDtoPagedResult
       })
     )
   }
 
-  getAllSummary() : Observable<ArticleListDto[]> {
-    return apiArticleGetAllSummaryGet$Json(this.http, this.apiConfig.rootUrl).pipe(
+  getAllSummary(page: number, pageSize:number) : Observable<ArticleListDtoPagedResult> {
+    return apiArticleGetAllSummaryGet$Json(this.http, this.apiConfig.rootUrl, {page: page, pageSize: pageSize}).pipe(
       map(response => {
         const body = response.body as any;
-        return body.value as ArticleListDto[] ?? []
+        return body.value as ArticleListDtoPagedResult
       })
     )
   }
@@ -55,7 +57,15 @@ export class ArticleService {
     )
   }
 
-  create(payload: ArticleCreateDto) {
+  create(payload: ArticleCreateDto): Observable<void> {
     return apiArticleCreatePost(this.http, this.apiConfig.rootUrl, {body: payload}).pipe(map(() => void 0));
+  }
+
+  update(payload: ArticleUpdateDto): Observable<void> {
+    return apiArticleUpdatePost(this.http, this.apiConfig.rootUrl, {body: payload}).pipe(map(() => void 0));
+  }
+
+  delete(id: string): Observable<void> {
+    return apiArticleDeleteIdDelete(this.http, this.apiConfig.rootUrl, {id}).pipe(map(() => void 0));
   }
 }

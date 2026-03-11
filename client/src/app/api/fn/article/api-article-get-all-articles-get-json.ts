@@ -7,14 +7,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ArticleListDto } from '../../models/article-list-dto';
+import { ArticleListDtoPagedResult } from '../../models/article-list-dto-paged-result';
 
 export interface ApiArticleGetAllArticlesGet$Json$Params {
+  page?: number;
+  pageSize?: number;
 }
 
-export function apiArticleGetAllArticlesGet$Json(http: HttpClient, rootUrl: string, params?: ApiArticleGetAllArticlesGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ArticleListDto>>> {
+export function apiArticleGetAllArticlesGet$Json(http: HttpClient, rootUrl: string, params?: ApiArticleGetAllArticlesGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<ArticleListDtoPagedResult>> {
   const rb = new RequestBuilder(rootUrl, apiArticleGetAllArticlesGet$Json.PATH, 'get');
   if (params) {
+    rb.query('page', params.page, {});
+    rb.query('pageSize', params.pageSize, {});
   }
 
   return http.request(
@@ -22,7 +26,7 @@ export function apiArticleGetAllArticlesGet$Json(http: HttpClient, rootUrl: stri
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<ArticleListDto>>;
+      return r as StrictHttpResponse<ArticleListDtoPagedResult>;
     })
   );
 }

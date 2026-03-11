@@ -47,7 +47,7 @@ export class ProfileCommentsComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Hiba történt a letöltéskor:', err);
+        console.error(err);
         this.isLoading = false;
       }
     });

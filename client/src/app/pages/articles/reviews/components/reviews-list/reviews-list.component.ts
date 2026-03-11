@@ -10,6 +10,7 @@ import {MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
 import {AuthService} from '../../../../../services/auth.service';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-reviews-list',
@@ -23,7 +24,8 @@ import {AuthService} from '../../../../../services/auth.service';
     RouterLink,
     MatFabButton,
     MatIcon,
-    MatTooltip
+    MatTooltip,
+    MatPaginator
   ],
   templateUrl: './reviews-list.component.html',
   styleUrl: './reviews-list.component.scss'
@@ -32,6 +34,10 @@ export class ReviewsListComponent implements OnInit {
   @Input() reviews: ArticleListDto[] = []
   isLoading = false;
   errorOccurred = false;
+
+  totalElements = 0;
+  pageSize = 2;
+  pageIndex = 0;
 
   constructor(private articleService: ArticleService, private authService: AuthService) {}
 
@@ -43,18 +49,25 @@ export class ReviewsListComponent implements OnInit {
     this.isLoading = true;
     this.errorOccurred = false;
 
-    this.articleService.getAllSummary().subscribe({
+    this.articleService.getAllSummary(this.pageIndex, this.pageSize).subscribe({
       next: (data) => {
-        this.reviews = data;
+        this.reviews = data.items!;
+        this.totalElements = data.totalCount!;
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.isLoading = false;
         this.errorOccurred = true;
       }
     });
   }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.fetchArticles();
+  }
+
 
   protected isAuthorOrAdmin(): boolean {
     const role = this.authService.currentProfile()?.role;

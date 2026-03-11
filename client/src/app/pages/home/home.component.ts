@@ -54,8 +54,7 @@ export class HomeComponent implements OnInit {
         this.polls = result.activePolls;
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Hiba az adatok betöltésekor:', err);
+      error: () => {
         this.isLoading = false;
         this.errorOccurred = true;
       }

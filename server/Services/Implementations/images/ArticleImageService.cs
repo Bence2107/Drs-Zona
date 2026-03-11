@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Services.Interfaces.images;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
 
 namespace Services.Implementations.images;
 
@@ -40,7 +42,7 @@ public class ArticleImageService(IWebHostEnvironment env): IArticleImageService
         }
     }
 
-    private string GetDraftImageUrl(string draftId, string imageName)
+    private static string GetDraftImageUrl(string draftId, string imageName)
     {
         return $"/uploads/dumps/articles/{draftId}/{imageName}";
     }
@@ -55,15 +57,19 @@ public class ArticleImageService(IWebHostEnvironment env): IArticleImageService
             File.Delete(old);
         }
 
-        var fileName = $"{imageName}{Path.GetExtension(file.FileName)}";
-        var filePath = Path.Combine(dumpsPath, fileName);
+        var filePath = Path.Combine(dumpsPath, $"{imageName}.jpg");
 
-        await using (var stream = new FileStream(filePath, FileMode.Create))
+        try
         {
-            await file.CopyToAsync(stream);
+            using var image = await Image.LoadAsync(file.OpenReadStream());
+            await image.SaveAsync(filePath, new JpegEncoder { Quality = 85 });
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Hiba a képfeldolgozás során.", ex);
         }
 
-        return GetDraftImageUrl(draftId, fileName);
+        return GetDraftImageUrl(draftId, $"{imageName}.jpg");
     }
 
     public async Task DeleteDraftImages(string draftId)
@@ -85,8 +91,15 @@ public class ArticleImageService(IWebHostEnvironment env): IArticleImageService
 
         foreach (var srcFile in Directory.GetFiles(draftFolder))
         {
-            var destFile = Path.Combine(publishFolder, Path.GetFileName(srcFile));
-            File.Copy(srcFile, destFile, overwrite: true);
+            var fileName = Path.GetFileName(srcFile);
+            var destFile = Path.Combine(publishFolder, fileName);
+
+            if (File.Exists(destFile))
+            {
+                File.Delete(destFile);
+            }
+        
+            File.Move(srcFile, destFile); 
         }
 
         await DeleteDraftImages(draftId);

@@ -92,8 +92,25 @@
       }
 </main>
 
-@if (isTheAuthorOrAdmin() && !isLoading) {
-  <a mat-fab color="primary" class="fab-edit" [routerLink]="['/news/add']" matTooltip="Cikk szerkesztése">
+@if (isTheAuthorOrAdmin() && !isLoading && article?.slug) {
+  <button mat-fab color="primary"
+          class="fab-edit"
+          [mat-menu-trigger-for]="adminMenu"
+          matTooltip="Adminisztráció">
     <mat-icon>edit</mat-icon>
-  </a>
+  </button>
+
+  <mat-menu #adminMenu="matMenu" yPosition="above" class="admin-fab-menu">
+    <div class="admin-menu-section">
+      <span class="admin-section-label">Cikk kezelés</span>
+    </div>
+
+    <button mat-menu-item [routerLink]="['/admin/articles/update/', article.slug]">
+      <mat-icon color="primary">edit</mat-icon> Cikk szerkesztése
+    </button>
+
+    <button mat-menu-item (click)="deleteArticle()" class="delete-item">
+      <mat-icon color="warn">delete</mat-icon> Törlés
+    </button>
+  </mat-menu>
 }

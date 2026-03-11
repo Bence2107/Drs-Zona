@@ -12,7 +12,6 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {CommentContentUpdateDto} from '../../../../api/models/comment-content-update-dto';
 import {CommentUpdateVoteDto} from '../../../../api/models/comment-update-vote-dto';
 import {RouterLink} from '@angular/router';
-import {ArticleService} from '../../../../services/article.service';
 
 @Component({
   selector: 'app-comment-item',
@@ -148,7 +147,7 @@ export class CommentItemComponent {
         }
       },
       error: (err) => {
-        console.error("Hiba a mentés során:", err);
+        console.error(err);
       }
     });
   }
@@ -187,7 +186,7 @@ export class CommentItemComponent {
         this.comment.currentUserVote = oldVote;
         this.comment.upVotes = oldUp;
         this.comment.downVotes = oldDown;
-        console.error('Hiba a szavazásnál:', err);
+        console.error(err);
       }
     });
   }
@@ -240,7 +239,7 @@ export class CommentItemComponent {
         next: () => {
           this.commentDeleted.emit();
         },
-        error: (err) => console.error("Hiba a törlés során:", err)
+        error: (err) => console.error(err)
       });
     }
 

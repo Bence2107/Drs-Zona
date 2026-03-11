@@ -15,7 +15,7 @@ import {ConstructorsComponent} from './pages/admin/results/constructors/construc
 import {ContractsComponent} from './pages/admin/results/contracts/contracts.component';
 import {EntryDetailComponent} from './pages/admin/results/entry/entry-detail/entry-detail.component';
 import {EntryCreateComponent} from './pages/admin/results/entry/entry-create/entry-create.component';
-import ArticleCreateComponent from './pages/admin/articles/article-create/article-create.component';
+import {ArticleManageComponent} from './pages/admin/articles/article-manage/article-manage.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -32,7 +32,8 @@ export const routes: Routes = [
   { path: "admin/contracts", component: ContractsComponent},
   { path: 'admin/results/entry/:gpId', component: EntryDetailComponent },
   { path: 'admin/results/entry/:gpId/create', component: EntryCreateComponent },
-  { path: 'admin/articles/create', component: ArticleCreateComponent },
+  { path: 'admin/articles/create', component: ArticleManageComponent },
+  { path: 'admin/articles/update/:slug', component: ArticleManageComponent },
   {
     path: "auth",
     component: AuthComponent,

@@ -5,10 +5,9 @@
         @if (new_item?.primaryImageUrl !== null){
           <img mat-card-image
                [src]="new_item.primaryImageUrl"
-               [alt]="new_item.title"
-               loading="lazy">
+               [alt]="new_item.title">
         } @else {
-          <img mat-card-image [src]="'img/articles/image-not-found.png'" alt="No image" loading="lazy">
+          <img mat-card-image [src]="'img/articles/image-not-found.png'" alt="No image">
         }
           <mat-card-content class="text-content">
             <h2 class="news-label">{{ new_item.title }}</h2>
@@ -25,6 +24,15 @@
         </p>
       }
     </div>
+
+  <mat-paginator
+    [length]="totalElements"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [pageSizeOptions]="[4, 10, 25]"
+    (page)="onPageChange($event)"
+    aria-label="Oldal kiválasztása">
+  </mat-paginator>
   } @else {
     @if (errorOccurred) {
       <app-error-display

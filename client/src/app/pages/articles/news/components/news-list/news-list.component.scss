@@ -154,7 +154,47 @@ mat-progress-bar {
 
   .text-content .news-desc {
     font-size: 1em;
-    color: var(--secondary-text);
+    color: var(--text-secondary);
+  }
+
+  .fab-edit {
+    bottom: 20px !important;
+    right: 20px !important;
+    transform: scale(0.9);
+  }
+}
+
+mat-paginator {
+  background-color: var(--secondary-bg) !important;
+  color: var(--text-main) !important;
+  margin-top: 20px;
+  border-radius: 0 0 30px 12px;
+
+  // Alapértelmezett (Desktop) - A Material alapból középre teszi
+  ::ng-deep .mat-mdc-paginator-container {
+    justify-content: center !important;
+  }
+
+  // Mobil nézet (max 768px)
+  @media (max-width: 768px) {
+    ::ng-deep .mat-mdc-paginator-container {
+      justify-content: flex-start !important;
+    }
+
+    padding-left: 5px !important;
+    padding-right: 70px !important;
+  }
+
+  ::ng-deep {
+    .mat-mdc-paginator-range-label,
+    .mat-mdc-select-value,
+    .mat-mdc-paginator-navigation-next,
+    .mat-mdc-paginator-navigation-previous {
+      color: var(--text-main) !important;
+    }
+    .mat-mdc-paginator-icon {
+      fill: var(--text-main) !important;
+    }
   }
 }
 

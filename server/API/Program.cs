@@ -176,11 +176,24 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+var cacheControlHeader = new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        if (!ctx.File.Name.EndsWith(".jpg") && !ctx.File.Name.EndsWith(".jpeg") &&
+            !ctx.File.Name.EndsWith(".png")) return;
+        ctx.Context.Response.Headers.CacheControl = "no-cache, no-store, must-revalidate";
+        ctx.Context.Response.Headers.Pragma = "no-cache";
+        ctx.Context.Response.Headers.Expires = "0";
+    }
+};
+
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
         Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
-    RequestPath = "/uploads"
+    RequestPath = "/uploads",
+    OnPrepareResponse = cacheControlHeader.OnPrepareResponse
 });
 
 app.UseStaticFiles(new StaticFileOptions

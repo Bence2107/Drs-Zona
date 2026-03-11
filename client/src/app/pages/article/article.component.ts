@@ -12,6 +12,9 @@ import {CommentListComponent} from '../../components/lists/comment-list/comment-
 import {AuthService} from '../../services/auth.service';
 import {MatIcon} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatDialog} from '@angular/material/dialog';
+import {ConfirmDialogComponent} from '../../components/dialogs/confirmdialog/confirmdialog.component';
 
 @Component({
   selector: 'app-article',
@@ -27,7 +30,10 @@ import {MatTooltip} from '@angular/material/tooltip';
     MatProgressBar,
     MatFabButton,
     MatIcon,
-    MatTooltip
+    MatTooltip,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem
   ],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss'
@@ -37,10 +43,22 @@ export class ArticleComponent implements OnInit {
   isLoading = false;
   errorOccurred = false;
 
-  constructor(private articleService: ArticleService, private route: ActivatedRoute, private router: Router, private authService: AuthService) {}
+  constructor(
+    private articleService: ArticleService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService,
+    private dialog: MatDialog
+  )
+  {}
 
   ngOnInit() {
     this.fetchArticle();
+  }
+
+  private addCacheBuster(url: string | null | undefined): string | null {
+    if (!url) return null;
+    return `${url}?cache=${new Date().getTime()}`;
   }
 
   fetchArticle() {
@@ -56,11 +74,17 @@ export class ArticleComponent implements OnInit {
     if (slug != null) {
       this.articleService.getBySlug(slug).subscribe({
         next: (data) => {
-          this.article = data;
+          this.article = {
+            ...data,
+            primaryImageUrl: this.addCacheBuster(data.primaryImageUrl),
+            secondaryImageUrl: this.addCacheBuster(data.secondaryImageUrl),
+            thirdImageUrl: this.addCacheBuster(data.thirdImageUrl),
+            lastImageUrl: this.addCacheBuster(data.lastImageUrl)
+          };
           this.isLoading = false;
         },
-        error: (err) => {
-          console.error(err);
+        error: () => {
+          console.error();
           this.isLoading = false;
           this.errorOccurred = true;
         }
@@ -85,5 +109,22 @@ export class ArticleComponent implements OnInit {
     const url = this.article.authorImageUrl;
     if (url == null) return "img/user/avatars/avatar.jpg";
     return `${url}`;
+  }
+
+  deleteArticle() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Cikk törlése',
+        message: 'Biztosan törölni szeretnéd ezt a cikket? A művelet nem vonható vissza.'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.articleService.delete(this.article.id!).subscribe(() => {
+          this.router.navigate(['/news']);
+        });
+      }
+    });
   }
 }

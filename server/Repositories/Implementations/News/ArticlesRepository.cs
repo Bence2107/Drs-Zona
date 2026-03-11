@@ -18,7 +18,38 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
         .Include(article => article.Author)
         .Include(article => article.GrandPrix)
         .FirstOrDefaultAsync(article => article.Slug == slug);
+
+    public async Task<(List<Article> Items, int TotalCount)> GetPagedArticles(int page, int pageSize)
+    {
+        var query = _articles.Where(a => a.IsSummary != true);
+
+        var totalCount = await query.CountAsync();
+        
+        var items = await query
+            .OrderByDescending(a => a.DatePublished)
+            .Skip((page) * pageSize) 
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
+    }
     
+    public async Task<(List<Article> Items, int TotalCount)> GetPagedReviews(int page, int pageSize)
+    {
+        var query = _articles.Where(a => a.IsSummary == true);
+
+        var totalCount = await query.CountAsync();
+        
+        var items = await query
+            .OrderByDescending(a => a.DatePublished)
+            .Skip((page) * pageSize) 
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
+    }
+    
+
     public async Task<List<Article>> GetAllArticles() => await _articles
         .Where(article => article.IsSummary != true)
         .ToListAsync();

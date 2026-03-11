@@ -44,7 +44,7 @@ export class PollVoteDialogComponent {
       next: (updatedPoll) => {
         this.poll = updatedPoll;
       },
-      error: (err) => console.error('Hiba a frissítéskor', err)
+      error: (err) => console.error(err)
     });
   }
 
@@ -54,7 +54,7 @@ export class PollVoteDialogComponent {
 
     this.pollService.vote(this.poll.id!, optionId, this.userId).subscribe({
       next: () => this.refreshData(),
-      error: (err) => console.error('Hiba a szavazásnál:', err)
+      error: (err) => console.error(err)
     });
   }
 

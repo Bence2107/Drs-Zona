@@ -5,6 +5,7 @@ using Repositories.Interfaces.News;
 using Repositories.Interfaces.RaceTracks;
 using Services.Interfaces;
 using Services.Interfaces.images;
+using Services.Types;
 
 namespace Services.Implementations;
 
@@ -89,37 +90,58 @@ public class ArticleService(
         ));
     }
 
-    public async Task<ResponseResult<List<ArticleListDto>>> ListArticles()
+    public async Task<ResponseResult<PagedResult<ArticleListDto>>> ListArticles(int page, int pageSize)
     {
-        var articles = await articleRepo.GetAllArticles();
+        var (articles, totalCount) = await articleRepo.GetPagedArticles(page, pageSize);      
         
         var dtoS = articles.Select(a => new ArticleListDto(
-            Id: a.Id,
-            Title: a.Title,
-            Lead: a.Lead,
-            IsReview: a.IsSummary,
-            Slug: a.Slug,
-            DatePublished: a.DatePublished,
-            PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
-        )).ToList();
+                Id: a.Id,
+                Title: a.Title,
+                Lead: a.Lead,
+                IsReview: a.IsSummary,
+                Slug: a.Slug,
+                DatePublished: a.DatePublished,
+                PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
+            ))
+            .OrderByDescending(a => a.DatePublished)
+            .ToList();
         
-        return ResponseResult<List<ArticleListDto>>.Success(dtoS);
+        var result = new PagedResult<ArticleListDto>
+        {
+            Items = dtoS,
+            TotalCount = totalCount,
+            PageSize = pageSize,
+            CurrentPage = page
+        };
+        
+        return ResponseResult<PagedResult<ArticleListDto>>.Success(result);
     }
-    public async Task<ResponseResult<List<ArticleListDto>>> ListAllSummary()
+    
+    public async Task<ResponseResult<PagedResult<ArticleListDto>>> ListAllSummary(int page, int pageSize)
     {
-        var articles = await articleRepo.GetAllSummary();
+        var (articles, totalCount) = await articleRepo.GetPagedReviews(page, pageSize);      
         
         var dtoS = articles.Select(a => new ArticleListDto(
-            Id: a.Id,
-            Title: a.Title,
-            Lead: a.Lead,
-            IsReview: a.IsSummary,
-            Slug: a.Slug,
-            DatePublished: a.DatePublished,
-            PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
-        )).ToList();
+                Id: a.Id,
+                Title: a.Title,
+                Lead: a.Lead,
+                IsReview: a.IsSummary,
+                Slug: a.Slug,
+                DatePublished: a.DatePublished,
+                PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
+            ))
+            .OrderByDescending(a => a.DatePublished)
+            .ToList();
         
-        return ResponseResult<List<ArticleListDto>>.Success(dtoS);
+        var result = new PagedResult<ArticleListDto>
+        {
+            Items = dtoS,
+            TotalCount = totalCount,
+            PageSize = pageSize,
+            CurrentPage = page
+        };
+        
+        return ResponseResult<PagedResult<ArticleListDto>>.Success(result);
     }
 
     public async Task<ResponseResult<List<ArticleListDto>>> GetRecentArticles(int count)
@@ -127,14 +149,16 @@ public class ArticleService(
         var articles = await articleRepo.GetRecentNews(count);
         
         var dtoS = articles.Select(a => new ArticleListDto(
-            Id: a.Id,
-            Title: a.Title,
-            Lead: a.Lead,
-            IsReview: a.IsSummary,
-            Slug: a.Slug,
-            DatePublished: a.DatePublished,
-            PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
-        )).ToList();
+                Id: a.Id,
+                Title: a.Title,
+                Lead: a.Lead,
+                IsReview: a.IsSummary,
+                Slug: a.Slug,
+                DatePublished: a.DatePublished,
+                PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
+            ))
+            .OrderByDescending(a => a.DatePublished)
+            .ToList();
         
         return ResponseResult<List<ArticleListDto>>.Success(dtoS);
     }

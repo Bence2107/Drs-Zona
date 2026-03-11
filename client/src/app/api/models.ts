@@ -5,6 +5,7 @@ export type { AddParticipationsDto } from './models/add-participations-dto';
 export type { ArticleCreateDto } from './models/article-create-dto';
 export type { ArticleDetailDto } from './models/article-detail-dto';
 export type { ArticleListDto } from './models/article-list-dto';
+export type { ArticleListDtoPagedResult } from './models/article-list-dto-paged-result';
 export type { ArticleUpdateDto } from './models/article-update-dto';
 export type { AuthResponse } from './models/auth-response';
 export type { BatchResultCreateDto } from './models/batch-result-create-dto';

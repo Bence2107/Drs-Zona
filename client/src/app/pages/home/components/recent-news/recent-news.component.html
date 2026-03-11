@@ -4,10 +4,9 @@
         @if (new_item?.primaryImageUrl !== null){
           <img mat-card-image
                [src]="new_item.primaryImageUrl"
-               [alt]="new_item.title"
-               loading="lazy">
+               [alt]="new_item.title">
         } @else {
-          <img mat-card-image [src]="'img/articles/image-not-found.png'" alt="No image" loading="lazy">
+          <img mat-card-image [src]="'img/articles/image-not-found.png'" alt="No image">
         }
 
           <mat-card-content class="text-content">

@@ -6,7 +6,7 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton} from '@angular/material/button';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {Router,} from '@angular/router';
+import {ActivatedRoute, Router,} from '@angular/router';
 import {AngularEditorConfig, AngularEditorModule} from '@kolkov/angular-editor';
 import {v4 as uuidv4} from 'uuid';
 import {ArticleImageService} from '../../../../services/article-image.service';
@@ -16,6 +16,8 @@ import {ArticleService} from '../../../../services/article.service';
 import {ArticleCreateDto} from '../../../../api/models/article-create-dto';
 import {AuthService} from '../../../../services/auth.service';
 import {switchMap} from 'rxjs';
+import {ArticleUpdateDto} from '../../../../api/models/article-update-dto';
+import {ArticleDetailDto} from '../../../../api/models/article-detail-dto';
 
 interface ArticleForm {
   title: FormControl<string>;
@@ -34,7 +36,7 @@ interface ArticleForm {
 }
 
 @Component({
-  selector: 'app-article-create',
+  selector: 'app-article-manage',
   imports: [
     MatCard,
     MatCardContent,
@@ -49,10 +51,11 @@ interface ArticleForm {
     AngularEditorModule,
     MatHint
   ],
-  templateUrl: './article-create.component.html',
-  styleUrl: './article-create.component.scss',
+  templateUrl: './article-manage.component.html',
+  styleUrl: './article-manage.component.scss',
 })
-class ArticleCreateComponent implements OnInit, OnDestroy {
+export class ArticleManageComponent implements OnInit, OnDestroy {
+  articleToEdit?: ArticleDetailDto | null = null;
   articleForm!: FormGroup<ArticleForm>;
   isLoading = false;
   errorMessage = '';
@@ -69,6 +72,7 @@ class ArticleCreateComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private dialog: MatDialog,
     private imageService: ArticleImageService,
     private authService: AuthService,
@@ -77,21 +81,17 @@ class ArticleCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.articleForm = this.fb.group<ArticleForm>({
-      title: this.fb.nonNullable.control('', Validators.required),
-      lead: this.fb.nonNullable.control('', Validators.required),
-      slug: this.fb.nonNullable.control('', Validators.required),
-      authorId: this.fb.nonNullable.control('admin'),
-      grandPrixId: this.fb.control(null),
-      isReview: this.fb.nonNullable.control(false),
-      firstSection: this.fb.nonNullable.control('', Validators.required),
-      summary: this.fb.group({
-        secondSection: this.fb.nonNullable.control(''),
-        thirdSection: this.fb.nonNullable.control(''),
-        fourthSection: this.fb.nonNullable.control(''),
-      }),
-      lastSection: this.fb.nonNullable.control('', Validators.required),
-    });
+    this.initEmptyForm();
+
+    const slug = this.route.snapshot.paramMap.get('slug');
+    if (slug) {
+      this.articleService.getBySlug(slug).subscribe(article => {
+        this.articleToEdit = article;
+        this.draftId = article.id!;
+
+        this.loadArticleData(article);
+      });
+    }
 
     this.articleForm.get('isReview')?.valueChanges.subscribe(isReview => {
       const summary = this.articleForm.get('summary') as FormGroup;
@@ -112,17 +112,59 @@ class ArticleCreateComponent implements OnInit, OnDestroy {
     });
   }
 
+  private initEmptyForm() {
+    this.articleForm = this.fb.group<ArticleForm>({
+      title: this.fb.nonNullable.control(''),
+      lead: this.fb.nonNullable.control(''),
+      slug: this.fb.nonNullable.control(''),
+      authorId: this.fb.nonNullable.control('admin'),
+      grandPrixId: this.fb.control(null),
+      isReview: this.fb.nonNullable.control(false),
+      firstSection: this.fb.nonNullable.control(''),
+      summary: this.fb.group({
+        secondSection: this.fb.nonNullable.control(''),
+        thirdSection: this.fb.nonNullable.control(''),
+        fourthSection: this.fb.nonNullable.control(''),
+      }),
+      lastSection: this.fb.nonNullable.control(''),
+    });
+  }
+
+  private loadArticleData(article: ArticleDetailDto) {
+    this.articleForm.patchValue({
+      title: article.title!,
+      lead: article.lead!,
+      slug: article.slug!,
+      grandPrixId: article.grandPrixId,
+      isReview: article.isReview,
+      firstSection: article.firstSection!,
+      lastSection: article.lastSection!,
+      summary: {
+        secondSection: article.middleSections?.[0] || '',
+        thirdSection: article.middleSections?.[1] || '',
+        fourthSection: article.middleSections?.[2] || ''
+      }
+    });
+
+    this.imagePreviews = {
+      primary: article.primaryImageUrl ? `${article.primaryImageUrl}?t=${new Date().getTime()}` : '',
+      secondary: article.secondaryImageUrl ? `${article.secondaryImageUrl}?t=${new Date().getTime()}` : '',
+      third: article.thirdImageUrl ? `${article.thirdImageUrl}?t=${new Date().getTime()}` : '',
+      last: article.lastImageUrl ? `${article.lastImageUrl}?t=${new Date().getTime()}` : ''
+    };
+  }
+
   ngOnDestroy(): void {
     if (!this.isSubmitted) {
       this.imageService.deleteDraft(this.draftId).subscribe({
         next: () => {
           this.isLoading = false;
-          this.router.navigate(['/admin/articles']);
+          this.router.navigate(['/news']);
         },
         error: (err) => {
-          console.error('Hiba a draft törlése közben:', err);
+          console.error(err);
           this.isLoading = false;
-          this.router.navigate(['/admin/articles']);
+          this.router.navigate(['/news']);
         }
       });
     }
@@ -155,28 +197,25 @@ class ArticleCreateComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     if (this.articleForm.invalid) return;
-
     this.isLoading = true;
-    this.errorMessage = '';
+    const payload = this.articleToEdit
+      ? this.buildUpdatePayLoad()
+      : this.buildCreatePayLoad()
 
-    const payload = this.buildPayload();
-    this.articleService.create(payload).pipe(
-      switchMap(() => this.imageService.promoteDraftImages(this.draftId, payload.slug!))).subscribe({
-       next: () => {
-         this.isSubmitted = true;
-         this.isLoading = false;
-         this.router.navigate(['/news'])
-       },
-       error: (err) => {
-         this.errorMessage = err?.message ?? 'Ismeretlen hiba történt.';
-         this.isLoading = false;
-       },
+    const action$ = this.articleToEdit
+      ? this.articleService.update(payload)
+      : this.articleService.create(payload);
+
+    action$.pipe(
+      switchMap(() => this.imageService.promoteDraftImages(this.draftId, payload.slug!))
+    ).subscribe({
+      next: () => {
+        this.isSubmitted = true;
+        const version = new Date().getTime();
+        window.location.href = `/article/${payload.slug}?v=${version}`;
+      },
+      error: () => { this.errorMessage = 'Hiba történt.'; this.isLoading = false; }
     });
-
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/news']);
-    }, 1000);
   }
 
   onFileSelected(event: any, slot: string) {
@@ -187,17 +226,17 @@ class ArticleCreateComponent implements OnInit, OnDestroy {
 
     this.imageService.uploadDraftImage(this.draftId, slot, file).subscribe({
       next: (url: string) => {
-        this.imagePreviews[slot] = url;
+        this.imagePreviews[slot] = `${url}?t=${new Date().getTime()}`;
         this.isUploading[slot] = false;
       },
       error: (err) => {
-        console.error('Feltöltési hiba:', err);
+        console.error(err);
         this.isUploading[slot] = false;
       }
     });
   }
 
-  private buildPayload(): ArticleCreateDto {
+  private buildCreatePayLoad(): ArticleCreateDto {
     const userId = this.authService.currentProfile()?.userId;
     const raw = this.articleForm.getRawValue();
 
@@ -207,6 +246,22 @@ class ArticleCreateComponent implements OnInit, OnDestroy {
       lead: raw.lead,
       slug: raw.slug,
       authorId: userId,
+      grandPrixId: raw.grandPrixId || null,
+      isReview: raw.isReview,
+      firstSection: raw.firstSection,
+      lastSection: raw.lastSection,
+      ...(raw.isReview ? {summary: raw.summary} : {}),
+    };
+  }
+
+  private buildUpdatePayLoad(): ArticleUpdateDto {
+    const raw = this.articleForm.getRawValue();
+
+    return {
+      id: this.articleToEdit!.id,
+      title: raw.title,
+      lead: raw.lead,
+      slug: raw.slug,
       grandPrixId: raw.grandPrixId || null,
       isReview: raw.isReview,
       firstSection: raw.firstSection,
@@ -248,7 +303,7 @@ class ArticleCreateComponent implements OnInit, OnDestroy {
             this.router.navigate(['news']);
           },
           error: (err) => {
-            console.error('Hiba a draft törlése közben:', err);
+            console.error(err);
             this.isLoading = false;
             this.router.navigate(['news']);
           }
@@ -257,5 +312,3 @@ class ArticleCreateComponent implements OnInit, OnDestroy {
     });
   }
 }
-
-export default ArticleCreateComponent

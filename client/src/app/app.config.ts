@@ -8,6 +8,8 @@ import localeHu from '@angular/common/locales/hu';
 import {registerLocaleData} from '@angular/common';
 import {authInterceptor} from './interceptors/auth';
 import {provideNativeDateAdapter} from '@angular/material/core';
+import {MatPaginatorIntl} from '@angular/material/paginator';
+import {getHungarianPaginatorIntl} from './shared/getHungarianPaginator';
 
 registerLocaleData(localeHu)
 
@@ -32,6 +34,7 @@ export const appConfig: ApplicationConfig = {
         return config;
       }
     },
-    { provide: LOCALE_ID, useValue: 'hu-HU' }
+    { provide: LOCALE_ID, useValue: 'hu-HU' },
+    { provide: MatPaginatorIntl, useValue: getHungarianPaginatorIntl() }
   ]
 };
