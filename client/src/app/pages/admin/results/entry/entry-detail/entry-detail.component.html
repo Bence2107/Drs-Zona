@@ -78,7 +78,7 @@
             <th mat-header-cell *matHeaderCellDef>Poz.</th>
             <td mat-cell *matCellDef="let _; let i = index">
               <mat-form-field appearance="outline" class="inline-field">
-                <input matInput type="number" [formControl]="$any(editForms()[i].get('finishPosition'))">
+                <input matInput [formControl]="$any(editForms()[i].get('finishPosition'))">
               </mat-form-field>
             </td>
           </ng-container>
@@ -98,7 +98,7 @@
             <th mat-header-cell *matHeaderCellDef>Körök</th>
             <td mat-cell *matCellDef="let _; let i = index">
               <mat-form-field appearance="outline" class="inline-field inline-field--small">
-                <input matInput type="number" [formControl]="$any(editForms()[i].get('lapsCompleted'))">
+                <input matInput [formControl]="$any(editForms()[i].get('lapsCompleted'))">
               </mat-form-field>
             </td>
           </ng-container>

@@ -294,3 +294,8 @@ mat-option.mat-mdc-option .mat-pseudo-checkbox {
     color: var(--text-main) !important;
   }
 }
+
+inline-field--small input[type="number"]::-webkit-inner-spin-button,
+.inline-field--small input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
