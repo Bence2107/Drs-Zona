@@ -43,12 +43,33 @@
   justify-content: flex-start;
   margin-bottom: 2rem;
 
-  .season-field {
+  .season-field, .series-select {
     width: 180px;
   }
 }
 
-// Grid
+.series-select {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .series-section { display: none; }
+
+  .series-select, .season-field {
+    width: 100%;
+    display: flex;
+    margin: 0 auto 1.5rem;
+  }
+
+  .season-section {
+    width: 100%;
+
+    .season-field {
+      width: 100%;
+    }
+  }
+}
+
 .gp-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -225,6 +246,10 @@ loading-state {
 @media (max-width: 600px) {
   .entry-container {
     padding: 1rem;
+  }
+
+  .season-section, .series-section {
+    justify-content: center;
   }
 
   .gp-grid {

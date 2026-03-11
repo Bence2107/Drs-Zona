@@ -4,7 +4,8 @@
   align-items: center; // Középre rendezi a mezőket
   gap: 8px;
   padding: 20px 0;
-  min-width: 450px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 // Itt állítjuk be, hogy a mezők ne legyenek túl szélesek

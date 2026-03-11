@@ -1,6 +1,6 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon } from '@angular/material/icon';
 import {
@@ -12,7 +12,7 @@ import {
   MatTable,
 
 } from '@angular/material/table';
-import {MatFormField} from '@angular/material/form-field';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
@@ -48,7 +48,9 @@ import {GrandPrixChampionshipContextDto} from '../../../../../api/models/grand-p
     MatRow,
     MatTooltip,
     MatHeaderRowDef,
-    MatRowDef
+    MatRowDef,
+    MatLabel,
+    FormsModule
   ],
   templateUrl: './entry-detail.component.html',
   styleUrl: './entry-detail.component.scss',

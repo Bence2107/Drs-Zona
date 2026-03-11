@@ -31,6 +31,16 @@
       }
     </div>
 
+    <mat-form-field appearance="outline" class="session-select">
+      <mat-label>Session</mat-label>
+      <mat-select [ngModel]="selectedSession()" (ngModelChange)="onSessionChange($event)">
+        @for (sess of sessions(); track sess) {
+          <mat-option [value]="sess">{{ sess }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+
     @if (sessions().length === 0) {
       <div class="empty-state">
         <mat-icon>inbox</mat-icon>

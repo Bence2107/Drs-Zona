@@ -22,6 +22,9 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatDivider} from '@angular/material/list';
 import {Router, RouterLink} from '@angular/router';
 import {MatTooltip} from '@angular/material/tooltip';
+import {MatFormField, MatLabel} from '@angular/material/input';
+import {MatOption} from '@angular/material/core';
+import {MatSelect} from '@angular/material/select';
 
 @Component({
   selector: 'app-championships',
@@ -45,7 +48,11 @@ import {MatTooltip} from '@angular/material/tooltip';
     MatCardActions,
     MatFabButton,
     MatTooltip,
-    MatIconButton
+    MatIconButton,
+    MatFormField,
+    MatLabel,
+    MatOption,
+    MatSelect
   ],
   templateUrl: './championships.component.html',
   styleUrl: './championships.component.scss',

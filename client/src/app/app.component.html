@@ -27,6 +27,13 @@
         </li>
       }
 
+      @if (isMobileOverlay) {
+        <li routerLink="results" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+          <mat-icon>rate_review</mat-icon>
+          <a>Eredmények</a>
+        </li>
+      }
+
       @if (isSmallScreen) {
         @if(isLoggedIn()) {
           <mat-accordion multi="true" class="menu-accordion" >

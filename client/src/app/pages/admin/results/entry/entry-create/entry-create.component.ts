@@ -1,6 +1,14 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
 import {ResultsService} from '../../../../../services/results.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {GrandPrixChampionshipContextDto} from '../../../../../api/models/grand-prix-championship-context-dto';
@@ -18,7 +26,7 @@ import {
   MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
   MatTable
 } from '@angular/material/table';
-import {MatFormField, MatInput} from '@angular/material/input';
+import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatOption} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
 import {DriverLookUpDto} from '../../../../../api/models/driver-look-up-dto';
@@ -46,7 +54,9 @@ import {ConstructorLookUpDto} from '../../../../../api/models/constructor-look-u
     MatHeaderRow,
     MatRow,
     MatRowDef,
-    MatHeaderRowDef
+    MatHeaderRowDef,
+    MatLabel,
+    FormsModule
   ],
   templateUrl: './entry-create.component.html',
   styleUrl: './entry-create.component.scss',

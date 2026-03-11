@@ -11,24 +11,11 @@
   gap: 12px;
   margin-bottom: 2rem;
 
-  .header-text {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
   .page-title {
     font-size: 1.4rem;
     font-weight: 600;
     color: var(--text-main);
     margin: 0;
-  }
-
-  .page-subtitle {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
   }
 }
 
@@ -38,9 +25,9 @@
   margin-bottom: 1.5rem;
 }
 
-.season-section {
-  margin-bottom: 2rem;
-  .season-field { width: 180px; }
+.series-select {
+  display: none;
+  width: 180px;
 }
 
 .championship-list {
@@ -77,6 +64,8 @@
     align-items: center;
     gap: 12px;
     padding: 16px 16px 8px 20px;
+
+    ::ng-deep .mat-mdc-card-header-text { display: none; }
   }
 
   .season-badge {
@@ -95,8 +84,21 @@
 
   .header-content {
     flex: 1;
-    mat-card-title  { font-size: 15px !important; font-weight: 600; color: var(--text-main) !important; }
-    mat-card-subtitle { font-size: 12px !important; color: var(--text-secondary) !important; }
+    min-width: 0;
+
+    mat-card-title {
+      font-size: 15px !important;
+      font-weight: 600;
+      color: var(--text-main) !important;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    mat-card-subtitle {
+      font-size: 12px !important;
+      color: var(--text-secondary) !important;
+    }
   }
 
   .status-chip {
@@ -108,6 +110,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    flex-shrink: 0;
 
     mat-icon { font-size: 14px; width: 14px; height: 14px; }
 
@@ -132,16 +135,17 @@
     gap: 6px;
     font-size: 13px;
     color: var(--text-secondary);
+    min-width: 0;
 
-    mat-icon { font-size: 16px; width: 16px; height: 16px; }
-
-    .meta-label { font-weight: 500; }
-    .meta-value { color: var(--text-main); }
+    mat-icon { font-size: 16px; width: 16px; height: 16px; flex-shrink: 0; }
+    .meta-label { font-weight: 500; flex-shrink: 0; }
+    .meta-value { color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   }
 
   mat-card-actions {
     padding: 4px 12px 12px 12px !important;
     display: flex;
+    flex-wrap: wrap;
     gap: 4px;
   }
 }
@@ -177,5 +181,13 @@
 
 @media (max-width: 600px) {
   .championship-container { padding: 1rem; }
-  .champ-meta { flex-direction: column; align-items: flex-start; }
+  .series-section { display: none; }
+  .series-select { display: flex; margin: 0 auto 1.5rem; width: 100% }
+  .champ-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+  .status-chip {
+    font-size: 11px;
+    padding: 0 8px;
+    height: 28px;
+  }
 }

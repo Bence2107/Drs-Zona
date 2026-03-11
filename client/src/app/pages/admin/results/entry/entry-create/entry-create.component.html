@@ -33,6 +33,15 @@
       </div>
     </div>
 
+    <mat-form-field appearance="outline" class="series-select">
+      <mat-label>Session</mat-label>
+      <mat-select [ngModel]="selectedSession()" (ngModelChange)="selectedSession.set($event)">
+        @for (sess of context()!.availableSessions; track sess) {
+          <mat-option [value]="sess">{{ sess }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
     <form [formGroup]="form">
       <div class="table-wrapper">
         <table mat-table [dataSource]="dataSource()">
@@ -149,14 +158,14 @@
       </div>
 
       <div class="table-footer">
-        <button mat-stroked-button type="button" (click)="addRow()">
+        <button mat-button type="button" (click)="addRow()">
           <mat-icon>add</mat-icon> Sor hozzáadása
         </button>
         <span class="row-count">{{ rows.length }} versenyző</span>
       </div>
 
       <div class="actions">
-        <button mat-stroked-button type="button" (click)="goBack()">Mégsem</button>
+        <button mat-button type="button" (click)="goBack()">Mégsem</button>
         <button mat-flat-button type="button"
                 (click)="submit()"
                 [disabled]="form.invalid || isSaving() || !selectedSession()">

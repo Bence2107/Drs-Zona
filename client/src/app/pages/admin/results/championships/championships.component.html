@@ -19,6 +19,15 @@
     </mat-button-toggle-group>
   </div>
 
+  <mat-form-field appearance="outline" class="series-select">
+    <mat-label>Széria</mat-label>
+    <mat-select [ngModel]="selectedSeriesId()"  (ngModelChange)="onSeriesChange($event)">
+      @for (series of seriesList(); track series.id) {
+        <mat-option [value]="series.id">{{ series.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
   @if (isLoading()) {
     <div class="loading-state">
       <mat-spinner diameter="48"></mat-spinner>

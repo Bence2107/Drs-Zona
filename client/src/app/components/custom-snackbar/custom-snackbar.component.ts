@@ -14,17 +14,29 @@ import { MatButton } from '@angular/material/button';
     </div>
   `,
   styles: [`
-    .custom-snackbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--primary-text);
-      background-color: var(--primary-bg);
-      padding: 10px;
-      border-radius: 5px;
-      font-size: 14px;
+  .custom-snackbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    color: var(--primary-text);
+    background-color: var(--primary-bg);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+
+    span {
+      flex: 1;
+      word-break: break-word;
     }
-  `]
+
+    button {
+      flex-shrink: 0;
+    }
+  }
+`]
 })
 export class CustomSnackbarComponent {
   constructor(

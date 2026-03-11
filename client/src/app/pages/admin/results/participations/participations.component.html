@@ -6,7 +6,6 @@
     <h2 class="page-title">Résztvevők szerkesztése</h2>
   </div>
 
-
   <div class="series-section">
     <mat-button-toggle-group
       [ngModel]="selectedSeriesId()"
@@ -19,6 +18,15 @@
     </mat-button-toggle-group>
   </div>
 
+  <mat-form-field appearance="outline" class="series-select">
+    <mat-label>Széria</mat-label>
+    <mat-select [ngModel]="selectedSeriesId()" (ngModelChange)="onSeriesChange($event)">
+      @for (series of seriesList(); track series.id) {
+        <mat-option [value]="series.id">{{ series.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
   <div class="season-section">
     <mat-form-field appearance="outline" class="season-field">
       <mat-label>Szezon</mat-label>
@@ -30,6 +38,7 @@
     </mat-form-field>
   </div>
 
+
   @if (isLoading()) {
     <div class="loading-state">
       <mat-spinner diameter="48"></mat-spinner>
@@ -39,13 +48,12 @@
   @if (!isLoading() && participations()) {
     <div class="participation-grid">
 
-      <!-- Konstruktőrök -->
       <mat-card class="participation-card">
-        <mat-card-header>
+        <div class="card-header">
           <mat-icon>directions_car</mat-icon>
-          <mat-card-title>Konstruktőrök</mat-card-title>
+          <span class="card-title">Konstruktőrök</span>
           <span class="count-badge">{{ participations()!.constructors!.length }}</span>
-        </mat-card-header>
+        </div>
         <mat-divider></mat-divider>
         <mat-card-content>
           @if (participations()!.constructors!.length === 0) {
@@ -55,10 +63,7 @@
             <div class="participant-row">
               <mat-icon class="participant-icon">directions_car</mat-icon>
               <span class="participant-name">{{ constructor.name }}</span>
-              <button mat-icon-button
-                      (click)="removeConstructor(constructor.id!)"
-                      [disabled]="!constructor.id"
-                      matTooltip="Eltávolítás">
+              <button mat-icon-button (click)="removeConstructor(constructor.id!)" [disabled]="!constructor.id" matTooltip="Eltávolítás">
                 <mat-icon color="warn">remove_circle</mat-icon>
               </button>
             </div>
@@ -67,11 +72,11 @@
       </mat-card>
 
       <mat-card class="participation-card">
-        <mat-card-header>
+        <div class="card-header">
           <mat-icon>person</mat-icon>
-          <mat-card-title>Versenyzők</mat-card-title>
+          <span class="card-title">Versenyzők</span>
           <span class="count-badge">{{ participations()!.drivers!.length }}</span>
-        </mat-card-header>
+        </div>
         <mat-divider></mat-divider>
         <mat-card-content>
           @if (participations()!.drivers!.length === 0) {
@@ -85,9 +90,7 @@
                 <span class="participant-sub">{{ driver.nationality }} · {{ driver.age }} év</span>
               </div>
               <span class="team-name">{{ driver.teamName }}</span>
-              <button mat-icon-button
-                      (click)="removeDriver(driver.driverId!)"
-                      matTooltip="Eltávolítás">
+              <button mat-icon-button (click)="removeDriver(driver.driverId!)" matTooltip="Eltávolítás">
                 <mat-icon color="warn">remove_circle</mat-icon>
               </button>
             </div>
@@ -107,8 +110,6 @@
 
 </div>
 
-<button mat-fab color="primary" class="fab-add"
-        (click)="openAddDialog()"
-        matTooltip="Résztvevők hozzáadása">
+<button mat-fab color="primary" class="fab-add" (click)="openAddDialog()" matTooltip="Résztvevők hozzáadása">
   <mat-icon>person_add</mat-icon>
 </button>
