@@ -32,9 +32,9 @@ public class PollController(IPollService pollService): ControllerBase
     }
     
     [HttpGet("getByCreatorId/{id:guid}")]
-    public async Task<ActionResult<List<PollListDto>>> GetByCreatorId([FromRoute] Guid id)
+    public async Task<ActionResult<List<PollListDto>>> GetByCreatorId([FromRoute] Guid id,  [FromQuery] string? tag = null)
     {
-        var response = await pollService.GetPollByCreatorId(id);
+        var response = await pollService.GetPollByCreatorId(id, tag);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -48,23 +48,23 @@ public class PollController(IPollService pollService): ControllerBase
     }
     
     [HttpGet("getAll")]
-    public async Task<ActionResult<List<PollListDto>>> GetAll()
+    public async Task<ActionResult<List<PollListDto>>> GetAll([FromQuery] string? tag = null)
     {
-        var response = await pollService.ListAllPolls();
+        var response = await pollService.ListAllPolls(tag);
         return Ok(response);
     }
     
     [HttpGet("getAllActive")]
-    public async Task<ActionResult<List<PollListDto>>> GetAllActive()
+    public async Task<ActionResult<List<PollListDto>>> GetAllActive([FromQuery] string? tag = null)
     {
-        var response = await pollService.GetActivePolls();
+        var response = await pollService.GetActivePolls(tag);
         return Ok(response);
     }
     
     [HttpGet("getAllExpired")]
-    public async Task<ActionResult<List<PollListDto>>> GetAllExpired()
+    public async Task<ActionResult<List<PollListDto>>> GetAllExpired([FromQuery] string? tag = null)
     {
-        var response = await pollService.GetExpiredPolls();
+        var response = await pollService.GetExpiredPolls(tag);
         return Ok(response);
     }
     

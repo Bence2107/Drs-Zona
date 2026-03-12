@@ -3,6 +3,14 @@
   height: 100%;
 }
 
+.header-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 16px;
+}
+
 .poll-preview-card {
   height: 100%;
   display: flex;
@@ -36,10 +44,13 @@
 }
 
 .card-status-bar {
-  height: 4px;
+  height: 6px;
   width: 100%;
-  background: var(--secondary-bg);
-  &.active { background: linear-gradient(90deg, var(--accent-color), #b41130); }
+  background: #e74c3c;
+
+  &.active {
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
+  }
 }
 
 .poll-icon {
@@ -89,11 +100,15 @@
   gap: 6px;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #2ecc71; // Zöld, ha aktív
+  color: #2ecc71;
 
   mat-icon { font-size: 18px; width: 18px; height: 18px; }
 
   &.warn { color: #e74c3c; }
+}
+
+.time-info.warn {
+  color: #e74c3c !important;
 }
 
 .action-hint {
@@ -106,4 +121,25 @@
   transition: all 0.2s ease;
 
   mat-icon { font-size: 20px; }
+}
+
+.series-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75em;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  color: white;
+  width: fit-content;
+  letter-spacing: 0.5px;
+
+  &.tag-F1 { background-color: #ed2449; }
+  &.tag-F2 { background-color: #00bfff; }
+  &.tag-WEC { background-color: #003399; }
+  &.tag-Nascar {
+    background-color: #ffcc00;
+    color: #1a1a1a;
+  }
 }

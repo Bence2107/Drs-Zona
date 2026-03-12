@@ -10,11 +10,13 @@ import { RequestBuilder } from '../../request-builder';
 import { PollListDto } from '../../models/poll-list-dto';
 
 export interface ApiPollGetAllExpiredGet$Plain$Params {
+  tag?: string;
 }
 
 export function apiPollGetAllExpiredGet$Plain(http: HttpClient, rootUrl: string, params?: ApiPollGetAllExpiredGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PollListDto>>> {
   const rb = new RequestBuilder(rootUrl, apiPollGetAllExpiredGet$Plain.PATH, 'get');
   if (params) {
+    rb.query('tag', params.tag, {});
   }
 
   return http.request(

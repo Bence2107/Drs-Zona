@@ -9,6 +9,7 @@ public record PollCreateDto(
     [Required(ErrorMessage = "A Leírás közelező")]
     [StringLength(500, MinimumLength = 10, ErrorMessage = "A leírás 10 és 500 karakter között kell legyen")]
     string Description,
+    string Tag,
     [Required(ErrorMessage = "A lejárat dátuma kötelező")]
     DateTime ExpiresAt,
     [Required(ErrorMessage = "Az opciók megadása kötelező")]
@@ -41,6 +42,7 @@ public record PollListDto(
     [Required] Guid Id,
     string Title,
     string Description,
+    string Tag,
     DateTime ExpiresAt
 );
 
@@ -49,6 +51,7 @@ public record PollDto(
     [Required] Guid? AuthorId,
     string AuthorName,
     string Title,
+    string Tag,
     string Description,
     DateTime CreatedAt,
     DateTime ExpiresAt,

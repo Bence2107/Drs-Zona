@@ -5,5 +5,6 @@ export interface PollListDto {
   description?: string | null;
   expiresAt?: string;
   id?: string;
+  tag?: string | null;
   title?: string | null;
 }

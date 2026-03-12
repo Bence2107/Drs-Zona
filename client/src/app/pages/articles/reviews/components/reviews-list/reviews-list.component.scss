@@ -192,6 +192,27 @@ mat-paginator {
   }
 }
 
+.series-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75em;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  color: white;
+  width: fit-content;
+  letter-spacing: 0.5px;
+
+  &.tag-F1 { background-color: #ed2449; }
+  &.tag-F2 { background-color: #00bfff; }
+  &.tag-WEC { background-color: #003399; }
+  &.tag-Nascar {
+    background-color: #ffcc00;
+    color: #1a1a1a;
+  }
+}
+
 @keyframes fadeIn {
   from { opacity: 0.3; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }

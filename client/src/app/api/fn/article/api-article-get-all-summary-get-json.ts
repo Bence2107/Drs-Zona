@@ -12,6 +12,7 @@ import { ArticleListDtoPagedResult } from '../../models/article-list-dto-paged-r
 export interface ApiArticleGetAllSummaryGet$Json$Params {
   page?: number;
   pageSize?: number;
+  tag?: string;
 }
 
 export function apiArticleGetAllSummaryGet$Json(http: HttpClient, rootUrl: string, params?: ApiArticleGetAllSummaryGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<ArticleListDtoPagedResult>> {
@@ -19,6 +20,7 @@ export function apiArticleGetAllSummaryGet$Json(http: HttpClient, rootUrl: strin
   if (params) {
     rb.query('page', params.page, {});
     rb.query('pageSize', params.pageSize, {});
+    rb.query('tag', params.tag, {});
   }
 
   return http.request(

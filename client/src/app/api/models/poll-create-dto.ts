@@ -5,5 +5,6 @@ export interface PollCreateDto {
   description?: string | null;
   expiresAt?: string;
   options?: Array<string> | null;
+  tag?: string | null;
   title?: string | null;
 }

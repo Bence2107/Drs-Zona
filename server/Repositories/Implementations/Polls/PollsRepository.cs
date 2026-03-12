@@ -11,17 +11,30 @@ public class PollsRepository(EfContext context) : IPollsRepository
     
     public Task<Poll?> GetPollById(Guid id) => _polls.FirstOrDefaultAsync(p => p.Id == id);
 
-    public Task<List<Poll>> GetAll() =>  _polls.ToListAsync();
+    public Task<List<Poll>> GetAll(string? tag = null) => 
+        _polls
+            .Where(p => tag == null || p.Tag == tag)
+            .ToListAsync();
 
+    public async Task<List<Poll>> GetActive(string? tag = null) => 
+        await _polls
+            .Where(p => p.IsActive && (tag == null || p.Tag == tag))
+            .ToListAsync();
+
+    public async Task<List<Poll>> GetExpired(string? tag = null) => 
+        await _polls
+            .Where(p => p.ExpiresAt < DateTime.Now && (tag == null || p.Tag == tag))
+            .OrderBy(p => p.ExpiresAt)
+            .ToListAsync();
+
+    public async Task<List<Poll>> GetByCreatorId(Guid authorId, string? tag = null) => 
+        await _polls
+            .Where(p => p.AuthorId == authorId && (tag == null || p.Tag == tag))
+            .ToListAsync();
+    
     public async Task Add(Poll poll)
     {
         _polls.Add(poll);
-        await context.SaveChangesAsync();
-    }
-
-    public async Task Modify(Poll poll)
-    {
-        _polls.Update(poll);
         await context.SaveChangesAsync();
     }
 
@@ -37,20 +50,7 @@ public class PollsRepository(EfContext context) : IPollsRepository
     public async Task<Poll?> GetByIdWithAuthor(Guid id) => await _polls
         .Include(p => p.Author)
         .FirstOrDefaultAsync(p => p.Id == id);
-
-    public async Task<List<Poll>> GetActive() => await _polls
-        .Where(p => p.IsActive)
-        .ToListAsync();
     
-
-    public async Task<List<Poll>> GetByCreatorId(Guid authorId) => await _polls
-        .Where(poll => poll.AuthorId == authorId)
-        .ToListAsync();
-    
-
-    public async Task<List<Poll>> GetExpired() => await _polls
-        .Where(poll => poll.ExpiresAt < DateTime.Now)
-        .ToListAsync();
     
     public async Task<bool> CheckIfIdExists(Guid id) => await _polls.AnyAsync(p => p.Id == id);
 }

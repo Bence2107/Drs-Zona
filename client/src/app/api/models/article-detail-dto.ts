@@ -19,6 +19,7 @@ export interface ArticleDetailDto {
   primaryImageUrl?: string | null;
   secondaryImageUrl?: string | null;
   slug?: string | null;
+  tag?: string | null;
   thirdImageUrl?: string | null;
   title?: string | null;
 }

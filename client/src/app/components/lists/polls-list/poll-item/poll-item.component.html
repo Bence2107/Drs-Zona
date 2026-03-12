@@ -1,16 +1,20 @@
-<mat-card class="poll-preview-card" shadow-sm>
+<mat-card class="poll-preview-card" [class.is-expired]="isExpired">
+  <div class="card-status-bar" [class.active]="!isExpired"></div>
+
   <mat-card-header>
-    <mat-card-title class="poll-title"><h3>{{ poll?.title }}</h3></mat-card-title>
+    <div class="header-container">
+      @if (poll?.tag) {
+        <span class="series-tag tag-{{ poll?.tag }}">
+          {{ poll?.tag }}
+        </span>
+      }
+      <mat-card-title class="poll-title">
+        <h3>{{ poll?.title }}</h3>
+      </mat-card-title>
+    </div>
   </mat-card-header>
 
   <mat-card-content>
     <p class="poll-description">{{ poll?.description }}</p>
   </mat-card-content>
-
-  <mat-card-footer class="poll-footer">
-    <div class="expiration-info">
-      <mat-icon inline>timer</mat-icon>
-      <span>Lejárat: {{ poll?.expiresAt | date:'yyyy.MM.dd HH:mm' }}</span>
-    </div>
-  </mat-card-footer>
 </mat-card>

@@ -4,7 +4,6 @@ import { PollListDto } from '../../../../api/models/poll-list-dto';
 import { MatCardModule } from '@angular/material/card';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-poll-item',
@@ -14,7 +13,6 @@ import {MatIcon} from '@angular/material/icon';
     MatCardModule,
     MatRadioModule,
     MatProgressBarModule,
-    MatIcon
   ],
   templateUrl: './poll-item.component.html',
   styleUrl: './poll-item.component.scss',
@@ -33,14 +31,9 @@ export class PollItemComponent implements OnInit {
     }
   }
 
-  selectOption(option: any) {
-    if (this.isExpired || !this.poll) return;
-
-    if (option.isUserChoice) {
-      this.voteRemoved.emit(option.id);
-    } else {
-      this.voteSubmitted.emit(option.id);
-    }
+  get IsExpired(): boolean {
+    if (!this.poll?.expiresAt) return false;
+    return new Date(this.poll.expiresAt) < new Date();
   }
 
   private updateExpirationStatus() {
@@ -64,4 +57,6 @@ export class PollItemComponent implements OnInit {
     if (diffMins > 0) return `${diffMins} minute${diffMins > 1 ? 's' : ''} left`;
     return 'Expires soon';
   }
+
+
 }

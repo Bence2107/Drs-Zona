@@ -21,16 +21,16 @@ import {PollCreateDto} from '../api/models/poll-create-dto';
 export class PollService {
   constructor(private http: HttpClient, private apiConfig: ApiConfiguration) {}
 
-  getAllActive(): Observable<PollListDto[]> {
-    return apiPollGetAllActiveGet$Json(this.http, this.apiConfig.rootUrl).pipe(
+  getAllActive(tag: string | undefined): Observable<PollListDto[]> {
+    return apiPollGetAllActiveGet$Json(this.http, this.apiConfig.rootUrl, {tag: tag}).pipe(
       map(response => {
         const body = response.body as any;
         return body.value as PollListDto[] ?? []
       })
     )
   }
-  getPollsByUser(id: string): Observable<PollListDto[]> {
-    return apiPollGetByCreatorIdIdGet$Json(this.http, this.apiConfig.rootUrl, {id: id }).pipe(
+  getPollsByUser(id: string, tag: string | undefined): Observable<PollListDto[]> {
+    return apiPollGetByCreatorIdIdGet$Json(this.http, this.apiConfig.rootUrl, {id: id, tag: tag }).pipe(
       map(response => {
         return response.body as PollListDto[];
 
@@ -54,7 +54,7 @@ export class PollService {
 
   createPoll(dto: PollCreateDto, userId: string) {
     return apiPollCreateUserIdPost(this.http, this.apiConfig.rootUrl, {body: dto, userId: userId}).pipe(
-      map(response => void 0)
+      map(() => void 0)
     );
   }
 

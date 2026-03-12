@@ -8,5 +8,6 @@ export interface ArticleListDto {
   lead?: string | null;
   primaryImageUrl?: string | null;
   slug?: string | null;
+  tag?: string | null;
   title?: string | null;
 }

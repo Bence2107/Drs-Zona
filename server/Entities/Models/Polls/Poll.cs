@@ -21,6 +21,10 @@ public class Poll
     public required string Title { get; set; }
     
     [Required]
+    [Column("tag")]
+    public required string Tag { get; set; }
+    
+    [Required]
     [Column("description")]
     public required string Description { get; set; }
     

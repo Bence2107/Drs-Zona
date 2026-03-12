@@ -19,9 +19,14 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
         .Include(article => article.GrandPrix)
         .FirstOrDefaultAsync(article => article.Slug == slug);
 
-    public async Task<(List<Article> Items, int TotalCount)> GetPagedArticles(int page, int pageSize)
+    public async Task<(List<Article> Items, int TotalCount)> GetPagedArticles(int page, int pageSize, string? tag)
     {
         var query = _articles.Where(a => a.IsSummary != true);
+
+        if (!string.IsNullOrEmpty(tag))
+        {
+            query = query.Where(a => a.Tag == tag);
+        }
 
         var totalCount = await query.CountAsync();
         
@@ -34,10 +39,15 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
         return (items, totalCount);
     }
     
-    public async Task<(List<Article> Items, int TotalCount)> GetPagedReviews(int page, int pageSize)
+    public async Task<(List<Article> Items, int TotalCount)> GetPagedReviews(int page, int pageSize, string? tag)
     {
         var query = _articles.Where(a => a.IsSummary == true);
 
+        if (!string.IsNullOrEmpty(tag))
+        {
+            query = query.Where(a => a.Tag == tag);
+        }
+        
         var totalCount = await query.CountAsync();
         
         var items = await query
@@ -84,10 +94,19 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
         .Include(article => article.GrandPrix)
         .FirstOrDefaultAsync(article => article.Id == id);
 
-    public async Task<List<Article>> GetRecentNews(int count) => await _articles
-        .Include(a => a.Author)
-        .Where(a => a.IsSummary != true)
-        .OrderByDescending(a => a.DatePublished)
-        .Take(count)
-        .ToListAsync();
+    public async Task<List<Article>> GetRecentNews(int count, string? tag = null)
+    {
+        var articles = await _articles
+            .Include(a => a.Author)
+            .Where(a => a.IsSummary != true)
+            .OrderByDescending(a => a.DatePublished)
+            .ToListAsync();
+        
+        if (!string.IsNullOrEmpty(tag))
+        {
+            articles = articles.Where(t => t.Tag == tag).ToList();
+        }
+        
+        return articles.Take(count).ToList();
+    } 
 }

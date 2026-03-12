@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import { DatePipe } from "@angular/common";
+import {DatePipe, NgClass} from "@angular/common";
 import {ErrorDisplayComponent} from "../../../../../components/error-display/error-display.component";
 import {MatCard, MatCardContent, MatCardImage} from "@angular/material/card";
 import {MatProgressBar} from "@angular/material/progress-bar";
@@ -25,7 +25,8 @@ import {MatPaginator, PageEvent} from '@angular/material/paginator';
     MatFabButton,
     MatIcon,
     MatTooltip,
-    MatPaginator
+    MatPaginator,
+    NgClass
   ],
   templateUrl: './reviews-list.component.html',
   styleUrl: './reviews-list.component.scss'
@@ -49,7 +50,7 @@ export class ReviewsListComponent implements OnInit {
     this.isLoading = true;
     this.errorOccurred = false;
 
-    this.articleService.getAllSummary(this.pageIndex, this.pageSize).subscribe({
+    this.articleService.getAllSummary(this.pageIndex, this.pageSize, undefined).subscribe({
       next: (data) => {
         this.reviews = data.items!;
         this.totalElements = data.totalCount!;

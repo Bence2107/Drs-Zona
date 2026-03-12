@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {PollService} from '../../../../services/poll.service';
 import {
@@ -14,6 +14,9 @@ import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {PollCreateDto} from '../../../../api/models/poll-create-dto';
 import {AuthService} from '../../../../services/auth.service';
+import {SeriesListDto} from '../../../../api/models/series-list-dto';
+import {SeriesService} from '../../../../services/series.service';
+import {MatOption, MatSelect} from '@angular/material/select';
 
 @Component({
   selector: 'app-poll-add-dialog',
@@ -34,23 +37,28 @@ import {AuthService} from '../../../../services/auth.service';
     MatButton,
     MatDialogClose,
     ReactiveFormsModule,
-    MatHint
+    MatHint,
+    MatSelect,
+    MatOption
   ],
   templateUrl: './poll-add-dialog.component.html',
   styleUrl: './poll-add-dialog.component.scss',
 })
-export class PollAddDialogComponent {
+export class PollAddDialogComponent implements OnInit {
   pollForm: FormGroup;
   minDate = new Date();
+  series: SeriesListDto[] = [];
 
   constructor(
     private fb: FormBuilder,
     private pollService: PollService,
     private authService: AuthService,
+    private seriesService: SeriesService,
     private dialogRef: MatDialogRef<PollAddDialogComponent>
   ) {
     this.pollForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]],
+      tag: ['', [Validators.required]],
       description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
       expiresAt: [null, [Validators.required]],
       options: this.fb.array([
@@ -58,6 +66,10 @@ export class PollAddDialogComponent {
         this.fb.control('', [Validators.required, Validators.minLength(2)])
       ])
     });
+  }
+
+  ngOnInit(): void {
+    this.seriesService.getSeriesList().subscribe(data => this.series = data);
   }
 
   get options() {
@@ -82,6 +94,7 @@ export class PollAddDialogComponent {
     if (this.pollForm.valid && userId) {
       const pollDto: PollCreateDto = {
         title: this.pollForm.value.title,
+        tag: this.pollForm.value.tag,
         description: this.pollForm.value.description,
         expiresAt: new Date(this.pollForm.value.expiresAt).toISOString(),
         options: this.pollForm.value.options

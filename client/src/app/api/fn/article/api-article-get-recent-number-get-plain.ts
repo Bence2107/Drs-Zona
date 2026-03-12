@@ -11,12 +11,14 @@ import { ArticleListDto } from '../../models/article-list-dto';
 
 export interface ApiArticleGetRecentNumberGet$Plain$Params {
   number: number;
+  tag?: string;
 }
 
 export function apiArticleGetRecentNumberGet$Plain(http: HttpClient, rootUrl: string, params: ApiArticleGetRecentNumberGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ArticleListDto>>> {
   const rb = new RequestBuilder(rootUrl, apiArticleGetRecentNumberGet$Plain.PATH, 'get');
   if (params) {
     rb.path('number', params.number, {});
+    rb.query('tag', params.tag, {});
   }
 
   return http.request(
