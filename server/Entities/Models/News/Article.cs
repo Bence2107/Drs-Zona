@@ -39,6 +39,10 @@ public class Article
     public required string Slug { get; set; }
     
     [Required]
+    [Column("tag")]
+    public required string Tag { get; set; }
+    
+    [Required]
     [Column("first_section")]
     public required string FirstSection { get; set; }
     

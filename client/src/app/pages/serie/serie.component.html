@@ -1,0 +1,41 @@
+<main>
+  <div class="content-container">
+    @if (isLoading && !errorOccurred) {
+      <div class="loading-container">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <h3>{{ seriesDetail?.shortName || 'Széria' }} adatok betöltése...</h3>
+      </div>
+    }
+    @else if (errorOccurred) {
+      <app-error-display (retry)="ngOnInit()"></app-error-display>
+    }
+    @else {
+        <h2>Aktuális {{ seriesDetail?.shortName }} szavazások:</h2>
+        <app-poll-list [polls]="polls"></app-poll-list>
+
+      <h2>Friss hírek ({{ seriesDetail?.shortName }}):</h2>
+      <app-recent-news-list [articles]="articles"></app-recent-news-list>
+
+      <mat-card class="outer-card">
+        <mat-card class="inner-card">
+          <mat-card-header>
+            <mat-card-title>
+              <h1>Minden a {{ seriesDetail?.name }} világáról</h1>
+            </mat-card-title>
+          </mat-card-header>
+
+          @if (seriesDetail?.shortName) {
+            <img mat-card-image
+                 [src]="'img/series/' + seriesDetail?.shortName?.toLowerCase() + '.jpg'"
+                 [alt]="seriesDetail?.name">
+          }
+
+          <mat-card-content>
+            <p>{{ seriesDetail?.description }}</p>
+            <h3 class="join-us">Kövess velünk minden {{ seriesDetail?.shortName }} eseményt!</h3>
+          </mat-card-content>
+        </mat-card>
+      </mat-card>
+    }
+  </div>
+</main>

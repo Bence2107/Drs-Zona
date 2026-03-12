@@ -10,11 +10,13 @@ import { RequestBuilder } from '../../request-builder';
 import { PollListDto } from '../../models/poll-list-dto';
 
 export interface ApiPollGetAllGet$Json$Params {
+  tag?: string;
 }
 
 export function apiPollGetAllGet$Json(http: HttpClient, rootUrl: string, params?: ApiPollGetAllGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PollListDto>>> {
   const rb = new RequestBuilder(rootUrl, apiPollGetAllGet$Json.PATH, 'get');
   if (params) {
+    rb.query('tag', params.tag, {});
   }
 
   return http.request(

@@ -30,6 +30,7 @@ public class SeriesService(
         return ResponseResult<SeriesDetailDto>.Success(new SeriesDetailDto(
             Id: series.Id,
             Name: series.Name,
+            ShortName: series.ShortName,
             Description: series.Description,
             GoverningBody: series.GoverningBody,
             FirstYear: series.FirstYear,
@@ -57,6 +58,7 @@ public class SeriesService(
         return ResponseResult<SeriesDetailDto>.Success(new SeriesDetailDto(
             Id: series.Id,
             Name: series.Name,
+            ShortName: series.ShortName,
             Description: series.Description,
             GoverningBody: series.GoverningBody,
             FirstYear: series.FirstYear,

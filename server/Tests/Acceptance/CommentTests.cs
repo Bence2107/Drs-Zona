@@ -246,7 +246,8 @@ public class CommentTests
         Id = Guid.NewGuid(),
         Title = "Article",
         Slug = "article",
-        Lead = "Lead",
+        Lead = "Lead",            
+        Tag = "F1",
         FirstSection = "First",
         LastSection = "Last"
     };

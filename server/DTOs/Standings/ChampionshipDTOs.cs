@@ -79,6 +79,7 @@ public record SeriesUpdateDto(
 public record SeriesDetailDto(
     [Required] Guid Id,
     [Required] [StringLength(100)] string Name,
+    [Required] [StringLength(100)] string ShortName,
     [Required] [StringLength(200)] string Description,
     [Required] [StringLength(100)] string GoverningBody,
     [Required] int FirstYear,

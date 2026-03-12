@@ -13,6 +13,7 @@ export interface PollDto {
   isActive?: boolean;
   isExpired?: boolean;
   pollOptions?: Array<PollOptionDto> | null;
+  tag?: string | null;
   title?: string | null;
   totalVotes?: number;
   userVoteOptionId?: string | null;

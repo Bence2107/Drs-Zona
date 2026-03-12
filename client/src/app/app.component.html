@@ -87,7 +87,7 @@
 
           <ul class="nav-list inner-list">
             @for(serie of seriesList; track serie) {
-              <li [routerLink]="serie.shortName" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+              <li [routerLink]="['serie', serie.shortName]" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
               <img [src]="'img/header/icons/' + serie.shortName?.toLowerCase() + '.png'" class="sidenav_icon" [alt]="serie.shortName?.toLowerCase()">
               <a>{{serie.shortName}}</a>
             }

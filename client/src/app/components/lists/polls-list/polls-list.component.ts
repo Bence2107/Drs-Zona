@@ -61,7 +61,7 @@ export class PollListComponent {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.pollService.getAllActive().subscribe(data => this.polls = data);
+          this.pollService.getAllActive(undefined).subscribe(data => this.polls = data);
         }
       });
   }

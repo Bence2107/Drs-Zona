@@ -36,6 +36,7 @@ public class ArticleService(
             Title: article.Title,
             Lead: article.Lead,
             Slug: article.Slug,
+            Tag: article.Tag,
             IsReview: article.IsSummary,
             FirstSection: article.FirstSection,
             LastSection: article.LastSection,
@@ -53,6 +54,7 @@ public class ArticleService(
             AuthorImageUrl: await userImageService.GetAvatarUrl(article.AuthorId)
         ));
     }
+    
     public async Task<ResponseResult<ArticleDetailDto>> GetArticleBySlug(string slug)
     {
         var article = await articleRepo.GetArticleBySlug(slug);
@@ -72,6 +74,7 @@ public class ArticleService(
             Title: article.Title,
             Lead: article.Lead,
             Slug: article.Slug,
+            Tag: article.Tag,
             IsReview: article.IsSummary,
             FirstSection: article.FirstSection,
             LastSection: article.LastSection,
@@ -90,14 +93,15 @@ public class ArticleService(
         ));
     }
 
-    public async Task<ResponseResult<PagedResult<ArticleListDto>>> ListArticles(int page, int pageSize)
+    public async Task<ResponseResult<PagedResult<ArticleListDto>>> ListArticles(int page, int pageSize, string? tag = null)
     {
-        var (articles, totalCount) = await articleRepo.GetPagedArticles(page, pageSize);      
+        var (articles, totalCount) = await articleRepo.GetPagedArticles(page, pageSize, tag);      
         
         var dtoS = articles.Select(a => new ArticleListDto(
                 Id: a.Id,
                 Title: a.Title,
                 Lead: a.Lead,
+                Tag: a.Tag,
                 IsReview: a.IsSummary,
                 Slug: a.Slug,
                 DatePublished: a.DatePublished,
@@ -117,14 +121,15 @@ public class ArticleService(
         return ResponseResult<PagedResult<ArticleListDto>>.Success(result);
     }
     
-    public async Task<ResponseResult<PagedResult<ArticleListDto>>> ListAllSummary(int page, int pageSize)
+    public async Task<ResponseResult<PagedResult<ArticleListDto>>> ListAllSummary(int page, int pageSize, string? tag = null)
     {
-        var (articles, totalCount) = await articleRepo.GetPagedReviews(page, pageSize);      
+        var (articles, totalCount) = await articleRepo.GetPagedReviews(page, pageSize, tag);      
         
         var dtoS = articles.Select(a => new ArticleListDto(
                 Id: a.Id,
                 Title: a.Title,
                 Lead: a.Lead,
+                Tag: a.Tag,
                 IsReview: a.IsSummary,
                 Slug: a.Slug,
                 DatePublished: a.DatePublished,
@@ -144,14 +149,15 @@ public class ArticleService(
         return ResponseResult<PagedResult<ArticleListDto>>.Success(result);
     }
 
-    public async Task<ResponseResult<List<ArticleListDto>>> GetRecentArticles(int count)
+    public async Task<ResponseResult<List<ArticleListDto>>> GetRecentArticles(int count, string? tag = null)
     {
-        var articles = await articleRepo.GetRecentNews(count);
+        var articles = await articleRepo.GetRecentNews(count, tag);
         
         var dtoS = articles.Select(a => new ArticleListDto(
                 Id: a.Id,
                 Title: a.Title,
                 Lead: a.Lead,
+                Tag: a.Tag,
                 IsReview: a.IsSummary,
                 Slug: a.Slug,
                 DatePublished: a.DatePublished,
@@ -175,6 +181,7 @@ public class ArticleService(
         {
             Title = dto.Title,
             Lead = dto.Lead,
+            Tag = dto.Tag,
             Slug = dto.Slug,
             IsSummary = dto.IsReview,
             FirstSection = dto.FirstSection,

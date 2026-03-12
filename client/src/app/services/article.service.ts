@@ -22,8 +22,8 @@ export class ArticleService {
 
   constructor(private http: HttpClient, private apiConfig: ApiConfiguration) { }
 
-  getAllArticles(page: number, pageSize:number) : Observable<ArticleListDtoPagedResult> {
-    return apiArticleGetAllArticlesGet$Json(this.http, this.apiConfig.rootUrl, {page: page, pageSize: pageSize}).pipe(
+  getAllArticles(page: number, pageSize:number, tag: string | undefined) : Observable<ArticleListDtoPagedResult> {
+    return apiArticleGetAllArticlesGet$Json(this.http, this.apiConfig.rootUrl, {page: page, pageSize: pageSize, tag: tag}).pipe(
       map(response => {
         const body = response.body as any;
         return body.value as ArticleListDtoPagedResult
@@ -31,8 +31,8 @@ export class ArticleService {
     )
   }
 
-  getAllSummary(page: number, pageSize:number) : Observable<ArticleListDtoPagedResult> {
-    return apiArticleGetAllSummaryGet$Json(this.http, this.apiConfig.rootUrl, {page: page, pageSize: pageSize}).pipe(
+  getAllSummary(page: number, pageSize:number, tag: string | undefined) : Observable<ArticleListDtoPagedResult> {
+    return apiArticleGetAllSummaryGet$Json(this.http, this.apiConfig.rootUrl, {page: page, pageSize: pageSize, tag: tag}).pipe(
       map(response => {
         const body = response.body as any;
         return body.value as ArticleListDtoPagedResult
@@ -40,8 +40,8 @@ export class ArticleService {
     )
   }
 
-  getRecent(count: number): Observable<ArticleListDto[]> {
-    return apiArticleGetRecentNumberGet$Json(this.http, this.apiConfig.rootUrl, { number: count }).pipe(
+  getRecent(count: number, tag: string | undefined): Observable<ArticleListDto[]> {
+    return apiArticleGetRecentNumberGet$Json(this.http, this.apiConfig.rootUrl, { number: count, tag: tag }).pipe(
       map(response => {
         const body = response.body as any;
         return body.value as ArticleListDto[] ?? [];

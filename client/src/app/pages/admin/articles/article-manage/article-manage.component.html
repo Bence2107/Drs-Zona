@@ -24,6 +24,18 @@
 
           <section class="form-section">
             <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Kategória / Széria</mat-label>
+              <mat-select formControlName="tag">
+                @for (s of series; track s.id) {
+                  <mat-option [value]="s.shortName">{{s.name}}</mat-option>
+                }
+              </mat-select>
+              @if (articleForm.get('tag')?.invalid && articleForm.get('tag')?.touched) {
+                <mat-error>A kategória kiválasztása kötelező</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
               <mat-label>Cikk címe</mat-label>
               <input matInput formControlName="title" />
             </mat-form-field>

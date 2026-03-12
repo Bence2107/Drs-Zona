@@ -11,5 +11,6 @@ export interface ArticleCreateDto {
   lead?: string | null;
   slug?: string | null;
   summary?: SummaryDto;
+  tag?: string | null;
   title?: string | null;
 }

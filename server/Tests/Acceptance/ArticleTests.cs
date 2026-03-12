@@ -80,6 +80,7 @@ public class ArticleTests
             Id = Guid.NewGuid(),
             Title = "F1 at Hungaroring",
             Slug = testSlug,
+            Tag = "F1",
             Lead = "The traveling circus arrives at Hungaroring in June",
             FirstSection = "This is the start of the full content...",
             LastSection = "This is the final section of the content",
@@ -133,6 +134,7 @@ public class ArticleTests
                 IsSummary = false,
                 Slug = "old",
                 Lead = "lead",
+                Tag = "F1",
                 FirstSection = "First",
                 LastSection = "Last"
             },
@@ -142,6 +144,7 @@ public class ArticleTests
                 Title = "Latest",
                 DatePublished = now,
                 IsSummary = false,
+                Tag = "F1",
                 Slug = "latest",
                 Lead = "latest lead",
                 FirstSection = "First",
@@ -153,7 +156,8 @@ public class ArticleTests
                 Title = "Yesterday",
                 DatePublished = now.AddDays(-1),
                 IsSummary = false,
-                Slug = "yesterday",
+                Slug = "yesterday",     
+                Tag = "F1",
                 Lead = "lead",
                 FirstSection = "first",
                 LastSection = "last"
@@ -240,7 +244,7 @@ public class ArticleTests
     [Fact]
     public async Task CreateArticle_ShouldFail_WhenAuthorNotFound()
     {
-        var dto = new ArticleCreateDto(Guid.NewGuid(), Guid.NewGuid(), "T", "S", false, "L", "F", "L", null);
+        var dto = new ArticleCreateDto(Guid.NewGuid(), Guid.NewGuid(), "T", "S", "F1",false, "L", "F", "L", null);
 
         var result = await _service.CreateArticle(dto);
 
@@ -277,6 +281,7 @@ public class ArticleTests
         Title = "Article",
         Slug = Guid.NewGuid().ToString(),
         Lead = "Lead",
+        Tag = "F1",
         FirstSection = "First",
         LastSection = "Last",
         Author = author,

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardImage} from '@angular/material/card';
-import { DatePipe } from '@angular/common';
+import {DatePipe, NgClass} from '@angular/common';
 import {ErrorDisplayComponent} from '../../../../../components/error-display/error-display.component';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {ArticleListDto} from '../../../../../api/models/article-list-dto';
@@ -25,7 +25,8 @@ import {MatPaginator, PageEvent} from '@angular/material/paginator';
     MatFabButton,
     MatIcon,
     MatTooltip,
-    MatPaginator
+    MatPaginator,
+    NgClass
   ],
   templateUrl: './news-list.component.html',
   styleUrl: './news-list.component.scss'
@@ -57,7 +58,7 @@ export class NewsListComponent implements OnInit {
     this.isLoading = true;
     this.errorOccurred = false;
 
-    this.articleService.getAllArticles(this.pageIndex, this.pageSize).subscribe({
+    this.articleService.getAllArticles(this.pageIndex, this.pageSize, undefined).subscribe({
       next: (data) => {
         this.articles = data.items!;
         this.totalElements = data.totalCount!;

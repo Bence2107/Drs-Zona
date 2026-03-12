@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatFormField, MatHint, MatInput, MatLabel} from '@angular/material/input';
+import {MatError, MatFormField, MatHint, MatInput, MatLabel} from '@angular/material/input';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton} from '@angular/material/button';
@@ -18,11 +18,15 @@ import {AuthService} from '../../../../services/auth.service';
 import {switchMap} from 'rxjs';
 import {ArticleUpdateDto} from '../../../../api/models/article-update-dto';
 import {ArticleDetailDto} from '../../../../api/models/article-detail-dto';
+import {SeriesListDto} from '../../../../api/models/series-list-dto';
+import {SeriesService} from '../../../../services/series.service';
+import {MatOption, MatSelect} from '@angular/material/select';
 
 interface ArticleForm {
   title: FormControl<string>;
   lead: FormControl<string>;
   slug: FormControl<string>;
+  tag: FormControl<string>;
   authorId: FormControl<string>;
   grandPrixId: FormControl<string | null>;
   isReview: FormControl<boolean>;
@@ -49,7 +53,10 @@ interface ArticleForm {
     MatButton,
     MatProgressSpinner,
     AngularEditorModule,
-    MatHint
+    MatHint,
+    MatSelect,
+    MatOption,
+    MatError
   ],
   templateUrl: './article-manage.component.html',
   styleUrl: './article-manage.component.scss',
@@ -59,6 +66,8 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
   articleForm!: FormGroup<ArticleForm>;
   isLoading = false;
   errorMessage = '';
+
+  series: SeriesListDto[] = [];
   private isSubmitted = false;
 
   get isReview(): boolean {
@@ -77,10 +86,13 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
     private imageService: ArticleImageService,
     private authService: AuthService,
     private articleService: ArticleService,
+    private seriesService: SeriesService
   ) {
   }
 
   ngOnInit(): void {
+    this.seriesService.getSeriesList().subscribe(data => this.series = data);
+
     this.initEmptyForm();
 
     const slug = this.route.snapshot.paramMap.get('slug');
@@ -117,6 +129,7 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
       title: this.fb.nonNullable.control(''),
       lead: this.fb.nonNullable.control(''),
       slug: this.fb.nonNullable.control(''),
+      tag: this.fb.nonNullable.control<string>(''),
       authorId: this.fb.nonNullable.control('admin'),
       grandPrixId: this.fb.control(null),
       isReview: this.fb.nonNullable.control(false),
@@ -245,6 +258,7 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
       title: raw.title,
       lead: raw.lead,
       slug: raw.slug,
+      tag: raw.tag,
       authorId: userId,
       grandPrixId: raw.grandPrixId || null,
       isReview: raw.isReview,

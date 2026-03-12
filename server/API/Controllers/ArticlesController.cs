@@ -42,23 +42,23 @@ public class ArticleController(IArticleService articleService): ControllerBase
     }
     
     [HttpGet("getAllArticles")]
-    public async Task<ActionResult<PagedResult<ArticleListDto>>> GetAllArticles(int page, int pageSize)
+    public async Task<ActionResult<PagedResult<ArticleListDto>>> GetAllArticles(int page, int pageSize, string? tag)
     {
-        var response = await articleService.ListArticles(page, pageSize);
+        var response = await articleService.ListArticles(page, pageSize, tag);
         return Ok(response);
     }
     
     [HttpGet("getAllSummary")]
-    public async Task<ActionResult<PagedResult<ArticleListDto>>> GetAllSummary(int page, int pageSize)
+    public async Task<ActionResult<PagedResult<ArticleListDto>>> GetAllSummary(int page, int pageSize, string? tag)
     {
-        var response = await articleService.ListAllSummary(page, pageSize);
+        var response = await articleService.ListAllSummary(page, pageSize, tag);
         return Ok(response);
     }
 
     [HttpGet("getRecent/{number:int}")]
-    public async Task<ActionResult<List<ArticleListDto>>> GetRecent([FromRoute]int number)
+    public async Task<ActionResult<List<ArticleListDto>>> GetRecent([FromRoute]int number, [FromQuery] string? tag)
     {
-        var response  = await articleService.GetRecentArticles(number);
+        var response  = await articleService.GetRecentArticles(number, tag);
         return Ok(response);
     }
     

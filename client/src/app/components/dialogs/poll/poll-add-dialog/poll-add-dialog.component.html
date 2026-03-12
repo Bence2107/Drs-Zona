@@ -1,6 +1,18 @@
 <h2 mat-dialog-title>Új szavazás létrehozása</h2>
 
 <mat-dialog-content [formGroup]="pollForm" class="dialog-container">
+  <mat-form-field appearance="outline" class="narrow-field">
+    <mat-label>Kategória / Széria</mat-label>
+    <mat-select formControlName="tag">
+      @for (s of series; track s.id) {
+        <mat-option [value]="s.shortName">{{s.name}}</mat-option>
+      }
+    </mat-select>
+    @if (pollForm.get('tag')?.invalid && pollForm.get('tag')?.touched) {
+      <mat-error>Válassz egy szériát!</mat-error>
+    }
+  </mat-form-field>
+
 
   <mat-form-field appearance="outline" class="narrow-field">
     <mat-label>Cím</mat-label>

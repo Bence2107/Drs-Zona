@@ -33,14 +33,9 @@ export class PollItemComponent implements OnInit {
     }
   }
 
-  selectOption(option: any) {
-    if (this.isExpired || !this.poll) return;
-
-    if (option.isUserChoice) {
-      this.voteRemoved.emit(option.id);
-    } else {
-      this.voteSubmitted.emit(option.id);
-    }
+  get IsExpired(): boolean {
+    if (!this.poll?.expiresAt) return false;
+    return new Date(this.poll.expiresAt) < new Date();
   }
 
   private updateExpirationStatus() {
@@ -64,4 +59,6 @@ export class PollItemComponent implements OnInit {
     if (diffMins > 0) return `${diffMins} minute${diffMins > 1 ? 's' : ''} left`;
     return 'Expires soon';
   }
+
+
 }

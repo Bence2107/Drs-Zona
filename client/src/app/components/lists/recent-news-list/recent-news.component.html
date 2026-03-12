@@ -10,6 +10,12 @@
         }
 
           <mat-card-content class="text-content">
+            @if (new_item.tag) {
+              <span class="series-tag" [ngClass]="'tag-' + new_item.tag">
+                {{ new_item.tag }}
+              </span>
+            }
+
             <h2 class="news-label">{{ new_item.title }}</h2>
             <p class="news-desc">{{ new_item.lead }}</p>
             <p class="news-date">

@@ -22,7 +22,7 @@ public class PollService(
 
         var options = await pollOptionsRepository.GetByPollId(pollId);
         
-        int totalVotes = 0;
+        var totalVotes = 0;
         foreach (var opt in options)
         {
             totalVotes += await pollVoteRepository.GetVoteCount(opt.Id);
@@ -59,6 +59,7 @@ public class PollService(
             AuthorId: poll.AuthorId,
             AuthorName: poll.Author!.Username,
             Title: poll.Title,
+            Tag: poll.Tag,
             Description: poll.Description,
             CreatedAt: poll.CreatedAt,
             ExpiresAt: poll.ExpiresAt,
@@ -70,12 +71,13 @@ public class PollService(
         ));
     }
 
-    public async Task<ResponseResult<List<PollListDto>>> GetPollByCreatorId(Guid creatorId)
+    public async Task<ResponseResult<List<PollListDto>>> GetPollByCreatorId(Guid creatorId, string? tag = null)
     {
-        var polls = await pollRepository.GetByCreatorId(creatorId);
+        var polls = await pollRepository.GetByCreatorId(creatorId, tag);
         var dto = polls.Select(poll => new PollListDto(
             Id: poll.Id,
             Title: poll.Title,
+            Tag: poll.Tag,
             Description: poll.Description,
             ExpiresAt: poll.ExpiresAt
         )).ToList();
@@ -83,9 +85,9 @@ public class PollService(
         return ResponseResult<List<PollListDto>>.Success(dto);
     }
 
-    public async Task<ResponseResult<List<PollListDto>>> GetActivePolls()
+    public async Task<ResponseResult<List<PollListDto>>> GetActivePolls(string? tag = null)
     {
-        var allActivePolls = await pollRepository.GetActive();
+        var allActivePolls = await pollRepository.GetActive(tag);
         var activePools = allActivePolls
             .Where(p => p.ExpiresAt > DateTime.Now) 
             .ToList();
@@ -93,6 +95,7 @@ public class PollService(
         var dto = activePools.Select(poll => new PollListDto(
             Id: poll.Id,
             Title: poll.Title,
+            Tag: poll.Tag,
             Description: poll.Description,
             ExpiresAt: poll.ExpiresAt
         )).ToList();
@@ -100,12 +103,13 @@ public class PollService(
         return ResponseResult<List<PollListDto>>.Success(dto);
     }
 
-    public async Task<ResponseResult<List<PollListDto>>> GetExpiredPolls()
+    public async Task<ResponseResult<List<PollListDto>>> GetExpiredPolls(string? tag = null)
     {
-        var expiredPolls = await pollRepository.GetExpired();
+        var expiredPolls = await pollRepository.GetExpired(tag);
         var dto = expiredPolls.Select(poll => new PollListDto(
             Id: poll.Id,
             Title: poll.Title,
+            Tag: poll.Tag,
             Description: poll.Description,
             ExpiresAt: poll.ExpiresAt
         )).ToList();
@@ -113,12 +117,13 @@ public class PollService(
         return ResponseResult<List<PollListDto>>.Success(dto);
     }
 
-    public async Task<ResponseResult<List<PollListDto>>> ListAllPolls()
+    public async Task<ResponseResult<List<PollListDto>>> ListAllPolls(string? tag = null)
     {
-        var polls = await pollRepository.GetAll();
+        var polls = await pollRepository.GetAll(tag);
         var dto = polls.Select(poll => new PollListDto(
             Id: poll.Id,
             Title: poll.Title,
+            Tag: poll.Tag,
             Description: poll.Description,
             ExpiresAt: poll.ExpiresAt
         )).ToList();
@@ -128,7 +133,7 @@ public class PollService(
 
     public async Task<ResponseResult<bool>> Create(PollCreateDto dto, Guid? currentUserId = null)
     {
-        if (currentUserId is not null && await userRepository.CheckIfIdExists(currentUserId))
+        if (currentUserId is not null && !await userRepository.CheckIfIdExists(currentUserId))
             return ResponseResult<bool>.Failure("User not found");
 
         await using var transaction = await context.Database.BeginTransactionAsync();
@@ -139,6 +144,7 @@ public class PollService(
             {
                 AuthorId = currentUserId,
                 Title = dto.Title,
+                Tag = dto.Tag,
                 Description = dto.Description.Trim(),
                 CreatedAt = DateTime.UtcNow,
                 ExpiresAt = dto.ExpiresAt,

@@ -34,7 +34,7 @@ public class SeriesRepository(EfContext context) : ISeriesRepository
         await context.SaveChangesAsync();
     }
 
-    public async Task<Series?> GetByName(string name) => await _series.FirstOrDefaultAsync(d => d.Name == name);
+    public async Task<Series?> GetByName(string name) => await _series.FirstOrDefaultAsync(d => d.ShortName == name);
 
     public async Task<bool> CheckIfIdExists(Guid id) => await _series.AnyAsync(d => d.Id == id);
 }

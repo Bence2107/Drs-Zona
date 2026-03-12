@@ -11,12 +11,14 @@ import { PollListDto } from '../../models/poll-list-dto';
 
 export interface ApiPollGetByCreatorIdIdGet$Plain$Params {
   id: string;
+  tag?: string;
 }
 
 export function apiPollGetByCreatorIdIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiPollGetByCreatorIdIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PollListDto>>> {
   const rb = new RequestBuilder(rootUrl, apiPollGetByCreatorIdIdGet$Plain.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
+    rb.query('tag', params.tag, {});
   }
 
   return http.request(

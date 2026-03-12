@@ -16,6 +16,7 @@ import {ContractsComponent} from './pages/admin/results/contracts/contracts.comp
 import {EntryDetailComponent} from './pages/admin/results/entry/entry-detail/entry-detail.component';
 import {EntryCreateComponent} from './pages/admin/results/entry/entry-create/entry-create.component';
 import {ArticleManageComponent} from './pages/admin/articles/article-manage/article-manage.component';
+import {SerieComponent} from './pages/serie/serie.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -24,6 +25,7 @@ export const routes: Routes = [
   { path: "reviews", component: ReviewsComponent },
   { path: "article/:slug", component: ArticleComponent },
   { path: "results", component: ResultsComponent },
+  { path: "serie/:name", component: SerieComponent},
   { path: "admin/results/entry", component:  EntryComponent },
   { path: "admin/championships", component:  ChampionshipsComponent },
   { path: "admin/participations", component:  ParticipationsComponent },

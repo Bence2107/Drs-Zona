@@ -11,6 +11,7 @@ public record ArticleCreateDto(
     string Title,
     [StringLength(200, MinimumLength = 5, ErrorMessage = "A slug hossza nem megfelelő (5-200 karakter)")]
     string Slug,
+    string Tag,
     [Required(ErrorMessage = "Kötelező megadni a hír összefoglaló-e?")]
     bool IsReview,
     [Required(ErrorMessage = "A Lead mező kitöltése kötelező")]
@@ -71,6 +72,7 @@ public record ArticleListDto(
     [StringLength(200, MinimumLength = 5)] string Title,
     [StringLength(500, MinimumLength = 20)]
     string Lead,
+    string Tag,
     bool IsReview,
     [StringLength(200, MinimumLength = 5)] string Slug,
     DateTime DatePublished,
@@ -89,6 +91,7 @@ public record ArticleDetailDto(
     [StringLength(500, MinimumLength = 20)] string Lead,
     [StringLength(200, MinimumLength = 5)] string Slug,
     [Required] bool IsReview,
+    string Tag,
     [MinLength(100)] [MaxLength(524288)] string FirstSection,
     [MinLength(100)] [MaxLength(524288)] string LastSection,
     List<string> MiddleSections,
