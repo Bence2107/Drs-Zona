@@ -4,13 +4,15 @@ namespace DTOs.Standings;
 
 public record SeriesListDto(
     [Required] Guid Id,
-    [Required] [StringLength(100)] string Name
+    [Required] [StringLength(100)] string Name,
+    [Required] [StringLength(10)] string ShortName
 );
 
 public record SeriesCreateDto(
     [Required(ErrorMessage = "Név megadása kötelező")]
     [StringLength(100, ErrorMessage = "A név max 100 karakter")]
     string Name,
+    string ShortName,
     [Required(ErrorMessage = "Leírás megadása kötelező")]
     [StringLength(200, ErrorMessage = "A leírás max 200 karakter")]
     string Description,
@@ -45,6 +47,7 @@ public record SeriesUpdateDto(
     [Required(ErrorMessage = "Név megadása kötelező")]
     [StringLength(100, ErrorMessage = "A név max 100 karakter")]
     string Name,
+    string ShortName,
     [Required(ErrorMessage = "Leírás megadása kötelező")]
     [StringLength(200, ErrorMessage = "A leírás max 200 karakter")]
     string Description,

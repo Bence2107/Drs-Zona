@@ -15,6 +15,10 @@ public class Series
     public required string Name { get; set; }
     
     [Required]
+    [Column("short_name")]
+    public required string ShortName { get; set; }
+    
+    [Required]
     [Column("description")]
     public required string Description { get; set; }
     

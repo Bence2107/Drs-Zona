@@ -69,9 +69,12 @@ public class SeriesService(
     {
         var series = await seriesRepo.GetAllSeries();
         var dto = series.Select(d => new SeriesListDto(
-            Id: d.Id,
-            Name: d.Name)
-        ).ToList();
+                Id: d.Id,
+                Name: d.Name,
+                ShortName: d.ShortName
+            ))
+            .OrderBy(s => s.Name)
+            .ToList();
 
         return ResponseResult<List<SeriesListDto>>.Success(dto);
     }
@@ -87,6 +90,7 @@ public class SeriesService(
         var series = new Series
         {
             Name = dto.Name,
+            ShortName = dto.ShortName,
             Description = dto.Description,
             GoverningBody = dto.GoverningBody,
             FirstYear = dto.FirstYear,
@@ -107,6 +111,7 @@ public class SeriesService(
         {
             Id = dto.Id,
             Name = dto.Name,
+            ShortName = dto.ShortName,
             Description = dto.Description,
             GoverningBody = dto.GoverningBody,
             FirstYear = dto.FirstYear,
