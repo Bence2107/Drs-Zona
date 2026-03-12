@@ -1,35 +1,60 @@
-@if (!isLoading && !errorOccurred) {
+@if (isLoading) {
+  <div class="loading-container">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <h3>Cikkek betöltése...</h3>
+  </div>
+} @else if (errorOccurred) {
+  <app-error-display (retry)="fetchArticles()"></app-error-display>
+} @else if (reviews.length === 0) {
+  <div class="tag-filter">
+    <mat-form-field appearance="outline" class="tag-select">
+      <mat-label>Kategória</mat-label>
+      <mat-select [ngModel]="selectedTag" (ngModelChange)="onTagChange($event)">
+        <mat-option [value]="undefined">Összes</mat-option>
+        @for(serie of seriesList; track serie) {
+          <mat-option [value]="serie.shortName">{{ serie.shortName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="empty-state">
+    <mat-icon>search_off</mat-icon>
+    <p>Nincs találat a kiválasztott kategóriára.</p>
+  </div>
+} @else {
+  <div class="tag-filter">
+    <mat-form-field appearance="outline" class="tag-select">
+      <mat-label>Kategória</mat-label>
+      <mat-select [ngModel]="selectedTag" (ngModelChange)="onTagChange($event)">
+        <mat-option [value]="undefined">Összes</mat-option>
+        @for(serie of seriesList; track serie) {
+          <mat-option [value]="serie.shortName">{{ serie.shortName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
   <div class="reviews-container">
     @for (new_item of reviews; track new_item) {
       <mat-card class="new-item" [routerLink]="['/article', new_item.slug]">
-        @if (new_item?.primaryImageUrl !== null){
-          <img mat-card-image
-               [src]="new_item.primaryImageUrl"
-               [alt]="new_item.title">
+        @if (new_item?.primaryImageUrl !== null) {
+          <img mat-card-image [src]="new_item.primaryImageUrl" [alt]="new_item.title">
         } @else {
           <img mat-card-image [src]="'img/articles/image-not-found.png'" alt="No image">
         }
-          <mat-card-content class="text-content">
-            @if (new_item.tag) {
-              <span class="series-tag" [ngClass]="'tag-' + new_item.tag">
-                {{ new_item.tag }}
-              </span>
-            }
-
-            <h2 class="news-label">{{ new_item.title }}</h2>
-            <p class="news-desc">{{ new_item.lead }}</p>
-            <p class="news-date">
-              {{ new_item.datePublished | date:'yyyy. MMMM d. – HH:mm' }}
-            </p>
-          </mat-card-content>
-        </mat-card>
-      }
-      @if (reviews.length === 0) {
-        <p class="empty-msg">
-          Nem találtunk híreket.
-        </p>
-      }
+        <mat-card-content class="text-content">
+          @if (new_item.tag) {
+            <span class="series-tag" [ngClass]="'tag-' + new_item.tag">{{ new_item.tag }}</span>
+          }
+          <h2 class="news-label">{{ new_item.title }}</h2>
+          <p class="news-desc">{{ new_item.lead }}</p>
+          <p class="news-date">{{ new_item.datePublished | date:'yyyy. MMMM d. – HH:mm' }}</p>
+        </mat-card-content>
+      </mat-card>
+    }
   </div>
+
   <mat-paginator
     [length]="totalElements"
     [pageIndex]="pageIndex"
@@ -38,19 +63,8 @@
     (page)="onPageChange($event)"
     aria-label="Oldal kiválasztása">
   </mat-paginator>
-  } @else {
-    @if (errorOccurred) {
-      <app-error-display
-        (retry)="fetchArticles()">
-      </app-error-display>
-    }
-    @if (isLoading && !errorOccurred) {
-      <div class="loading-container">
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        <h3>Hírek betöltése...</h3>
-      </div>
-    }
-  }
+}
+
 @if (isAuthorOrAdmin() && !isLoading) {
   <a mat-fab color="primary" class="fab-edit" [routerLink]="['/reviews/add']" matTooltip="Cikk hozzáadása">
     <mat-icon>add</mat-icon>

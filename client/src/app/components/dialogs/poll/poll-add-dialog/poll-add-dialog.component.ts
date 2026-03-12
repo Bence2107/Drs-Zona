@@ -17,6 +17,8 @@ import {AuthService} from '../../../../services/auth.service';
 import {SeriesListDto} from '../../../../api/models/series-list-dto';
 import {SeriesService} from '../../../../services/series.service';
 import {MatOption, MatSelect} from '@angular/material/select';
+import {CustomSnackbarComponent} from '../../../custom-snackbar/custom-snackbar.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-poll-add-dialog',
@@ -54,7 +56,8 @@ export class PollAddDialogComponent implements OnInit {
     private pollService: PollService,
     private authService: AuthService,
     private seriesService: SeriesService,
-    private dialogRef: MatDialogRef<PollAddDialogComponent>
+    private dialogRef: MatDialogRef<PollAddDialogComponent>,
+    private snackBar: MatSnackBar
   ) {
     this.pollForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]],
@@ -102,6 +105,11 @@ export class PollAddDialogComponent implements OnInit {
 
       this.pollService.createPoll(pollDto, userId).subscribe({
         next: () => {
+          this.snackBar.openFromComponent(CustomSnackbarComponent, {
+            data: { message: 'Szavazás sikeresen létrehozva.', actionLabel: 'Rendben' },
+            duration: 3000,
+            horizontalPosition: 'center',
+          });
           this.dialogRef.close(true);
         }
       });

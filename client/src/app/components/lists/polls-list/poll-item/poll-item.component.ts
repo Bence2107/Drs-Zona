@@ -31,11 +31,6 @@ export class PollItemComponent implements OnInit {
     }
   }
 
-  get IsExpired(): boolean {
-    if (!this.poll?.expiresAt) return false;
-    return new Date(this.poll.expiresAt) < new Date();
-  }
-
   private updateExpirationStatus() {
     if (!this.poll || !this.poll.expiresAt) return;
     const now = new Date();

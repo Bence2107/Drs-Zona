@@ -21,6 +21,8 @@ import {ArticleDetailDto} from '../../../../api/models/article-detail-dto';
 import {SeriesListDto} from '../../../../api/models/series-list-dto';
 import {SeriesService} from '../../../../services/series.service';
 import {MatOption, MatSelect} from '@angular/material/select';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {CustomSnackbarComponent} from '../../../../components/custom-snackbar/custom-snackbar.component';
 
 interface ArticleForm {
   title: FormControl<string>;
@@ -86,7 +88,8 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
     private imageService: ArticleImageService,
     private authService: AuthService,
     private articleService: ArticleService,
-    private seriesService: SeriesService
+    private seriesService: SeriesService,
+    private snackBar: MatSnackBar
   ) {
   }
 
@@ -225,6 +228,11 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
       next: () => {
         this.isSubmitted = true;
         const version = new Date().getTime();
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Profilkép sikeresen feltöltve', actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
         window.location.href = `/article/${payload.slug}?v=${version}`;
       },
       error: () => { this.errorMessage = 'Hiba történt.'; this.isLoading = false; }
@@ -241,9 +249,18 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
       next: (url: string) => {
         this.imagePreviews[slot] = `${url}?t=${new Date().getTime()}`;
         this.isUploading[slot] = false;
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Kép sikeresen feltöltve', actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Hiba a feltöltés során!', actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
         this.isUploading[slot] = false;
       }
     });

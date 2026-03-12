@@ -11,6 +11,11 @@ import {MatIcon} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
 import {AuthService} from '../../../../../services/auth.service';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
+import {MatFormField, MatLabel} from '@angular/material/input';
+import {MatOption, MatSelect} from '@angular/material/select';
+import {FormsModule} from '@angular/forms';
+import {SeriesListDto} from '../../../../../api/models/series-list-dto';
+import {SeriesService} from '../../../../../services/series.service';
 
 @Component({
   selector: 'app-news-list',
@@ -26,7 +31,12 @@ import {MatPaginator, PageEvent} from '@angular/material/paginator';
     MatIcon,
     MatTooltip,
     MatPaginator,
-    NgClass
+    NgClass,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    FormsModule
   ],
   templateUrl: './news-list.component.html',
   styleUrl: './news-list.component.scss'
@@ -36,6 +46,8 @@ export class NewsListComponent implements OnInit {
   isLoading = false;
   errorOccurred = false;
 
+  seriesList: SeriesListDto[] = []
+  selectedTag: string | undefined = undefined;
   totalElements = 0;
   pageSize = 2;
   pageIndex = 0;
@@ -43,6 +55,7 @@ export class NewsListComponent implements OnInit {
   constructor(
     private articleService: ArticleService,
     private authService: AuthService,
+    private seriesService: SeriesService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -53,12 +66,23 @@ export class NewsListComponent implements OnInit {
       this.pageSize = params['size'] ? +params['size'] : 2;
       this.fetchArticles();
     });
+
+    this.seriesService.getSeriesList().subscribe(seriesList => {
+      this.seriesList = seriesList;
+    })
   }
+
+  onTagChange(tag: string | undefined): void {
+    this.selectedTag = tag;
+    this.pageIndex = 0;
+    this.fetchArticles();
+  }
+
   fetchArticles() {
     this.isLoading = true;
     this.errorOccurred = false;
 
-    this.articleService.getAllArticles(this.pageIndex, this.pageSize, undefined).subscribe({
+    this.articleService.getAllArticles(this.pageIndex, this.pageSize, this.selectedTag).subscribe({
       next: (data) => {
         this.articles = data.items!;
         this.totalElements = data.totalCount!;

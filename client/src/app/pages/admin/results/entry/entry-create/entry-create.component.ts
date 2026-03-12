@@ -31,6 +31,7 @@ import {MatOption} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
 import {DriverLookUpDto} from '../../../../../api/models/driver-look-up-dto';
 import {ConstructorLookUpDto} from '../../../../../api/models/constructor-look-up-dto';
+import {CustomSnackbarComponent} from '../../../../../components/custom-snackbar/custom-snackbar.component';
 
 @Component({
   selector: 'app-entry-create',
@@ -185,12 +186,20 @@ export class EntryCreateComponent implements OnInit{
     this.resultsService.insertResults(dto).subscribe({
       next: () => {
         this.isSaving.set(false);
-        this.snackBar.open('Eredmények mentve!', '', { duration: 2000 });
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Eredmények mentve!', actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
         this.router.navigate(['/admin/results/entry', this.gpId()]);
       },
       error: () => {
         this.isSaving.set(false);
-        this.snackBar.open('Hiba történt a mentés során!', '', { duration: 3000 });
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Hiba mentés során', actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
       }
     });
   }

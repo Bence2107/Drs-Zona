@@ -112,6 +112,29 @@ mat-progress-bar {
   z-index: 1000;
 }
 
+.empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 4rem 0;
+  color: var(--text-secondary);
+
+  mat-icon { font-size: 48px; width: 48px; height: 48px; opacity: 0.4; }
+}
+
+.tag-filter {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.tag-select {
+  width: 180px;
+}
+
+
 @media (max-width: 1200px) {
   .news-container,
   .reviews-container {
