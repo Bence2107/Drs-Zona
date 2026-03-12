@@ -4,4 +4,5 @@
 export interface SeriesListDto {
   id?: string;
   name?: string | null;
+  shortName?: string | null;
 }

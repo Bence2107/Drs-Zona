@@ -16,6 +16,8 @@ import {MatIconButton} from '@angular/material/button';
 import {AuthService} from './services/auth.service';
 import {CustomSnackbarComponent} from './components/custom-snackbar/custom-snackbar.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {SeriesListDto} from './api/models/series-list-dto';
+import {SeriesService} from './services/series.service';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +30,13 @@ export class AppComponent implements OnInit{
   isSmallScreen = false;
   isMobileOverlay = false;
 
-  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService, private snackBar: MatSnackBar) {
+  seriesList: SeriesListDto[] | null = null;
+
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private authService: AuthService,
+    private seriesService: SeriesService,
+    private snackBar: MatSnackBar) {
      this.authService.loadProfile();
   }
 
@@ -42,6 +50,11 @@ export class AppComponent implements OnInit{
       .subscribe(result => {
         this.isMobileOverlay = result.matches;
       });
+
+    this.seriesService.getSeriesList().subscribe(data => {
+      this.seriesList = data;
+    })
+
   }
 
   isLoggedIn() {
@@ -61,9 +74,6 @@ export class AppComponent implements OnInit{
     return this.authService.currentProfile()?.username ?? null;
   }
 
-  get hasProfileData(): boolean {
-    return !!this.authService.currentProfile();
-  }
 
   isAuthor(): boolean {
     return this.authService.currentProfile()?.role === 'Author';

@@ -86,18 +86,11 @@
           </mat-expansion-panel-header>
 
           <ul class="nav-list inner-list">
-            <li routerLink="f1" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
-              <img [src]="'img/header/icons/f1.png'" class="sidenav_icon" alt="f1">
-              <a>F1</a>
-            </li>
-            <li routerLink="f2" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
-              <img [src]="'img/header/icons/f2.png'" class="sidenav_icon" alt="f2">
-              <a>F2</a>
-            </li>
-            <li routerLink="wec" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
-              <img [src]="'img/header/icons/wec.png'" class="sidenav_icon" alt="wec">
-              <a>WEC</a>
-            </li>
+            @for(serie of seriesList; track serie) {
+              <li [routerLink]="serie.shortName" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+              <img [src]="'img/header/icons/' + serie.shortName?.toLowerCase() + '.png'" class="sidenav_icon" [alt]="serie.shortName?.toLowerCase()">
+              <a>{{serie.shortName}}</a>
+            }
           </ul>
         </mat-expansion-panel>
         <mat-expansion-panel expanded="true" class="menu-panel">

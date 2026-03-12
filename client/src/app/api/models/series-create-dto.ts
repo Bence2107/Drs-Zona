@@ -8,4 +8,5 @@ export interface SeriesCreateDto {
   lastYear?: number;
   name?: string | null;
   pointSystem?: string | null;
+  shortName?: string | null;
 }
