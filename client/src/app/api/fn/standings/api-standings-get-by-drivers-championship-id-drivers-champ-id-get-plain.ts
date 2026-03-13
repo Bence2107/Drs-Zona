@@ -11,12 +11,14 @@ import { DriverStandingsDto } from '../../models/driver-standings-dto';
 
 export interface ApiStandingsGetByDriversChampionshipIdDriversChampIdGet$Plain$Params {
   driversChampId: string;
+  category?: string;
 }
 
 export function apiStandingsGetByDriversChampionshipIdDriversChampIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiStandingsGetByDriversChampionshipIdDriversChampIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<DriverStandingsDto>> {
   const rb = new RequestBuilder(rootUrl, apiStandingsGetByDriversChampionshipIdDriversChampIdGet$Plain.PATH, 'get');
   if (params) {
     rb.path('driversChampId', params.driversChampId, {});
+    rb.query('category', params.category, {});
   }
 
   return http.request(

@@ -146,9 +146,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
     
     [HttpGet("getByDriversChampionshipId/{driversChampId:guid}")]
-    public async Task<ActionResult<DriverStandingsDto>> GetDriverStandings(Guid driversChampId)
+    public async Task<ActionResult<DriverStandingsDto>> GetDriverStandings(Guid driversChampId, [FromQuery] string? category = null)
     {
-        var response = await standingsService.GetDriverStandings(driversChampId);
+        var response = await standingsService.GetDriverStandings(driversChampId, category);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -162,9 +162,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
 
     [HttpGet("getByConstructorChampionshipId/{constructsChampId:guid}")]
-    public async Task<ActionResult<ConstructorStandingsDto>> GetConstructorStandings(Guid constructsChampId)
+    public async Task<ActionResult<ConstructorStandingsDto>> GetConstructorStandings(Guid constructsChampId, [FromQuery] string? category = null)
     {
-        var response = await standingsService.GetConstructorStandings(constructsChampId);
+        var response = await standingsService.GetConstructorStandings(constructsChampId, category);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -345,7 +345,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     public async Task<ActionResult> InsertWecResults([FromBody] WecBatchResultCreateDto dto)
     {
         var result = await standingsService.InsertWecResults(dto);
-        return result.IsSuccess ? Ok() : BadRequest(result.ErrorField);
+        if (!result.IsSuccess)
+            return BadRequest(new { result.ErrorField, result.Message });
+        return Ok();
     }
 
     [HttpPost("wec/SaveSessionResults")]
@@ -356,9 +358,9 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
     
     [HttpGet("wec/{grandPrixId:guid}/results/{session}")]
-    public async Task<ActionResult<WecGrandPrixResultsDto>> GetWecGrandPrixResults(Guid grandPrixId, string session)
+    public async Task<ActionResult<WecGrandPrixResultsDto>> GetWecGrandPrixResults(Guid grandPrixId, string session, [FromQuery] string? category = null)
     {
-        var result = await standingsService.GetWecGrandPrixResults(grandPrixId, session);
+        var result = await standingsService.GetWecGrandPrixResults(grandPrixId, session, category);
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorField);
     }
 }

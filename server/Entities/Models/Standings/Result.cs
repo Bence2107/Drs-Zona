@@ -85,7 +85,9 @@ public class Result
     
     [Column("is_car_entry")]
     public bool IsCarEntry { get; set; } = false;
-
     [JsonIgnore]
     public virtual ICollection<CarEntry>? CarEntries { get; set; }
+    
+    [Column("category")]
+    public required string Category {get; set;}
 }

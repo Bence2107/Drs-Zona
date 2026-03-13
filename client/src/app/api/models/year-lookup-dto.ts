@@ -4,5 +4,6 @@
 export interface YearLookupDto {
   constructorsChampId?: string;
   driversChampId?: string;
+  pointSystem?: string | null;
   season?: string | null;
 }

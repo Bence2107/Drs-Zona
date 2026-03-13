@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>WEC Autó nevezése</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form" style="display: flex; flex-direction: column; gap: 16px; margin-top: 8px;">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Konstruktőr</mat-label>
+      <mat-select formControlName="constructorId">
+        @for (c of constructors(); track c.id) {
+          <mat-option [value]="c.id">{{ c.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Rajtszám</mat-label>
+      <input matInput type="number" formControlName="carNumber">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Pilóták (Több is választható)</mat-label>
+      <mat-select formControlName="driverIds" multiple>
+        @for (d of drivers(); track d.id) {
+          <mat-option [value]="d.id">{{ d.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Mégse</button>
+  <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="save()">Mentés</button>
+</mat-dialog-actions>

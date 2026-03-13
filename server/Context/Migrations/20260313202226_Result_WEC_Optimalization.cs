@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Context.Migrations
 {
     /// <inheritdoc />
-    public partial class Results_WEC_Optimalization : Migration
+    public partial class Result_WEC_Optimalization : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,6 +26,13 @@ namespace Context.Migrations
                 nullable: true,
                 oldClrType: typeof(Guid),
                 oldType: "uuid");
+
+            migrationBuilder.AddColumn<string>(
+                name: "category",
+                table: "results",
+                type: "text",
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.AddColumn<bool>(
                 name: "is_car_entry",
@@ -77,6 +84,10 @@ namespace Context.Migrations
         {
             migrationBuilder.DropTable(
                 name: "car_entries");
+
+            migrationBuilder.DropColumn(
+                name: "category",
+                table: "results");
 
             migrationBuilder.DropColumn(
                 name: "is_car_entry",

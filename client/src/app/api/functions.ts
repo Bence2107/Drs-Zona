@@ -291,3 +291,11 @@ export type { ApiStandingsUpdateSingleResultPost$Params as ApiStandingsUpdateSin
 export { apiStandingsUpdateSingleResultPost as apiStandingsUpdateSingleResultPost } from './fn/standings/api-standings-update-single-result-post';
 export type { ApiStandingsRecalculateSessionGrandPrixIdSessionPost$Params as ApiStandingsRecalculateSessionGrandPrixIdSessionPost$Params } from './fn/standings/api-standings-recalculate-session-grand-prix-id-session-post';
 export { apiStandingsRecalculateSessionGrandPrixIdSessionPost as apiStandingsRecalculateSessionGrandPrixIdSessionPost } from './fn/standings/api-standings-recalculate-session-grand-prix-id-session-post';
+export type { ApiStandingsWecInsertResultsPost$Params as ApiStandingsWecInsertResultsPost$Params } from './fn/standings/api-standings-wec-insert-results-post';
+export { apiStandingsWecInsertResultsPost as apiStandingsWecInsertResultsPost } from './fn/standings/api-standings-wec-insert-results-post';
+export type { ApiStandingsWecSaveSessionResultsPost$Params as ApiStandingsWecSaveSessionResultsPost$Params } from './fn/standings/api-standings-wec-save-session-results-post';
+export { apiStandingsWecSaveSessionResultsPost as apiStandingsWecSaveSessionResultsPost } from './fn/standings/api-standings-wec-save-session-results-post';
+export type { ApiStandingsWecGrandPrixIdResultsSessionGet$Plain$Params as ApiStandingsWecGrandPrixIdResultsSessionGet$Plain$Params } from './fn/standings/api-standings-wec-grand-prix-id-results-session-get-plain';
+export { apiStandingsWecGrandPrixIdResultsSessionGet$Plain as apiStandingsWecGrandPrixIdResultsSessionGet$Plain } from './fn/standings/api-standings-wec-grand-prix-id-results-session-get-plain';
+export type { ApiStandingsWecGrandPrixIdResultsSessionGet$Json$Params as ApiStandingsWecGrandPrixIdResultsSessionGet$Json$Params } from './fn/standings/api-standings-wec-grand-prix-id-results-session-get-json';
+export { apiStandingsWecGrandPrixIdResultsSessionGet$Json as apiStandingsWecGrandPrixIdResultsSessionGet$Json } from './fn/standings/api-standings-wec-grand-prix-id-results-session-get-json';

@@ -215,6 +215,7 @@ public record SingleResultDto(
     int FinishPosition,
     string RaceTime, 
     int LapsCompleted,
+    string Category,
     string Status,
     bool Pole = false,
     int StartPosition = 0
@@ -233,7 +234,10 @@ public record ResultEditDto(
     int LapsCompleted,
     string Status,
     double DriverPoints,
-    double ConstructorPoints
+    double ConstructorPoints,
+    string Category,     
+    bool IsCarEntry,
+    List<CarEntryDto>? Drivers = null
 );
 
 public record SessionEditDto(
@@ -281,7 +285,8 @@ public record DriverStandingsResultDto(
     string Nationality,
     Guid ConstructorId,
     string ConstructorName,
-    double Points
+    double Points,
+    string Category
 );
 
 public record ConstructorStandingsDto(
@@ -298,7 +303,7 @@ public record ConstructorStandingsResultDto(
 );
 
 public record SeriesLookupDto(Guid Id, string Name);
-public record YearLookupDto(string Season, Guid DriversChampId, Guid ConstructorsChampId);
+public record YearLookupDto(string Season, Guid DriversChampId, Guid ConstructorsChampId, string PointSystem);
 public record DriverLookUpDto(Guid Id, string Name, Guid? ConstructorId = null);
 public record ConstructorLookUpDto(Guid Id, string Name, string ShortName);
 public record GrandPrixLookupDto(
@@ -351,6 +356,7 @@ public record WecSingleResultDto(
     int FinishPosition,
     string RaceTime,
     int LapsCompleted,
+    string Category,
     string Status,
     bool Pole = false,
     int StartPosition = 0,
@@ -367,7 +373,8 @@ public record WecCarEntryCreateDto(
 /// </summary>
 public record WecBatchResultCreateDto(
     Guid GrandPrixId,
-    Guid ConsChampId,          // WEC-nél nincs DriversChampId
+    Guid? DriversChampId,
+    Guid ConsChampId,          
     string Session,
     List<WecSingleResultDto> Results
 );
@@ -379,9 +386,10 @@ public record WecBatchResultCreateDto(
 /// </summary>
 public record GrandPrixChampionshipContextDto(
     Guid? DriversChampId,
-    Guid ConsChampId,
+    Guid? ConsChampId,
     string PointSystem,
-    List<SessionDefinition> AvailableSessions
+    List<SessionDefinition> AvailableSessions,
+    List<string>? Categories
 );
 
 /// <summary>

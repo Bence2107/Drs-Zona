@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Context.Migrations
 {
     [DbContext(typeof(EfContext))]
-    [Migration("20260313163034_Results_WEC_Optimalization")]
-    partial class Results_WEC_Optimalization
+    [Migration("20260313202226_Result_WEC_Optimalization")]
+    partial class Result_WEC_Optimalization
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -726,6 +726,11 @@ namespace Context.Migrations
                     b.Property<int>("CarNumber")
                         .HasColumnType("integer")
                         .HasColumnName("car_number");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("category");
 
                     b.Property<Guid>("ConsChampId")
                         .HasColumnType("uuid")

@@ -39,9 +39,9 @@ public record GrandPrixCreateDto(
     [Required(ErrorMessage = "A befejezési idő kötelező")] 
     DateTime EndTime,
     [Required(ErrorMessage = "A versenytáv kötelező")] 
-    [Range(1, 1000, ErrorMessage = "A versenytáv 1 és 1000 km között lehet")] 
+    [Range(1, 10000, ErrorMessage = "A versenytáv 1 és 10000 km között lehet")] 
     int RaceDistance,
-    [Range(0, 100, ErrorMessage = "A körök száma 0 és 100 között lehet")] 
+    [Range(0, 1000, ErrorMessage = "A körök száma 0 és 1000 között lehet")] 
     int LapsCompleted
 ) : IValidatableObject
 {

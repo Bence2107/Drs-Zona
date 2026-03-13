@@ -34,25 +34,6 @@ public class ResultsRepository(EfContext context) : IResultsRepository
         _results.Remove(result);
         await context.SaveChangesAsync();
     }
-    
-    public async Task<Result?> GetResultWithAll(Guid id) => await _results
-        .Include(r => r.Driver)
-        .Include(r => r.Constructor)
-        .Include(r => r.DriversChampionship)
-        .Include(r => r.ConsChampionship)
-        .FirstOrDefaultAsync(r => r.Id == id);
-
-    public async Task<List<Result>> GetByGrandPrixId(Guid grandPrixId) => await _results
-        .Where(r => r.GrandPrixId == grandPrixId)
-        .ToListAsync();
-
-    public async Task<List<Result>> GetByDriverId(Guid driverId) => await _results
-        .Where(r => r.DriverId == driverId)
-        .ToListAsync();
-
-    public async Task<List<Result>> GetByConstructorId(Guid constructorId) => await _results
-        .Where(r => r.ConstructorId == constructorId)
-        .ToListAsync();
 
     public async Task<List<Result>> GetBySession(Guid grandPrixId, string session) => await _results
         .Include(r => r.GrandPrix)
@@ -60,6 +41,7 @@ public class ResultsRepository(EfContext context) : IResultsRepository
         .ToListAsync();
 
     public async Task<List<Result>> GetByDriversChampionshipId(Guid championshipId) => await _results
+        .Include(r => r.CarEntries)
         .Include(r => r.Driver)
         .Include(r => r.GrandPrix)
         .Include(r => r.Constructor)
@@ -83,7 +65,6 @@ public class ResultsRepository(EfContext context) : IResultsRepository
             .ToListAsync();
     }
     
-    public async Task<bool> CheckIfIdExists(Guid id) => await _results.AnyAsync(d => d.Id == id);
     public async Task<bool> HasGrandPrixResults(GrandPrix gp)
     {
         return await _results.AnyAsync(r => r.GrandPrixId == gp.Id);

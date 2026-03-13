@@ -28,7 +28,10 @@ import {
   apiStandingsInsertResultsPost, apiStandingsRecalculateSessionGrandPrixIdSessionPost,
   apiStandingsRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete,
   apiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete, apiStandingsSaveSessionResultsPost,
-  apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost, apiStandingsUpdateSingleResultPost
+  apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost, apiStandingsUpdateSingleResultPost,
+  apiStandingsWecGrandPrixIdResultsSessionGet$Json,
+  apiStandingsWecInsertResultsPost,
+  apiStandingsWecSaveSessionResultsPost
 } from '../api/functions';
 import {DriverStandingsDto} from '../api/models/driver-standings-dto';
 import {ConstructorStandingsDto} from '../api/models/constructor-standings-dto';
@@ -41,6 +44,7 @@ import {
   ChampionshipRowDto, CircuitListDto,
   ConstructorLookUpDto,
   DriverLookUpDto, GrandPrixChampionshipContextDto, GrandPrixCreateDto, SessionEditDto, SingleResultUpdateDto,
+  WecBatchResultCreateDto, WecGrandPrixResultsDto,
 } from "../api/models";
 import {
   apiStandingsGetConstructorsByConstructorsChampionshipConstChampIdGet$Json
@@ -106,14 +110,16 @@ export class ResultsService {
     );
   }
 
-  getDriverStandings(driversChampId: string): Observable<DriverStandingsDto> {
-    return apiStandingsGetByDriversChampionshipIdDriversChampIdGet$Json(this.http, this.apiConfig.rootUrl, { driversChampId }).pipe(
+  getDriverStandings(driversChampId: string, category: string | undefined): Observable<DriverStandingsDto> {
+    return apiStandingsGetByDriversChampionshipIdDriversChampIdGet$Json(this.http, this.apiConfig.rootUrl,
+      { driversChampId, category }).pipe(
       map(r => r.body as DriverStandingsDto)
     );
   }
 
-  getConstructorStandings(constructsChampId: string): Observable<ConstructorStandingsDto> {
-    return apiStandingsGetByConstructorChampionshipIdConstructsChampIdGet$Json(this.http, this.apiConfig.rootUrl, { constructsChampId }).pipe(
+  getConstructorStandings(constructsChampId: string, category: string | undefined): Observable<ConstructorStandingsDto> {
+    return apiStandingsGetByConstructorChampionshipIdConstructsChampIdGet$Json(this.http, this.apiConfig.rootUrl,
+      { constructsChampId, category }).pipe(
       map(r => r.body as ConstructorStandingsDto)
     );
   }
@@ -220,5 +226,18 @@ export class ResultsService {
   recalculateSession(gpId: string, session: string): Observable<void> {
     return apiStandingsRecalculateSessionGrandPrixIdSessionPost(this.http, this.apiConfig.rootUrl,
       {grandPrixId: gpId, session: session}).pipe(map(() => void 0));
+  }
+
+  saveWecSessionResults(dto: WecBatchResultCreateDto): Observable<void> {
+    return apiStandingsWecSaveSessionResultsPost(this.http, this.apiConfig.rootUrl, {body: dto}).pipe(map(() => void 0));
+  }
+
+  insertWecResults(dto: WecBatchResultCreateDto): Observable<void> {
+    return apiStandingsWecInsertResultsPost(this.http, this.apiConfig.rootUrl, {body: dto}).pipe(map(() => void 0));
+  }
+
+  getWecGrandPrixResults(grandPrixId: string, session: string, category: string | undefined): Observable<WecGrandPrixResultsDto> {
+    return apiStandingsWecGrandPrixIdResultsSessionGet$Json(this.http, this.apiConfig.rootUrl,
+      {grandPrixId: grandPrixId, session: session}).pipe(map((response) => response.body as WecGrandPrixResultsDto ));
   }
 }

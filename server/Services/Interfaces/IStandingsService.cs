@@ -13,8 +13,8 @@ public interface IStandingsService
     Task<ResponseResult<List<ConstructorLookUpDto>>> GetConstructorsBySeason(Guid driversChampId);
     Task<ResponseResult<List<GrandPrixLookupDto>>> GetGrandsPrixByChampionship(Guid driverChampId);
     Task<ResponseResult<List<string>>> GetSessionsByGrandPrix(Guid grandPrixId);
-    Task<ResponseResult<DriverStandingsDto>> GetDriverStandings(Guid driverChampId);
-    Task<ResponseResult<ConstructorStandingsDto>> GetConstructorStandings(Guid constructorsChampionId);
+    Task<ResponseResult<DriverStandingsDto>> GetDriverStandings(Guid driverChampId, string? category = null);
+    Task<ResponseResult<ConstructorStandingsDto>> GetConstructorStandings(Guid constructorsChampionId, string? category = null);
     Task<ResponseResult<GrandPrixResultsDto>> GetGrandPrixResults(Guid grandPrixId, string session);
     Task<ResponseResult<List<DriverSeasonResultDto>>> GetDriverResultsBySeason(Guid driverId, Guid driverChampId);
     Task<ResponseResult<List<ConstructorSeasonResultDto>>> GetConstructorResultsBySeason(Guid constructorId, Guid constructorChampId);
@@ -32,5 +32,5 @@ public interface IStandingsService
     Task<ResponseResult<bool>> RecalculateSession(Guid grandPrixId, string session);
     Task<ResponseResult<bool>> InsertWecResults(WecBatchResultCreateDto dto);
     Task<ResponseResult<bool>> SaveWecSessionResults(WecBatchResultCreateDto dto);
-    Task<ResponseResult<WecGrandPrixResultsDto>> GetWecGrandPrixResults(Guid grandPrixId, string session);
+    Task<ResponseResult<WecGrandPrixResultsDto>> GetWecGrandPrixResults(Guid grandPrixId, string session, string? category = null);
 }

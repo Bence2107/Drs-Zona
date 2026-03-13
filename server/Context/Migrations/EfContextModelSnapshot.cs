@@ -724,6 +724,11 @@ namespace Context.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("car_number");
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("category");
+
                     b.Property<Guid>("ConsChampId")
                         .HasColumnType("uuid")
                         .HasColumnName("constructors_championship_id");

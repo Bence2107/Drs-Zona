@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {ApiConfiguration} from '../api/api-configuration';
 import {Observable} from 'rxjs';
 import {SeriesListDto} from '../api/models/series-list-dto';
-import {apiSeriesGetAllSeriesGet$Json, apiSeriesNameNameGet$Json} from '../api/functions';
+import {apiSeriesGetAllSeriesGet$Json, apiSeriesIdGet$Json, apiSeriesNameNameGet$Json} from '../api/functions';
 import {map} from 'rxjs/operators';
 import {SeriesDetailDto} from '../api/models/series-detail-dto';
 
@@ -20,6 +20,14 @@ export class SeriesService {
     return apiSeriesGetAllSeriesGet$Json(this.http, this.apiConfig.rootUrl).pipe(
       map(response => {
         return response.body as SeriesListDto[];
+      })
+    )
+  }
+
+  getSerieById(id: string): Observable<SeriesDetailDto> {
+    return apiSeriesIdGet$Json(this.http, this.apiConfig.rootUrl, {id: id}).pipe(
+      map(response => {
+        return response.body as SeriesDetailDto;
       })
     )
   }

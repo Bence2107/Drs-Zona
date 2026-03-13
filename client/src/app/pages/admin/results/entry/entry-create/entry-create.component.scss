@@ -154,3 +154,18 @@
     button { width: 100%; }
   }
 }
+
+.no-points-badge {
+  font-size: 0.7rem;
+  background: var(--text-secondary);
+  color: white;
+  border-radius: 4px;
+  padding: 0 4px;
+  margin-left: 4px;
+  opacity: 0.6;
+}
+
+.drivers-set {
+  color: var(--accent-color);
+  mat-icon { color: var(--accent-color); }
+}

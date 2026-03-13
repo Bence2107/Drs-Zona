@@ -2,15 +2,12 @@ import {Component, inject, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButton, MatIconButton} from '@angular/material/button';
-import {MatIcon } from '@angular/material/icon';
+import {MatIcon} from '@angular/material/icon';
 import {
-  MatCell,
-  MatCellDef,
-  MatColumnDef,
-  MatHeaderCell,
-  MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable,
-
+  MatCell, MatCellDef, MatColumnDef,
+  MatHeaderCell, MatHeaderCellDef,
+  MatHeaderRow, MatHeaderRowDef,
+  MatRow, MatRowDef, MatTable
 } from '@angular/material/table';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
@@ -24,33 +21,18 @@ import {ResultEditDto} from '../../../../../api/models/result-edit-dto';
 import {SingleResultUpdateDto} from '../../../../../api/models/single-result-update-dto';
 import {CustomSnackbarComponent} from '../../../../../components/custom-snackbar/custom-snackbar.component';
 import {BatchResultCreateDto} from '../../../../../api/models/batch-result-create-dto';
+import {WecBatchResultCreateDto} from '../../../../../api/models/wec-batch-result-create-dto';
 import {GrandPrixChampionshipContextDto} from '../../../../../api/models/grand-prix-championship-context-dto';
 
 @Component({
   selector: 'app-entry-detail',
   imports: [
-    MatIconButton,
-    MatIcon,
-    MatProgressSpinner,
-    MatButton,
-    MatTable,
-    MatHeaderCell,
-    MatCell,
-    MatColumnDef,
-    MatCellDef,
-    MatHeaderCellDef,
-    MatFormField,
-    MatInput,
-    ReactiveFormsModule,
-    MatSelect,
-    MatOption,
-    MatHeaderRow,
-    MatRow,
-    MatTooltip,
-    MatHeaderRowDef,
-    MatRowDef,
-    MatLabel,
-    FormsModule
+    MatIconButton, MatIcon, MatProgressSpinner, MatButton,
+    MatTable, MatHeaderCell, MatCell, MatColumnDef,
+    MatCellDef, MatHeaderCellDef, MatFormField, MatInput,
+    ReactiveFormsModule, MatSelect, MatOption,
+    MatHeaderRow, MatRow, MatTooltip,
+    MatHeaderRowDef, MatRowDef, MatLabel, FormsModule
   ],
   templateUrl: './entry-detail.component.html',
   styleUrl: './entry-detail.component.scss',
@@ -70,16 +52,38 @@ export class EntryDetailComponent implements OnInit {
   isSaving = signal(false);
   context = signal<GrandPrixChampionshipContextDto | null>(null);
 
-
   editForms = signal<FormGroup[]>([]);
 
   statusOptions = ['Finished', 'DNF', 'DNS', 'DSQ', 'DNQ'];
   editColumns = ['position', 'driver', 'constructor', 'finishPos', 'raceTime', 'laps', 'status', 'actions'];
 
+  get isWec(): boolean {
+    return this.context()?.pointSystem === 'WEC';
+  }
+
   ngOnInit() {
     this.gpId.set(this.route.snapshot.paramMap.get('gpId') ?? '');
-    this.loadSessions();
+    // Csak a context betöltéséből indítjuk a sessions töltést — nem ngOnInit-ből is
     this.loadContext();
+  }
+
+  loadContext() {
+    this.isLoading.set(true);
+    this.resultsService.getGrandPrixContext(this.gpId()).subscribe({
+      next: ctx => {
+        this.context.set(ctx);
+        if (ctx.pointSystem === 'WEC') {
+          this.editColumns = ['position', 'carNumber', 'carLabel', 'category', 'drivers', 'raceTime', 'laps', 'status', 'actions'];
+        } else {
+          this.editColumns = ['position', 'driver', 'constructor', 'raceTime', 'laps', 'status', 'actions'];
+        }
+        this.loadSessions(); // egyetlen hívási pont
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.snackBar.open('Hiba a kontextus betöltésekor', '', {duration: 3000});
+      }
+    });
   }
 
   loadSessions() {
@@ -109,21 +113,20 @@ export class EntryDetailComponent implements OnInit {
       error: () => this.isLoading.set(false)
     });
   }
+
   buildForms(results: ResultEditDto[]) {
     const forms = results.map(r => {
       const isFinished = r.status === 'Finished';
       const group = this.fb.group({
-        resultId:      [r.resultId],
-        finishPosition:[r.finishPosition, [Validators.required, Validators.min(1), Validators.max(99)]],
-        raceTime:      [{ value: r.raceTime ?? '-', disabled: !isFinished }, Validators.required],
+        resultId: [r.resultId],
+        finishPosition: [r.finishPosition, [Validators.required, Validators.min(1), Validators.max(99)]],
+        raceTime: [{value: r.raceTime ?? '-', disabled: !isFinished}, Validators.required],
         lapsCompleted: [r.lapsCompleted, [Validators.required, Validators.min(0)]],
-        status:        [r.status, Validators.required],
+        status: [r.status, Validators.required],
       });
 
       group.get('status')!.valueChanges.subscribe(status => {
-        if (typeof status === "string") {
-          this.onStatusChange(group, status);
-        }
+        if (typeof status === 'string') this.onStatusChange(group, status);
       });
 
       return group;
@@ -149,29 +152,26 @@ export class EntryDetailComponent implements OnInit {
 
     const v = form.getRawValue();
     const dto: SingleResultUpdateDto = {
-      resultId:      v.resultId,
-      finishPosition:v.finishPosition,
-      raceTime:      v.raceTime,
+      resultId: v.resultId,
+      finishPosition: v.finishPosition,
+      raceTime: v.raceTime,
       lapsCompleted: v.lapsCompleted,
-      status:        v.status,
+      status: v.status,
     };
-
     this.resultsService.updateSingleResult(dto).subscribe({
       next: () => {
         this.isSaving.set(false);
         this.snackBar.openFromComponent(CustomSnackbarComponent, {
-          data: { message: 'Eredmény frissítve', actionLabel: 'Rendben' },
-          duration: 3000,
-          horizontalPosition: 'center',
+          data: {message: 'Eredmény frissítve', actionLabel: 'Rendben'},
+          duration: 3000, horizontalPosition: 'center',
         });
         this.onSessionChange(this.selectedSession());
       },
       error: () => {
         this.isSaving.set(false);
         this.snackBar.openFromComponent(CustomSnackbarComponent, {
-          data: { message: 'Hiba történt', actionLabel: 'Rendben' },
-          duration: 3000,
-          horizontalPosition: 'center',
+          data: {message: 'Hiba történt', actionLabel: 'Rendben'},
+          duration: 3000, horizontalPosition: 'center',
         });
       }
     });
@@ -182,48 +182,88 @@ export class EntryDetailComponent implements OnInit {
     const forms = this.editForms();
     const ctx = this.context();
 
-    const isAnyInvalid = forms.some(f => f.invalid);
-    if (isAnyInvalid || !currentData) {
-      this.snackBar.open('Kérlek javítsd a hibákat a mentés előtt!', 'OK', { duration: 3000 });
+    if (forms.some(f => f.invalid) || !currentData) {
+      this.snackBar.open('Kérlek javítsd a hibákat a mentés előtt!', 'OK', {duration: 3000});
       return;
     }
 
     this.isSaving.set(true);
+
+    if (this.isWec) {
+      this.saveWecSession(forms, currentData, ctx);
+    } else {
+      this.saveStandardSession(forms, currentData, ctx);
+    }
+  }
+
+  private saveStandardSession(forms: FormGroup[], currentData: SessionEditDto, ctx: GrandPrixChampionshipContextDto | null) {
     const dto: BatchResultCreateDto = {
       grandPrixId: this.gpId(),
-      driversChampId: ctx?.driversChampId,
-      consChampId: ctx?.consChampId,
+      driversChampId: ctx?.driversChampId!,
+      consChampId: ctx?.consChampId!,
       session: this.selectedSession(),
       results: forms.map((f, index) => {
         const v = f.getRawValue();
-        const originalResult = currentData.results![index];
-
+        const orig = currentData.results![index];
         return {
-          driverId:      originalResult.driverId,
-          constructorId: originalResult.constructorId,
-          finishPosition:v.finishPosition,
-          raceTime:      v.raceTime,
+          driverId: orig.driverId!,
+          constructorId: orig.constructorId,
+          finishPosition: v.finishPosition,
+          raceTime: v.raceTime,
           lapsCompleted: v.lapsCompleted,
-          status:        v.status,
-          startPosition: originalResult.startPosition
+          status: v.status,
+          startPosition: orig.startPosition
         };
       })
     };
 
     this.resultsService.saveSessionResults(dto).subscribe({
-      next: () => {
-        this.isSaving.set(false);
-        this.snackBar.openFromComponent(CustomSnackbarComponent, {
-          data: { message: 'Minden módosítás mentve és újraszámolva!', actionLabel: 'Rendben' },
-          duration: 3000
-        });
-        this.onSessionChange(this.selectedSession());
-      },
-      error: () => {
-        this.isSaving.set(false);
-        this.snackBar.open('Hiba történt a tömeges mentés során!', 'OK', { duration: 3000 });
-      }
+      next: () => this.onSaveSuccess('Minden módosítás mentve és újraszámolva!'),
+      error: () => this.onSaveError('Hiba történt a tömeges mentés során!')
     });
+  }
+
+  private saveWecSession(forms: FormGroup[], currentData: SessionEditDto, ctx: GrandPrixChampionshipContextDto | null) {
+    // WEC szerkesztésnél csak pozíció/idő/státusz változhat — a pilóták a CarEntry dialógon keresztül módosulnak
+    // Ezért saveSessionResults (WEC végpont) hívása, az eredeti constructorId/carNumber megtartásával
+    const dto: WecBatchResultCreateDto = {
+      grandPrixId: this.gpId(),
+      consChampId: ctx?.consChampId!,
+      session: this.selectedSession(),
+      results: forms.map((f, index) => {
+        const v = f.getRawValue();
+        const orig = currentData.results![index];
+        return {
+          constructorId: orig.constructorId,
+          carNumber: orig.carNumber,
+          carLabel: orig.driverName, // driverNameSnapshot WEC-nél az autó neve
+          finishPosition: v.finishPosition,
+          raceTime: v.raceTime,
+          lapsCompleted: v.lapsCompleted,
+          status: v.status,
+          startPosition: orig.startPosition,
+          drivers: []
+        };
+      })
+    };
+
+    this.resultsService.saveWecSessionResults(dto).subscribe({
+      next: () => this.onSaveSuccess('Minden módosítás mentve és újraszámolva!'),
+      error: () => this.onSaveError('Hiba történt a tömeges mentés során!')
+    });
+  }
+
+  private onSaveSuccess(message: string) {
+    this.isSaving.set(false);
+    this.snackBar.openFromComponent(CustomSnackbarComponent, {
+      data: {message, actionLabel: 'Rendben'}, duration: 3000
+    });
+    this.onSessionChange(this.selectedSession());
+  }
+
+  private onSaveError(message: string) {
+    this.isSaving.set(false);
+    this.snackBar.open(message, 'OK', {duration: 3000});
   }
 
   recalculate() {
@@ -232,18 +272,16 @@ export class EntryDetailComponent implements OnInit {
       next: () => {
         this.isSaving.set(false);
         this.snackBar.openFromComponent(CustomSnackbarComponent, {
-          data: { message: 'Eredmény újraszámolva', actionLabel: 'Rendben' },
-          duration: 3000,
-          horizontalPosition: 'center',
+          data: {message: 'Eredmény újraszámolva', actionLabel: 'Rendben'},
+          duration: 3000, horizontalPosition: 'center',
         });
         this.onSessionChange(this.selectedSession());
       },
       error: () => {
         this.isSaving.set(false);
         this.snackBar.openFromComponent(CustomSnackbarComponent, {
-          data: { message: 'Hiba történt!', actionLabel: 'Rendben' },
-          duration: 3000,
-          horizontalPosition: 'center',
+          data: {message: 'Hiba történt!', actionLabel: 'Rendben'},
+          duration: 3000, horizontalPosition: 'center',
         });
       }
     });
@@ -255,19 +293,5 @@ export class EntryDetailComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['/admin/results/entry']);
-  }
-
-  loadContext() {
-      this.isLoading.set(true);
-      this.resultsService.getGrandPrixContext(this.gpId()).subscribe({
-        next: ctx => {
-          this.context.set(ctx);
-          this.loadSessions();
-        },
-        error: () => {
-          this.isLoading.set(false);
-          this.snackBar.open('Hiba a kontextus betöltésekor', '', { duration: 3000 });
-        }
-      });
   }
 }

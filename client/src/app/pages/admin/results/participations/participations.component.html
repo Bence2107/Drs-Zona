@@ -39,6 +39,20 @@
   </div>
 
 
+  @if (selectedYearLookup()?.pointSystem === 'WEC') {
+    <div class="category-section" style="margin-bottom: 20px;">
+      <mat-form-field appearance="outline" class="category-field">
+        <mat-label>Kategória</mat-label>
+        <mat-select [ngModel]="selectedCategory()" (ngModelChange)="selectedCategory.set($event)">
+          <mat-option [value]="null">Összes kategória</mat-option>
+          <mat-option value="Hypercar">Hypercar</mat-option>
+          <mat-option value="LMGT3">LMGT3</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  }
+
+
   @if (isLoading()) {
     <div class="loading-state">
       <mat-spinner diameter="48"></mat-spinner>
@@ -110,6 +124,11 @@
 
 </div>
 
-<button mat-fab color="primary" class="fab-add" (click)="openAddDialog()" matTooltip="Résztvevők hozzáadása">
-  <mat-icon>person_add</mat-icon>
+<button
+  mat-fab
+  color="primary"
+  class="fab-add"
+  (click)="selectedYearLookup()?.pointSystem === 'WEC' ? openWecAddDialog() : openAddDialog()"
+  [matTooltip]="selectedYearLookup()?.pointSystem === 'WEC' ? 'Új autó nevezése' : 'Résztvevők hozzáadása'">
+  <mat-icon>{{ selectedYearLookup()?.pointSystem === 'WEC' ? 'directions_car' : 'person_add' }}</mat-icon>
 </button>

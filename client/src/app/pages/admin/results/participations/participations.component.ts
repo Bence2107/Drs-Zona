@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ResultsService} from '../../../../services/results.service';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
@@ -19,6 +19,9 @@ import {MatFabButton, MatIconButton} from '@angular/material/button';
 import {MatTooltip} from '@angular/material/tooltip';
 import {ParticipationListDto} from '../../../../api/models/participation-list-dto';
 import {Router} from '@angular/router';
+import {
+  WecParticipationAddDialogComponent
+} from '../../../../components/dialogs/participations/wec-participation-add-dialog/wec-participation-add-dialog.component';
 
 
 @Component({
@@ -43,7 +46,7 @@ import {Router} from '@angular/router';
   templateUrl: './participations.component.html',
   styleUrl: './participations.component.scss',
 })
-export class ParticipationsComponent {
+export class ParticipationsComponent implements OnInit {
   private dialog = inject(MatDialog);
   private resultService = inject(ResultsService);
   private router = inject(Router);
@@ -56,6 +59,7 @@ export class ParticipationsComponent {
   selectedYearLookup = signal<YearLookupDto | null>(null);
   participations = signal<ParticipationListDto | null>(null);
   isLoading = signal(false);
+  selectedCategory = signal<string | null>(null);
 
   ngOnInit() {
     this.resultService.getAllSeries().subscribe(res => {
@@ -63,6 +67,34 @@ export class ParticipationsComponent {
       if (res.length > 0) this.onSeriesChange(res[0].id!);
     });
   }
+
+  processedParticipations = computed(() => {
+    const all = this.participations();
+    const cat = this.selectedCategory();
+    if (!all) return null;
+
+    // Ha nem WEC, visszaadjuk az eredetit
+    if (this.selectedYearLookup()?.pointSystem !== 'WEC') return all;
+
+    return {
+      ...all,
+      drivers: cat ? all.drivers?.filter(d => (d as any).category === cat) : all.drivers
+    };
+  });
+
+  wecCars = computed(() => {
+    const data = this.processedParticipations();
+    if (!data?.drivers) return [];
+
+    const map = new Map<number, any>();
+    data.drivers.forEach(d => {
+      if (!map.has(d.driverNumber!)) {
+        map.set(d.driverNumber!, { number: d.driverNumber, team: d.teamName, drivers: [] });
+      }
+      map.get(d.driverNumber!).drivers.push(d.name);
+    });
+    return Array.from(map.values());
+  });
 
   onSeriesChange(seriesId: string) {
     this.selectedSeriesId.set(seriesId);
@@ -153,5 +185,10 @@ export class ParticipationsComponent {
 
   protected goBack() {
     this.router.navigate(["results"]);
+  }
+
+  openWecAddDialog() {
+    const lookup = this.selectedYearLookup();
+    if (lookup) this.dialog.open(WecParticipationAddDialogComponent, { width: '600px', data: { driversChampId: lookup.driversChampId, constructorsChampId: lookup.constructorsChampId } }).afterClosed().subscribe(res => { if (res) this.loadParticipations(lookup); });
   }
 }

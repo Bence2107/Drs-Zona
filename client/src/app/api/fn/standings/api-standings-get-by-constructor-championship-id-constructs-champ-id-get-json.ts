@@ -11,12 +11,14 @@ import { ConstructorStandingsDto } from '../../models/constructor-standings-dto'
 
 export interface ApiStandingsGetByConstructorChampionshipIdConstructsChampIdGet$Json$Params {
   constructsChampId: string;
+  category?: string;
 }
 
 export function apiStandingsGetByConstructorChampionshipIdConstructsChampIdGet$Json(http: HttpClient, rootUrl: string, params: ApiStandingsGetByConstructorChampionshipIdConstructsChampIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<ConstructorStandingsDto>> {
   const rb = new RequestBuilder(rootUrl, apiStandingsGetByConstructorChampionshipIdConstructsChampIdGet$Json.PATH, 'get');
   if (params) {
     rb.path('constructsChampId', params.constructsChampId, {});
+    rb.query('category', params.category, {});
   }
 
   return http.request(

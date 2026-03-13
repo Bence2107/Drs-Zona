@@ -82,6 +82,10 @@ export class ResultsComponent implements OnInit {
   driverSeasonResults = signal<DriverSeasonResultDto[]>([]);
   constructorSeasonResults = signal<ConstructorSeasonResultDto[]>([]);
 
+  selectedCategory = signal<string | null>(null);
+  categories = signal<string[]>([]);
+
+  isWec = signal<boolean>(false);
   isLoading = signal(false);
 
   raceColumns = ['position', 'driver', 'time', 'points'];
@@ -97,7 +101,6 @@ export class ResultsComponent implements OnInit {
   ngOnInit() {
     this.loadAllSeries();
   }
-
   loadAllSeries() {
     this.standingsService.getAllSeries().subscribe(res => {
       this.seriesList.set(res);
@@ -111,6 +114,7 @@ export class ResultsComponent implements OnInit {
 
   onSeriesChange(seriesId: string) {
     this.selectedSeriesId.set(seriesId);
+    this.isWec.set(seriesId === 'WEC');
     this.standingsService.getSeasonsBySeries(seriesId).subscribe(res => {
       this.seasons.set(res);
       if (res.length > 0) {
@@ -276,13 +280,13 @@ export class ResultsComponent implements OnInit {
       });
     } else if (this.viewMode() === 'drivers' && drChampId) {
       this.isLoading.set(true);
-      this.standingsService.getDriverStandings(drChampId).subscribe(res => {
+      this.standingsService.getDriverStandings(drChampId, this.selectedCategory()!).subscribe(res => {
         this.driverStandings.set(res.results || []);
         this.isLoading.set(false);
       });
     } else if (this.viewMode() === 'constructors' && coChampId) {
       this.isLoading.set(true);
-      this.standingsService.getConstructorStandings(coChampId).subscribe(res => {
+      this.standingsService.getConstructorStandings(coChampId, this.selectedCategory()!).subscribe(res => {
         this.constructorStandings.set(res.results || []);
         this.isLoading.set(false);
       });
@@ -322,16 +326,35 @@ export class ResultsComponent implements OnInit {
     if (!gpId || !session) return;
 
     this.isLoading.set(true);
-    this.standingsService.getGrandPrixResults(gpId, session).subscribe({
-      next: (res) => {
-        this.raceResults.set(res.results || []);
-        this.isLoading.set(false);
-      },
-      error: () => this.isLoading.set(false)
-    });
+
+    if (this.isWec()) {
+      this.standingsService.getWecGrandPrixResults(gpId, session, this.selectedCategory()!).subscribe({
+        next: (res) => {
+            this.raceResults.set(res.results || []);
+            this.isLoading.set(false);
+        }
+      })
+    }
+    else {
+      this.standingsService.getGrandPrixResults(gpId, session).subscribe({
+        next: (res) => {
+          this.raceResults.set(res.results || []);
+          this.isLoading.set(false);
+        },
+        error: () => this.isLoading.set(false)
+      });
+    }
+
   }
 
   isAdmin(): boolean {
       return this.authService.currentProfile()?.role === 'Admin' || this.authService.currentProfile()?.role === 'Manager';
+  }
+
+  onCategoryChange(category: string) {
+    this.selectedCategory.set(category);
+    if (this.selectedSession()) {
+      this.loadResults(this.selectedSession()!);
+    }
   }
 }

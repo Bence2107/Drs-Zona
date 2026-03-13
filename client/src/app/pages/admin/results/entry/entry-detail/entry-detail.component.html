@@ -69,12 +69,28 @@
             <td mat-cell *matCellDef="let r">{{ r.finishPosition }}.</td>
           </ng-container>
 
-          <ng-container matColumnDef="driver">
-            <th mat-header-cell *matHeaderCellDef>Versenyző</th>
-            <td mat-cell *matCellDef="let r">
-              <div class="driver-cell">
-                <span class="car-number">#{{ r.carNumber }}</span>
-                <span class="driver-name">{{ r.driverName }}</span>
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>Kategória</th>
+            <td mat-cell *matCellDef="let _; let i = index">
+              @if (context()?.pointSystem === 'WEC') {
+                <mat-form-field appearance="outline" class="inline-field">
+                  <mat-select [formControl]="$any(editForms()[i].get('category'))">
+                    @for (cat of context()?.categories; track cat) {
+                      <mat-option [value]=cat>{{ cat }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="drivers">
+            <th mat-header-cell *matHeaderCellDef>Versenyzők</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="drivers-list">
+                @for (d of row.drivers; track d.driverId) {
+                  <span class="driver-chip">{{ d.driverName }}</span>
+                }
               </div>
             </td>
           </ng-container>

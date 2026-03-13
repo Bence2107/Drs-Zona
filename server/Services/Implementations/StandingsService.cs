@@ -134,7 +134,8 @@ public class StandingsService (
                 (d, c) => new YearLookupDto(
                     d.Season.ToString(),
                     d.Id,
-                    c.Id
+                    c.Id,
+                    c.Series!.PointSystem
                 )
             )
             .OrderByDescending(y => y.Season)
@@ -219,71 +220,98 @@ public class StandingsService (
         return ResponseResult<List<string>>.Success(sessions);
     }
 
-    public async Task<ResponseResult<DriverStandingsDto>> GetDriverStandings(Guid driverChampId)
+    public async Task<ResponseResult<DriverStandingsDto>> GetDriverStandings(Guid driverChampId, string? category = null)
     {
         var driverChampionship = await driverChampRepo.GetByIdWithSeries(driverChampId);
-        if (driverChampionship == null ) return ResponseResult<DriverStandingsDto>.Failure("Az egyéni bajnokság nem található");
-        
-        var series = await seriesRepo.GetSeriesById(driverChampionship.SeriesId);
-        if (series == null ) return ResponseResult<DriverStandingsDto>.Failure("A széria nem található");
+        if (driverChampionship == null) return ResponseResult<DriverStandingsDto>.Failure("Bajnokság nem található");
+
+        var isWec = driverChampionship.Series?.PointSystem == "WEC";
 
         var results = await resultsRepo.GetByDriversChampionshipId(driverChampId);
-        if (results.Count == 0)
-            return ResponseResult<DriverStandingsDto>.Success(new DriverStandingsDto(driverChampId, []));
-        
-        var standingsResult = results
-            .GroupBy(r => r.DriverId)
-            .Select(group =>
-            {
-                var latestResult = group.OrderBy(r => r.GrandPrix!.RoundNumber).Last();
-            
-                return new
-                {
-                    DriverId = group.Key,
-                    DriverName = latestResult.DriverNameSnapshot,
-                    Nationality = latestResult.Driver?.Nationality ?? "N/A",
-                    ConstructId = latestResult.ConstructorId,
-                    ConstructorName = latestResult.ConstructorNicknameSnapshot,
-                    Points = group.Sum(r => r.DriverPoints),
-                    BestFinish = group.Min(r => r.FinishPosition)
-                };
-            })
+        var filteredResults = string.IsNullOrEmpty(category) 
+            ? results 
+            : results.Where(r => string.Equals(r.Category, category, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        if (!filteredResults.Any()) return ResponseResult<DriverStandingsDto>.Success(new DriverStandingsDto(driverChampId, []));
+
+        IEnumerable<dynamic> rawStandings;
+
+        if (isWec)
+        {
+            rawStandings = filteredResults
+                .SelectMany(r => r.CarEntries!.Select(ce => new { Result = r, Entry = ce }))
+                .GroupBy(x => x.Entry.DriverId)
+                .Select(group => {
+                    var latest = group.OrderBy(x => x.Result.GrandPrix!.RoundNumber).Last();
+                    return new {
+                        DriverId = group.Key,
+                        DriverName = latest.Entry.DriverNameSnapshot,
+                        Nationality = "N/A", 
+                        ConstructId = latest.Result.ConstructorId,
+                        ConstructorName = latest.Result.ConstructorNicknameSnapshot,
+                        Points = group.Sum(x => x.Result.DriverPoints),
+                        BestFinish = group.Min(x => x.Result.FinishPosition),
+                        latest.Result.Category 
+                    };
+                });
+        }
+        else
+        {
+            rawStandings = filteredResults
+                .GroupBy(r => r.DriverId)
+                .Select(group => {
+                    var latest = group.OrderBy(r => r.GrandPrix!.RoundNumber).Last();
+                    return new {
+                        DriverId = (Guid?)(group.Key ?? Guid.Empty),
+                        DriverName = latest.DriverNameSnapshot,
+                        Nationality = latest.Driver?.Nationality ?? "N/A",
+                        ConstructId = latest.ConstructorId,
+                        ConstructorName = latest.ConstructorNicknameSnapshot,
+                        Points = group.Sum(r => r.DriverPoints),
+                        BestFinish = group.Min(r => r.FinishPosition),
+                        latest.Category 
+                    };
+                });
+        }
+
+        var standingsResult = rawStandings
             .OrderByDescending(x => x.Points)
             .ThenBy(x => x.BestFinish)
             .Select((x, index) => new DriverStandingsResultDto(
-                index + 1,
-                x.DriverId,
-                x.DriverName,
-                x.Nationality,
-                x.ConstructId,
-                x.ConstructorName,
-                x.Points
+                index + 1, 
+                x.DriverId, 
+                x.DriverName, 
+                x.Nationality, 
+                x.ConstructId, 
+                x.ConstructorName, 
+                x.Points,
+                x.Category // JAVÍTVA: Beillesztve az új DTO paraméter
             ))
             .ToArray();
 
-        return ResponseResult<DriverStandingsDto>.Success(
-            new DriverStandingsDto(driverChampId, standingsResult)
-        );
-
-    }
-
-    public async Task<ResponseResult<ConstructorStandingsDto>> GetConstructorStandings(Guid constructorsChampionId)
+        return ResponseResult<DriverStandingsDto>.Success(new DriverStandingsDto(driverChampId, standingsResult));
+    }    
+    public async Task<ResponseResult<ConstructorStandingsDto>> GetConstructorStandings(Guid constructorsChampionId, string? category = null)
     {
         var constructorChampionship = await constructorChampRepo.GetByIdWithSeries(constructorsChampionId);
         if (constructorChampionship == null) 
             return ResponseResult<ConstructorStandingsDto>.Failure("A konstruktőri bajnokság nem található");
 
         var results = await resultsRepo.GetByConstructorsChampionshipId(constructorsChampionId);
-    
-        if (results.Count == 0)
+
+        // SZŰRÉS KATEGÓRIÁRA (WEC-nél kötelező)
+        var filteredResults = string.IsNullOrEmpty(category) 
+            ? results 
+            : results.Where(r => string.Equals(r.Category, category, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        if (filteredResults.Count == 0)
             return ResponseResult<ConstructorStandingsDto>.Success(new ConstructorStandingsDto(constructorsChampionId, []));
 
-        var standingsResult = results
+        var standingsResult = filteredResults
             .GroupBy(r => r.ConstructorId)
             .Select(group =>
             {
                 var latestResult = group.Last(); 
-        
                 return new
                 {
                     ConstructorId = group.Key,
@@ -567,6 +595,7 @@ public class StandingsService (
                 DriversChampId     = dto.DriversChampId,
                 ConsChampId        = dto.ConsChampId,
                 StartPosition      = startingPosition.Result,
+                Category           = string.IsNullOrEmpty(r.Category) ? "Overall" : r.Category,
                 FinishPosition     = r.FinishPosition,
                 Session            = dto.Session,
                 RaceTime           = r.Status
@@ -607,32 +636,28 @@ public class StandingsService (
         var series = await seriesRepo.GetSeriesById(gp.SeriesId);
         if (series == null) return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Széria nem található");
 
-        var driversChamp = series.PointSystem != "WEC"
-            ? (await driverChampRepo.GetBySeriesId(gp.SeriesId))
-            .FirstOrDefault(c => c.Season == gp.SeasonYear.ToString())
-            : null;
+        var driversChamp = (await driverChampRepo.GetBySeriesId(gp.SeriesId))
+            .FirstOrDefault(c => c.Season == gp.SeasonYear.ToString());
 
         var consChamp = (await constructorChampRepo.GetBySeriesId(gp.SeriesId))
             .FirstOrDefault(c => c.Season == gp.SeasonYear.ToString());
-        if (consChamp == null)
-            return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Konstruktőri bajnokság nem található");
 
-        // WEC esetén nincs drivers champ — ez nem hiba
-        if (series.PointSystem != "WEC" && driversChamp == null)
-            return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Egyéni bajnokság nem található");
+        var categories = series.PointSystem == "WEC" 
+            ? new List<string> { "Hypercar", "LMGT3" } 
+            : new List<string> { "Overall" };
 
         var sessions = GetAvailableSessions(series.PointSystem);
 
         return ResponseResult<GrandPrixChampionshipContextDto>.Success(
             new GrandPrixChampionshipContextDto(
                 DriversChampId: driversChamp?.Id,
-                ConsChampId: consChamp.Id,
+                ConsChampId: consChamp?.Id,
                 PointSystem: series.PointSystem,
-                AvailableSessions: sessions
+                AvailableSessions: sessions,
+                Categories: categories
             )
         );
     }
-
     public async Task<ResponseResult<SessionEditDto>> GetSessionForEdit(Guid grandPrixId, string session)
     {
         var rawResults = await resultsRepo.GetBySession(grandPrixId, session);
@@ -655,7 +680,9 @@ public class StandingsService (
             LapsCompleted:     r.LapsCompleted,
             Status:            r.Status,
             DriverPoints:      r.DriverPoints,
-            ConstructorPoints: r.ConstructorPoints
+            ConstructorPoints: r.ConstructorPoints,
+            Category:          r.Category, 
+            IsCarEntry:        r.IsCarEntry
         )).ToList();
 
         return ResponseResult<SessionEditDto>.Success(new SessionEditDto(grandPrixId, session, results));
@@ -795,7 +822,7 @@ public class StandingsService (
             if (constructorCompetition == null) continue;
 
             // Pontszámítás — WEC-nél csak konstruktőri, versenyzői = 0
-            var (_, constructorPoints) = CalculateWecPoints(r.FinishPosition, r.Pole, gp.RaceDurationMinutes);
+            var (_, calculatedPoints) = CalculateWecPoints(r.FinishPosition, r.Pole, gp.RaceDurationMinutes);
 
             // Időmérőn az indulási pozíció: a Hyperpole/Qualifying result sorból olvassuk
             var startPosition = await GetWecStartPosition(dto.Session, dto.GrandPrixId, r.CarNumber);
@@ -810,6 +837,7 @@ public class StandingsService (
                 ConstructorNameSnapshot     = constructorCompetition.ConstructorNameSnapshot,
                 ConstructorNicknameSnapshot = constructorCompetition.ConstructorNicknameSnapshot,
                 DriversChampId              = null,              
+                Category                    = r.Category,
                 ConsChampId                 = dto.ConsChampId,
                 StartPosition               = startPosition,
                 FinishPosition              = r.FinishPosition,
@@ -818,8 +846,8 @@ public class StandingsService (
                 RaceTime                    = r.Status.Equals("Finished", StringComparison.OrdinalIgnoreCase)
                     ? ResolveRaceTime(r.RaceTime, leaderTimeMs)
                     : 0,
-                DriverPoints                = 0,                
-                ConstructorPoints           = constructorPoints,
+                DriverPoints                = calculatedPoints,                
+                ConstructorPoints           = calculatedPoints,
                 LapsCompleted               = r.LapsCompleted,
                 Status                      = r.Status,
                 IsCarEntry                  = true,
@@ -847,27 +875,34 @@ public class StandingsService (
         return ResponseResult<bool>.Success(true);
     }
     
-    public async Task<ResponseResult<WecGrandPrixResultsDto>> GetWecGrandPrixResults(Guid grandPrixId, string session)
+    public async Task<ResponseResult<WecGrandPrixResultsDto>> GetWecGrandPrixResults(Guid grandPrixId, string session, string? category = null)
     {
         var rawResults = await resultsRepo.GetWecBySession(grandPrixId, session); 
-        var ordered = rawResults.OrderBy(r => r.FinishPosition).ToList();
+    
+        // 1. Szűrés kategóriára, ha van megadva
+        var filteredResults = string.IsNullOrEmpty(category) 
+            ? rawResults 
+            : rawResults.Where(r => string.Equals(r.Category, category, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        var ordered = filteredResults.OrderBy(r => r.FinishPosition).ToList();
 
         if (ordered.Count == 0)
-            return ResponseResult<WecGrandPrixResultsDto>.Success(
-                new WecGrandPrixResultsDto(grandPrixId, session, []));
+            return ResponseResult<WecGrandPrixResultsDto>.Success(new WecGrandPrixResultsDto(grandPrixId, session, []));
 
         var leader = ordered.First();
         var leaderTime = leader.RaceTime;
         var leaderLaps = leader.LapsCompleted;
 
-        var rows = ordered.Select(r =>
+        var rows = ordered.Select((r, index) =>
         {
             var drivers = r.CarEntries?
                 .Select(ce => new CarEntryDto(ce.DriverId, ce.DriverNameSnapshot, ce.IsQualifier))
                 .ToList() ?? [];
 
             return new WecResultRowDto(
-                Position:       r.FinishPosition,
+                // Ha szűrtünk kategóriára, az index + 1 a kategória-helyezés, 
+                // különben az eredeti FinishPosition-t mutatjuk
+                Position:       string.IsNullOrEmpty(category) ? r.FinishPosition : index + 1,
                 CarNumber:      r.CarNumber,
                 CarLabel:       r.DriverNameSnapshot,
                 ConstructorId:  r.ConstructorId,
@@ -878,10 +913,8 @@ public class StandingsService (
             );
         }).ToArray();
 
-        return ResponseResult<WecGrandPrixResultsDto>.Success(
-            new WecGrandPrixResultsDto(grandPrixId, session, rows));
-    }
-    
+        return ResponseResult<WecGrandPrixResultsDto>.Success(new WecGrandPrixResultsDto(grandPrixId, session, rows));
+    }    
     private async Task<int> GetWecStartPosition(string session, Guid grandPrixId, int carNumber)
     {
         if (session is "Qualifying" or "Hyperpole") return 0;
@@ -889,20 +922,17 @@ public class StandingsService (
 
         var existingSessions = await resultsRepo.GetAvailableSessionsByGrandPrixId(grandPrixId);
 
-        var qualifyingSession = existingSessions.Contains("Hyperpole")
-            ? "Hyperpole"
-            : existingSessions.Contains("Qualifying")
-                ? "Qualifying"
-                : null;
+        // Meghatározzuk, mi volt az utolsó releváns időmérő session
+        var qualifyingSession = existingSessions.Contains("Hyperpole") ? "Hyperpole" : 
+            existingSessions.Contains("Qualifying") ? "Qualifying" : null;
 
         if (qualifyingSession == null) return 0;
 
         var qualResults = await resultsRepo.GetBySession(grandPrixId, qualifyingSession);
-        return qualResults
-            .FirstOrDefault(r => r.CarNumber == carNumber)
-            ?.FinishPosition ?? 0;
+        var carResult = qualResults.FirstOrDefault(r => r.CarNumber == carNumber);
+    
+        return carResult?.FinishPosition ?? 0;
     }
-
     public async Task<ResponseResult<bool>> SaveWecSessionResults(WecBatchResultCreateDto dto)
     {
         var existing = await resultsRepo.GetBySession(dto.GrandPrixId, dto.Session);
