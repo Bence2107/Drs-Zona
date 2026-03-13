@@ -88,5 +88,10 @@ public class ResultsRepository(EfContext context) : IResultsRepository
     {
         return await _results.AnyAsync(r => r.GrandPrixId == gp.Id);
     }
-    
+
+    public async Task<List<Result>> GetWecBySession(Guid grandPrixId, string session) => await _results
+        .Include(r => r.CarEntries)!
+        .ThenInclude(ce => ce.Driver)
+        .Where(r => r.GrandPrixId == grandPrixId && r.Session == session)
+        .ToListAsync();
 }

@@ -20,4 +20,5 @@ public interface IResultsRepository
     Task<List<string>> GetAvailableSessionsByGrandPrixId(Guid grandPrixId);
     Task<bool> CheckIfIdExists(Guid id);
     Task<bool> HasGrandPrixResults(GrandPrix gp);
+    Task<List<Result>> GetWecBySession(Guid grandPrixId, string session);
 }

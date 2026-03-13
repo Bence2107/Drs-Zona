@@ -222,7 +222,7 @@ public record SingleResultDto(
 
 public record ResultEditDto(
     Guid ResultId,
-    Guid DriverId,
+    Guid? DriverId,
     int CarNumber,
     string DriverName,
     Guid ConstructorId,
@@ -260,20 +260,13 @@ public record GrandPrixResultsDto(
 
 public record GrandRrixResultDto(
     int Position,
-    Guid DriverId,
+    Guid? DriverId,
     int DriverNumber,
     string DriverName,
     Guid ConstructorId,
     string ConstructorName,
     string TimeOrCompleted,
     double Points
-);
-
-public record GrandPrixChampionshipContextDto(
-    Guid DriversChampId,
-    Guid ConsChampId,
-    string PointSystem,
-    List<string> AvailableSessions
 );
 
 public record DriverStandingsDto(
@@ -283,7 +276,7 @@ public record DriverStandingsDto(
 
 public record DriverStandingsResultDto(
     int Position,
-    Guid DriverId,
+    Guid? DriverId,
     string DriverName,
     string Nationality,
     Guid ConstructorId,
@@ -331,3 +324,92 @@ public record DefaultFiltersDto(
 public record DriverSeasonResultDto(string GrandPrixName, string GrandPrixShortName, DateTime Date, string TeamName, int Position, double Points);
 public record ConstructorSeasonResultDto(string GrandPrixName, string GrandPrixShortName,  DateTime Date, double Points);
 public record SeasonOverviewDto(string GrandPrixName, string GrandPrixShortName, DateTime Date, string WinnerName, string TeamName, int Laps, string Time);
+
+
+// ─────────────────────────────────────────────
+// WEC CarEntry DTOs
+// ─────────────────────────────────────────────
+
+/// <summary>
+/// Egy pilóta hozzárendelése egy WEC autó-eredménysorhoz.
+/// </summary>
+public record CarEntryDto(
+    Guid? DriverId,
+    string DriverName,
+    bool IsQualifier
+);
+
+/// <summary>
+/// WEC batch feltöltésnél egy autó összes adata.
+/// A DriverId / DriverName itt az autó "label"-je (pl. "#8 Toyota"),
+/// a pilóták a Drivers listában vannak.
+/// </summary>
+public record WecSingleResultDto(
+    Guid ConstructorId,
+    int CarNumber,
+    string CarLabel,           // pl. "Toyota GR010 #8" — ez kerül a DriverNameSnapshot-ba
+    int FinishPosition,
+    string RaceTime,
+    int LapsCompleted,
+    string Status,
+    bool Pole = false,
+    int StartPosition = 0,
+    List<WecCarEntryCreateDto>? Drivers = null  // co-driverek
+);
+
+public record WecCarEntryCreateDto(
+    Guid DriverId,
+    bool IsQualifier = false   // időmérőn ki vezette az autót
+);
+
+/// <summary>
+/// WEC batch eredmény feltöltés (futam VAGY időmérő)
+/// </summary>
+public record WecBatchResultCreateDto(
+    Guid GrandPrixId,
+    Guid ConsChampId,          // WEC-nél nincs DriversChampId
+    string Session,
+    List<WecSingleResultDto> Results
+);
+
+
+/// <summary>
+/// Egy nagydíjhoz tartozó championship kontextus.
+/// WEC esetén DriversChampId null.
+/// </summary>
+public record GrandPrixChampionshipContextDto(
+    Guid? DriversChampId,
+    Guid ConsChampId,
+    string PointSystem,
+    List<SessionDefinition> AvailableSessions
+);
+
+/// <summary>
+/// Egy session leírója: neve + hogy számít-e pontba
+/// </summary>
+public record SessionDefinition(
+    string Name,
+    bool CountsForPoints,
+    bool IsQualifying          // időmérő jellegű-e (indulási pozíciót határoz meg)
+);
+
+// ─────────────────────────────────────────────
+// WEC eredmény megjelenítéshez
+// ─────────────────────────────────────────────
+
+public record WecGrandPrixResultsDto(
+    Guid GrandPrixId,
+    string Session,
+    WecResultRowDto[] Results
+);
+
+public record WecResultRowDto(
+    int Position,
+    int CarNumber,
+    string CarLabel,
+    Guid ConstructorId,
+    string ConstructorName,
+    List<CarEntryDto> Drivers,
+    string TimeOrCompleted,
+    double Points
+);

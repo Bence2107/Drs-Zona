@@ -30,4 +30,7 @@ public interface IStandingsService
     Task<ResponseResult<SessionEditDto>> GetSessionForEdit(Guid grandPrixId, string session);
     Task<ResponseResult<bool>> UpdateSingleResult(SingleResultUpdateDto dto);
     Task<ResponseResult<bool>> RecalculateSession(Guid grandPrixId, string session);
+    Task<ResponseResult<bool>> InsertWecResults(WecBatchResultCreateDto dto);
+    Task<ResponseResult<bool>> SaveWecSessionResults(WecBatchResultCreateDto dto);
+    Task<ResponseResult<WecGrandPrixResultsDto>> GetWecGrandPrixResults(Guid grandPrixId, string session);
 }

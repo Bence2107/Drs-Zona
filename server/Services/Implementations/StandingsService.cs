@@ -9,6 +9,7 @@ namespace Services.Implementations;
 public class StandingsService (
     IDriversChampionshipsRepository driverChampRepo,
     IDriversRepository driversRepo,
+    ICarEntryRepository carEntryRepo,
     IConstructorsChampionshipsRepository constructorChampRepo,
     IConstructorsRepository constructorsRepo,
     IResultsRepository resultsRepo,
@@ -606,23 +607,29 @@ public class StandingsService (
         var series = await seriesRepo.GetSeriesById(gp.SeriesId);
         if (series == null) return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Széria nem található");
 
-        var driversChamp = (await driverChampRepo.GetBySeriesId(gp.SeriesId))
-            .FirstOrDefault(c => c.Season == series.LastYear.ToString());
-        if (driversChamp == null) return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Egyéni bajnokság nem található");
+        var driversChamp = series.PointSystem != "WEC"
+            ? (await driverChampRepo.GetBySeriesId(gp.SeriesId))
+            .FirstOrDefault(c => c.Season == gp.SeasonYear.ToString())
+            : null;
 
         var consChamp = (await constructorChampRepo.GetBySeriesId(gp.SeriesId))
-            .FirstOrDefault(c => c.Season == series.LastYear.ToString());
-        if (consChamp == null) return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Konstruktőri bajnokság nem található");
+            .FirstOrDefault(c => c.Season == gp.SeasonYear.ToString());
+        if (consChamp == null)
+            return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Konstruktőri bajnokság nem található");
 
-        var availableSessions = series.PointSystem switch
-        {
-            "F1"     => new List<string> { "Sprint", "Verseny" },
-            "F2"     => new List<string> { "Sprint", "Verseny" },
-            _        => new List<string> { "Verseny" }
-        };
+        // WEC esetén nincs drivers champ — ez nem hiba
+        if (series.PointSystem != "WEC" && driversChamp == null)
+            return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Egyéni bajnokság nem található");
+
+        var sessions = GetAvailableSessions(series.PointSystem);
 
         return ResponseResult<GrandPrixChampionshipContextDto>.Success(
-            new GrandPrixChampionshipContextDto(driversChamp.Id, consChamp.Id, series.PointSystem, availableSessions)
+            new GrandPrixChampionshipContextDto(
+                DriversChampId: driversChamp?.Id,
+                ConsChampId: consChamp.Id,
+                PointSystem: series.PointSystem,
+                AvailableSessions: sessions
+            )
         );
     }
 
@@ -655,75 +662,62 @@ public class StandingsService (
     }
     
     public async Task<ResponseResult<bool>> UpdateSingleResult(SingleResultUpdateDto dto)
-{
-    var result = await resultsRepo.GetResultById(dto.ResultId);
-    if (result == null) return ResponseResult<bool>.Failure("Eredmény nem található");
-
-    var gp = await grandsPrixRepo.GetGrandPrixById(result.GrandPrixId);
-    if (gp == null) return ResponseResult<bool>.Failure("Nagydíj nem található");
-
-    var series = await seriesRepo.GetSeriesById(gp.SeriesId);
-    if (series == null) return ResponseResult<bool>.Failure("Széria nem található");
-
-    var (driverPoints, constructorPoints) = CalculatePoints(
-        series.PointSystem,
-        result.Session,
-        dto.FinishPosition,
-        dto.FinishPosition == 1,
-        gp.RaceDurationMinutes
-    );
-
-    if (series.PointSystem == "NASCAR")
     {
-        var sessionResults = await resultsRepo.GetBySession(result.GrandPrixId, result.Session);
-        var bestPosition = sessionResults
-            .Where(r => r.ConstructorId == result.ConstructorId && r.Id != result.Id)
-            .Select(r => r.FinishPosition)
-            .Append(dto.FinishPosition)
-            .Min();
-        var (nascarPoints, _) = CalculateNascarPoints(dto.FinishPosition);
-        constructorPoints = dto.FinishPosition == bestPosition ? nascarPoints : 0;
-    }
+        var result = await resultsRepo.GetResultById(dto.ResultId);
+        if (result == null) return ResponseResult<bool>.Failure("Eredmény nem található");
 
-    var allSessionResults = await resultsRepo.GetBySession(result.GrandPrixId, result.Session);
-    var leaderTimeMs = dto.FinishPosition == 1
-        ? ParseAbsoluteTime(dto.RaceTime)
-        : allSessionResults
-            .Where(r => r.FinishPosition == 1 && r.Id != result.Id)
-            .Select(r => r.RaceTime)
-            .FirstOrDefault();
+        var gp = await grandsPrixRepo.GetGrandPrixById(result.GrandPrixId);
+        if (gp == null) return ResponseResult<bool>.Failure("Nagydíj nem található");
 
-    result.FinishPosition    = dto.FinishPosition;
-    result.RaceTime          = dto.Status.Equals("Finished", StringComparison.OrdinalIgnoreCase)
-        ? ResolveRaceTime(dto.RaceTime, leaderTimeMs)
-        : 0;
-    result.LapsCompleted     = dto.LapsCompleted;
-    result.Status            = dto.Status;
-    result.DriverPoints      = driverPoints;
-    result.ConstructorPoints = constructorPoints;
-    result.StartPosition     = await GetStartPosition(
-        series.PointSystem,
-        result.Session,
-        result.GrandPrixId,
-        result.DriverId,
-        result.StartPosition
-    );
+        var series = await seriesRepo.GetSeriesById(gp.SeriesId);
+        if (series == null) return ResponseResult<bool>.Failure("Széria nem található");
 
-    await resultsRepo.Update(result);
-    return ResponseResult<bool>.Success(true);
-}
-    
-    private static (double driverPoints, double constructorPoints) CalculatePoints(
-        string scoringSystem, string session, int finishPosition, bool pole = false, int? raceDurationMinutes = null)
-    {
-        return scoringSystem switch
+        var (driverPoints, constructorPoints) = CalculatePoints(
+            series.PointSystem,
+            result.Session,
+            dto.FinishPosition,
+            dto.FinishPosition == 1,
+            gp.RaceDurationMinutes
+        );
+
+        if (series.PointSystem == "NASCAR")
         {
-            "F1"     => CalculateF1Points(session, finishPosition),
-            "F2"     => CalculateF2Points(session, finishPosition, pole),
-            "WEC"    => CalculateWecPoints(finishPosition, pole, raceDurationMinutes),
-            "NASCAR" => CalculateNascarPoints(finishPosition),
-            _        => (0, 0)
-        };
+            var sessionResults = await resultsRepo.GetBySession(result.GrandPrixId, result.Session);
+            var bestPosition = sessionResults
+                .Where(r => r.ConstructorId == result.ConstructorId && r.Id != result.Id)
+                .Select(r => r.FinishPosition)
+                .Append(dto.FinishPosition)
+                .Min();
+            var (nascarPoints, _) = CalculateNascarPoints(dto.FinishPosition);
+            constructorPoints = dto.FinishPosition == bestPosition ? nascarPoints : 0;
+        }
+
+        var allSessionResults = await resultsRepo.GetBySession(result.GrandPrixId, result.Session);
+        var leaderTimeMs = dto.FinishPosition == 1
+            ? ParseAbsoluteTime(dto.RaceTime)
+            : allSessionResults
+                .Where(r => r.FinishPosition == 1 && r.Id != result.Id)
+                .Select(r => r.RaceTime)
+                .FirstOrDefault();
+
+        result.FinishPosition    = dto.FinishPosition;
+        result.RaceTime          = dto.Status.Equals("Finished", StringComparison.OrdinalIgnoreCase)
+            ? ResolveRaceTime(dto.RaceTime, leaderTimeMs)
+            : 0;
+        result.LapsCompleted     = dto.LapsCompleted;
+        result.Status            = dto.Status;
+        result.DriverPoints      = driverPoints;
+        result.ConstructorPoints = constructorPoints;
+        result.StartPosition     = await GetStartPosition(
+            series.PointSystem,
+            result.Session,
+            result.GrandPrixId,
+            result.DriverId,
+            result.StartPosition
+        );
+
+        await resultsRepo.Update(result);
+        return ResponseResult<bool>.Success(true);
     }
     
     public async Task<ResponseResult<bool>> RecalculateSession(Guid grandPrixId, string session)
@@ -781,6 +775,184 @@ public class StandingsService (
 
         return ResponseResult<bool>.Success(true);
     }
+    
+    public async Task<ResponseResult<bool>> InsertWecResults(WecBatchResultCreateDto dto)
+    {
+        var gp = await grandsPrixRepo.GetGrandPrixById(dto.GrandPrixId);
+        if (gp == null) return ResponseResult<bool>.Failure("Nagydíj nem található");
+
+        var series = await seriesRepo.GetSeriesById(gp.SeriesId);
+        if (series == null) return ResponseResult<bool>.Failure("Széria nem található");
+        if (series.PointSystem != "WEC") return ResponseResult<bool>.Failure("Ez a végpont csak WEC-hez használható");
+
+        var leaderDto = dto.Results.FirstOrDefault(r => r.FinishPosition == 1);
+        var leaderTimeMs = leaderDto != null ? ParseAbsoluteTime(leaderDto.RaceTime) : 0;
+
+        foreach (var r in dto.Results)
+        {
+            var constructorCompetition = await constructorCompetitionRepo
+                .GetByConstructorAndChampionship(r.ConstructorId, dto.ConsChampId);
+            if (constructorCompetition == null) continue;
+
+            // Pontszámítás — WEC-nél csak konstruktőri, versenyzői = 0
+            var (_, constructorPoints) = CalculateWecPoints(r.FinishPosition, r.Pole, gp.RaceDurationMinutes);
+
+            // Időmérőn az indulási pozíció: a Hyperpole/Qualifying result sorból olvassuk
+            var startPosition = await GetWecStartPosition(dto.Session, dto.GrandPrixId, r.CarNumber);
+
+            var result = new Result
+            {
+                Id                          = Guid.NewGuid(),
+                GrandPrixId                 = dto.GrandPrixId,
+                DriverId                    = null,             
+                DriverNameSnapshot          = r.CarLabel,       
+                ConstructorId               = r.ConstructorId,
+                ConstructorNameSnapshot     = constructorCompetition.ConstructorNameSnapshot,
+                ConstructorNicknameSnapshot = constructorCompetition.ConstructorNicknameSnapshot,
+                DriversChampId              = null,              
+                ConsChampId                 = dto.ConsChampId,
+                StartPosition               = startPosition,
+                FinishPosition              = r.FinishPosition,
+                Session                     = dto.Session,
+                CarNumber                   = r.CarNumber,
+                RaceTime                    = r.Status.Equals("Finished", StringComparison.OrdinalIgnoreCase)
+                    ? ResolveRaceTime(r.RaceTime, leaderTimeMs)
+                    : 0,
+                DriverPoints                = 0,                
+                ConstructorPoints           = constructorPoints,
+                LapsCompleted               = r.LapsCompleted,
+                Status                      = r.Status,
+                IsCarEntry                  = true,
+            };
+
+            await resultsRepo.Create(result);
+
+            if (r.Drivers == null) continue;
+            foreach (var driverEntry in r.Drivers)
+            {
+                var driver = await driversRepo.GetDriverById(driverEntry.DriverId);
+                if (driver == null) continue;
+
+                await carEntryRepo.Create(new CarEntry
+                {
+                    Id                  = Guid.NewGuid(),
+                    ResultId            = result.Id,
+                    DriverId            = driverEntry.DriverId,
+                    DriverNameSnapshot  = driver.Name,
+                    IsQualifier         = driverEntry.IsQualifier,
+                });
+            }
+        }
+
+        return ResponseResult<bool>.Success(true);
+    }
+    
+    public async Task<ResponseResult<WecGrandPrixResultsDto>> GetWecGrandPrixResults(Guid grandPrixId, string session)
+    {
+        var rawResults = await resultsRepo.GetWecBySession(grandPrixId, session); 
+        var ordered = rawResults.OrderBy(r => r.FinishPosition).ToList();
+
+        if (ordered.Count == 0)
+            return ResponseResult<WecGrandPrixResultsDto>.Success(
+                new WecGrandPrixResultsDto(grandPrixId, session, []));
+
+        var leader = ordered.First();
+        var leaderTime = leader.RaceTime;
+        var leaderLaps = leader.LapsCompleted;
+
+        var rows = ordered.Select(r =>
+        {
+            var drivers = r.CarEntries?
+                .Select(ce => new CarEntryDto(ce.DriverId, ce.DriverNameSnapshot, ce.IsQualifier))
+                .ToList() ?? [];
+
+            return new WecResultRowDto(
+                Position:       r.FinishPosition,
+                CarNumber:      r.CarNumber,
+                CarLabel:       r.DriverNameSnapshot,
+                ConstructorId:  r.ConstructorId,
+                ConstructorName: r.ConstructorNicknameSnapshot,
+                Drivers:        drivers,
+                TimeOrCompleted: FormatTimeOrStatus(r, leaderTime, leaderLaps),
+                Points:         r.ConstructorPoints
+            );
+        }).ToArray();
+
+        return ResponseResult<WecGrandPrixResultsDto>.Success(
+            new WecGrandPrixResultsDto(grandPrixId, session, rows));
+    }
+    
+    private async Task<int> GetWecStartPosition(string session, Guid grandPrixId, int carNumber)
+    {
+        if (session is "Qualifying" or "Hyperpole") return 0;
+        if (session != "Verseny") return 0;
+
+        var existingSessions = await resultsRepo.GetAvailableSessionsByGrandPrixId(grandPrixId);
+
+        var qualifyingSession = existingSessions.Contains("Hyperpole")
+            ? "Hyperpole"
+            : existingSessions.Contains("Qualifying")
+                ? "Qualifying"
+                : null;
+
+        if (qualifyingSession == null) return 0;
+
+        var qualResults = await resultsRepo.GetBySession(grandPrixId, qualifyingSession);
+        return qualResults
+            .FirstOrDefault(r => r.CarNumber == carNumber)
+            ?.FinishPosition ?? 0;
+    }
+
+    public async Task<ResponseResult<bool>> SaveWecSessionResults(WecBatchResultCreateDto dto)
+    {
+        var existing = await resultsRepo.GetBySession(dto.GrandPrixId, dto.Session);
+        foreach (var res in existing)
+            await resultsRepo.Delete(res.Id);
+
+        return await InsertWecResults(dto);
+    }
+    
+    private static (double driverPoints, double constructorPoints) CalculatePoints(
+        string scoringSystem, string session, int finishPosition, bool pole = false, int? raceDurationMinutes = null)
+    {
+        return scoringSystem switch
+        {
+            "F1"     => CalculateF1Points(session, finishPosition),
+            "F2"     => CalculateF2Points(session, finishPosition, pole),
+            "WEC"    => CalculateWecPoints(finishPosition, pole, raceDurationMinutes),
+            "NASCAR" => CalculateNascarPoints(finishPosition),
+            _        => (0, 0)
+        };
+    }
+    
+    
+    private static List<SessionDefinition> GetAvailableSessions(string pointSystem) =>
+        pointSystem switch
+        {
+            "F1" => [
+                new SessionDefinition("Időmérő",          CountsForPoints: false, IsQualifying: true),
+                new SessionDefinition("Sprint Qualifying",CountsForPoints: false, IsQualifying: true),
+                new SessionDefinition("Sprint",           CountsForPoints: true,  IsQualifying: false),
+                new SessionDefinition("Verseny",          CountsForPoints: true,  IsQualifying: false),
+            ],
+            "F2" => [
+                new SessionDefinition("Időmérő",          CountsForPoints: false, IsQualifying: true),
+                new SessionDefinition("Sprint",           CountsForPoints: true,  IsQualifying: false),
+                new SessionDefinition("Verseny",          CountsForPoints: true,  IsQualifying: false),
+            ],
+            "WEC" => [
+                new SessionDefinition("Qualifying",       CountsForPoints: false, IsQualifying: true),
+                new SessionDefinition("Hyperpole",        CountsForPoints: false, IsQualifying: true),
+                new SessionDefinition("Verseny",          CountsForPoints: true,  IsQualifying: false),
+            ],
+            "NASCAR" => [
+                new SessionDefinition("Qualifying",       CountsForPoints: false, IsQualifying: true),
+                new SessionDefinition("Verseny",          CountsForPoints: true,  IsQualifying: false),
+            ],
+            _ => [
+                new SessionDefinition("Verseny",          CountsForPoints: true,  IsQualifying: false),
+            ]
+        };
 
     private static (double, double) CalculateF1Points(string session, int position)
     {
@@ -871,7 +1043,7 @@ public class StandingsService (
     }
 
     private async Task<int> GetStartPosition(
-        string pointSystem, string session, Guid grandPrixId, Guid driverId, int fallback)
+        string pointSystem, string session, Guid grandPrixId, Guid? driverId, int fallback)
     {
         var noStartPositionSessions = new[] 
         { 

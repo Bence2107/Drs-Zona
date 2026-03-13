@@ -90,6 +90,7 @@ builder.Services.AddScoped<ICircuitsRepository, CircuitsRepository>();
 builder.Services.AddScoped<IGrandsPrixRepository, GrandsPrixRepository>();
 
 builder.Services.AddScoped<IBrandsRepository, BrandsRepository>();
+builder.Services.AddScoped<ICarEntryRepository, CarEntryRepository>();
 builder.Services.AddScoped<IConstructorCompetitionRepository, ConstructorCompetitionRepository>();
 builder.Services.AddScoped<IConstructorsChampionshipsRepository, ConstructorsChampionshipsRepository>();
 builder.Services.AddScoped<IConstructorsRepository, ConstructorsRepository>();

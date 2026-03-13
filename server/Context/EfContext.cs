@@ -15,6 +15,8 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
 
     public DbSet<Comment> Comments { get; set; }
     
+    public DbSet<CarEntry> CarEntries { get; set; }
+    
     public DbSet<CommentVote> CommentVotes { get; set; }
 
     public DbSet<Poll> Polls { get; set; }
@@ -228,6 +230,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
             options
                 .HasOne(r => r.Driver)
                 .WithMany()
+                .IsRequired(false) 
                 .HasForeignKey(r => r.DriverId)
                 .OnDelete(DeleteBehavior.NoAction);
 
@@ -240,6 +243,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
             options
                 .HasOne(r => r.DriversChampionship)
                 .WithMany()
+                .IsRequired(false) 
                 .HasForeignKey(r => r.DriversChampId)
                 .OnDelete(DeleteBehavior.NoAction);
 
@@ -248,6 +252,24 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .WithMany()
                 .HasForeignKey(r => r.ConsChampId)
                 .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<CarEntry>(options =>
+        {
+            // Result -> CarEntry (One-to-Many), CASCADE
+            options
+                .HasOne(c => c.Result)
+                .WithMany(r => r.CarEntries)
+                .HasForeignKey(c => c.ResultId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Driver -> CarEntry (Many-to-One), SET NULL
+            options
+                .HasOne(c => c.Driver)
+                .WithMany()
+                .HasForeignKey(c => c.DriverId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         // Team -> Brand (Many-to-One)

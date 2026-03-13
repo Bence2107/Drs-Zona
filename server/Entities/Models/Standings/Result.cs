@@ -18,9 +18,8 @@ public class Result
     [JsonIgnore]
     public virtual GrandPrix? GrandPrix {get; set;}
     
-    [Required]
     [Column("driver_id")]
-    public Guid DriverId {get; set;}
+    public Guid? DriverId {get; set;}
     [JsonIgnore]
     public virtual Driver? Driver {get; set;}
     
@@ -39,7 +38,7 @@ public class Result
     public required string ConstructorNicknameSnapshot { get; set; }
     
     [Column("drivers_championship_id")]
-    public Guid DriversChampId {get; set;}
+    public Guid? DriversChampId {get; set;}
     [JsonIgnore]
     public virtual DriversChampionship? DriversChampionship {get; set;}
     
@@ -83,4 +82,10 @@ public class Result
     [Required]
     [Column("constructor_points")]
     public double ConstructorPoints {get; set;}
+    
+    [Column("is_car_entry")]
+    public bool IsCarEntry { get; set; } = false;
+
+    [JsonIgnore]
+    public virtual ICollection<CarEntry>? CarEntries { get; set; }
 }

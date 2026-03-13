@@ -340,4 +340,25 @@ public class StandingsController(IStandingsService standingsService): Controller
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
     }
+    
+    [HttpPost("wec/insertResults")]
+    public async Task<ActionResult> InsertWecResults([FromBody] WecBatchResultCreateDto dto)
+    {
+        var result = await standingsService.InsertWecResults(dto);
+        return result.IsSuccess ? Ok() : BadRequest(result.ErrorField);
+    }
+
+    [HttpPost("wec/SaveSessionResults")]
+    public async Task<ActionResult> SaveWecSessionResults([FromBody] WecBatchResultCreateDto dto)
+    {
+        var result = await standingsService.SaveWecSessionResults(dto);
+        return result.IsSuccess ? Ok() : BadRequest(result.ErrorField);
+    }
+    
+    [HttpGet("wec/{grandPrixId:guid}/results/{session}")]
+    public async Task<ActionResult<WecGrandPrixResultsDto>> GetWecGrandPrixResults(Guid grandPrixId, string session)
+    {
+        var result = await standingsService.GetWecGrandPrixResults(grandPrixId, session);
+        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorField);
+    }
 }
