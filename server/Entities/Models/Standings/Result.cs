@@ -83,4 +83,12 @@ public class Result
     [Required]
     [Column("constructor_points")]
     public double ConstructorPoints {get; set;}
+    
+    [Required]
+    [Column("is_pole_position")]
+    public bool IsPolePosition { get; set; }
+
+    [Required]
+    [Column("is_fastest_lap")]
+    public bool IsFastestLap { get; set; }
 }

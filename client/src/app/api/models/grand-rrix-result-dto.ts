@@ -7,7 +7,13 @@ export interface GrandRrixResultDto {
   driverId?: string;
   driverName?: string | null;
   driverNumber?: number;
+  isFastestLap?: boolean;
+  isPole?: boolean;
+  lapsCompleted?: number;
   points?: number;
   position?: number;
+  q1?: string | null;
+  q2?: string | null;
+  q3?: string | null;
   timeOrCompleted?: string | null;
 }

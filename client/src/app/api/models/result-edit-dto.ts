@@ -10,7 +10,12 @@ export interface ResultEditDto {
   driverName?: string | null;
   driverPoints?: number;
   finishPosition?: number;
+  isFastestLap?: boolean;
+  isPole?: boolean;
   lapsCompleted?: number;
+  q1?: string | null;
+  q2?: string | null;
+  q3?: string | null;
   raceTime?: string | null;
   resultId?: string;
   startPosition?: number;

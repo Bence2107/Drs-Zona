@@ -88,5 +88,14 @@ public class ResultsRepository(EfContext context) : IResultsRepository
     {
         return await _results.AnyAsync(r => r.GrandPrixId == gp.Id);
     }
-    
+
+    public async Task<Result?> GetByGpDriverSession(Guid grandPrixId, Guid driverId, string session)
+    {
+        return await _results.FirstOrDefaultAsync(
+            r => 
+                r.GrandPrixId == grandPrixId && 
+                r.DriverId == driverId && 
+                r.Session == session
+        );
+    }
 }

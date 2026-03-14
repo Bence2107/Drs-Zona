@@ -41,6 +41,8 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
 
     public DbSet<DriversChampionship> DriversChampionships { get; set; }
 
+    public DbSet<QualifyingResult> QualifyingResults { get; set; }
+    
     public DbSet<Result> Results { get; set; }
 
     public DbSet<Series> Series { get; set; }
@@ -281,6 +283,16 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
         {
             options.Property(u => u.Role).HasDefaultValue("user");
             options.Property(u => u.HasAvatar).HasDefaultValue(false);
+        });
+        
+        modelBuilder.Entity<QualifyingResult>(options =>
+        {
+            // One-to-One kapcsolat: Egy Result-hoz tartozhat egy QualifyingResult
+            options
+                .HasOne(qr => qr.Result)
+                .WithOne() // Ha a Result osztályba nem akarsz navigációs property-t, hagyd üresen
+                .HasForeignKey<QualifyingResult>(qr => qr.ResultId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
         
         

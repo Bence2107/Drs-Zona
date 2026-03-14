@@ -5,8 +5,12 @@ export interface SingleResultDto {
   constructorId?: string;
   driverId?: string;
   finishPosition?: number;
+  isFastestLap?: boolean;
   lapsCompleted?: number;
   pole?: boolean;
+  q1?: string | null;
+  q2?: string | null;
+  q3?: string | null;
   raceTime?: string | null;
   startPosition?: number;
   status?: string | null;

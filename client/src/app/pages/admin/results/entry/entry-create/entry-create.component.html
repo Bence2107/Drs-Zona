@@ -53,7 +53,27 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="driverId">
+          <ng-container matColumnDef="lapsCompleted">
+            <th mat-header-cell *matHeaderCellDef>Körök</th>
+            <td mat-cell *matCellDef="let _; let i = index">
+              <mat-form-field appearance="outline" class="inline-field inline-field--small">
+                <input matInput type="text" inputmode="numeric" pattern="[0-9]*"
+                       [formControl]="$any(getRowGroup(i).get('lapsCompleted'))">
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="finishPosition">
+            <th mat-header-cell *matHeaderCellDef>Poz.</th>
+            <td mat-cell *matCellDef="let _; let i = index" [formGroup]="getRowGroup(i)">
+              <mat-form-field appearance="outline" class="inline-field inline-field--small">
+                <input matInput type="number" formControlName="finishPosition">
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="driver">
             <th mat-header-cell *matHeaderCellDef>Versenyző</th>
             <td mat-cell *matCellDef="let _; let i = index">
               <mat-form-field appearance="outline" class="inline-field">
@@ -68,7 +88,7 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="constructorId">
+          <ng-container matColumnDef="constructor">
             <th mat-header-cell *matHeaderCellDef>Csapat</th>
             <td mat-cell *matCellDef="let _; let i = index">
               <mat-form-field appearance="outline" class="inline-field">
@@ -83,12 +103,29 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="finishPosition">
-            <th mat-header-cell *matHeaderCellDef>Poz.</th>
-            <td mat-cell *matCellDef="let _; let i = index">
-              <mat-form-field appearance="outline" class="inline-field inline-field--small">
-                <input matInput type="text" inputmode="numeric" pattern="[0-9]*"
-                       [formControl]="$any(getRowGroup(i).get('finishPosition'))">
+          <ng-container matColumnDef="q1">
+            <th mat-header-cell *matHeaderCellDef> Q1 </th>
+            <td mat-cell *matCellDef="let _; let i = index" [formGroup]="getRowGroup(i)">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <input matInput formControlName="q1" placeholder="pl. 1:25.100">
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="q2">
+            <th mat-header-cell *matHeaderCellDef> Q2 </th>
+            <td mat-cell *matCellDef="let _; let i = index" [formGroup]="getRowGroup(i)">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <input matInput formControlName="q2" placeholder="pl. 1:24.500">
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="q3">
+            <th mat-header-cell *matHeaderCellDef> Q3 </th>
+            <td mat-cell *matCellDef="let _; let i = index" [formGroup]="getRowGroup(i)">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <input matInput formControlName="q3" placeholder="pl. 1:23.999">
               </mat-form-field>
             </td>
           </ng-container>
@@ -100,16 +137,6 @@
                 <input matInput type="text"
                        placeholder="1:23:45.678 vagy +0.242s"
                        [formControl]="$any(getRowGroup(i).get('raceTime'))">
-              </mat-form-field>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="laps">
-            <th mat-header-cell *matHeaderCellDef>Poz.</th>
-            <td mat-cell *matCellDef="let _; let i = index">
-              <mat-form-field appearance="outline" class="inline-field inline-field--small">
-                <input matInput type="text" inputmode="numeric" pattern="[0-9]*"
-                       [formControl]="$any(getRowGroup(i).get('lapsCompleted'))">
               </mat-form-field>
             </td>
           </ng-container>
@@ -128,18 +155,19 @@
           </ng-container>
 
           <ng-container matColumnDef="pole">
-            <th mat-header-cell *matHeaderCellDef>Pole</th>
+            <th mat-header-cell *matHeaderCellDef> Pole </th>
             <td mat-cell *matCellDef="let _; let i = index">
-              <button mat-icon-button type="button"
-                      [class.pole-active]="getRowGroup(i).get('pole')!.value"
-                      (click)="getRowGroup(i).get('pole')!.setValue(!getRowGroup(i).get('pole')!.value)"
-                      matTooltip="Pole position">
-                <mat-icon>star</mat-icon>
-              </button>
+              <mat-checkbox [formControl]="$any(getRowGroup(i).get('isPole'))"></mat-checkbox>
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="remove">
+          <ng-container matColumnDef="fastestLap">
+            <th mat-header-cell *matHeaderCellDef> Leggyorsabb kör </th>
+            <td mat-cell *matCellDef="let _; let i = index">
+              <mat-checkbox [formControl]="$any(getRowGroup(i).get('isFastestLap'))"></mat-checkbox> </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let _; let i = index">
               <button mat-icon-button type="button"
@@ -152,8 +180,8 @@
             </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-          <tr mat-row *matRowDef="let _; columns: displayedColumns;"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+          <tr mat-row *matRowDef="let _; columns: displayedColumns();"></tr>
         </table>
       </div>
 
@@ -179,5 +207,4 @@
       </div>
     </form>
   }
-
 </div>

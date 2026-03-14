@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButton, MatIconButton} from '@angular/material/button';
@@ -25,6 +25,7 @@ import {SingleResultUpdateDto} from '../../../../../api/models/single-result-upd
 import {CustomSnackbarComponent} from '../../../../../components/custom-snackbar/custom-snackbar.component';
 import {BatchResultCreateDto} from '../../../../../api/models/batch-result-create-dto';
 import {GrandPrixChampionshipContextDto} from '../../../../../api/models/grand-prix-championship-context-dto';
+import {MatCheckbox} from '@angular/material/checkbox'; //
 
 @Component({
   selector: 'app-entry-detail',
@@ -50,7 +51,8 @@ import {GrandPrixChampionshipContextDto} from '../../../../../api/models/grand-p
     MatHeaderRowDef,
     MatRowDef,
     MatLabel,
-    FormsModule
+    FormsModule,
+    MatCheckbox
   ],
   templateUrl: './entry-detail.component.html',
   styleUrl: './entry-detail.component.scss',
@@ -70,11 +72,16 @@ export class EntryDetailComponent implements OnInit {
   isSaving = signal(false);
   context = signal<GrandPrixChampionshipContextDto | null>(null);
 
-
   editForms = signal<FormGroup[]>([]);
 
   statusOptions = ['Finished', 'DNF', 'DNS', 'DSQ', 'DNQ'];
-  editColumns = ['position', 'driver', 'constructor', 'finishPos', 'raceTime', 'laps', 'status', 'actions'];
+  editColumns = computed(() => {
+    const isQualy = this.selectedSession()?.includes('Időmérő');
+    if (isQualy) {
+      return ['driver', 'constructor', 'position', 'q1', 'q2', 'q3', 'lapsCompleted', 'status', 'pole', 'actions'];
+    }
+    return ['driver', 'constructor', 'position', 'raceTime', 'lapsCompleted', 'status', 'pole', 'fastestLap', 'actions'];
+  });
 
   ngOnInit() {
     this.gpId.set(this.route.snapshot.paramMap.get('gpId') ?? '');
@@ -118,6 +125,11 @@ export class EntryDetailComponent implements OnInit {
         raceTime:      [{ value: r.raceTime ?? '-', disabled: !isFinished }, Validators.required],
         lapsCompleted: [r.lapsCompleted, [Validators.required, Validators.min(0)]],
         status:        [r.status, Validators.required],
+        isPole:        [r.isPole],
+        isFastestLap:  [r.isFastestLap],
+        q1: [r.q1],
+        q2: [r.q2],
+        q3: [r.q3]
       });
 
       group.get('status')!.valueChanges.subscribe(status => {
@@ -154,6 +166,11 @@ export class EntryDetailComponent implements OnInit {
       raceTime:      v.raceTime,
       lapsCompleted: v.lapsCompleted,
       status:        v.status,
+      isPole:        v.isPole,
+      isFastestLap:  v.isFastestLap,
+      q1: v.q1,
+      q2: v.q2,
+      q3: v.q3
     };
 
     this.resultsService.updateSingleResult(dto).subscribe({
@@ -205,7 +222,12 @@ export class EntryDetailComponent implements OnInit {
           raceTime:      v.raceTime,
           lapsCompleted: v.lapsCompleted,
           status:        v.status,
-          startPosition: originalResult.startPosition
+          startPosition: originalResult.startPosition,
+          pole:          v.isPole,
+          isFastestLap:  v.isFastestLap,
+          q1: v.q1,
+          q2: v.q2,
+          q3: v.q3
         };
       })
     };

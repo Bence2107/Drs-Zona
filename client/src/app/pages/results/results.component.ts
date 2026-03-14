@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import {Component, OnInit, signal, inject, computed} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -84,7 +84,14 @@ export class ResultsComponent implements OnInit {
 
   isLoading = signal(false);
 
-  raceColumns = ['position', 'driver', 'time', 'points'];
+  raceColumns = computed(() => {
+    const session = this.selectedSession()?.toLowerCase() || '';
+    const isQualy = session.includes('időmérő');
+
+    return isQualy
+      ? ['position', 'driver', 'q1', 'q2', 'q3', 'laps']
+      : ['position', 'driver', 'time', 'points'];
+  });
   driverColumns = ['position', 'driver', 'points'];
   constructorColumns = ['position', 'constructor', 'points'];
   overviewColumns = ['grandPrixName', 'winnerName', 'teamName', 'laps', 'time'];

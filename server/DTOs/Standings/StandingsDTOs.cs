@@ -217,7 +217,11 @@ public record SingleResultDto(
     int LapsCompleted,
     string Status,
     bool Pole = false,
-    int StartPosition = 0
+    bool IsFastestLap = false, 
+    int StartPosition = 0,
+    string? Q1 = null,
+    string? Q2 = null,
+    string? Q3 = null
 );
 
 public record ResultEditDto(
@@ -233,7 +237,12 @@ public record ResultEditDto(
     int LapsCompleted,
     string Status,
     double DriverPoints,
-    double ConstructorPoints
+    double ConstructorPoints,
+    bool IsFastestLap, 
+    bool IsPole,
+    string? Q1 = null,
+    string? Q2 = null,
+    string? Q3 = null
 );
 
 public record SessionEditDto(
@@ -247,7 +256,12 @@ public record SingleResultUpdateDto(
     int FinishPosition,
     string RaceTime,
     int LapsCompleted,
-    string Status
+    string Status,
+    bool IsFastestLap,
+    bool IsPole,
+    string? Q1 = null,
+    string? Q2 = null,
+    string? Q3 = null
 );
 
 
@@ -266,7 +280,13 @@ public record GrandRrixResultDto(
     Guid ConstructorId,
     string ConstructorName,
     string TimeOrCompleted,
-    double Points
+    double Points,
+    string? q1,
+    string? q2,
+    string? q3,
+    int lapsCompleted,
+    bool IsFastestLap = false,
+    bool IsPole = false
 );
 
 public record GrandPrixChampionshipContextDto(

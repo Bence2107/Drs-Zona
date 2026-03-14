@@ -140,6 +140,23 @@
                     </div>
                   </td>
                 </ng-container>
+                <ng-container matColumnDef="q1">
+                  <th mat-header-cell *matHeaderCellDef> Q1 </th>
+                  <td mat-cell *matCellDef="let r"> {{r.q1}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="q2">
+                  <th mat-header-cell *matHeaderCellDef> Q2 </th>
+                  <td mat-cell *matCellDef="let r"> {{r.q2}} </td>
+                </ng-container>
+                <ng-container matColumnDef="q3">
+                  <th mat-header-cell *matHeaderCellDef> Q3 </th>
+                  <td mat-cell *matCellDef="let r"> {{r.q3}} </td>
+                </ng-container>
+                <ng-container matColumnDef="laps">
+                  <th mat-header-cell *matHeaderCellDef> Kör </th>
+                  <td mat-cell *matCellDef="let r"> {{r.lapsCompleted}} </td>
+                </ng-container>
                 <ng-container matColumnDef="time">
                   <th mat-header-cell *matHeaderCellDef> Idő/Kül. </th>
                   <td mat-cell *matCellDef="let r"> {{r.timeOrCompleted}} </td>
@@ -148,8 +165,8 @@
                   <th mat-header-cell *matHeaderCellDef> Pont </th>
                   <td mat-cell *matCellDef="let r"> {{r.points}} </td>
                 </ng-container>
-                <tr mat-header-row *matHeaderRowDef="raceColumns"></tr>
-                <tr mat-row *matRowDef="let _; columns: raceColumns;"></tr>
+                <tr mat-header-row *matHeaderRowDef="raceColumns()"></tr>
+                <tr mat-row *matRowDef="let _; columns: raceColumns();"></tr>
               </table>
             }
           }

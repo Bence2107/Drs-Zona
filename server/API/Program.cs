@@ -97,9 +97,10 @@ builder.Services.AddScoped<IContractsRepository, ContractsRepository>();
 builder.Services.AddScoped<IDriverParticipationRepository, DriverParticipationRepository>();
 builder.Services.AddScoped<IDriversChampionshipsRepository, DriversChampionshipsRepository>();
 builder.Services.AddScoped<IDriversRepository, DriversRepository>();
+builder.Services.AddScoped<IPollVotesRepository, PollVotesRepository>();
 builder.Services.AddScoped<IResultsRepository, ResultsRepository>();
 builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
-builder.Services.AddScoped<IPollVotesRepository, PollVotesRepository>();
+builder.Services.AddScoped<IQualifyingResultRepository, QualifyingResultRepository>();
 
 builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();

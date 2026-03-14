@@ -3,6 +3,7 @@ using System;
 using Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Context.Migrations
 {
     [DbContext(typeof(EfContext))]
-    partial class EfContextModelSnapshot : ModelSnapshot
+    [Migration("20260314144452_Result_Add_Bools")]
+    partial class Result_Add_Bools
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -678,38 +681,6 @@ namespace Context.Migrations
                     b.ToTable("driver_championships");
                 });
 
-            modelBuilder.Entity("Entities.Models.Standings.QualifyingResult", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("gen_random_uuid()");
-
-                    b.Property<long?>("Q1")
-                        .HasColumnType("bigint")
-                        .HasColumnName("q1_time");
-
-                    b.Property<long?>("Q2")
-                        .HasColumnType("bigint")
-                        .HasColumnName("q2_time");
-
-                    b.Property<long?>("Q3")
-                        .HasColumnType("bigint")
-                        .HasColumnName("q3_time");
-
-                    b.Property<Guid>("ResultId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("result_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ResultId")
-                        .IsUnique();
-
-                    b.ToTable("qualifying_results");
-                });
-
             modelBuilder.Entity("Entities.Models.Standings.Result", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1145,17 +1116,6 @@ namespace Context.Migrations
                         .IsRequired();
 
                     b.Navigation("Series");
-                });
-
-            modelBuilder.Entity("Entities.Models.Standings.QualifyingResult", b =>
-                {
-                    b.HasOne("Entities.Models.Standings.Result", "Result")
-                        .WithOne()
-                        .HasForeignKey("Entities.Models.Standings.QualifyingResult", "ResultId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Result");
                 });
 
             modelBuilder.Entity("Entities.Models.Standings.Result", b =>

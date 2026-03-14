@@ -3,7 +3,12 @@
 
 export interface SingleResultUpdateDto {
   finishPosition?: number;
+  isFastestLap?: boolean;
+  isPole?: boolean;
   lapsCompleted?: number;
+  q1?: string | null;
+  q2?: string | null;
+  q3?: string | null;
   raceTime?: string | null;
   resultId?: string;
   status?: string | null;

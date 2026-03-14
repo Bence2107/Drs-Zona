@@ -9,72 +9,32 @@ public record SeriesListDto(
 );
 
 public record SeriesCreateDto(
-    [Required(ErrorMessage = "Név megadása kötelező")]
-    [StringLength(100, ErrorMessage = "A név max 100 karakter")]
-    string Name,
+    [Required] string Name,
     string ShortName,
-    [Required(ErrorMessage = "Leírás megadása kötelező")]
-    [StringLength(200, ErrorMessage = "A leírás max 200 karakter")]
-    string Description,
-    [Required(ErrorMessage = "A birtokos megadása kötelező")]
-    [StringLength(100, ErrorMessage = "A birtokos max 100 karakter")]
-    string GoverningBody,
-    [Required(ErrorMessage = "Az első év megadása kötelező")]
-    int FirstYear,
-    [Required(ErrorMessage = "Az utolsó év megadása kötelező")]
-    int LastYear,
-    [Required(ErrorMessage = "Pontszámítási rendszer megadása kötelező")]
-    string PointSystem
+    [Required] string Description,
+    [Required] string GoverningBody,
+    [Required] int FirstYear,
+    [Required] int LastYear,
+    [Required] string PointSystem
 ) : IValidatableObject
 {
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (FirstYear < 1894)
-            yield return new ValidationResult("Az első év nem lehet 1894-nél korábbi", [nameof(FirstYear)]);
-
-        if (LastYear > DateTime.Today.Year + 1)
-            yield return new ValidationResult("Az utolsó év nem lehet a jövőben", [nameof(LastYear)]);
-
-        if (FirstYear <= LastYear) yield break;
-        yield return new ValidationResult("Az időrend nem megfelelő", [nameof(FirstYear)]);
-        yield return new ValidationResult("Az időrend nem megfelelő", [nameof(LastYear)]);
+        if (FirstYear > LastYear)
+            yield return new ValidationResult("Az időrend nem megfelelő", [nameof(FirstYear)]);
     }
 }
 
 public record SeriesUpdateDto(
-    [Required(ErrorMessage = "Az azonosító megadása kötelező")]
-    Guid Id,
-    [Required(ErrorMessage = "Név megadása kötelező")]
-    [StringLength(100, ErrorMessage = "A név max 100 karakter")]
-    string Name,
+    [Required] Guid Id,
+    [Required] string Name,
     string ShortName,
-    [Required(ErrorMessage = "Leírás megadása kötelező")]
-    [StringLength(200, ErrorMessage = "A leírás max 200 karakter")]
-    string Description,
-    [Required(ErrorMessage = "A birtokos megadása kötelező")]
-    [StringLength(100, ErrorMessage = "A birtokos max 100 karakter")]
-    string GoverningBody,
-    [Required(ErrorMessage = "Az első év megadása kötelező")]
-    int FirstYear,
-    [Required(ErrorMessage = "Az utolsó év megadása kötelező")]
-    int LastYear,
-    [Required(ErrorMessage = "Pontszámítási rendszer megadása kötelező")]
-    string PointSystem
-) : IValidatableObject
-{
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        if (FirstYear < 1894)
-            yield return new ValidationResult("Az első év nem lehet 1894-nél korábbi", [nameof(FirstYear)]);
-
-        if (LastYear > DateTime.Today.Year + 1)
-            yield return new ValidationResult("Az utolsó év nem lehet a jövőben", [nameof(LastYear)]);
-
-        if (FirstYear <= LastYear) yield break;
-        yield return new ValidationResult("Az időrend nem megfelelő", [nameof(FirstYear)]);
-        yield return new ValidationResult("Az időrend nem megfelelő", [nameof(LastYear)]);
-    }
-}
+    [Required] string Description,
+    [Required] string GoverningBody,
+    [Required] int FirstYear,
+    [Required] int LastYear,
+    [Required] string PointSystem
+);
 
 public record SeriesDetailDto(
     [Required] Guid Id,
