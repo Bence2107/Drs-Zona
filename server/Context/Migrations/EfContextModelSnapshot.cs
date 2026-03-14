@@ -415,6 +415,40 @@ namespace Context.Migrations
                     b.ToTable("brands");
                 });
 
+            modelBuilder.Entity("Entities.Models.Standings.CarEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<Guid>("DriverId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("driver_id");
+
+                    b.Property<string>("DriverNameSnapshot")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("driver_name_snapshot");
+
+                    b.Property<bool>("IsQualifier")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_qualifier");
+
+                    b.Property<Guid>("ResultId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("result_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("ResultId");
+
+                    b.ToTable("car_entries");
+                });
+
             modelBuilder.Entity("Entities.Models.Standings.Constructor", b =>
                 {
                     b.Property<Guid>("Id")
@@ -690,6 +724,11 @@ namespace Context.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("car_number");
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("category");
+
                     b.Property<Guid>("ConsChampId")
                         .HasColumnType("uuid")
                         .HasColumnName("constructors_championship_id");
@@ -716,7 +755,7 @@ namespace Context.Migrations
                         .HasColumnType("double precision")
                         .HasColumnName("constructor_points");
 
-                    b.Property<Guid>("DriverId")
+                    b.Property<Guid?>("DriverId")
                         .HasColumnType("uuid")
                         .HasColumnName("driver_id");
 
@@ -731,7 +770,7 @@ namespace Context.Migrations
                         .HasColumnType("double precision")
                         .HasColumnName("driver_points");
 
-                    b.Property<Guid>("DriversChampId")
+                    b.Property<Guid?>("DriversChampId")
                         .HasColumnType("uuid")
                         .HasColumnName("drivers_championship_id");
 
@@ -742,6 +781,10 @@ namespace Context.Migrations
                     b.Property<Guid>("GrandPrixId")
                         .HasColumnType("uuid")
                         .HasColumnName("grand_prix_id");
+
+                    b.Property<bool>("IsCarEntry")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_car_entry");
 
                     b.Property<int>("LapsCompleted")
                         .HasColumnType("integer")
@@ -1017,6 +1060,24 @@ namespace Context.Migrations
                     b.Navigation("Series");
                 });
 
+            modelBuilder.Entity("Entities.Models.Standings.CarEntry", b =>
+                {
+                    b.HasOne("Entities.Models.Standings.Driver", "Driver")
+                        .WithMany()
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Entities.Models.Standings.Result", "Result")
+                        .WithMany("CarEntries")
+                        .HasForeignKey("ResultId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("Result");
+                });
+
             modelBuilder.Entity("Entities.Models.Standings.Constructor", b =>
                 {
                     b.HasOne("Entities.Models.Standings.Brand", "Brand")
@@ -1124,14 +1185,12 @@ namespace Context.Migrations
                     b.HasOne("Entities.Models.Standings.Driver", "Driver")
                         .WithMany()
                         .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Entities.Models.Standings.DriversChampionship", "DriversChampionship")
                         .WithMany()
                         .HasForeignKey("DriversChampId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Entities.Models.RaceTracks.GrandPrix", "GrandPrix")
                         .WithMany()
@@ -1148,6 +1207,11 @@ namespace Context.Migrations
                     b.Navigation("DriversChampionship");
 
                     b.Navigation("GrandPrix");
+                });
+
+            modelBuilder.Entity("Entities.Models.Standings.Result", b =>
+                {
+                    b.Navigation("CarEntries");
                 });
 #pragma warning restore 612, 618
         }
