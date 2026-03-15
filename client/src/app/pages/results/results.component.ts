@@ -88,9 +88,17 @@ export class ResultsComponent implements OnInit {
     const session = this.selectedSession()?.toLowerCase() || '';
     const isQualy = session.includes('időmérő');
 
-    return isQualy
-      ? ['position', 'driver', 'q1', 'q2', 'q3', 'laps']
-      : ['position', 'driver', 'time', 'points'];
+    const isF1 = this.seriesList().find(s => s.id === this.selectedSeriesId())?.name?.includes('Formula 1');
+    console.log("F1-e? : " + isF1);
+    console.log("Időmérő? " + isQualy);
+
+    if (isQualy) {
+      return isF1
+        ? ['position', 'driver', 'q1', 'q2', 'q3']
+        : ['position', 'driver', 'time', 'laps'];
+    }
+
+    return ['position', 'driver', 'time', 'points'];
   });
   driverColumns = ['position', 'driver', 'points'];
   constructorColumns = ['position', 'constructor', 'points'];

@@ -310,73 +310,73 @@ public class StandingsService (
     }
 
     public async Task<ResponseResult<GrandPrixResultsDto>> GetGrandPrixResults(Guid grandPrixId, string session)
-{
-    var gp = await grandsPrixRepo.GetGrandPrixById(grandPrixId);
-    if (gp == null) return ResponseResult<GrandPrixResultsDto>.Failure("A nagydíj nem létezik");
+    {
+        var gp = await grandsPrixRepo.GetGrandPrixById(grandPrixId);
+        if (gp == null) return ResponseResult<GrandPrixResultsDto>.Failure("A nagydíj nem létezik");
     
-    var series = await seriesRepo.GetSeriesById(gp.SeriesId);
-    if (series == null) return ResponseResult<GrandPrixResultsDto>.Failure("Széria nem található");
+        var series = await seriesRepo.GetSeriesById(gp.SeriesId);
+        if (series == null) return ResponseResult<GrandPrixResultsDto>.Failure("Széria nem található");
 
-    var rawResults = await resultsRepo.GetBySession(grandPrixId, session);
-    var results = rawResults
-        .OrderBy(r => r.FinishPosition) 
-        .ToList();
+        var rawResults = await resultsRepo.GetBySession(grandPrixId, session);
+        var results = rawResults
+            .OrderBy(r => r.FinishPosition) 
+            .ToList();
         
-    if (results.Count == 0)
-    {
-        return ResponseResult<GrandPrixResultsDto>.Success(new GrandPrixResultsDto(grandPrixId, session, []));
-    }
-
-    var isF1Qualy = series.PointSystem == "F1" && (session.Contains("Időmérő") || session.Contains("Qualifying"));
-    
-    Dictionary<Guid, QualifyingResult>? qualyData = null;
-    if (isF1Qualy)
-    {
-        var resultIds = results.Select(r => r.Id).ToList();
-        var qualyList = await qualifyingRepo.GetByResultIds(resultIds);
-        qualyData = qualyList.ToDictionary(q => q.ResultId);
-    }
-    
-    var leader = results.First();
-    var leaderTime = leader.RaceTime;
-    var leaderLaps = leader.LapsCompleted;
-
-    var resultsDto = results.Select(r => 
-    {
-        // Megkeressük az időmérő adatokat, ha ez egy időmérő session
-        string? q1 = null;
-        string? q2 = null;
-        string? q3 = null;
-
-        if (isF1Qualy && qualyData != null && qualyData.TryGetValue(r.Id, out var q))
+        if (results.Count == 0)
         {
-            q1 = FormatAbsoluteTime(q.Q1);
-            q2 = FormatAbsoluteTime(q.Q2);
-            q3 = FormatAbsoluteTime(q.Q3);
+            return ResponseResult<GrandPrixResultsDto>.Success(new GrandPrixResultsDto(grandPrixId, session, []));
         }
 
-        return new GrandRrixResultDto(
-            r.FinishPosition,
-            r.DriverId,
-            r.CarNumber,
-            r.DriverNameSnapshot,
-            r.ConstructorId,
-            r.ConstructorNicknameSnapshot,
-            FormatTimeOrStatus(r, leaderTime, leaderLaps), 
-            r.DriverPoints,
-            q1, 
-            q2, 
-            q3,
-            r.LapsCompleted,
-            r.IsFastestLap,   
-            r.IsPolePosition 
-        );
-    }).ToArray();
+        var isF1Qualy = series.PointSystem == "F1" && (session.Contains("Időmérő") || session.Contains("Qualifying"));
+    
+        Dictionary<Guid, QualifyingResult>? qualyData = null;
+        if (isF1Qualy)
+        {
+            var resultIds = results.Select(r => r.Id).ToList();
+            var qualyList = await qualifyingRepo.GetByResultIds(resultIds);
+            qualyData = qualyList.ToDictionary(q => q.ResultId);
+        }
+    
+        var leader = results.First();
+        var leaderTime = leader.RaceTime;
+        var leaderLaps = leader.LapsCompleted;
 
-    return ResponseResult<GrandPrixResultsDto>.Success(
-        new GrandPrixResultsDto(grandPrixId, session, resultsDto)
-    );
-}
+        var resultsDto = results.Select(r => 
+        {
+            // Megkeressük az időmérő adatokat, ha ez egy időmérő session
+            string? q1 = null;
+            string? q2 = null;
+            string? q3 = null;
+
+            if (isF1Qualy && qualyData != null && qualyData.TryGetValue(r.Id, out var q))
+            {
+                q1 = FormatAbsoluteTime(q.Q1);
+                q2 = FormatAbsoluteTime(q.Q2);
+                q3 = FormatAbsoluteTime(q.Q3);
+            }
+
+            return new GrandRrixResultDto(
+                r.FinishPosition,
+                r.DriverId,
+                r.CarNumber,
+                r.DriverNameSnapshot,
+                r.ConstructorId,
+                r.ConstructorNicknameSnapshot,
+                FormatTimeOrStatus(r, leaderTime, leaderLaps, session), 
+                r.DriverPoints,
+                q1, 
+                q2, 
+                q3,
+                r.LapsCompleted,
+                r.IsFastestLap,   
+                r.IsPolePosition 
+            );
+        }).ToArray();
+
+        return ResponseResult<GrandPrixResultsDto>.Success(
+            new GrandPrixResultsDto(grandPrixId, session, resultsDto)
+        );
+    }
     
     public async Task<ResponseResult<List<DriverSeasonResultDto>>> GetDriverResultsBySeason(Guid driverId, Guid driverChampId)
     {
@@ -431,7 +431,7 @@ public class StandingsService (
             r.DriverNameSnapshot,
             r.ConstructorNicknameSnapshot,
             r.LapsCompleted,
-            FormatTimeOrStatus(r, r.RaceTime, r.LapsCompleted) 
+            FormatTimeOrStatus(r, r.RaceTime, r.LapsCompleted, r.Session) 
         )).ToList();
 
         return ResponseResult<List<SeasonOverviewDto>>.Success(overview);
@@ -658,12 +658,24 @@ public class StandingsService (
             .FirstOrDefault(c => c.Season == series.LastYear.ToString());
         if (consChamp == null) return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Konstruktőri bajnokság nem található");
 
-        var availableSessions = series.PointSystem switch
+        var allPossibleSessions = series.PointSystem switch
         {
             "F1"     => new List<string> { "Sprint Időmérő", "Időmérő" ,"Sprint", "Verseny" },
             "F2"     => new List<string> { "Időmérő", "Sprint", "Verseny" },
             _        => new List<string> { "Verseny" }
         };
+        
+        var existingResults = await resultsRepo.GetByGrandPrixId(grandPrixId);
+    
+        var completedSessionNames = existingResults
+            .Select(r => r.Session)
+            .Distinct()
+            .ToList();
+
+        // 4. Szűrés: Csak azok a session-ök maradnak, amik még nincsenek az adatbázisban
+        var availableSessions = allPossibleSessions
+            .Where(session => !completedSessionNames.Contains(session, StringComparer.OrdinalIgnoreCase))
+            .ToList();
 
         return ResponseResult<GrandPrixChampionshipContextDto>.Success(
             new GrandPrixChampionshipContextDto(driversChamp.Id, consChamp.Id, series.PointSystem, availableSessions)
@@ -710,7 +722,7 @@ public class StandingsService (
                 ConstructorName:   r.ConstructorNicknameSnapshot,
                 StartPosition:     r.StartPosition,
                 FinishPosition:    r.FinishPosition,
-                RaceTime:          FormatRaceTimeForEdit(r.RaceTime, leader.RaceTime, r.LapsCompleted, leader.LapsCompleted, r.Status, r.FinishPosition),
+                RaceTime:          FormatRaceTimeForEdit(r.RaceTime, leader.RaceTime, r.LapsCompleted, leader.LapsCompleted, r.Status, r.FinishPosition, session),
                 LapsCompleted:     r.LapsCompleted,
                 Status:            r.Status,
                 DriverPoints:      r.DriverPoints,
@@ -1024,7 +1036,7 @@ public class StandingsService (
             : $"{t.Minutes:D2}:{t.Seconds:D2}.{t.Milliseconds:D3}";
     }
 
-    private static string FormatRaceTimeForEdit(long ms, long leaderMs, int myLaps, int leaderLaps, string status, int position)
+    private static string FormatRaceTimeForEdit(long ms, long leaderMs, int myLaps, int leaderLaps, string status, int position, string session)
     {
         if (!status.Equals("Finished", StringComparison.OrdinalIgnoreCase)) return "-";
         if (ms <= 0) return "-";
@@ -1037,15 +1049,18 @@ public class StandingsService (
                 : $"{t.Minutes:D2}:{t.Seconds:D2}.{t.Milliseconds:D3}";
         }
 
-        if (myLaps < leaderLaps) return "-"; 
+        var isRace = session.Equals("Verseny", StringComparison.OrdinalIgnoreCase) || 
+                      session.Equals("Sprint", StringComparison.OrdinalIgnoreCase);
+
+        if (isRace && myLaps < leaderLaps) return "-"; 
 
         var diff = TimeSpan.FromMilliseconds(ms - leaderMs);
         return diff.TotalMinutes >= 1
             ? $"+{(int)diff.TotalMinutes}:{diff.Seconds:D2}.{diff.Milliseconds:D3}s"
             : $"+{diff.Seconds}.{diff.Milliseconds:D3}s";
     }
-    
-    private static string FormatTimeOrStatus(Result result, long leaderTime, int leaderLaps)
+
+    private static string FormatTimeOrStatus(Result result, long leaderTime, int leaderLaps, string session)
     {
         if (!result.Status.Equals("Finished", StringComparison.OrdinalIgnoreCase))
             return result.Status;
@@ -1058,7 +1073,10 @@ public class StandingsService (
                 : $"{t.Minutes:D2}:{t.Seconds:D2}.{t.Milliseconds:D3}";
         }
 
-        if (result.LapsCompleted < leaderLaps)
+        var isRace = session.Equals("Verseny", StringComparison.OrdinalIgnoreCase) || 
+                      session.Equals("Sprint", StringComparison.OrdinalIgnoreCase);
+
+        if (isRace && result.LapsCompleted < leaderLaps)
         {
             var lapsDown = leaderLaps - result.LapsCompleted;
             return $"+{lapsDown} {(lapsDown == 1 ? "Lap" : "Laps")}";
