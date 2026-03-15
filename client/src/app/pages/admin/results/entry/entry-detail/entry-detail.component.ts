@@ -76,8 +76,11 @@ export class EntryDetailComponent implements OnInit {
 
   statusOptions = ['Finished', 'DNF', 'DNS', 'DSQ', 'DNQ'];
   editColumns = computed(() => {
-    const isQualy = this.selectedSession()?.includes('Időmérő');
-    if (isQualy) {
+    const ctx = this.context();
+    const session = this.selectedSession();
+
+    const isF1Qualy = ctx?.pointSystem === 'F1' && session?.includes('Időmérő');
+    if (isF1Qualy) {
       return ['driver', 'constructor', 'position', 'q1', 'q2', 'q3', 'lapsCompleted', 'status', 'pole', 'actions'];
     }
     return ['driver', 'constructor', 'position', 'raceTime', 'lapsCompleted', 'status', 'pole', 'fastestLap', 'actions'];
@@ -201,7 +204,11 @@ export class EntryDetailComponent implements OnInit {
 
     const isAnyInvalid = forms.some(f => f.invalid);
     if (isAnyInvalid || !currentData) {
-      this.snackBar.open('Kérlek javítsd a hibákat a mentés előtt!', 'OK', { duration: 3000 });
+      this.snackBar.openFromComponent(CustomSnackbarComponent, {
+        data: { message: 'Kérlek javítsd a hibákat a mentés előtt!', actionLabel: 'Rendben' },
+        duration: 3000,
+        horizontalPosition: 'center',
+      });
       return;
     }
 
@@ -243,7 +250,11 @@ export class EntryDetailComponent implements OnInit {
       },
       error: () => {
         this.isSaving.set(false);
-        this.snackBar.open('Hiba történt a tömeges mentés során!', 'OK', { duration: 3000 });
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Hiba a mentés után!', actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
       }
     });
   }
@@ -288,7 +299,11 @@ export class EntryDetailComponent implements OnInit {
         },
         error: () => {
           this.isLoading.set(false);
-          this.snackBar.open('Hiba a kontextus betöltésekor', '', { duration: 3000 });
+          this.snackBar.openFromComponent(CustomSnackbarComponent, {
+            data: { message: 'Hiba a kontextus betöltésekor', actionLabel: 'Rendben' },
+            duration: 3000,
+            horizontalPosition: 'center',
+          });
         }
       });
   }

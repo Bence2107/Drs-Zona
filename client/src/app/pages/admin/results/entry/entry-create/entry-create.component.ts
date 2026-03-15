@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, effect, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   AbstractControl,
@@ -65,11 +65,18 @@ import {MatCheckbox} from '@angular/material/checkbox';
   styleUrl: './entry-create.component.scss',
 })
 export class EntryCreateComponent implements OnInit{
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private fb = inject(FormBuilder);
-  private resultsService = inject(ResultsService);
-  private snackBar = inject(MatSnackBar);
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private fb: FormBuilder,
+    private resultsService: ResultsService,
+    private snackBar: MatSnackBar
+  ) {
+    effect(() => {
+      const session = this.selectedSession();
+      this.updateValidators(session);
+    });
+  }
 
   gpId = signal<string>('');
   context = signal<GrandPrixChampionshipContextDto | null>(null);
@@ -81,18 +88,18 @@ export class EntryCreateComponent implements OnInit{
   constructors = signal<ConstructorLookUpDto[]>([]);
 
   dataSource = signal<AbstractControl[]>([]);
+  invalidErrors = signal<string[]>([]);
 
   form!: FormGroup;
 
-  private sessionEffect = effect(() => {
-    const session = this.selectedSession();
-    this.updateValidators(session);
-  });
-
   statusOptions = ['Finished', 'DNF', 'DNS', 'DSQ', 'DNQ'];
+
   displayedColumns = computed(() => {
-    const isQualy = this.selectedSession()?.includes('Időmérő');
-    if (isQualy) {
+    const ctx = this.context();
+    const session = this.selectedSession();
+
+    const isF1Qualy = ctx?.pointSystem === 'F1' && session?.includes('Időmérő');
+    if (isF1Qualy) {
       return ['rowNum', 'finishPosition', 'driver', 'constructor', 'q1', 'q2', 'q3', 'lapsCompleted', 'status', 'pole', 'actions'];
     }
     return ['rowNum', 'finishPosition','driver', 'constructor','raceTime', 'lapsCompleted', 'status', 'pole', 'fastestLap', 'actions'];
@@ -122,11 +129,14 @@ export class EntryCreateComponent implements OnInit{
             this.loadLookups(ctx.driversChampId, ctx.consChampId);
         }
         this.isLoadingContext.set(false);
-        this.addRow();
       },
       error: () => {
         this.isLoadingContext.set(false);
-        this.snackBar.open('Nem sikerült betölteni a nagydíj adatait.', '', { duration: 3000 });
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Nem sikerült betölteni az eredményeket!', actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
       }
     });
   }
@@ -231,10 +241,6 @@ export class EntryCreateComponent implements OnInit{
     this.dataSource.set([...this.rows.controls]);
   }
 
-  getRowGroup(index: number): FormGroup {
-    return this.rows.at(index) as FormGroup;
-  }
-
   goBack() {
     this.router.navigate(['/admin/results/entry', this.gpId()]);
   }
@@ -243,24 +249,33 @@ export class EntryCreateComponent implements OnInit{
     this.resultsService.getDriversByDriversChampionship(driverChampId).subscribe(list => this.drivers.set(list));
     this.resultsService.getConstructorsByConstChampionship(consChampId).subscribe(list => this.constructors.set(list));
 
-    if (this.rows.length === 0) this.addRow();
+    this.resultsService.getDriversByDriversChampionship(driverChampId).subscribe(driverList => {
+      this.drivers.set(driverList);
+
+      // Minden pilótához hozzáadunk egy sort, előre kitöltve az ID-kat
+      driverList.forEach(() => {
+        this.addRow();
+      });
+    });
   }
 
   findInvalidControls() {
     const invalid: string[] = [];
-    const controls = this.form.controls['rows'] as FormArray;
+    const rows = this.form.get('rows') as FormArray;
 
-    controls.controls.forEach((group, index) => {
-      Object.keys((group as FormGroup).controls).forEach(key => {
-        const control = group.get(key);
-        if (control && control.invalid) {
-          invalid.push(`Sor ${index + 1} - ${key}: ${control.errors ? JSON.stringify(control.errors) : 'invalid'}`);
+    rows.controls.forEach((control, index) => {
+      const group = control as FormGroup;
+      Object.keys(group.controls).forEach(key => {
+        const field = group.get(key);
+        if (field && field.invalid) {
+          // Formázott hibaüzenet
+          invalid.push(`Sor ${index + 1}: a "${key}" mező érvénytelen (Hiba: ${JSON.stringify(field.errors)})`);
         }
       });
     });
 
+    this.invalidErrors.set(invalid); // Frissítjük a signal-t
     console.log('Érvénytelen mezők:', invalid);
-    return invalid;
   }
 
   isDriverSelected(driverId: string, currentIndex: number): boolean {
@@ -270,12 +285,14 @@ export class EntryCreateComponent implements OnInit{
   }
 
   updateValidators(session: string) {
-    const isQualy = session.includes('Időmérő');
+    const ctx = this.context();
+    // Itt is be kell kötni az isF1Qualy vizsgálatot, akárcsak a táblázat oszlopainál!
+    const isF1Qualy = ctx?.pointSystem === 'F1' && session.includes('Időmérő');
 
     this.rows.controls.forEach(control => {
       const group = control as FormGroup;
 
-      if (isQualy) {
+      if (isF1Qualy) {
         group.get('q1')?.setValidators([Validators.required]);
         group.get('raceTime')?.clearValidators();
       } else {
