@@ -71,25 +71,25 @@ public record GrandPrixUpdateDto(
 }
 
 public record GrandPrixListDto(
-    [Required] Guid Id,
-    [Required] [StringLength(100)] string Name,
-    [Required] [Range(1,30)] int RoundNumber,
-    [Range(1906, 2100)] int SeasonYear,
-    [Required] DateTime StartTime,
-    [Required] DateTime EndTime
+    Guid Id,
+    string Name,
+    int RoundNumber,
+    int SeasonYear,
+    DateTime StartTime,
+    DateTime EndTime
 );
 
 public record GrandPrixDetailDto(
-    [Required] Guid Id,
-    [Required] Guid SeriesId,
-    [Required] Guid CircuitId,
-    [Required] [StringLength(100)] string Name,
-    [Required] [StringLength(100)] string SeriesName,
-    [Required] [Range(1,30)] int RoundNumber,
-    [Range(1906, 2100)] int SeasonYear,
-    [Required] DateTime StartTime,
-    [Required] DateTime EndTime,
-    [Required] [Range(1, 1000)] int RaceDistance,
-    [Required] [Range(0, 100)] int LapsCompleted,
-    [Required] CircuitDetailDto CircuitDetail
+    Guid Id,
+    Guid SeriesId,
+    Guid CircuitId,
+    string Name,
+    string SeriesName,
+    int RoundNumber,
+    int SeasonYear,
+    DateTime StartTime,
+    DateTime EndTime,
+    int RaceDistance,
+    int LapsCompleted,
+    CircuitDetailDto CircuitDetail
 );

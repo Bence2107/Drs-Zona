@@ -8,22 +8,6 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class StandingsController(IStandingsService standingsService): ControllerBase
 {
-    [HttpGet("getDefaultFilters")]
-    public async Task<ActionResult<DefaultFiltersDto>> GetDefaultFilters()
-    {
-        var response = await standingsService.GetDefaultFilters();
-        if (!response.IsSuccess)
-        {
-            return BadRequest(new
-            {
-                response.ErrorField, 
-                response.Message
-            });
-        }
-        
-        return Ok(response.Value);      
-    }
-    
     [HttpGet("getAllSeries")]
     public async Task<ActionResult<List<SeriesLookupDto>>> GetAllSeries()
     {
@@ -260,7 +244,7 @@ public class StandingsController(IStandingsService standingsService): Controller
     }
     
     [HttpPost("addParticipations")]
-    public async Task<ActionResult> AddParticipations([FromBody] AddParticipationsDto dto)
+    public async Task<ActionResult> AddParticipations([FromBody] ParticipationAddDto dto)
     {
         var response = await standingsService.AddParticipations(dto);
         if (!response.IsSuccess)

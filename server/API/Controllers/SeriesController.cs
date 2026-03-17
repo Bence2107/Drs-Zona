@@ -46,45 +46,4 @@ public class SeriesController(ISeriesService seriesService) : ControllerBase
         var response = await seriesService.ListSeries();
         return Ok(response.Value);
     }
-
-    [HttpPost("create")]
-    public async Task<ActionResult> Create([FromBody]SeriesCreateDto dto)
-    {
-        var response = await seriesService.CreateSeries(dto);
-        if (!response.IsSuccess)
-        {
-            return BadRequest(new
-            {
-                response.ErrorField, 
-                response.Message
-            });
-        }
-        return Ok(new { Message = "Series created successfully" });
-    }
-
-    [HttpPost("update")]
-    public async Task<ActionResult> Update([FromBody]SeriesUpdateDto dto)
-    {
-        var response = await seriesService.Update(dto);
-        if (!response.IsSuccess)
-        {
-          
-            return BadRequest(new
-            {
-                response.ErrorField, 
-                response.Message
-            });
-        }
-
-        return Ok(); 
-    }
-
-    [HttpDelete("{id:guid}")]
-    public async Task<ActionResult> Delete(Guid id)
-    {
-        var response = await seriesService.Delete(id);
-        if (!response.IsSuccess) return NotFound(response.Message);
-
-        return Ok();
-    }
 }

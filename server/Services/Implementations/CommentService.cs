@@ -4,6 +4,7 @@ using Repositories.Interfaces;
 using Repositories.Interfaces.News;
 using Services.Interfaces;
 using Services.Interfaces.images;
+using Services.Types;
 
 namespace Services.Implementations;
 

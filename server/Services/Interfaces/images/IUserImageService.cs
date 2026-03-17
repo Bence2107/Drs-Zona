@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Services.Types;
 
 namespace Services.Interfaces.images;
 

@@ -9,10 +9,7 @@ export type { ArticleListDtoPagedResult } from './models/article-list-dto-paged-
 export type { ArticleUpdateDto } from './models/article-update-dto';
 export type { AuthResponse } from './models/auth-response';
 export type { BatchResultCreateDto } from './models/batch-result-create-dto';
-export type { BrandCreateDto } from './models/brand-create-dto';
-export type { BrandDetailDto } from './models/brand-detail-dto';
 export type { BrandListDto } from './models/brand-list-dto';
-export type { BrandUpdateDto } from './models/brand-update-dto';
 export type { ChampionshipCreateDto } from './models/championship-create-dto';
 export type { ChampionshipRowDto } from './models/championship-row-dto';
 export type { ChangePasswordRequest } from './models/change-password-request';
@@ -32,7 +29,6 @@ export type { ConstructorStandingsResultDto } from './models/constructor-standin
 export type { ConstructorUpdateDto } from './models/constructor-update-dto';
 export type { ContractCreateDto } from './models/contract-create-dto';
 export type { ContractListDto } from './models/contract-list-dto';
-export type { DefaultFiltersDto } from './models/default-filters-dto';
 export type { DriverCreateDto } from './models/driver-create-dto';
 export type { DriverDetailDto } from './models/driver-detail-dto';
 export type { DriverListDto } from './models/driver-list-dto';
@@ -66,7 +62,7 @@ export type { SeriesListDto } from './models/series-list-dto';
 export type { SeriesLookupDto } from './models/series-lookup-dto';
 export type { SeriesUpdateDto } from './models/series-update-dto';
 export type { SessionEditDto } from './models/session-edit-dto';
-export type { SingleResultDto } from './models/single-result-dto';
+export type { SingleResultCreateDto } from './models/single-result-create-dto';
 export type { SingleResultUpdateDto } from './models/single-result-update-dto';
 export type { SummaryDto } from './models/summary-dto';
 export type { UpdateUserRequest } from './models/update-user-request';

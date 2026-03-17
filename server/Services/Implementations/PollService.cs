@@ -4,6 +4,7 @@ using Entities.Models.Polls;
 using Repositories.Interfaces;
 using Repositories.Interfaces.Polls;
 using Services.Interfaces;
+using Services.Types;
 
 namespace Services.Implementations;
 

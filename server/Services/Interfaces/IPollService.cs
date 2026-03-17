@@ -1,4 +1,5 @@
 ﻿using DTOs.Polls;
+using Services.Types;
 
 namespace Services.Interfaces;
 

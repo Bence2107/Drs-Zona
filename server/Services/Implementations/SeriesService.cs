@@ -2,6 +2,7 @@
 using Entities.Models.Standings;
 using Repositories.Interfaces.Standings;
 using Services.Interfaces;
+using Services.Types;
 
 namespace Services.Implementations;
 
@@ -79,58 +80,5 @@ public class SeriesService(
             .ToList();
 
         return ResponseResult<List<SeriesListDto>>.Success(dto);
-    }
-
-    public async Task<ResponseResult<bool>> CreateSeries(SeriesCreateDto dto)
-    {
-        var nameExits = await seriesRepo.GetByName(dto.Name);
-        if (nameExits is not null)
-        {
-            return ResponseResult<bool>.Failure(nameof(dto.Name), "Series with this name already exist");
-        }
-
-        var series = new Series
-        {
-            Name = dto.Name,
-            ShortName = dto.ShortName,
-            Description = dto.Description,
-            GoverningBody = dto.GoverningBody,
-            FirstYear = dto.FirstYear,
-            LastYear = dto.LastYear,
-            PointSystem = dto.PointSystem
-        };
-
-        await seriesRepo.Create(series);
-        return ResponseResult<bool>.Success(true);
-    }
-
-    public async Task<ResponseResult<bool>> Update(SeriesUpdateDto dto)
-    {
-        var editable = await seriesRepo.GetSeriesById(dto.Id);
-        if (editable is null) return ResponseResult<bool>.Failure("Series not exist");
-
-        var series = new Series
-        {
-            Id = dto.Id,
-            Name = dto.Name,
-            ShortName = dto.ShortName,
-            Description = dto.Description,
-            GoverningBody = dto.GoverningBody,
-            FirstYear = dto.FirstYear,
-            LastYear = dto.LastYear,
-            PointSystem = dto.PointSystem
-        };
-
-        await seriesRepo.Create(series);
-        return ResponseResult<bool>.Success(true);
-    }
-
-    public async Task<ResponseResult<bool>> Delete(Guid id)
-    {
-        var series = await seriesRepo.GetSeriesById(id);
-        if (series is null) return ResponseResult<bool>.Failure("Series not exist");
-
-        await seriesRepo.Delete(id);
-        return ResponseResult<bool>.Success(true);
     }
 }

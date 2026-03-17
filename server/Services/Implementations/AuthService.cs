@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Repositories.Interfaces;
 using Services.Interfaces;
 using Services.Interfaces.images;
+using Services.Types;
 
 namespace Services.Implementations;
 

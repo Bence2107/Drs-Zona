@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 
 export interface ApiAuthProfilePictureUpdatePost$Params {
       body?: {
-'File': Blob;
+'File'?: Blob;
 }
 }
 

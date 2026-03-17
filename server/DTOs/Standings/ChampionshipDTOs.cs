@@ -3,77 +3,60 @@
 namespace DTOs.Standings;
 
 public record SeriesListDto(
-    [Required] Guid Id,
-    [Required] [StringLength(100)] string Name,
-    [Required] [StringLength(10)] string ShortName
-);
-
-public record SeriesCreateDto(
-    [Required] string Name,
-    string ShortName,
-    [Required] string Description,
-    [Required] string GoverningBody,
-    [Required] int FirstYear,
-    [Required] int LastYear,
-    [Required] string PointSystem
-) : IValidatableObject
-{
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        if (FirstYear > LastYear)
-            yield return new ValidationResult("Az időrend nem megfelelő", [nameof(FirstYear)]);
-    }
-}
-
-public record SeriesUpdateDto(
-    [Required] Guid Id,
-    [Required] string Name,
-    string ShortName,
-    [Required] string Description,
-    [Required] string GoverningBody,
-    [Required] int FirstYear,
-    [Required] int LastYear,
-    [Required] string PointSystem
+    Guid Id,
+    string Name,
+    string ShortName
 );
 
 public record SeriesDetailDto(
-    [Required] Guid Id,
-    [Required] [StringLength(100)] string Name,
-    [Required] [StringLength(100)] string ShortName,
-    [Required] [StringLength(200)] string Description,
-    [Required] [StringLength(100)] string GoverningBody,
-    [Required] int FirstYear,
-    [Required] int LastYear,
+    Guid Id,
+    string Name,
+    string ShortName,
+    string Description,
+    string GoverningBody,
+    int FirstYear,
+    int LastYear,
     List<string>? AvailableSeasons
 );
 
 public record ChampionshipRowDto(
     Guid DriversChampId,
     Guid ConstructorsChampId,
-
     string Season,
     string Status,
     string SeriesName,
-
     string DriversChampName,
     string ConstructorsChampName
 );
 
 public record ChampionshipCreateDto(
+    [Required(ErrorMessage = "Széria megadása kötelező")]
     Guid SeriesId,
+    [Required(ErrorMessage = "Szezon megadása kötelező")]
+    [RegularExpression(@"^\d{4}(\/\d{4})?$", ErrorMessage = "A szezon formátuma: 2024 vagy 2024/2025")]
     string Season,
+    [Required(ErrorMessage = "Egyéni bajnokság neve kötelező")]
+    [StringLength(100, MinimumLength = 3, ErrorMessage = "A név hossza 3 és 100 karakter között lehet")]
     string DriversName,
+    [Required(ErrorMessage = "Konstruktőri bajnokság neve kötelező")]
+    [StringLength(100, MinimumLength = 3, ErrorMessage = "A név hossza 3 és 100 karakter között lehet")]
     string ConstructorsName
 );
 
-public record AddParticipationsDto(
+public record ParticipationAddDto(
+    [Required(ErrorMessage = "Egyéni bajnokság megadása kötelező")]
     Guid DriversChampId,
+    [Required(ErrorMessage = "Konstruktőri bajnokság megadása kötelező")]
     Guid ConstructorsChampId,
+    [Required(ErrorMessage = "Legalább egy versenyzőt meg kell adni")]
+    [MinLength(1, ErrorMessage = "Legalább egy versenyzőt meg kell adni")]
     List<DriverParticipationRowDto> Drivers,
+    [Required(ErrorMessage = "Legalább egy konstruktőrt meg kell adni")]
+    [MinLength(1, ErrorMessage = "Legalább egy konstruktőrt meg kell adni")]
     List<Guid> ConstructorIds
 );
 
-public record DriverParticipationRowDto(
+public abstract record DriverParticipationRowDto(
     Guid DriverId,
     int DriverNumber
 );

@@ -265,7 +265,7 @@ export class ResultsComponent implements OnInit {
         this.standingsService.getSessionsByGrandPrix(latestGP.id!).subscribe(sessions => {
           this.sessions.set(sessions);
           if (sessions.length > 0) {
-            let defaultSession = sessions.find(s => s === 'Verseny') ||
+            let defaultSession = sessions.find(s => s === 'Futam') ||
               sessions.find(s => s === 'Sprint') ||
               sessions[sessions.length - 1];
 
@@ -318,7 +318,7 @@ export class ResultsComponent implements OnInit {
       next: (sessions) => {
         this.sessions.set(sessions);
         if (sessions.length > 0) {
-          const preferredSession = sessions.find(s => s === 'Verseny') ||
+          const preferredSession = sessions.find(s => s === 'Futam') ||
             sessions.find(s => s === 'Sprint') ||
             sessions[sessions.length - 1];
 

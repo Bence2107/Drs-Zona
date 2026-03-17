@@ -25,7 +25,7 @@ import {SingleResultUpdateDto} from '../../../../../api/models/single-result-upd
 import {CustomSnackbarComponent} from '../../../../../components/custom-snackbar/custom-snackbar.component';
 import {BatchResultCreateDto} from '../../../../../api/models/batch-result-create-dto';
 import {GrandPrixChampionshipContextDto} from '../../../../../api/models/grand-prix-championship-context-dto';
-import {MatCheckbox} from '@angular/material/checkbox'; //
+import {MatCheckbox} from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-entry-detail',
@@ -229,7 +229,6 @@ export class EntryDetailComponent implements OnInit {
           raceTime:      v.raceTime,
           lapsCompleted: v.lapsCompleted,
           status:        v.status,
-          startPosition: originalResult.startPosition,
           pole:          v.isPole,
           isFastestLap:  v.isFastestLap,
           q1: v.q1,

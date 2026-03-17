@@ -14,7 +14,7 @@ public record CommentCreateDto(
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (string.IsNullOrWhiteSpace(Content))
-            yield return new ValidationResult("A komment nem tartalmazhat csak szóközt!", [nameof(Content)]);
+            yield return new ValidationResult("A komment tartalma nem lehet üres!", [nameof(Content)]);
     }
 }
 
@@ -38,17 +38,17 @@ public record CommentUpdateVoteDto(
 );
 
 public record CommentDetailDto(
-    [Required] Guid Id,
-    [Required] Guid UserId,
-    [Required] Guid ArticleId,
-    [Required] string ArticleSlug,
+    Guid Id,
+    Guid UserId,
+    Guid ArticleId, 
+    string ArticleSlug,
     Guid? ReplyToCommentId,
     string Username,
     string? UserAvatarUrl,
     int ReplyCount, 
-    [StringLength(1000, MinimumLength = 1)] string Content,
-    [Range(0, int.MaxValue)]int UpVotes,
-    [Range(0, int.MaxValue)]int DownVotes,
+    string Content,
+    int UpVotes,
+    int DownVotes,
     DateTime DateCreated,
     DateTime DateUpdated,
     int CurrentUserVote = 0

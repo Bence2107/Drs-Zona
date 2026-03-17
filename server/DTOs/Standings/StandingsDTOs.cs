@@ -1,48 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace DTOs.Standings;
 
-public record BrandCreateDto(
-    [Required(ErrorMessage = "Brand nevének megadása kötelező")]
-    [StringLength(100, ErrorMessage = "Brand neve nem lehet 100 karakternél több")]
-    string Name,
-    [Required(ErrorMessage = "Brand leírása kötelező")]
-    [StringLength(1000, ErrorMessage = "Brand leírása nem lehet 1000 karakternél több")]
-    string Description,
-    [Required(ErrorMessage = "Vezető megadása kötelező")]
-    [StringLength(100, ErrorMessage = "Brand vezetőjének neve nem lehet 100 karakternél több")]
-    string Principal,
-    [Required(ErrorMessage = "Bázis megadása kötelező")]
-    [StringLength(100, ErrorMessage = "Brand bázisának neve nem lehet 100 karakternél több")]
-    string HeadQuarters
-);
-
-public record BrandUpdateDto(
-    [Required] Guid Id,
-    [StringLength(100, ErrorMessage = "Brand neve nem lehet 100 karakternél több")]
-    string Name,
-    [Required(ErrorMessage = "Brand leírása kötelező")]
-    [StringLength(1000, ErrorMessage = "Brand leírása nem lehet 1000 karakternél több")]
-    string Description,
-    [Required(ErrorMessage = "Vezető megadása kötelező")]
-    [StringLength(100, ErrorMessage = "Brand vezetőjének neve nem lehet 100 karakternél több")]
-    string Principal,
-    [Required(ErrorMessage = "Bázis megadása kötelező")]
-    [StringLength(100, ErrorMessage = "Brand bázisának neve nem lehet 100 karakternél több")]
-    string HeadQuarters
-);
-
 public record BrandListDto(
-    [Required] Guid Id,
-    [StringLength(100)] string? Name
-);
-
-public record BrandDetailDto(
-    [Required] Guid Id,
-    [StringLength(100)] string Name,
-    [StringLength(1000)] string Description,
-    [StringLength(100)] string Principal,
-    [StringLength(100)] string HeadQuarters
+    Guid Id, 
+    string? Name
 );
 
 public record ConstructorCreateDto(
@@ -96,14 +59,13 @@ public record ConstructorUpdateDto(
 );
 
 public record ConstructorListDto(
-    [Required] Guid Id, 
-    [StringLength(100, ErrorMessage = "A név max 100 karakter")] 
+    Guid Id, 
     string Name
 );
 
 public record ConstructorDetailDto(
-    [Required] Guid Id,
-    [Required] Guid BrandId,
+    Guid Id,
+    Guid BrandId,
     string BrandName,
     string BrandDescription,
     string? Name,
@@ -139,6 +101,21 @@ public record DriverCreateDto(
     {
         if (BirthDate > DateTime.Today.AddYears(-15))
             yield return new ValidationResult("A versenyzőnek legalább 15 évesnek kell lennie", [nameof(BirthDate)]);
+
+        if (TotalWins > TotalRaces)
+            yield return new ValidationResult("A győzelmek száma nem haladhatja meg a versenyek számát", [nameof(TotalWins)]);
+
+        if (TotalPodiums > TotalRaces)
+            yield return new ValidationResult("A dobogók száma nem haladhatja meg a versenyek számát", [nameof(TotalPodiums)]);
+
+        if (TotalWins > TotalPodiums)
+            yield return new ValidationResult("A győzelmek száma nem haladhatja meg a dobogók számát", [nameof(TotalWins)]);
+
+        if (PolePositions > TotalRaces)
+            yield return new ValidationResult("A pole pozíciók száma nem haladhatja meg a versenyek számát", [nameof(PolePositions)]);
+
+        if (Championships > Seasons)
+            yield return new ValidationResult("A bajnoki címek száma nem haladhatja meg a szezonok számát", [nameof(Championships)]);
     }
 }
 
@@ -169,52 +146,128 @@ public record DriverUpdateDto(
 }
 
 public record DriverListDto(
-    [Required] Guid Id,
-    [StringLength(100)] string Name,
-    [StringLength(50)] string Nationality,
-    [Range(15, 99)] int Age,
+    Guid Id,
+    string Name,
+    string Nationality,
+    int Age,
     string? CurrentTeam
 );
 
 public record DriverNameRecord(
-    [Required] Guid Id,
-    [StringLength(100)] string Name
+    Guid Id,
+    string Name
 );
 
 public record DriverDetailDto(
     Guid Id,
-    [Required] [StringLength(100)] string Name,
-    [Required] [StringLength(50)] string Nationality,
-    [Required] DateTime BirthDate,
+    string Name,
+    string Nationality,
+    DateTime BirthDate,
     List<Guid>? ConstructorIds,
-    [Required] [Range(1, 500)] int TotalRaces,
-    [Required] [Range(1, 500)] int TotalWins,
-    [Required] [Range(1, 1000)] int TotalPodiums,
-    [Required] [Range(1, 99)] int Championships,
-    [Required] [Range(1, 200)] int PolePositions,
+    int TotalRaces,
+    int TotalWins,
+    int TotalPodiums,
+    int Championships,
+    int PolePositions,
     int Age,
     int Seasons
 );
 
 public record ContractCreateDto(
+    [Required(ErrorMessage = "Pilóta megadása kötelező")]
     Guid DriverId,
+    [Required(ErrorMessage = "Csapat megadása kötelező")]
     Guid TeamId
 );
 
+public class ValidSessionAttribute : ValidationAttribute
+{
+    private static readonly string[] AllowedSessions =
+    [
+        "Időmérő", "Futam", "Sprint", "Sprint Időmérő"
+    ];
+
+    protected override ValidationResult? IsValid(object? value, ValidationContext ctx)
+    {
+        if (value is not string s) return ValidationResult.Success;
+        return AllowedSessions.Contains(s.Trim())
+            ? ValidationResult.Success
+            : new ValidationResult($"Érvénytelen szakasz. Lehetséges értékek: {string.Join(", ", AllowedSessions)}");
+    }
+}
+
+public class ValidStatusAttribute : ValidationAttribute
+{
+    private static readonly string[] AllowedStatuses =
+    [
+        "Finished", "DNF", "DNS", "DSQ", "DNQ"
+    ];
+
+    protected override ValidationResult? IsValid(object? value, ValidationContext ctx)
+    {
+        if (value is not string s) return ValidationResult.Success;
+        return AllowedStatuses.Contains(s.Trim(), StringComparer.OrdinalIgnoreCase)
+            ? ValidationResult.Success
+            : new ValidationResult("Érvénytelen státusz. Lehetséges értékek: Finished, DNF, DNS, DSQ, DNQ");
+    }
+}
+
 public record BatchResultCreateDto(
+    [Required(ErrorMessage = "Nagydíj megadása kötelező!")]
     Guid GrandPrixId,
+    [Required(ErrorMessage = "Egyéni bajnokság megadása kötelező!")]
     Guid DriversChampId,
+    [Required(ErrorMessage = "Konstruktőri bajnokság kötelező!")]
     Guid ConsChampId,
+    [Required(ErrorMessage = "Szakasz megadása kötelező")]
+    [ValidSession]
     string Session,
-    List<SingleResultDto> Results
+    List<SingleResultCreateDto> Results
 );
 
-public record SingleResultDto(
+public partial class RaceTimeAttribute : ValidationAttribute
+{
+    private static readonly Regex[] ValidPatterns =
+    [
+        MyRegex(),   // H:MM:SS.mmm
+        MyRegex1(),           // M:SS.mmm
+        MyRegex2(),                 // SS.mmm
+        MyRegex3(),            // +xxxs delta
+    ];
+
+    protected override ValidationResult? IsValid(object? value, ValidationContext ctx)
+    {
+        if (value is not string s || s == "-") return ValidationResult.Success;
+
+        return ValidPatterns.Any(p => p.IsMatch(s.Trim()))
+            ? ValidationResult.Success
+            : new ValidationResult("Érvénytelen időformátum. (pl.: 1:23:45.678 / 1:23.456 / +5.123s / -)");
+    }
+
+    [GeneratedRegex(@"^\d+:\d{2}:\d{2}\.\d{3}$")]
+    private static partial Regex MyRegex();
+    [GeneratedRegex(@"^\d+:\d{2}\.\d{3}$")]
+    private static partial Regex MyRegex1();
+    [GeneratedRegex(@"^\d+\.\d{3}$")]
+    private static partial Regex MyRegex2();
+    [GeneratedRegex(@"^\+\d+(\.\d+)?s?$")]
+    private static partial Regex MyRegex3();
+}
+
+public record SingleResultCreateDto(
+    [Required(ErrorMessage = "Pilóta kiválasztása kötelező!")]
     Guid DriverId,
+    [Required(ErrorMessage = "Konstruktör kiválasztása kötelező!")]
     Guid ConstructorId,
+    [Required(ErrorMessage = "Pozíció megadása kötelező")]
     int FinishPosition,
+    [Required(ErrorMessage = "Idő megadása megadása kötelező")]
+    [RaceTime]
     string RaceTime, 
-    int LapsCompleted,
+    [Required(ErrorMessage = "Körök számának megadása kötelező")] 
+    [Range(0, 600)] int LapsCompleted,
+    [Required(ErrorMessage = "Státusz megadása kötelező")]
+    [ValidStatus]
     string Status,
     bool Pole = false,
     bool IsFastestLap = false, 
@@ -231,13 +284,16 @@ public record ResultEditDto(
     string DriverName,
     Guid ConstructorId,
     string ConstructorName,
-    int StartPosition,
+    [Required(ErrorMessage = "Pozíció megadása kötelező")]
     int FinishPosition,
+    [Required(ErrorMessage = "Idő megadása megadása kötelező")]
+    [RaceTime]
     string RaceTime, 
-    int LapsCompleted,
+    [Required(ErrorMessage = "Körök számának megadása kötelező")] 
+    [Range(0, 600)] int LapsCompleted,
+    [Required(ErrorMessage = "Státusz megadása kötelező")]
+    [ValidStatus]
     string Status,
-    double DriverPoints,
-    double ConstructorPoints,
     bool IsFastestLap, 
     bool IsPole,
     string? Q1 = null,
@@ -246,16 +302,25 @@ public record ResultEditDto(
 );
 
 public record SessionEditDto(
+    [Required(ErrorMessage = "Nagydíj megadása kötelező")]
     Guid GrandPrixId,
+    [Required(ErrorMessage = "Szakasz megadása kötelező")]
+    [ValidSession]
     string Session,
     List<ResultEditDto> Results
 );
 
 public record SingleResultUpdateDto(
     Guid ResultId,
+    [Required(ErrorMessage = "Pozíció megadása kötelező")]
     int FinishPosition,
-    string RaceTime,
-    int LapsCompleted,
+    [Required(ErrorMessage = "Idő megadása megadása kötelező")]
+    [RaceTime]
+    string RaceTime, 
+    [Required(ErrorMessage = "Körök számának megadása kötelező")] 
+    [Range(0, 600)] int LapsCompleted,
+    [Required(ErrorMessage = "Státusz megadása kötelező")]
+    [ValidStatus]
     string Status,
     bool IsFastestLap,
     bool IsPole,
@@ -281,10 +346,10 @@ public record GrandRrixResultDto(
     string ConstructorName,
     string TimeOrCompleted,
     double Points,
-    string? q1,
-    string? q2,
-    string? q3,
-    int lapsCompleted,
+    string? Q1,
+    string? Q2,
+    string? Q3,
+    int LapsCompleted,
     bool IsFastestLap = false,
     bool IsPole = false
 );
@@ -324,10 +389,29 @@ public record ConstructorStandingsResultDto(
     double Points
 );
 
-public record SeriesLookupDto(Guid Id, string Name);
-public record YearLookupDto(string Season, Guid DriversChampId, Guid ConstructorsChampId);
-public record DriverLookUpDto(Guid Id, string Name, Guid? ConstructorId = null);
-public record ConstructorLookUpDto(Guid Id, string Name, string ShortName);
+public record SeriesLookupDto(
+    Guid Id, 
+    string Name
+);
+
+public record YearLookupDto(
+    string Season, 
+    Guid DriversChampId, 
+    Guid ConstructorsChampId
+);
+
+public record DriverLookUpDto(
+    Guid Id, 
+    string Name, 
+    Guid? ConstructorId = null
+);
+
+public record ConstructorLookUpDto(
+    Guid Id, 
+    string Name, 
+    string ShortName
+);
+
 public record GrandPrixLookupDto(
     Guid Id, 
     string Name,
@@ -341,13 +425,26 @@ public record GrandPrixLookupDto(
     int LapsCompleted
 );
 
-public record DefaultFiltersDto(
-    Guid SeriesId,
-    Guid DriversChampId,
-    Guid GrandPrixId,
-    string Session
+public record DriverSeasonResultDto(
+    string GrandPrixName, 
+    string GrandPrixShortName, 
+    DateTime Date, 
+    string TeamName, 
+    int Position, 
+    double Points
 );
-
-public record DriverSeasonResultDto(string GrandPrixName, string GrandPrixShortName, DateTime Date, string TeamName, int Position, double Points);
-public record ConstructorSeasonResultDto(string GrandPrixName, string GrandPrixShortName,  DateTime Date, double Points);
-public record SeasonOverviewDto(string GrandPrixName, string GrandPrixShortName, DateTime Date, string WinnerName, string TeamName, int Laps, string Time);
+public record ConstructorSeasonResultDto(
+    string GrandPrixName, 
+    string GrandPrixShortName,  
+    DateTime Date, 
+    double Points
+);
+public record SeasonOverviewDto(
+    string GrandPrixName, 
+    string GrandPrixShortName, 
+    DateTime Date, 
+    string WinnerName, 
+    string TeamName, 
+    int Laps, 
+    string Time
+);

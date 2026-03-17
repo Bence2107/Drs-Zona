@@ -5,10 +5,8 @@ export interface ResultEditDto {
   carNumber?: number;
   constructorId?: string;
   constructorName?: string | null;
-  constructorPoints?: number;
   driverId?: string;
   driverName?: string | null;
-  driverPoints?: number;
   finishPosition?: number;
   isFastestLap?: boolean;
   isPole?: boolean;
@@ -18,6 +16,5 @@ export interface ResultEditDto {
   q3?: string | null;
   raceTime?: string | null;
   resultId?: string;
-  startPosition?: number;
   status?: string | null;
 }

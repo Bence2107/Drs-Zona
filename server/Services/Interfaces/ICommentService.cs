@@ -1,4 +1,5 @@
 ﻿using DTOs.News;
+using Services.Types;
 
 namespace Services.Interfaces;
 

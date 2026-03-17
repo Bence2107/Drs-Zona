@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Services.Interfaces.images;
+using Services.Types;
 
 namespace Services.Implementations.images;
 

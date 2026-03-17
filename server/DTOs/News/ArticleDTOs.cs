@@ -68,37 +68,42 @@ public record ArticleUpdateDto(
 }
 
 public record ArticleListDto(
-    [Required] Guid Id,
-    [StringLength(200, MinimumLength = 5)] string Title,
-    [StringLength(500, MinimumLength = 20)]
+    Guid Id,
+    string Title,
     string Lead,
     string Tag,
     bool IsReview,
-    [StringLength(200, MinimumLength = 5)] string Slug,
+    string Slug,
     DateTime DatePublished,
     string? PrimaryImageUrl
 );
 
 public record SummaryDto(
-    [MinLength(100)] [MaxLength(5000)] string SecondSection,
-    [MinLength(100)] [MaxLength(5000)] string ThirdSection,
-    [MinLength(100)] [MaxLength(5000)] string FourthSection
+    [MinLength(100, ErrorMessage = "A szekció hossza minimum 100 karakter")] 
+    [MaxLength(5000,  ErrorMessage = "A szekció hossza maximum 5000 karakter")] 
+    string SecondSection,
+    [MinLength(100, ErrorMessage = "A szekció hossza minimum 100 karakter")] 
+    [MaxLength(5000,  ErrorMessage = "A szekció hossza maximum 5000 karakter")] 
+    string ThirdSection,
+    [MinLength(100, ErrorMessage = "A szekció hossza minimum 100 karakter")] 
+    [MaxLength(5000,  ErrorMessage = "A szekció hossza maximum 5000 karakter")] 
+    string FourthSection
 );
 
 public record ArticleDetailDto(
-    [Required] Guid Id,
-    [StringLength(200, MinimumLength = 5)] string Title,
-    [StringLength(500, MinimumLength = 20)] string Lead,
-    [StringLength(200, MinimumLength = 5)] string Slug,
-    [Required] bool IsReview,
+    Guid Id,
+    string Title,
+    string Lead,
+    string Slug,
+    bool IsReview,
     string Tag,
-    [MinLength(100)] [MaxLength(524288)] string FirstSection,
-    [MinLength(100)] [MaxLength(524288)] string LastSection,
+    string FirstSection,
+    string LastSection,
     List<string> MiddleSections,
     Guid? AuthorId,
-    [StringLength(50, MinimumLength = 3)] string AuthorName,
+    string AuthorName,
     Guid? GrandPrixId,
-    [StringLength(100)] string? GrandPrixName,
+    string? GrandPrixName,
     DateTime DatePublished,
     DateTime DateUpdated,
     string? PrimaryImageUrl,

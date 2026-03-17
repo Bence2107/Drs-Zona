@@ -1,4 +1,5 @@
 using DTOs.Auth;
+using Services.Types;
 
 namespace Services.Interfaces;
 

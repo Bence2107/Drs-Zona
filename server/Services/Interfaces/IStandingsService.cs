@@ -1,10 +1,10 @@
 using DTOs.Standings;
+using Services.Types;
 
 namespace Services.Interfaces;
 
 public interface IStandingsService
 {
-    Task<ResponseResult<DefaultFiltersDto>> GetDefaultFilters();
     Task<ResponseResult<List<SeriesLookupDto>>> GetAllSeries();
     Task<ResponseResult<ParticipationListDto>> GetParticipations(Guid driversChampId, Guid constructorsChampId);
     Task<ResponseResult<List<ChampionshipRowDto>>> GetAllChampionshipsBySeries(Guid seriesId);
@@ -21,7 +21,7 @@ public interface IStandingsService
     Task<ResponseResult<List<SeasonOverviewDto>>> GetSeasonOverview(Guid driverChampId);
     Task<ResponseResult<bool>> CreateChampionship(ChampionshipCreateDto createDto);
     Task<ResponseResult<bool>> UpdateChampionshipStatus(Guid driversChampId, Guid constructorsChampId, string status);
-    Task<ResponseResult<bool>> AddParticipations(AddParticipationsDto dto);
+    Task<ResponseResult<bool>> AddParticipations(ParticipationAddDto dto);
     Task<ResponseResult<bool>> RemoveDriverParticipation(Guid driverId, Guid driversChampId);
     Task<ResponseResult<bool>> RemoveConstructorCompetition(Guid constructorId, Guid constructorsChampId);
     Task<ResponseResult<bool>> InsertResults(BatchResultCreateDto dto);

@@ -39,7 +39,7 @@ public record PollCreateDto(
 }
 
 public record PollListDto(
-    [Required] Guid Id,
+    Guid Id,
     string Title,
     string Description,
     string Tag,
@@ -47,8 +47,8 @@ public record PollListDto(
 );
 
 public record PollDto(
-    [Required] Guid Id,
-    [Required] Guid? AuthorId,
+    Guid Id,
+    Guid? AuthorId,
     string AuthorName,
     string Title,
     string Tag,
@@ -65,7 +65,7 @@ public record PollDto(
 }
 
 public record PollOptionDto(
-    [Required] Guid Id,
+    Guid Id,
     string Text,
     int VoteCount,
     double VotePercentage,
