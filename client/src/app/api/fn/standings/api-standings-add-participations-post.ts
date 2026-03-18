@@ -7,10 +7,10 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { AddParticipationsDto } from '../../models/add-participations-dto';
+import { ParticipationAddDto } from '../../models/participation-add-dto';
 
 export interface ApiStandingsAddParticipationsPost$Params {
-      body?: AddParticipationsDto
+      body?: ParticipationAddDto
 }
 
 export function apiStandingsAddParticipationsPost(http: HttpClient, rootUrl: string, params?: ApiStandingsAddParticipationsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {

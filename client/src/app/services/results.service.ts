@@ -36,7 +36,7 @@ import { SeasonOverviewDto } from '../api/models/season-overview-dto';
 import {DriverSeasonResultDto} from '../api/models/driver-season-result-dto';
 import {ConstructorSeasonResultDto} from '../api/models/constructor-season-result-dto';
 import {
-  AddParticipationsDto, BatchResultCreateDto,
+  ParticipationAddDto, BatchResultCreateDto,
   ChampionshipCreateDto,
   ChampionshipRowDto, CircuitListDto,
   ConstructorLookUpDto,
@@ -178,7 +178,7 @@ export class ResultsService {
     return apiGrandPrixUpdatePost(this.http, this.apiConfig.rootUrl, {body: dto}).pipe(map(() => void 0));
   }
 
-  addParticipation(dto: AddParticipationsDto) {
+  addParticipation(dto: ParticipationAddDto) {
     return apiStandingsAddParticipationsPost(this.http, this.apiConfig.rootUrl, {body: dto}).pipe(map(() => void 0));
   }
 

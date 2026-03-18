@@ -177,8 +177,6 @@ export type { ApiSeriesIdGet$Plain$Params as ApiSeriesIdGet$Plain$Params } from 
 export { apiSeriesIdGet$Plain as apiSeriesIdGet$Plain } from './fn/series/api-series-id-get-plain';
 export type { ApiSeriesIdGet$Json$Params as ApiSeriesIdGet$Json$Params } from './fn/series/api-series-id-get-json';
 export { apiSeriesIdGet$Json as apiSeriesIdGet$Json } from './fn/series/api-series-id-get-json';
-export type { ApiSeriesIdDelete$Params as ApiSeriesIdDelete$Params } from './fn/series/api-series-id-delete';
-export { apiSeriesIdDelete as apiSeriesIdDelete } from './fn/series/api-series-id-delete';
 export type { ApiSeriesNameNameGet$Plain$Params as ApiSeriesNameNameGet$Plain$Params } from './fn/series/api-series-name-name-get-plain';
 export { apiSeriesNameNameGet$Plain as apiSeriesNameNameGet$Plain } from './fn/series/api-series-name-name-get-plain';
 export type { ApiSeriesNameNameGet$Json$Params as ApiSeriesNameNameGet$Json$Params } from './fn/series/api-series-name-name-get-json';
@@ -187,10 +185,6 @@ export type { ApiSeriesGetAllSeriesGet$Plain$Params as ApiSeriesGetAllSeriesGet$
 export { apiSeriesGetAllSeriesGet$Plain as apiSeriesGetAllSeriesGet$Plain } from './fn/series/api-series-get-all-series-get-plain';
 export type { ApiSeriesGetAllSeriesGet$Json$Params as ApiSeriesGetAllSeriesGet$Json$Params } from './fn/series/api-series-get-all-series-get-json';
 export { apiSeriesGetAllSeriesGet$Json as apiSeriesGetAllSeriesGet$Json } from './fn/series/api-series-get-all-series-get-json';
-export type { ApiSeriesCreatePost$Params as ApiSeriesCreatePost$Params } from './fn/series/api-series-create-post';
-export { apiSeriesCreatePost as apiSeriesCreatePost } from './fn/series/api-series-create-post';
-export type { ApiSeriesUpdatePost$Params as ApiSeriesUpdatePost$Params } from './fn/series/api-series-update-post';
-export { apiSeriesUpdatePost as apiSeriesUpdatePost } from './fn/series/api-series-update-post';
 export type { ApiStandingsGetAllSeriesGet$Plain$Params as ApiStandingsGetAllSeriesGet$Plain$Params } from './fn/standings/api-standings-get-all-series-get-plain';
 export { apiStandingsGetAllSeriesGet$Plain as apiStandingsGetAllSeriesGet$Plain } from './fn/standings/api-standings-get-all-series-get-plain';
 export type { ApiStandingsGetAllSeriesGet$Json$Params as ApiStandingsGetAllSeriesGet$Json$Params } from './fn/standings/api-standings-get-all-series-get-json';
