@@ -91,8 +91,12 @@ export class EntryComponent implements OnInit {
 
   loadSeries() {
     this.resultService.getAllSeries().subscribe(res => {
-      this.seriesList.set(res);
-      if (res.length > 0) this.onSeriesChange(res[0].id!);
+      const filtered = res.filter(s => {
+        const name = s.name?.toLowerCase() ?? '';
+        return !name.includes('wec') && !name.includes('nascar');
+      });
+      this.seriesList.set(filtered);
+      if (res.length > 0) this.onSeriesChange(filtered[0].id!);
     });
   }
 

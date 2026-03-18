@@ -108,7 +108,13 @@ export class EntryDetailComponent implements OnInit {
 
   private loadSeriesList() {
     this.resultsService.getAllSeries().subscribe({
-      next: data => this.seriesList.set(data)
+      next: data => {
+        const filtered = data.filter(s => {
+          const name = s.name?.toLowerCase() ?? '';
+          return !name.includes('wec') && !name.includes('nascar');
+        });
+        this.seriesList.set(filtered)
+      }
     });
   }
 

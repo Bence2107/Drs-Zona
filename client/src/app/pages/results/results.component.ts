@@ -115,8 +115,12 @@ export class ResultsComponent implements OnInit {
 
   loadAllSeries() {
     this.standingsService.getAllSeries().subscribe(res => {
-      this.seriesList.set(res);
-      if (res.length > 0) this.onSeriesChange(res[0].id!);
+      const filtered = res.filter(s => {
+        const name = s.name?.toLowerCase() ?? '';
+        return !name.includes('wec') && !name.includes('nascar');
+      });
+      this.seriesList.set(filtered);
+      if (filtered.length > 0) this.onSeriesChange(filtered[0].id!);
     });
   }
 

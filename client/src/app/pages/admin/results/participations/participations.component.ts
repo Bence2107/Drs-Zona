@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ResultsService} from '../../../../services/results.service';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
@@ -43,7 +43,7 @@ import {Router} from '@angular/router';
   templateUrl: './participations.component.html',
   styleUrl: './participations.component.scss',
 })
-export class ParticipationsComponent {
+export class ParticipationsComponent implements OnInit{
   private dialog = inject(MatDialog);
   private resultService = inject(ResultsService);
   private router = inject(Router);
@@ -59,8 +59,12 @@ export class ParticipationsComponent {
 
   ngOnInit() {
     this.resultService.getAllSeries().subscribe(res => {
-      this.seriesList.set(res);
-      if (res.length > 0) this.onSeriesChange(res[0].id!);
+      const filtered = res.filter(s => {
+        const name = s.name?.toLowerCase() ?? '';
+        return !name.includes('wec') && !name.includes('nascar');
+      });
+      this.seriesList.set(filtered);
+      if (res.length > 0) this.onSeriesChange(filtered[0].id!);
     });
   }
 
