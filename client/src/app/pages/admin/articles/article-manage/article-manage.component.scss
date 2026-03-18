@@ -136,6 +136,18 @@ main {
   }
 }
 
+.comment-error {
+  display: block;
+  font-size: 16px;
+  color: var(--mat-sys-error);
+  margin-top: 4px;
+  padding-left: 4px;
+}
+
+::ng-deep .mat-mdc-slide-toggle .mdc-label {
+  color: var(--text-main);
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0.3;

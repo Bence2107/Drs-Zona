@@ -38,7 +38,8 @@ function parseValidationErrors(errorResponse: any): HttpValidationError {
     if (errorObj?.errors) {
       for (const field in errorObj.errors) {
         if (Object.prototype.hasOwnProperty.call(errorObj.errors, field)) {
-          fieldErrors[field.toLowerCase()] = errorObj.errors[field];
+          const cleanKey = field.toLowerCase().replace(/^summary\./, '');
+          fieldErrors[cleanKey] = errorObj.errors[field];
         }
       }
     }

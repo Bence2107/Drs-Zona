@@ -33,16 +33,38 @@
               @if (articleForm.get('tag')?.invalid && articleForm.get('tag')?.touched) {
                 <mat-error>A kategória kiválasztása kötelező</mat-error>
               }
+              @if (articleForm.get('tag')?.hasError('serverError')) {
+                <mat-error>{{ articleForm.get('tag')?.getError('serverError') }}</mat-error>
+              }
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Cikk címe</mat-label>
               <input matInput formControlName="title" />
+              @if (articleForm.get('title')?.hasError('required') && articleForm.get('title')?.touched) {
+                <mat-error>A cím kitöltése kötelező</mat-error>
+              }
+              @if (articleForm.get('title')?.hasError('minlength') || articleForm.get('title')?.hasError('maxlength')) {
+                <mat-error>A cím hossza nem megfelelő (5-200 karakter)</mat-error>
+              }
+              @if (articleForm.get('title')?.hasError('serverError')) {
+                <mat-error>{{ articleForm.get('title')?.getError('serverError') }}</mat-error>
+              }
             </mat-form-field>
+
 
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Lead (Bevezető)</mat-label>
               <textarea matInput formControlName="lead" rows="3"></textarea>
+              @if (articleForm.get('lead')?.hasError('required') && articleForm.get('lead')?.touched) {
+                <mat-error>A Lead mező kitöltése kötelező</mat-error>
+              }
+              @if (articleForm.get('lead')?.hasError('minlength') || articleForm.get('lead')?.hasError('maxlength')) {
+                <mat-error>A Lead hossza nem megfelelő (20-500 karakter)</mat-error>
+              }
+              @if (articleForm.get('lead')?.hasError('serverError')) {
+                <mat-error>{{ articleForm.get('lead')?.getError('serverError') }}</mat-error>
+              }
             </mat-form-field>
 
             @if(!articleToEdit) {
@@ -50,6 +72,9 @@
                 <mat-label>Slug (URL azonosító)</mat-label>
                 <input matInput formControlName="slug" placeholder="pl: monaco-nagydij-2025" />
                 <mat-hint>Csak kisbetűk és kötőjel</mat-hint>
+                @if (articleForm.get('slug')?.hasError('serverError')) {
+                  <mat-error>{{ articleForm.get('slug')?.getError('serverError') }}</mat-error>
+                }
               </mat-form-field>
             }
           </section>
@@ -57,7 +82,10 @@
           <section class="form-section">
             <div class="editor-container full-width">
               <label class="editor-label">Első szöveges blokk</label>
-              <angular-editor formControlName="firstSection" [config]="editorConfig" (blur)="onEditorBlur('firstSection')">></angular-editor>
+              <angular-editor formControlName="firstSection" [config]="editorConfig" (blur)="onEditorBlur('firstSection')"></angular-editor>
+              @if (articleForm.get('firstSection')?.hasError('serverError')) {
+                <span class="comment-error">{{ articleForm.get('firstSection')?.getError('serverError') }}</span>
+              }
             </div>
           </section>
 
@@ -70,7 +98,13 @@
 
               <div class="editor-container full-width">
                 <label class="editor-label">Második szöveges blokk</label>
-                <angular-editor formControlName="secondSection" [config]="editorConfig" (blur)="onEditorBlur('firstSection')">></angular-editor>
+                <angular-editor formControlName="secondSection" [config]="editorConfig" (blur)="onEditorBlur('summary.secondSection')"></angular-editor>
+                @if (articleForm.get('summary.secondSection')?.hasError('required') && articleForm.get('summary.secondSection')?.touched) {
+                  <span class="comment-error">A második szekció kitöltése kötelező</span>
+                }
+                @if (articleForm.get('summary.secondSection')?.hasError('serverError')) {
+                  <span class="comment-error">{{ articleForm.get('summary.secondSection')?.getError('serverError') }}</span>
+                }
               </div>
               <div class="image-upload-section mini">
                 <label class="editor-label">Kép a második blokk után (Secondary)</label>
@@ -83,8 +117,15 @@
 
               <div class="editor-container full-width">
                 <label class="editor-label">Harmadik szöveges blokk</label>
-                <angular-editor formControlName="thirdSection" [config]="editorConfig" (blur)="onEditorBlur('firstSection')">></angular-editor>
+                <angular-editor formControlName="thirdSection" [config]="editorConfig" (blur)="onEditorBlur('summary.thirdSection')"></angular-editor>
+                @if (articleForm.get('summary.thirdSection')?.hasError('required') && articleForm.get('summary.thirdSection')?.touched) {
+                  <span class="comment-error">A harmadik szekció kitöltése kötelező</span>
+                }
+                @if (articleForm.get('summary.thirdSection')?.hasError('serverError')) {
+                  <span class="comment-error">{{ articleForm.get('summary.thirdSection')?.getError('serverError') }}</span>
+                }
               </div>
+
               <div class="image-upload-section mini">
                 <label class="editor-label">Kép a harmadik blokk után (Third)</label>
                 <div class="upload-placeholder" (click)="thirdInput.click()">
@@ -94,9 +135,16 @@
                 <input #thirdInput type="file" (change)="onFileSelected($event, 'third')" hidden>
               </div>
 
+
               <div class="editor-container full-width">
                 <label class="editor-label">Negyedik szöveges blokk</label>
-                <angular-editor formControlName="fourthSection" [config]="editorConfig" (blur)="onEditorBlur('firstSection')">></angular-editor>
+                <angular-editor formControlName="fourthSection" [config]="editorConfig" (blur)="onEditorBlur('summary.fourthSection')"></angular-editor>
+                @if (articleForm.get('summary.fourthSection')?.hasError('required') && articleForm.get('summary.fourthSection')?.touched) {
+                  <span class="comment-error">A negyedik szekció kitöltése kötelező</span>
+                }
+                @if (articleForm.get('summary.fourthSection')?.hasError('serverError')) {
+                  <span class="comment-error">{{ articleForm.get('summary.fourthSection')?.getError('serverError') }}</span>
+                }
               </div>
             </section>
           }
@@ -115,7 +163,10 @@
           <section class="form-section">
             <div class="editor-container full-width">
               <label class="editor-label">Befejező szöveges blokk</label>
-              <angular-editor formControlName="lastSection" [config]="editorConfig" (blur)="onEditorBlur('firstSection')">></angular-editor>
+              <angular-editor formControlName="lastSection" [config]="editorConfig" (blur)="onEditorBlur('lastSection')"></angular-editor>
+              @if (articleForm.get('lastSection')?.hasError('serverError')) {
+                <span class="comment-error">{{ articleForm.get('lastSection')?.getError('serverError') }}</span>
+              }
             </div>
           </section>
 
