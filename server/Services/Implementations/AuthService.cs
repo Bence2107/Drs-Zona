@@ -128,7 +128,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
 
         if (request.Username != user.Username)
         {
-            var exist = await authRepository.UserExistsByEmail(request.Email);
+            var exist = await authRepository.UserExistsByUsername(request.Username);
             if (exist)
             {
                 return ResponseResult<bool>.Failure(
