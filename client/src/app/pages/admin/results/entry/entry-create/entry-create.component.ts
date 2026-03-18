@@ -252,30 +252,10 @@ export class EntryCreateComponent implements OnInit{
     this.resultsService.getDriversByDriversChampionship(driverChampId).subscribe(driverList => {
       this.drivers.set(driverList);
 
-      // Minden pilótához hozzáadunk egy sort, előre kitöltve az ID-kat
       driverList.forEach(() => {
         this.addRow();
       });
     });
-  }
-
-  findInvalidControls() {
-    const invalid: string[] = [];
-    const rows = this.form.get('rows') as FormArray;
-
-    rows.controls.forEach((control, index) => {
-      const group = control as FormGroup;
-      Object.keys(group.controls).forEach(key => {
-        const field = group.get(key);
-        if (field && field.invalid) {
-          // Formázott hibaüzenet
-          invalid.push(`Sor ${index + 1}: a "${key}" mező érvénytelen (Hiba: ${JSON.stringify(field.errors)})`);
-        }
-      });
-    });
-
-    this.invalidErrors.set(invalid); // Frissítjük a signal-t
-    console.log('Érvénytelen mezők:', invalid);
   }
 
   isDriverSelected(driverId: string, currentIndex: number): boolean {
@@ -286,7 +266,6 @@ export class EntryCreateComponent implements OnInit{
 
   updateValidators(session: string) {
     const ctx = this.context();
-    // Itt is be kell kötni az isF1Qualy vizsgálatot, akárcsak a táblázat oszlopainál!
     const isF1Qualy = ctx?.pointSystem === 'F1' && session.includes('Időmérő');
 
     this.rows.controls.forEach(control => {
