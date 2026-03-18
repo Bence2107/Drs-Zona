@@ -7,6 +7,7 @@ import {CommentItemComponent} from './comment-item/comment-item.component';
 import {MatIcon} from '@angular/material/icon';
 import {AuthService} from '../../../services/auth.service';
 import {CommentCreateDto} from '../../../api/models/comment-create-dto';
+import {HttpValidationError} from '../../../services/error-interceptor.service';
 
 @Component({
   selector: 'app-comment-list',
@@ -24,15 +25,12 @@ export class CommentListComponent implements OnInit {
   @Input() articleId!: string;
   @Input() articleUrl!: string;
   newCommentText = '';
+  commentError = '';
   isSubmitting = false;
 
   submitComment() {
     const userId = this.authService.currentProfile()?.userId;
-
-    if (!this.newCommentText.trim() || !userId) {
-      console.warn('Hiányzó adat – nem küld');
-      return;
-    }
+    if (!this.newCommentText.trim() || !userId) return;
 
     const dto: CommentCreateDto = {
       articleId: this.articleId,
@@ -44,10 +42,14 @@ export class CommentListComponent implements OnInit {
     this.commentService.createComment(dto, userId).subscribe({
       next: () => {
         this.newCommentText = '';
+        this.commentError = '';
         this.isSubmitting = false;
         this.loadMainComments();
       },
-      error: () => this.isSubmitting = false
+      error: (err: HttpValidationError) => {
+        this.commentError = err?.fieldErrors?.['content']?.[0] ?? err?.title ?? 'Hiba történt a küldés során';
+        this.isSubmitting = false;
+      }
     });
   }
 

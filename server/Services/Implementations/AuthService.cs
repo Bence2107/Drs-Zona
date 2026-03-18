@@ -110,6 +110,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
         if (user is null)
         {
             return ResponseResult<bool>.Failure(
+                field: "username",
                 message: "Felhasználó nem található"
             );
         }
@@ -162,6 +163,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
         if (user is null)
         {
             return ResponseResult<bool>.Failure(
+                field: "curentPassword",
                 message: "Felhasználó nem található"
             );
         }

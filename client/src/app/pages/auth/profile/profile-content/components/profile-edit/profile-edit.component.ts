@@ -1,29 +1,24 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {UserProfileResponse} from '../../../../../../api/models/user-profile-response';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton} from '@angular/material/button';
 import {MatCard} from '@angular/material/card';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
-import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatError, MatFormField, MatInput, MatLabel, MatSuffix} from '@angular/material/input';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../../../../../../services/auth.service';
 import {ChangePasswordRequest} from '../../../../../../api/models/change-password-request';
 import {CustomSnackbarComponent} from '../../../../../../components/custom-snackbar/custom-snackbar.component';
 import {Router} from '@angular/router';
+import {HttpValidationError} from '../../../../../../services/error-interceptor.service';
 
 @Component({
   selector: 'app-profile-edit',
   imports: [
-    MatIcon,
-    MatCard,
-    MatTabGroup,
-    MatTab,
-    ReactiveFormsModule,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    MatButton
+    MatIcon, MatCard, MatTabGroup, MatTab,
+    ReactiveFormsModule, MatFormField, MatInput,
+    MatLabel, MatButton, MatError, MatSuffix
   ],
   templateUrl: './profile-edit.component.html',
   styleUrl: './profile-edit.component.scss',
@@ -44,16 +39,73 @@ export class ProfileEditComponent implements OnInit {
 
   ngOnInit() {
     this.profileForm = this.fb.group({
-      fullName: [this.userData?.fullName || '', Validators.required],
-      username: [this.userData?.username || '', Validators.required],
+      fullName: [this.userData?.fullName || '', [Validators.required, Validators.maxLength(100)]],
+      username: [this.userData?.username || '', [Validators.required, Validators.maxLength(50)]],
       email: [this.userData?.email || '', [Validators.required, Validators.email]]
     });
 
     this.passwordForm = this.fb.group({
       currentPassword: ['', Validators.required],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
+      newPassword: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(8)]]
     });
+
+    this.clearServerErrorOnChange([
+      this.profFullName, this.profUsername, this.profEmail,
+      this.passCurrentPassword, this.passNewPassword, this.passConfirmPassword
+    ]);
+  }
+
+  // Profile getters
+  get profFullName() { return this.profileForm.get('fullName') as FormControl; }
+  get profUsername() { return this.profileForm.get('username') as FormControl; }
+  get profEmail() { return this.profileForm.get('email') as FormControl; }
+
+  // Password getters
+  get passCurrentPassword() { return this.passwordForm.get('currentPassword') as FormControl; }
+  get passNewPassword() { return this.passwordForm.get('newPassword') as FormControl; }
+  get passConfirmPassword() { return this.passwordForm.get('confirmPassword') as FormControl; }
+
+  private clearServerErrorOnChange(controls: FormControl[]): void {
+    controls.forEach(control => {
+      control.valueChanges.subscribe(() => {
+        if (control.hasError('serverError')) {
+          const errors = { ...control.errors };
+          delete errors['serverError'];
+          control.setErrors(Object.keys(errors).length ? errors : null);
+        }
+      });
+    });
+  }
+
+  private applyServerErrors(form: FormGroup, error: HttpValidationError): void {
+    if (!error?.fieldErrors) {
+      form.get('email')?.setErrors({ serverError: error?.title ?? 'Ismeretlen hiba' });
+      return;
+    }
+
+    const fieldMap: { [key: string]: string } = {
+      'email': 'email',
+      'username': 'username',
+      'fullname': 'fullName',
+      'currentpassword': 'currentPassword',
+      'newpassword': 'newPassword',
+      'newpasswordagain': 'confirmPassword',
+    };
+
+    let hasFieldError = false;
+    for (const backendField of Object.keys(error.fieldErrors)) {
+      const controlName = fieldMap[backendField] ?? backendField;
+      const control = form.get(controlName);
+      if (control) {
+        control.setErrors({ serverError: error.fieldErrors[backendField][0] });
+        hasFieldError = true;
+      }
+    }
+
+    if (!hasFieldError && error.title) {
+      form.get('email')?.setErrors({ serverError: error.title });
+    }
   }
 
   forceRefresh() {
@@ -69,7 +121,7 @@ export class ProfileEditComponent implements OnInit {
     this.isLoading = true;
     this.authService.updateProfile(this.profileForm.value).subscribe({
       next: () => {
-        this.forceRefresh()
+        this.forceRefresh();
         this.snackBar.openFromComponent(CustomSnackbarComponent, {
           data: { message: 'Profil sikeresen módosítva', actionLabel: 'Rendben' },
           duration: 3000,
@@ -77,8 +129,8 @@ export class ProfileEditComponent implements OnInit {
         });
         this.isLoading = false;
       },
-      error: (err) => {
-        this.snackBar.open('Hiba történt a mentés során: ' + (err.error?.message || 'Ismeretlen hiba'), 'Bezár', { duration: 5000 });
+      error: (err: HttpValidationError) => {
+        this.applyServerErrors(this.profileForm, err);
         this.isLoading = false;
       }
     });
@@ -87,19 +139,19 @@ export class ProfileEditComponent implements OnInit {
   onUpdatePassword() {
     if (this.passwordForm.invalid) return;
 
-    const { currentPassword, newPassword, confirmPassword } = this.passwordForm.value;
-
+    const { newPassword, confirmPassword } = this.passwordForm.value;
     if (newPassword !== confirmPassword) {
-      this.snackBar.open('A két új jelszó nem egyezik!', 'Hiba', { duration: 3000 });
+      this.passConfirmPassword.setErrors({ serverError: 'A két jelszó nem egyezik' });
       return;
     }
 
     this.isLoading = true;
     const request: ChangePasswordRequest = {
-      currentPassword: currentPassword,
-      newPassword: newPassword,
-      newPasswordAgain: confirmPassword
-    }
+      currentPassword: this.passCurrentPassword.value,
+      newPassword: this.passNewPassword.value,
+      newPasswordAgain: this.passConfirmPassword.value
+    };
+
     this.authService.changePassword(request).subscribe({
       next: () => {
         this.snackBar.openFromComponent(CustomSnackbarComponent, {
@@ -110,12 +162,8 @@ export class ProfileEditComponent implements OnInit {
         this.passwordForm.reset();
         this.isLoading = false;
       },
-      error: (err) => {
-        this.snackBar.openFromComponent(CustomSnackbarComponent, {
-          data: { message: 'Sikertelen jelszómódosítás: ' + err, actionLabel: 'Rendben' },
-          duration: 3000,
-          horizontalPosition: 'center',
-        });
+      error: (err: HttpValidationError) => {
+        this.applyServerErrors(this.passwordForm, err);
         this.isLoading = false;
       }
     });

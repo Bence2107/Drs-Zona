@@ -17,14 +17,17 @@
         } @else {
           <div class="edit-container">
             <div class="edit-input-wrapper">
-        <textarea
-          class="reply-textarea edit-textarea"
-          [(ngModel)]="editText"
-          (input)="autoResize($event)"
-          rows="1"
-          placeholder="Módosítsd a hozzászólásod..."
-          autofocus></textarea>
+              <textarea
+                class="reply-textarea edit-textarea"
+                [(ngModel)]="editText"
+                (input)="autoResize($event); editError = ''"
+                rows="1"
+                placeholder="Módosítsd a hozzászólásod..."
+                autofocus></textarea>
             </div>
+            @if (editError) {
+              <span class="comment-error">{{ editError }}</span>
+            }
             <div class="edit-actions">
               <button class="edit-btn cancel" (click)="cancelEdit()">Mégse</button>
               <button class="edit-btn save" (click)="saveEdit()" [disabled]="!editText.trim()">
@@ -104,6 +107,9 @@
         placeholder="Írj választ..."
         rows="1"
         (input)="autoResize($event)"></textarea>
+          @if (replyError) {
+            <span class="comment-error">{{ replyError }}</span>
+          }
           <div class="reply-form-actions">
             <button class="cancel-btn" (click)="toggleReplyForm()">Mégse</button>
             <button class="submit-btn" (click)="submitReply()" [disabled]="!replyText.trim()">

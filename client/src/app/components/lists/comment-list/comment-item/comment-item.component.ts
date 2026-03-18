@@ -12,6 +12,7 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {CommentContentUpdateDto} from '../../../../api/models/comment-content-update-dto';
 import {CommentUpdateVoteDto} from '../../../../api/models/comment-update-vote-dto';
 import {RouterLink} from '@angular/router';
+import {HttpValidationError} from '../../../../services/error-interceptor.service';
 
 @Component({
   selector: 'app-comment-item',
@@ -49,6 +50,8 @@ export class CommentItemComponent {
   editText = '';
   replyFormVisible = false;
   replyText = '';
+  editError = '';
+  replyError = '';
 
   constructor(private commentService: CommentService, private authService: AuthService) {}
 
@@ -113,6 +116,7 @@ export class CommentItemComponent {
   cancelEdit() {
     this.isEditing = false;
     this.editText = '';
+    this.editError = '';
   }
 
   saveEdit() {
@@ -130,10 +134,9 @@ export class CommentItemComponent {
     this.commentService.updateComment(dto).subscribe({
       next: () => {
         this.comment.content = this.editText.trim();
-
         this.isEditing = false;
         this.editText = '';
-
+        this.editError = '';
 
         if (this.comment.id) {
           this.comment.loaded = false;
@@ -146,8 +149,8 @@ export class CommentItemComponent {
           });
         }
       },
-      error: (err) => {
-        console.error(err);
+      error: (err: HttpValidationError) => {
+        this.editError = err?.fieldErrors?.['content']?.[0] ?? err?.title ?? 'Hiba történt a mentés során';
       }
     });
   }
@@ -192,13 +195,14 @@ export class CommentItemComponent {
   }
 
   //Reply Comment:
-
+  
   toggleReplyForm() {
     this.replyFormVisible = !this.replyFormVisible;
-    if(this.isEditing) {
-      this.isEditing = false;
+    if (this.isEditing) this.isEditing = false;
+    if (!this.replyFormVisible) {
+      this.replyText = '';
+      this.replyError = '';
     }
-    if (!this.replyFormVisible) this.replyText = '';
   }
 
   submitReply() {
@@ -215,6 +219,7 @@ export class CommentItemComponent {
       next: () => {
         this.replyText = '';
         this.replyFormVisible = false;
+        this.replyError = '';
 
         if (this.comment.id) {
           this.comment.loaded = false;
@@ -227,6 +232,9 @@ export class CommentItemComponent {
             }
           });
         }
+      },
+      error: (err: HttpValidationError) => {
+        this.replyError = err?.fieldErrors?.['content']?.[0] ?? err?.title ?? 'Hiba történt a válasz küldése során';
       }
     });
   }

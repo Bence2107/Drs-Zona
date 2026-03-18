@@ -2,6 +2,7 @@
   <mat-card class="edit-card">
     <mat-tab-group dynamicHeight class="inner-tabs">
 
+      <!-- ADATOK MÓDOSÍTÁSA -->
       <mat-tab label="Adatok módosítása">
         <div class="tab-body">
           <div class="section-header">
@@ -10,26 +11,55 @@
           </div>
 
           <form class="edit-form" [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()">
+
             <mat-form-field appearance="fill">
               <mat-label>Teljes név</mat-label>
               <input matInput formControlName="fullName">
               <mat-icon matSuffix>badge</mat-icon>
+              @if (profFullName.hasError('required')) {
+                <mat-error>A teljes név megadása kötelező</mat-error>
+              }
+              @if (profFullName.hasError('maxlength')) {
+                <mat-error>Maximum 100 karakter lehet</mat-error>
+              }
+              @if (profFullName.hasError('serverError')) {
+                <mat-error>{{ profFullName.getError('serverError') }}</mat-error>
+              }
             </mat-form-field>
 
             <mat-form-field appearance="fill">
               <mat-label>Felhasználónév</mat-label>
               <input matInput formControlName="username">
               <mat-icon matSuffix>alternate_email</mat-icon>
+              @if (profUsername.hasError('required')) {
+                <mat-error>A felhasználónév megadása kötelező</mat-error>
+              }
+              @if (profUsername.hasError('maxlength')) {
+                <mat-error>Maximum 50 karakter lehet</mat-error>
+              }
+              @if (profUsername.hasError('serverError')) {
+                <mat-error>{{ profUsername.getError('serverError') }}</mat-error>
+              }
             </mat-form-field>
 
             <mat-form-field appearance="fill">
               <mat-label>Email cím</mat-label>
               <input matInput type="email" formControlName="email">
               <mat-icon matSuffix>mail</mat-icon>
+              @if (profEmail.hasError('required')) {
+                <mat-error>Az email cím megadása kötelező</mat-error>
+              }
+              @if (profEmail.hasError('email')) {
+                <mat-error>Hibás email formátum</mat-error>
+              }
+              @if (profEmail.hasError('serverError')) {
+                <mat-error>{{ profEmail.getError('serverError') }}</mat-error>
+              }
             </mat-form-field>
 
             <div class="actions">
-              <button mat-flat-button color="primary" class="save-btn" [disabled]="profileForm.invalid || profileForm.pristine">
+              <button mat-flat-button color="primary" class="save-btn"
+                      [disabled]="profileForm.invalid || profileForm.pristine">
                 Változtatások mentése
               </button>
             </div>
@@ -37,6 +67,7 @@
         </div>
       </mat-tab>
 
+      <!-- JELSZÓ MÓDOSÍTÁSA -->
       <mat-tab label="Jelszó módosítása">
         <div class="tab-body">
           <div class="section-header">
@@ -45,20 +76,45 @@
           </div>
 
           <form class="edit-form" [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
+
             <mat-form-field appearance="fill">
               <mat-label>Jelenlegi jelszó</mat-label>
               <input matInput type="password" formControlName="currentPassword">
+              @if (passCurrentPassword.hasError('required')) {
+                <mat-error>A jelenlegi jelszó megadása kötelező</mat-error>
+              }
+              @if (passCurrentPassword.hasError('serverError')) {
+                <mat-error>{{ passCurrentPassword.getError('serverError') }}</mat-error>
+              }
             </mat-form-field>
 
             <div class="password-grid">
               <mat-form-field appearance="fill">
                 <mat-label>Új jelszó</mat-label>
                 <input matInput type="password" formControlName="newPassword">
+                @if (passNewPassword.hasError('required')) {
+                  <mat-error>Az új jelszó megadása kötelező</mat-error>
+                }
+                @if (passNewPassword.hasError('minlength')) {
+                  <mat-error>A jelszónak legalább 8 karakternek kell lennie</mat-error>
+                }
+                @if (passNewPassword.hasError('serverError')) {
+                  <mat-error>{{ passNewPassword.getError('serverError') }}</mat-error>
+                }
               </mat-form-field>
 
               <mat-form-field appearance="fill">
                 <mat-label>Új jelszó megerősítése</mat-label>
                 <input matInput type="password" formControlName="confirmPassword">
+                @if (passConfirmPassword.hasError('required')) {
+                  <mat-error>A jelszó megerősítése kötelező</mat-error>
+                }
+                @if (passConfirmPassword.hasError('minlength')) {
+                  <mat-error>A jelszónak legalább 8 karakternek kell lennie</mat-error>
+                }
+                @if (passConfirmPassword.hasError('serverError')) {
+                  <mat-error>{{ passConfirmPassword.getError('serverError') }}</mat-error>
+                }
               </mat-form-field>
             </div>
 
@@ -70,6 +126,7 @@
           </form>
         </div>
       </mat-tab>
+
     </mat-tab-group>
   </mat-card>
 </div>
