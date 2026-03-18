@@ -6,7 +6,6 @@
     }
 
     <div class="auth-split-container">
-
       <div class="form-side">
         <div class="form-centering-wrapper">
 
@@ -15,14 +14,14 @@
               message="A szerver nem elérhető. Kérjük, ellenőrizze a kapcsolatot!"
               (retry)="checkConnection()">
             </app-error-display>
-          }
-          @else if (isServerLoading) {
+          } @else if (isServerLoading) {
             <div class="auth-loading-msg">
               <h3>Kapcsolódás a szerverhez...</h3>
             </div>
-          }
-          @else {
+          } @else {
             <mat-tab-group dynamicHeight>
+
+              <!-- BEJELENTKEZÉS -->
               <mat-tab label="Bejelentkezés">
                 <div class="auth-content">
                   <form class="auth-form" [formGroup]="loginForm" (ngSubmit)="login()">
@@ -33,12 +32,30 @@
 
                     <mat-form-field appearance="fill" class="form-field">
                       <mat-label>Email</mat-label>
-                      <input matInput type="email" [formControl]="email" placeholder="pelda@email.com" />
+                      <input matInput type="email" [formControl]="loginEmail" placeholder="pelda@email.com" />
+                      @if (loginEmail.hasError('required')) {
+                        <mat-error>Az email cím megadása kötelező</mat-error>
+                      }
+                      @if (loginEmail.hasError('email')) {
+                        <mat-error>Hibás email formátum</mat-error>
+                      }
+                      @if (loginEmail.hasError('serverError')) {
+                        <mat-error>{{ loginEmail.getError('serverError') }}</mat-error>
+                      }
                     </mat-form-field>
 
                     <mat-form-field appearance="fill" class="form-field">
                       <mat-label>Jelszó</mat-label>
-                      <input matInput type="password" [formControl]="password" />
+                      <input matInput type="password" [formControl]="loginPassword" />
+                      @if (loginPassword.hasError('required')) {
+                        <mat-error>A jelszó megadása kötelező</mat-error>
+                      }
+                      @if (loginPassword.hasError('minlength')) {
+                        <mat-error>A jelszónak legalább 8 karakternek kell lennie</mat-error>
+                      }
+                      @if (loginPassword.hasError('serverError')) {
+                        <mat-error>{{ loginPassword.getError('serverError') }}</mat-error>
+                      }
                     </mat-form-field>
 
                     <button mat-flat-button class="submit-button" [disabled]="loginForm.invalid">
@@ -48,6 +65,7 @@
                 </div>
               </mat-tab>
 
+              <!-- REGISZTRÁCIÓ -->
               <mat-tab label="Regisztráció">
                 <div class="auth-content">
                   <form class="auth-form" [formGroup]="registerForm" (ngSubmit)="signup()">
@@ -59,21 +77,57 @@
                     <mat-form-field appearance="fill">
                       <mat-label>Felhasználónév</mat-label>
                       <input matInput formControlName="username" />
+                      @if (regUsername.hasError('required')) {
+                        <mat-error>A felhasználónév megadása kötelező</mat-error>
+                      }
+                      @if (regUsername.hasError('maxlength')) {
+                        <mat-error>Maximum 50 karakter lehet</mat-error>
+                      }
+                      @if (regUsername.hasError('serverError')) {
+                        <mat-error>{{ regUsername.getError('serverError') }}</mat-error>
+                      }
                     </mat-form-field>
 
                     <mat-form-field appearance="fill">
                       <mat-label>Teljes név</mat-label>
                       <input matInput formControlName="fullName" />
+                      @if (regFullName.hasError('required')) {
+                        <mat-error>A teljes név megadása kötelező</mat-error>
+                      }
+                      @if (regFullName.hasError('maxlength')) {
+                        <mat-error>Maximum 100 karakter lehet</mat-error>
+                      }
+                      @if (regFullName.hasError('serverError')) {
+                        <mat-error>{{ regFullName.getError('serverError') }}</mat-error>
+                      }
                     </mat-form-field>
 
                     <mat-form-field appearance="fill">
                       <mat-label>Email Cím</mat-label>
                       <input matInput formControlName="email" />
+                      @if (regEmail.hasError('required')) {
+                        <mat-error>Az email cím megadása kötelező</mat-error>
+                      }
+                      @if (regEmail.hasError('email')) {
+                        <mat-error>Hibás email formátum</mat-error>
+                      }
+                      @if (regEmail.hasError('serverError')) {
+                        <mat-error>{{ regEmail.getError('serverError') }}</mat-error>
+                      }
                     </mat-form-field>
 
                     <mat-form-field appearance="fill">
                       <mat-label>Jelszó</mat-label>
                       <input matInput type="password" formControlName="password" />
+                      @if (regPassword.hasError('required')) {
+                        <mat-error>A jelszó megadása kötelező</mat-error>
+                      }
+                      @if (regPassword.hasError('minlength')) {
+                        <mat-error>A jelszónak legalább 8 karakternek kell lennie</mat-error>
+                      }
+                      @if (regPassword.hasError('serverError')) {
+                        <mat-error>{{ regPassword.getError('serverError') }}</mat-error>
+                      }
                     </mat-form-field>
 
                     <button mat-flat-button class="submit-button" [disabled]="registerForm.invalid">
@@ -82,6 +136,7 @@
                   </form>
                 </div>
               </mat-tab>
+
             </mat-tab-group>
           }
 
@@ -89,9 +144,7 @@
       </div>
 
       <div class="visual-side">
-        <img [src]="'img/login/login_page.jpg'"
-             alt="Login page"
-             class="side-image">
+        <img [src]="'img/login/login_page.jpg'" alt="Login page" class="side-image">
       </div>
     </div>
   </mat-card>

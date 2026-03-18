@@ -10,12 +10,14 @@ import {authInterceptor} from './interceptors/auth';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import {MatPaginatorIntl} from '@angular/material/paginator';
 import {getHungarianPaginatorIntl} from './shared/getHungarianPaginator';
+import {errorInterceptor} from './services/error-interceptor.service';
 
 registerLocaleData(localeHu)
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(),
+    provideHttpClient(withInterceptors([errorInterceptor])),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideNativeDateAdapter(),
     provideRouter(routes),

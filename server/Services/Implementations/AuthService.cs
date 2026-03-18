@@ -20,19 +20,19 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
 
     public async Task<ResponseResult<AuthResponse>> Register(RegisterRequest request)
     {
-        if (await authRepository.UserExistsByEmail(request.Email))
-        {
-            return ResponseResult<AuthResponse>.Failure(
-                field: "email",
-                message: "Ez az Email Cím már használatban van."
-            );
-        }
-
         if (await authRepository.UserExistsByUsername(request.Username))
         {
             return ResponseResult<AuthResponse>.Failure(
                 field: "username",
                 message: "Ez a felhasználónév foglalt."
+            );
+        }
+        
+        if (await authRepository.UserExistsByEmail(request.Email))
+        {
+            return ResponseResult<AuthResponse>.Failure(
+                field: "email",
+                message: "Ez az Email Cím már használatban van."
             );
         }
 
