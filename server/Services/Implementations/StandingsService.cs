@@ -26,7 +26,7 @@ public class StandingsService (
     public async Task<ResponseResult<List<SeriesLookupDto>>> GetAllSeries()
     {
         var series = await seriesRepo.GetAllSeries();
-        var dtoS = series.Select(s => new SeriesLookupDto(s.Id, s.Name)).ToList();
+        var dtoS = series.Select(s => new SeriesLookupDto(s.Id, s.ShortName)).ToList();
         return ResponseResult<List<SeriesLookupDto>>.Success(dtoS);
     }
     

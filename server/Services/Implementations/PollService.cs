@@ -19,7 +19,7 @@ public class PollService(
     public async Task<ResponseResult<PollDto>> GetPollById(Guid pollId, Guid? currentUserId = null)
     {
         var poll = await pollRepository.GetByIdWithAuthor(pollId);
-        if (poll == null) return ResponseResult<PollDto>.Failure("Poll not found");
+        if (poll == null) return ResponseResult<PollDto>.Failure("Szavazás nem található");
 
         var options = await pollOptionsRepository.GetByPollId(pollId);
         
@@ -135,7 +135,7 @@ public class PollService(
     public async Task<ResponseResult<bool>> Create(PollCreateDto dto, Guid? currentUserId = null)
     {
         if (currentUserId is not null && !await userRepository.CheckIfIdExists(currentUserId))
-            return ResponseResult<bool>.Failure("User not found");
+            return ResponseResult<bool>.Failure("Felhasználó nem található");
 
         await using var transaction = await context.Database.BeginTransactionAsync();
 
@@ -183,11 +183,11 @@ public class PollService(
     {
         var poll = await pollRepository.GetPollById(id);
         if (poll == null)
-            return ResponseResult<bool>.Failure("Poll not found");
+            return ResponseResult<bool>.Failure("Szavazás nem található");
 
         if (poll.AuthorId != currentUserId)
         {
-            return ResponseResult<bool>.Failure("You are not the author!");
+            return ResponseResult<bool>.Failure("Nem te vagy a szavazás kreátora");
         }
         
         await pollRepository.Delete(id);
@@ -198,20 +198,20 @@ public class PollService(
     {
         var poll = await pollRepository.GetPollById(pollId);
         if (poll == null)
-            return ResponseResult<bool>.Failure("Poll not found");
+            return ResponseResult<bool>.Failure("Szavazás nem található");
 
         if (!poll.IsActive)
-            return ResponseResult<bool>.Failure("Poll is not active");
+            return ResponseResult<bool>.Failure("Szavazás nem aktív, így nem lehet rá szavazni");
 
         if (poll.ExpiresAt < DateTime.Now)
-            return ResponseResult<bool>.Failure("Poll has expired");
+            return ResponseResult<bool>.Failure("A szavazás már lejárt");
 
         var option = await pollOptionsRepository.GetPollOptionById(pollOptionId);
         if (option == null || option.PollId != pollId)
-            return ResponseResult<bool>.Failure("Invalid poll option");
+            return ResponseResult<bool>.Failure("Ismeretlen opció");
 
         if (await HasUserVoted(pollId, userId))
-            return ResponseResult<bool>.Failure("User has already voted on this poll");
+            return ResponseResult<bool>.Failure("Már szavaztál ezen a szavazáson");
 
         var vote = new PollVote
         {
@@ -227,11 +227,11 @@ public class PollService(
     {
         var vote = await pollVoteRepository.GetUserVoteForPoll(userId, pollOptionId);
         if (vote == null)
-            return ResponseResult<bool>.Failure("Vote not found");
+            return ResponseResult<bool>.Failure("Szavazás nem található");
 
         var option = await pollOptionsRepository.GetPollOptionById(pollOptionId);
         if (option == null || option.PollId != pollId)
-            return ResponseResult<bool>.Failure("Poll option not found");
+            return ResponseResult<bool>.Failure("Opció nem található");
 
         await pollVoteRepository.Delete(userId, pollOptionId);
         return ResponseResult<bool>.Success(true);

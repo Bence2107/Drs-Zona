@@ -76,7 +76,7 @@ public class SeriesService(
                 Name: d.Name,
                 ShortName: d.ShortName
             ))
-            .OrderBy(s => s.Name)
+            .OrderBy(s => s.ShortName)
             .ToList();
 
         return ResponseResult<List<SeriesListDto>>.Success(dto);

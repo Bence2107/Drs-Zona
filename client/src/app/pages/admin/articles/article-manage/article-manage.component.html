@@ -27,7 +27,7 @@
               <mat-label>Kategória / Széria</mat-label>
               <mat-select formControlName="tag">
                 @for (s of series; track s.id) {
-                  <mat-option [value]="s.shortName">{{s.name}}</mat-option>
+                  <mat-option [value]="s.shortName">{{s.shortName}}</mat-option>
                 }
               </mat-select>
               @if (articleForm.get('tag')?.invalid && articleForm.get('tag')?.touched) {

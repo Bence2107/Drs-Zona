@@ -7,6 +7,8 @@ import { PollDto } from '../../../../api/models/poll-dto';
 import { PollService } from '../../../../services/poll.service';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {AuthService} from '../../../../services/auth.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {CustomSnackbarComponent} from '../../../custom-snackbar/custom-snackbar.component';
 
 export interface PollDialogData {
   poll: PollDto;
@@ -29,10 +31,11 @@ export class PollVoteDialogComponent {
     public dialogRef: MatDialogRef<PollVoteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: PollDialogData,
     private pollService: PollService,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackBar: MatSnackBar
   ) {
-    this.poll = data.poll; //
-    this.userId = data.userId; //
+    this.poll = data.poll;
+    this.userId = data.userId;
   }
 
   get voted(): boolean {
@@ -54,7 +57,13 @@ export class PollVoteDialogComponent {
 
     this.pollService.vote(this.poll.id!, optionId, this.userId).subscribe({
       next: () => this.refreshData(),
-      error: (err) => console.error(err)
+      error: () => {
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Ön már szavazott', actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
+      }
     });
   }
 

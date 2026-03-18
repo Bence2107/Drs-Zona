@@ -36,7 +36,7 @@
   }
 
   &.is-expired {
-    background: #fcfcfc;
+    background: var(--primary-bg);
     filter: grayscale(0.5);
     cursor: default;
     &:hover { transform: none; box-shadow: none; border-color: rgba(0, 0, 0, 0.05); }
@@ -46,7 +46,7 @@
 .card-status-bar {
   height: 6px;
   width: 100%;
-  background: #e74c3c;
+  background: #fb395c;
 
   &.active {
     background: linear-gradient(90deg, #2ecc71, #27ae60);
@@ -92,23 +92,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.time-info {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #2ecc71;
-
-  mat-icon { font-size: 18px; width: 18px; height: 18px; }
-
-  &.warn { color: #e74c3c; }
-}
-
-.time-info.warn {
-  color: #e74c3c !important;
 }
 
 .action-hint {
