@@ -4,6 +4,10 @@
       <mat-icon>arrow_back</mat-icon>
     </button>
     <h2 class="page-title">Eredmény szerkesztése</h2>
+
+    <button mat-icon-button (click)="openEditGrandPrixDialog()" matTooltip="Nagydíj szerkesztése">
+      <mat-icon>edit</mat-icon>
+    </button>
   </div>
 
   @if (isLoading()) {

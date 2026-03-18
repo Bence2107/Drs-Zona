@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -9,6 +9,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
 import {ResultsService} from '../../../../services/results.service';
 import {ChampionshipCreateDto} from '../../../../api/models/championship-create-dto';
+import {FormErrorService} from '../../../../services/form-error.service';
+import {HttpValidationError} from '../../../../services/error-interceptor.service';
 
 @Component({
   selector: 'app-championshipcreatedialog',
@@ -21,25 +23,36 @@ import {ChampionshipCreateDto} from '../../../../api/models/championship-create-
     MatButtonModule,
     MatIconModule
   ],
-  templateUrl: './championshipcreatedialog.component.html',
-  styleUrl: './championshipcreatedialog.component.scss',
+  templateUrl: './championship-create-dialog.component.html',
+  styleUrl: './championship-create-dialog.component.scss',
 })
-export class ChampionshipcreatedialogComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private dialogRef = inject(MatDialogRef<ChampionshipcreatedialogComponent>);
-  private resultService = inject(ResultsService);
+export class ChampionshipCreateDialogComponent implements OnInit {
   data = inject(MAT_DIALOG_DATA) as { seriesList: SeriesLookupDto[] };
-
   isSubmitting = false;
-
-  form: FormGroup = this.fb.group({
-    seriesId:         ['', Validators.required],
-    season:           ['', [Validators.required, Validators.pattern(/^\d{4}$/)]],
-    driversName:      ['', Validators.required],
-    constructorsName: ['', Validators.required],
-  });
+  form: FormGroup
 
   get seriesList() { return this.data.seriesList; }
+
+  private readonly fieldMap: { [key: string]: string } = {
+    'seriesid': 'seriesId',
+    'season': 'season',
+    'driversname': 'driversName',
+    'constructorsname': 'constructorsName',
+  };
+
+  constructor(
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<ChampionshipCreateDialogComponent>,
+    private resultService: ResultsService,
+    private formErrorService: FormErrorService,
+  ) {
+    this.form =  this.fb.group({
+      seriesId:         ['', Validators.required],
+      season:           ['', [Validators.required, Validators.pattern(/^\d{4}$/)]],
+      driversName:      ['', Validators.required],
+      constructorsName: ['', Validators.required],
+    });
+  }
 
   ngOnInit() {
     if (this.seriesList.length === 1) {
@@ -70,6 +83,13 @@ export class ChampionshipcreatedialogComponent implements OnInit {
         }, { emitEvent: false });
       }
     });
+
+    this.formErrorService.clearServerErrorOnChange([
+      this.form.get('seriesId') as FormControl,
+      this.form.get('season') as FormControl,
+      this.form.get('driversName') as FormControl,
+      this.form.get('constructorsName') as FormControl,
+    ]);
   }
 
   submit() {
@@ -88,8 +108,9 @@ export class ChampionshipcreatedialogComponent implements OnInit {
         this.isSubmitting = false;
         this.dialogRef.close(true);
       },
-      error: () => {
+      error: (err: HttpValidationError) => {
         this.isSubmitting = false;
+        this.formErrorService.applyServerErrors(this.form, err, this.fieldMap);
       }
     });
   }

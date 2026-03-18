@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GrandPrixCreateDialogComponent } from './grand-prix-creation-dialog.component';
+import { GrandPrixManageDialogComponent } from './grand-prix-creation-dialog.component';
 
 describe('GrandPrixCreationDialogComponent', () => {
-  let component: GrandPrixCreateDialogComponent;
-  let fixture: ComponentFixture<GrandPrixCreateDialogComponent>;
+  let component: GrandPrixManageDialogComponent;
+  let fixture: ComponentFixture<GrandPrixManageDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GrandPrixCreateDialogComponent]
+      imports: [GrandPrixManageDialogComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GrandPrixCreateDialogComponent);
+    fixture = TestBed.createComponent(GrandPrixManageDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

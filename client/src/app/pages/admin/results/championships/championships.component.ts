@@ -1,7 +1,7 @@
 import {ChampionshipRowDto, SeriesLookupDto} from "../../../../api/models";
 import {
-  ChampionshipcreatedialogComponent
-} from '../../../../components/dialogs/championship/championshipcreatedialog/championshipcreatedialog.component';
+  ChampionshipCreateDialogComponent
+} from '../../../../components/dialogs/championship/championshipcreatedialog/championship-create-dialog.component';
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ResultsService} from '../../../../services/results.service';
@@ -111,7 +111,7 @@ export class ChampionshipsComponent implements OnInit {
   }
 
   openCreateDialog() {
-    const ref = this.dialog.open(ChampionshipcreatedialogComponent, {
+    const ref = this.dialog.open(ChampionshipCreateDialogComponent, {
       width: '480px',
       data: { seriesList: this.seriesList() }
     });

@@ -1,0 +1,72 @@
+<h2 mat-dialog-title>Új bajnokság létrehozása</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Széria</mat-label>
+      <mat-select formControlName="seriesId">
+        @for (series of seriesList; track series.id) {
+          <mat-option [value]="series.id">{{ series.name }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('seriesId')?.hasError('required') && form.get('seriesId')?.touched) {
+        <mat-error>A széria kiválasztása kötelező</mat-error>
+      }
+      @if (form.get('seriesId')?.hasError('serverError')) {
+        <mat-error>{{ form.get('seriesId')?.getError('serverError') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Szezon (év)</mat-label>
+      <input matInput formControlName="season" placeholder="pl. 2025 vagy 2024/2025">
+      @if (form.get('season')?.hasError('required') && form.get('season')?.touched) {
+        <mat-error>A szezon megadása kötelező</mat-error>
+      }
+      @if (form.get('season')?.hasError('pattern')) {
+        <mat-error>A szezon formátuma: 2025 vagy 2024/2025</mat-error>
+      }
+      @if (form.get('season')?.hasError('serverError')) {
+        <mat-error>{{ form.get('season')?.getError('serverError') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Egyéni bajnokság neve</mat-label>
+      <input matInput formControlName="driversName">
+      @if (form.get('driversName')?.hasError('required') && form.get('driversName')?.touched) {
+        <mat-error>A név megadása kötelező</mat-error>
+      }
+      @if (form.get('driversName')?.hasError('minlength') || form.get('driversName')?.hasError('maxlength')) {
+        <mat-error>A név hossza 3 és 100 karakter között lehet</mat-error>
+      }
+      @if (form.get('driversName')?.hasError('serverError')) {
+        <mat-error>{{ form.get('driversName')?.getError('serverError') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Konstruktőri bajnokság neve</mat-label>
+      <input matInput formControlName="constructorsName">
+      @if (form.get('constructorsName')?.hasError('required') && form.get('constructorsName')?.touched) {
+        <mat-error>A név megadása kötelező</mat-error>
+      }
+      @if (form.get('constructorsName')?.hasError('minlength') || form.get('constructorsName')?.hasError('maxlength')) {
+        <mat-error>A név hossza 3 és 100 karakter között lehet</mat-error>
+      }
+      @if (form.get('constructorsName')?.hasError('serverError')) {
+        <mat-error>{{ form.get('constructorsName')?.getError('serverError') }}</mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Mégse</button>
+  <button mat-flat-button (click)="submit()" [disabled]="form.invalid || isSubmitting">
+    <mat-icon>add_circle</mat-icon>
+    {{ isSubmitting ? 'Létrehozás...' : 'Létrehozás' }}
+  </button>
+</mat-dialog-actions>

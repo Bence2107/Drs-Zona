@@ -23,7 +23,7 @@ import {YearLookupDto} from '../../../../api/models/year-lookup-dto';
 import {GrandPrixLookupDto} from '../../../../api/models/grand-prix-lookup-dto';
 import {MatTooltip} from '@angular/material/tooltip';
 import {
-  GrandPrixCreateDialogComponent
+  GrandPrixManageDialogComponent
 } from '../../../../components/dialogs/grand-prix/grand-prix-creation-dialog/grand-prix-creation-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 
@@ -122,7 +122,7 @@ export class EntryComponent implements OnInit {
   }
 
   openCreateDialog() {
-    const ref = this.dialog.open(GrandPrixCreateDialogComponent, {
+    const ref = this.dialog.open(GrandPrixManageDialogComponent, {
       width: '560px',
       data: {
         seriesList: this.seriesList(),

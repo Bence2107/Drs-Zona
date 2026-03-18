@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -14,6 +14,8 @@ import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/inpu
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
+import {FormErrorService} from '../../../../services/form-error.service';
+import {HttpValidationError} from '../../../../services/error-interceptor.service';
 
 @Component({
   selector: 'app-driver-edit-dialog',
@@ -36,13 +38,29 @@ import {MatIcon} from '@angular/material/icon';
   styleUrl: './driver-edit-dialog.component.scss',
 })
 export class DriverEditDialogComponent implements OnInit{
-  private fb = inject(FormBuilder);
-  private dialogRef = inject(MatDialogRef<DriverEditDialogComponent>);
-  private driverService = inject(DriverService);
   data = inject(MAT_DIALOG_DATA) as { driver: DriverDetailDto };
-
   isSubmitting = false;
   form!: FormGroup;
+
+  private readonly fieldMap: { [key: string]: string } = {
+    'name': 'name',
+    'nationality': 'nationality',
+    'birthdate': 'birthDate',
+    'totalraces': 'totalRaces',
+    'totalwins': 'totalWins',
+    'totalpodiums': 'totalPodiums',
+    'championships': 'championships',
+    'polepositions': 'polePositions',
+    'seasons': 'seasons',
+  };
+
+  constructor(
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<DriverEditDialogComponent>,
+    private driverService: DriverService,
+    private formErrorService: FormErrorService
+  ) {}
+
 
   ngOnInit() {
     const d = this.data.driver;
@@ -57,6 +75,18 @@ export class DriverEditDialogComponent implements OnInit{
       polePositions: [d.polePositions, [Validators.required, Validators.min(0)]],
       seasons:       [d.seasons, [Validators.required, Validators.min(0)]],
     });
+
+    this.formErrorService.clearServerErrorOnChange([
+      this.form.get('name') as FormControl,
+      this.form.get('nationality') as FormControl,
+      this.form.get('birthDate') as FormControl,
+      this.form.get('totalRaces') as FormControl,
+      this.form.get('totalWins') as FormControl,
+      this.form.get('totalPodiums') as FormControl,
+      this.form.get('championships') as FormControl,
+      this.form.get('polePositions') as FormControl,
+      this.form.get('seasons') as FormControl,
+    ]);
   }
 
   submit() {
@@ -79,7 +109,10 @@ export class DriverEditDialogComponent implements OnInit{
 
     this.driverService.updateDriver(dto).subscribe({
       next: () => { this.isSubmitting = false; this.dialogRef.close(true); },
-      error: () => { this.isSubmitting = false; }
+      error: (err: HttpValidationError) => {
+        this.isSubmitting = false;
+        this.formErrorService.applyServerErrors(this.form, err, this.fieldMap);
+      }
     });
   }
 

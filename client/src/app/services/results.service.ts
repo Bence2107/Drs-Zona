@@ -9,7 +9,7 @@ import { GrandPrixLookupDto } from '../api/models/grand-prix-lookup-dto';
 import { GrandPrixResultsDto } from '../api/models/grand-prix-results-dto';
 import {
   apiGrandPrixCreatePost,
-  apiGrandPrixGetAllCircuitsGet$Json,
+  apiGrandPrixGetAllCircuitsGet$Json, apiGrandPrixGetGrandPrixIdGet$Json, apiGrandPrixUpdatePost,
   apiStandingsAddParticipationsPost,
   apiStandingsCreateChampionshipPost,
   apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json,
@@ -40,7 +40,8 @@ import {
   ChampionshipCreateDto,
   ChampionshipRowDto, CircuitListDto,
   ConstructorLookUpDto,
-  DriverLookUpDto, GrandPrixChampionshipContextDto, GrandPrixCreateDto, SessionEditDto, SingleResultUpdateDto,
+  DriverLookUpDto, GrandPrixChampionshipContextDto, GrandPrixCreateDto, GrandPrixDetailDto,
+  GrandPrixUpdateDto, SessionEditDto, SingleResultUpdateDto,
 } from "../api/models";
 import {
   apiStandingsGetConstructorsByConstructorsChampionshipConstChampIdGet$Json
@@ -173,6 +174,10 @@ export class ResultsService {
     return apiGrandPrixCreatePost(this.http, this.apiConfig.rootUrl, {body: dto}).pipe(map(() => void 0));
   }
 
+  updateGrandPrix(dto: GrandPrixUpdateDto) {
+    return apiGrandPrixUpdatePost(this.http, this.apiConfig.rootUrl, {body: dto}).pipe(map(() => void 0));
+  }
+
   addParticipation(dto: AddParticipationsDto) {
     return apiStandingsAddParticipationsPost(this.http, this.apiConfig.rootUrl, {body: dto}).pipe(map(() => void 0));
   }
@@ -220,5 +225,11 @@ export class ResultsService {
   recalculateSession(gpId: string, session: string): Observable<void> {
     return apiStandingsRecalculateSessionGrandPrixIdSessionPost(this.http, this.apiConfig.rootUrl,
       {grandPrixId: gpId, session: session}).pipe(map(() => void 0));
+  }
+
+
+  getGrandPrixById(id: string): Observable<GrandPrixDetailDto> {
+    return apiGrandPrixGetGrandPrixIdGet$Json(this.http, this.apiConfig.rootUrl, {grandPrixId: id}).pipe(
+      map(r => r.body as GrandPrixDetailDto));
   }
 }

@@ -10,21 +10,40 @@
           <mat-option [value]="brand.id">{{ brand.name }}</mat-option>
         }
       </mat-select>
+      @if (form.get('brandId')?.hasError('required') && form.get('brandId')?.touched) {
+        <mat-error>A márka kiválasztása kötelező</mat-error>
+      }
+      @if (form.get('brandId')?.hasError('serverError')) {
+        <mat-error>{{ form.get('brandId')?.getError('serverError') }}</mat-error>
+      }
     </mat-form-field>
 
     <div class="form-row">
       <mat-form-field appearance="outline">
         <mat-label>Teljes név</mat-label>
-        <input matInput formControlName="name">
+        <input matInput formControlName="name" placeholder="pl. Oracle Red Bull Racing">
         @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
-          <mat-error>Kötelező mező</mat-error>
+          <mat-error>A név megadása kötelező</mat-error>
+        }
+        @if (form.get('name')?.hasError('maxlength')) {
+          <mat-error>A név max 100 karakter</mat-error>
+        }
+        @if (form.get('name')?.hasError('serverError')) {
+          <mat-error>{{ form.get('name')?.getError('serverError') }}</mat-error>
         }
       </mat-form-field>
+
       <mat-form-field appearance="outline">
         <mat-label>Rövid név</mat-label>
-        <input matInput formControlName="nickname">
+        <input matInput formControlName="nickname" placeholder="pl. Red Bull">
         @if (form.get('nickname')?.hasError('required') && form.get('nickname')?.touched) {
-          <mat-error>Kötelező mező</mat-error>
+          <mat-error>A rövid név megadása kötelező</mat-error>
+        }
+        @if (form.get('nickname')?.hasError('maxlength')) {
+          <mat-error>A rövid név max 100 karakter</mat-error>
+        }
+        @if (form.get('nickname')?.hasError('serverError')) {
+          <mat-error>{{ form.get('nickname')?.getError('serverError') }}</mat-error>
         }
       </mat-form-field>
     </div>
@@ -33,10 +52,26 @@
       <mat-form-field appearance="outline">
         <mat-label>Alapítás éve</mat-label>
         <input matInput type="number" formControlName="foundedYear">
+        @if (form.get('foundedYear')?.hasError('required') && form.get('foundedYear')?.touched) {
+          <mat-error>Az alapítás éve kötelező</mat-error>
+        }
+        @if (form.get('foundedYear')?.hasError('min') || form.get('foundedYear')?.hasError('max')) {
+          <mat-error>Az alapítás éve 1900 és 2100 között kell legyen</mat-error>
+        }
+        @if (form.get('foundedYear')?.hasError('serverError')) {
+          <mat-error>{{ form.get('foundedYear')?.getError('serverError') }}</mat-error>
+        }
       </mat-form-field>
+
       <mat-form-field appearance="outline">
         <mat-label>Székhely</mat-label>
-        <input matInput formControlName="headQuarters">
+        <input matInput formControlName="headQuarters" placeholder="pl. Milton Keynes, UK">
+        @if (form.get('headQuarters')?.hasError('required') && form.get('headQuarters')?.touched) {
+          <mat-error>A székhely megadása kötelező</mat-error>
+        }
+        @if (form.get('headQuarters')?.hasError('serverError')) {
+          <mat-error>{{ form.get('headQuarters')?.getError('serverError') }}</mat-error>
+        }
       </mat-form-field>
     </div>
 
@@ -44,10 +79,23 @@
       <mat-form-field appearance="outline">
         <mat-label>Csapatvezető</mat-label>
         <input matInput formControlName="teamChief">
+        @if (form.get('teamChief')?.hasError('required') && form.get('teamChief')?.touched) {
+          <mat-error>A csapatvezető megadása kötelező</mat-error>
+        }
+        @if (form.get('teamChief')?.hasError('serverError')) {
+          <mat-error>{{ form.get('teamChief')?.getError('serverError') }}</mat-error>
+        }
       </mat-form-field>
+
       <mat-form-field appearance="outline">
         <mat-label>Technikai vezető</mat-label>
         <input matInput formControlName="technicalChief">
+        @if (form.get('technicalChief')?.hasError('required') && form.get('technicalChief')?.touched) {
+          <mat-error>A technikai vezető megadása kötelező</mat-error>
+        }
+        @if (form.get('technicalChief')?.hasError('serverError')) {
+          <mat-error>{{ form.get('technicalChief')?.getError('serverError') }}</mat-error>
+        }
       </mat-form-field>
     </div>
 
@@ -57,10 +105,23 @@
       <mat-form-field appearance="outline">
         <mat-label>Bajnoki címek</mat-label>
         <input matInput type="number" formControlName="championships">
+        @if (form.get('championships')?.hasError('min') || form.get('championships')?.hasError('max')) {
+          <mat-error>Érvénytelen bajnoki cím szám (0-300)</mat-error>
+        }
+        @if (form.get('championships')?.hasError('serverError')) {
+          <mat-error>{{ form.get('championships')?.getError('serverError') }}</mat-error>
+        }
       </mat-form-field>
+
       <mat-form-field appearance="outline">
         <mat-label>Győzelmek</mat-label>
         <input matInput type="number" formControlName="wins">
+        @if (form.get('wins')?.hasError('min') || form.get('wins')?.hasError('max')) {
+          <mat-error>Érvénytelen győzelem szám (0-500)</mat-error>
+        }
+        @if (form.get('wins')?.hasError('serverError')) {
+          <mat-error>{{ form.get('wins')?.getError('serverError') }}</mat-error>
+        }
       </mat-form-field>
     </div>
 
@@ -68,10 +129,23 @@
       <mat-form-field appearance="outline">
         <mat-label>Dobogók</mat-label>
         <input matInput type="number" formControlName="podiums">
+        @if (form.get('podiums')?.hasError('min') || form.get('podiums')?.hasError('max')) {
+          <mat-error>Érvénytelen dobogó szám (0-1000)</mat-error>
+        }
+        @if (form.get('podiums')?.hasError('serverError')) {
+          <mat-error>{{ form.get('podiums')?.getError('serverError') }}</mat-error>
+        }
       </mat-form-field>
+
       <mat-form-field appearance="outline">
         <mat-label>Szezonok száma</mat-label>
         <input matInput type="number" formControlName="seasons">
+        @if (form.get('seasons')?.hasError('min') || form.get('seasons')?.hasError('max')) {
+          <mat-error>A szezonok száma 1-99 lehet</mat-error>
+        }
+        @if (form.get('seasons')?.hasError('serverError')) {
+          <mat-error>{{ form.get('seasons')?.getError('serverError') }}</mat-error>
+        }
       </mat-form-field>
     </div>
 

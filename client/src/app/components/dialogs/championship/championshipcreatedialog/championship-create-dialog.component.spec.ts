@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChampionshipcreatedialogComponent } from './championshipcreatedialog.component';
+import { ChampionshipCreateDialogComponent } from './championship-create-dialog.component';
 
 describe('ChampionshipcreatedialogComponent', () => {
-  let component: ChampionshipcreatedialogComponent;
-  let fixture: ComponentFixture<ChampionshipcreatedialogComponent>;
+  let component: ChampionshipCreateDialogComponent;
+  let fixture: ComponentFixture<ChampionshipCreateDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChampionshipcreatedialogComponent]
+      imports: [ChampionshipCreateDialogComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ChampionshipcreatedialogComponent);
+    fixture = TestBed.createComponent(ChampionshipCreateDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

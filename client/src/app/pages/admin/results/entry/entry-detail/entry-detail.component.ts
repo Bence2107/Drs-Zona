@@ -1,4 +1,4 @@
-import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButton, MatIconButton} from '@angular/material/button';
@@ -26,6 +26,12 @@ import {CustomSnackbarComponent} from '../../../../../components/custom-snackbar
 import {BatchResultCreateDto} from '../../../../../api/models/batch-result-create-dto';
 import {GrandPrixChampionshipContextDto} from '../../../../../api/models/grand-prix-championship-context-dto';
 import {MatCheckbox} from '@angular/material/checkbox';
+import {GrandPrixDetailDto} from '../../../../../api/models/grand-prix-detail-dto';
+import {SeriesLookupDto} from '../../../../../api/models/series-lookup-dto';
+import {
+  GrandPrixManageDialogComponent
+} from '../../../../../components/dialogs/grand-prix/grand-prix-creation-dialog/grand-prix-creation-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-entry-detail',
@@ -58,13 +64,20 @@ import {MatCheckbox} from '@angular/material/checkbox';
   styleUrl: './entry-detail.component.scss',
 })
 export class EntryDetailComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private fb = inject(FormBuilder);
-  private resultsService = inject(ResultsService);
-  private snackBar = inject(MatSnackBar);
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private fb: FormBuilder,
+    private resultsService: ResultsService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
+  ) {}
 
   gpId = signal<string>('');
+  grandPrix = signal<GrandPrixDetailDto | null>(null);
+  seriesList = signal<SeriesLookupDto[]>([]);
+
   sessions = signal<string[]>([]);
   selectedSession = signal<string>('');
   sessionData = signal<SessionEditDto | null>(null);
@@ -90,6 +103,13 @@ export class EntryDetailComponent implements OnInit {
     this.gpId.set(this.route.snapshot.paramMap.get('gpId') ?? '');
     this.loadSessions();
     this.loadContext();
+    this.loadSeriesList();
+  }
+
+  private loadSeriesList() {
+    this.resultsService.getAllSeries().subscribe({
+      next: data => this.seriesList.set(data)
+    });
   }
 
   loadSessions() {
@@ -104,6 +124,34 @@ export class EntryDetailComponent implements OnInit {
         }
       },
       error: () => this.isLoading.set(false)
+    });
+  }
+
+  openEditGrandPrixDialog() {
+    this.resultsService.getGrandPrixById(this.gpId()).subscribe({
+      next: (gp) => {
+        this.grandPrix.set(gp);
+        const ref = this.dialog.open(GrandPrixManageDialogComponent, {
+          width: '560px',
+          data: {
+            seriesList: this.seriesList(),
+            editData: gp
+          }
+        });
+        ref.afterClosed().subscribe(result => {
+          if (result) {
+            this.loadSessions();
+            this.loadContext();
+          }
+        });
+      },
+      error: () => {
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Hiba a nagydíj betöltésekor', actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
+      }
     });
   }
 

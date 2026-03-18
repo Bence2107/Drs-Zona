@@ -1,5 +1,5 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -15,6 +15,8 @@ import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/inpu
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
+import {FormErrorService} from '../../../../services/form-error.service';
+import {HttpValidationError} from '../../../../services/error-interceptor.service';
 
 @Component({
   selector: 'app-constructor-edit-dialog',
@@ -36,14 +38,31 @@ import {MatIcon} from '@angular/material/icon';
   styleUrl: './constructor-edit-dialog.component.scss',
 })
 class ConstructorEditDialogComponent implements OnInit{
-  private fb = inject(FormBuilder);
-  private dialogRef = inject(MatDialogRef<ConstructorEditDialogComponent>);
-  private constructorService = inject(ConstructorsService);
   data = inject(MAT_DIALOG_DATA) as { constructor: ConstructorDetailDto };
-
   brands = signal<BrandListDto[]>([]);
   isSubmitting = false;
   form!: FormGroup;
+
+  private readonly fieldMap: { [key: string]: string } = {
+    'brandid': 'brandId',
+    'name': 'name',
+    'nickname': 'nickname',
+    'foundedyear': 'foundedYear',
+    'headquarters': 'headQuarters',
+    'teamchief': 'teamChief',
+    'technicalchief': 'technicalChief',
+    'championships': 'championships',
+    'wins': 'wins',
+    'podiums': 'podiums',
+    'seasons': 'seasons',
+  };
+
+  constructor(
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<ConstructorEditDialogComponent>,
+    private constructorService: ConstructorsService,
+    private formErrorService: FormErrorService,
+  ) {}
 
   ngOnInit() {
     const c = this.data.constructor;
@@ -62,6 +81,21 @@ class ConstructorEditDialogComponent implements OnInit{
     });
 
     this.constructorService.getAllBrands().subscribe(res => this.brands.set(res));
+
+
+    this.formErrorService.clearServerErrorOnChange([
+      this.form.get('brandId') as FormControl,
+      this.form.get('name') as FormControl,
+      this.form.get('nickname') as FormControl,
+      this.form.get('foundedYear') as FormControl,
+      this.form.get('headQuarters') as FormControl,
+      this.form.get('teamChief') as FormControl,
+      this.form.get('technicalChief') as FormControl,
+      this.form.get('championships') as FormControl,
+      this.form.get('wins') as FormControl,
+      this.form.get('podiums') as FormControl,
+      this.form.get('seasons') as FormControl,
+    ]);
   }
 
   submit() {
@@ -86,7 +120,10 @@ class ConstructorEditDialogComponent implements OnInit{
 
     this.constructorService.updateConstructor(dto).subscribe({
       next: () => { this.isSubmitting = false; this.dialogRef.close(true); },
-      error: () => { this.isSubmitting = false; }
+      error: (err: HttpValidationError) => {
+        this.isSubmitting = false;
+        this.formErrorService.applyServerErrors(this.form, err, this.fieldMap);
+      }
     });
   }
 

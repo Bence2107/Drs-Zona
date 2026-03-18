@@ -12,9 +12,14 @@
 }
 
 .form-row {
-  display: grid;
+  display: flex;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+
+  mat-form-field {
+    flex: 1;
+    padding-bottom: 30px;
+  }
 
   @media (max-width: 480px) {
     grid-template-columns: 1fr;

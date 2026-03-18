@@ -26,10 +26,18 @@ public record ConstructorCreateDto(
     [StringLength(100)] string TeamChief,
     [Required(ErrorMessage = "Technikai vezető megadása kötelező")] 
     [StringLength(100)] string TechnicalChief,
-    [Required] [Range(0, 300, ErrorMessage = "Érvénytelen bajnoki cím szám")] int Championships,
-    [Required] [Range(0, 500, ErrorMessage = "Érvénytelen győzelem szám")] int Wins,
-    [Required] [Range(0, 1000, ErrorMessage = "Érvénytelen dobogó szám")] int Podiums,
-    [Required] [Range(1, 99, ErrorMessage = "A szezonok száma 1-99 lehet")] int Seasons
+    [Required(ErrorMessage = "A bajnoki címek száma kötelező")] 
+    [Range(0, 300, ErrorMessage = "Érvénytelen bajnoki cím szám (0-300)")] 
+    int Championships,
+    [Required(ErrorMessage = "A győzelmek száma kötelező")] 
+    [Range(0, 500, ErrorMessage = "Érvénytelen győzelem szám (0-500)")] 
+    int Wins,
+    [Required(ErrorMessage = "A dobogók száma kötelező")] 
+    [Range(0, 1000, ErrorMessage = "Érvénytelen dobogó szám (0-1000)")] 
+    int Podiums,
+    [Required(ErrorMessage = "A szezonok száma kötelező")] 
+    [Range(1, 99, ErrorMessage = "A szezonok száma 1-99 lehet")] 
+    int Seasons
 );
 
 public record ConstructorUpdateDto(
@@ -52,10 +60,18 @@ public record ConstructorUpdateDto(
     [StringLength(100)] string TeamChief,
     [Required(ErrorMessage = "Technikai vezető megadása kötelező")] 
     [StringLength(100)] string TechnicalChief,
-    [Required] [Range(0, 300, ErrorMessage = "Érvénytelen bajnoki cím szám")] int Championships,
-    [Required] [Range(0, 500, ErrorMessage = "Érvénytelen győzelem szám")] int Wins,
-    [Required] [Range(0, 1000, ErrorMessage = "Érvénytelen dobogó szám")] int Podiums,
-    [Required] [Range(1, 99, ErrorMessage = "A szezonok száma 1-99 lehet")] int Seasons
+    [Required(ErrorMessage = "A bajnoki címek száma kötelező")] 
+    [Range(0, 300, ErrorMessage = "Érvénytelen bajnoki cím szám (0-300)")] 
+    int Championships,
+    [Required(ErrorMessage = "A győzelmek száma kötelező")] 
+    [Range(0, 500, ErrorMessage = "Érvénytelen győzelem szám (0-500)")] 
+    int Wins,
+    [Required(ErrorMessage = "A dobogók száma kötelező")] 
+    [Range(0, 1000, ErrorMessage = "Érvénytelen dobogó szám (0-1000)")] 
+    int Podiums,
+    [Required(ErrorMessage = "A szezonok száma kötelező")] 
+    [Range(1, 99, ErrorMessage = "A szezonok száma 1-99 lehet")] 
+    int Seasons
 );
 
 public record ConstructorListDto(
@@ -89,12 +105,24 @@ public record DriverCreateDto(
     [StringLength(50)] string Nationality,
     [Required(ErrorMessage = "A születési dátum kötelező")] 
     DateTime BirthDate,
-    [Required] [Range(0, 500)] int TotalRaces,
-    [Required] [Range(0, 500)] int TotalWins,
-    [Required] [Range(0, 1000)] int TotalPodiums,
-    [Required] [Range(0, 99)] int Championships,
-    [Required] [Range(0, 200)] int PolePositions,
-    [Required] [Range(1, 30)] int Seasons
+    [Required(ErrorMessage = "Az összes verseny száma kötelező")] 
+    [Range(0, 500, ErrorMessage = "Az összes verseny száma 0 és 500 között lehet")] 
+    int TotalRaces,
+    [Required(ErrorMessage = "A győzelmek száma kötelező")] 
+    [Range(0, 500, ErrorMessage = "A győzelmek száma 0 és 500 között lehet")] 
+    int TotalWins,
+    [Required(ErrorMessage = "A dobogók száma kötelező")] 
+    [Range(0, 1000, ErrorMessage = "A dobogók száma 0 és 1000 között lehet")] 
+    int TotalPodiums,
+    [Required(ErrorMessage = "A bajnoki címek száma kötelező")] 
+    [Range(0, 99, ErrorMessage = "A bajnoki címek száma 0 és 99 között lehet")] 
+    int Championships,
+    [Required(ErrorMessage = "A pole pozíciók száma kötelező")] 
+    [Range(0, 200, ErrorMessage = "A pole pozíciók száma 0 és 200 között lehet")] 
+    int PolePositions,
+    [Required(ErrorMessage = "A szezonok száma kötelező")] 
+    [Range(1, 30, ErrorMessage = "A szezonok száma 1 és 30 között lehet")] 
+    int Seasons
 ) : IValidatableObject
 {
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -130,12 +158,24 @@ public record DriverUpdateDto(
     [StringLength(50)] string Nationality,
     [Required(ErrorMessage = "A születési dátum kötelező")] 
     DateTime BirthDate,
-    [Required] [Range(0, 500)] int TotalRaces,
-    [Required] [Range(0, 500)] int TotalWins,
-    [Required] [Range(0, 1000)] int TotalPodiums,
-    [Required] [Range(0, 99)] int Championships,
-    [Required] [Range(0, 200)] int PolePositions,
-    [Required] [Range(1, 30)] int Seasons
+    [Required(ErrorMessage = "Az összes verseny száma kötelező")] 
+    [Range(0, 500, ErrorMessage = "Az összes verseny száma 0 és 500 között lehet")] 
+    int TotalRaces,
+    [Required(ErrorMessage = "A győzelmek száma kötelező")] 
+    [Range(0, 500, ErrorMessage = "A győzelmek száma 0 és 500 között lehet")] 
+    int TotalWins,
+    [Required(ErrorMessage = "A dobogók száma kötelező")] 
+    [Range(0, 1000, ErrorMessage = "A dobogók száma 0 és 1000 között lehet")] 
+    int TotalPodiums,
+    [Required(ErrorMessage = "A bajnoki címek száma kötelező")] 
+    [Range(0, 99, ErrorMessage = "A bajnoki címek száma 0 és 99 között lehet")] 
+    int Championships,
+    [Required(ErrorMessage = "A pole pozíciók száma kötelező")] 
+    [Range(0, 200, ErrorMessage = "A pole pozíciók száma 0 és 200 között lehet")] 
+    int PolePositions,
+    [Required(ErrorMessage = "A szezonok száma kötelező")] 
+    [Range(1, 30, ErrorMessage = "A szezonok száma 1 és 30 között lehet")] 
+    int Seasons
 ) : IValidatableObject
 {
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -229,10 +269,10 @@ public partial class RaceTimeAttribute : ValidationAttribute
 {
     private static readonly Regex[] ValidPatterns =
     [
-        MyRegex(),   // H:MM:SS.mmm
-        MyRegex1(),           // M:SS.mmm
-        MyRegex2(),                 // SS.mmm
-        MyRegex3(),            // +xxxs delta
+        MyRegex(),
+        MyRegex1(),
+        MyRegex2(),
+        MyRegex3(),
     ];
 
     protected override ValidationResult? IsValid(object? value, ValidationContext ctx)

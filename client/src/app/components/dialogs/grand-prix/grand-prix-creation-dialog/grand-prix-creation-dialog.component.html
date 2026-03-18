@@ -1,70 +1,115 @@
-<h2 mat-dialog-title>Új nagydíj létrehozása</h2>
+<h2 mat-dialog-title>{{ title }}</h2>
 
 <mat-dialog-content>
   <form [formGroup]="form" class="dialog-form">
 
-    <div class="form-row">
+    @if (!isEditMode) {
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Széria</mat-label>
+          <mat-select formControlName="seriesId">
+            @for (series of seriesList; track series.id) {
+              <mat-option [value]="series.id">{{ series.name }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('seriesId')?.hasError('required') && form.get('seriesId')?.touched) {
+            <mat-error>A sorozat kiválasztása kötelező</mat-error>
+          }
+          @if (form.get('seriesId')?.hasError('serverError')) {
+            <mat-error>{{ form.get('seriesId')?.getError('serverError') }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Szezon éve</mat-label>
+          <input matInput type="number" formControlName="seasonYear" placeholder="pl. 2025">
+          @if (form.get('seasonYear')?.hasError('required') && form.get('seasonYear')?.touched) {
+            <mat-error>A szezon évének megadása kötelező</mat-error>
+          }
+          @if (form.get('seasonYear')?.hasError('min')) {
+            <mat-error>Érvénytelen évszám (min. 1906)</mat-error>
+          }
+          @if (form.get('seasonYear')?.hasError('serverError')) {
+            <mat-error>{{ form.get('seasonYear')?.getError('serverError') }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
       <mat-form-field appearance="outline">
-        <mat-label>Széria</mat-label>
-        <mat-select formControlName="seriesId">
-          @for (series of seriesList; track series.id) {
-            <mat-option [value]="series.id">{{ series.name }}</mat-option>
+        <mat-label>Pálya</mat-label>
+        <mat-select formControlName="circuitId">
+          @for (circuit of circuits(); track circuit.id) {
+            <mat-option [value]="circuit.id">
+              {{ circuit.location! | countryFlag }} {{ circuit.name }} · {{ circuit.location }}
+            </mat-option>
           }
         </mat-select>
-        @if (form.get('seriesId')?.hasError('required') && form.get('seriesId')?.touched) {
-          <mat-error>Kötelező mező</mat-error>
+        @if (form.get('circuitId')?.hasError('required') && form.get('circuitId')?.touched) {
+          <mat-error>A pálya kiválasztása kötelező</mat-error>
+        }
+        @if (form.get('circuitId')?.hasError('serverError')) {
+          <mat-error>{{ form.get('circuitId')?.getError('serverError') }}</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Szezon éve</mat-label>
-        <input matInput type="number" formControlName="seasonYear" placeholder="pl. 2025">
-        @if (form.get('seasonYear')?.hasError('required') && form.get('seasonYear')?.touched) {
-          <mat-error>Kötelező mező</mat-error>
+        <mat-label>Nagydíj neve</mat-label>
+        <input matInput formControlName="name" placeholder="pl. Formula 1 Australian Grand Prix 2025">
+        @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+          <mat-error>A név megadása kötelező</mat-error>
+        }
+        @if (form.get('name')?.hasError('maxlength')) {
+          <mat-error>Maximum 100 karakter lehet</mat-error>
+        }
+        @if (form.get('name')?.hasError('serverError')) {
+          <mat-error>{{ form.get('name')?.getError('serverError') }}</mat-error>
         }
       </mat-form-field>
-    </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Pálya</mat-label>
-      <mat-select formControlName="circuitId">
-        @for (circuit of circuits(); track circuit.id) {
-          <mat-option [value]="circuit.id">
-            {{ circuit.location! | countryFlag }} {{ circuit.name }} · {{ circuit.location }}
-          </mat-option>
-        }
-      </mat-select>
-      @if (form.get('circuitId')?.hasError('required') && form.get('circuitId')?.touched) {
-        <mat-error>Kötelező mező</mat-error>
-      }
-    </mat-form-field>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Rövid név</mat-label>
+          <input matInput formControlName="shortName" placeholder="pl. Australian GP">
+          @if (form.get('shortName')?.hasError('required') && form.get('shortName')?.touched) {
+            <mat-error>A név megadása kötelező</mat-error>
+          }
+          @if (form.get('shortName')?.hasError('maxlength')) {
+            <mat-error>Maximum 100 karakter lehet</mat-error>
+          }
+          @if (form.get('shortName')?.hasError('serverError')) {
+            <mat-error>{{ form.get('shortName')?.getError('serverError') }}</mat-error>
+          }
+        </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Nagydíj neve</mat-label>
-      <input matInput formControlName="name" placeholder="pl. Formula 1 Australian Grand Prix 2025">
-      @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
-        <mat-error>Kötelező mező</mat-error>
-      }
-    </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Forduló száma</mat-label>
+          <input matInput type="number" formControlName="roundNumber" placeholder="pl. 1">
+          @if (form.get('roundNumber')?.hasError('required') && form.get('roundNumber')?.touched) {
+            <mat-error>A forduló száma kötelező</mat-error>
+          }
+          @if (form.get('roundNumber')?.hasError('min') || form.get('roundNumber')?.hasError('max')) {
+            <mat-error>1 és 30 között lehet</mat-error>
+          }
+          @if (form.get('roundNumber')?.hasError('serverError')) {
+            <mat-error>{{ form.get('roundNumber')?.getError('serverError') }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
 
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Rövid név</mat-label>
-        <input matInput formControlName="shortName" placeholder="pl. Australian GP">
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Forduló száma</mat-label>
-        <input matInput type="number" formControlName="roundNumber" placeholder="pl. 1">
-      </mat-form-field>
-    </div>
-
+    <!-- Mindig látható mezők -->
     <div class="form-row">
       <mat-form-field appearance="outline">
         <mat-label>Kezdés</mat-label>
         <input matInput [matDatepicker]="startPicker" formControlName="startTime">
         <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
         <mat-datepicker #startPicker></mat-datepicker>
+        @if (form.get('startTime')?.hasError('required') && form.get('startTime')?.touched) {
+          <mat-error>Idő megadása kötelező</mat-error>
+        }
+        @if (form.get('startTime')?.hasError('serverError')) {
+          <mat-error>{{ form.get('startTime')?.getError('serverError') }}</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -72,20 +117,56 @@
         <input matInput [matDatepicker]="endPicker" formControlName="endTime">
         <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
         <mat-datepicker #endPicker></mat-datepicker>
+        @if (form.get('endTime')?.hasError('required') && form.get('endTime')?.touched) {
+          <mat-error>Idő megadása kötelező</mat-error>
+        }
+        @if (form.get('endTime')?.hasError('serverError')) {
+          <mat-error>{{ form.get('endTime')?.getError('serverError') }}</mat-error>
+        }
       </mat-form-field>
     </div>
 
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Verseny távolság (km)</mat-label>
-        <input matInput type="number" formControlName="raceDistance">
-      </mat-form-field>
+    @if (!isEditMode) {
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Verseny távolság (km)</mat-label>
+          <input matInput type="number" formControlName="raceDistance">
+          @if (form.get('raceDistance')?.hasError('required') && form.get('raceDistance')?.touched) {
+            <mat-error>A versenytáv megadása kötelező</mat-error>
+          }
+          @if (form.get('raceDistance')?.hasError('min') || form.get('raceDistance')?.hasError('max')) {
+            <mat-error> 1 és 1000 km között lehet</mat-error>
+          }
+          @if (form.get('raceDistance')?.hasError('serverError')) {
+            <mat-error>{{ form.get('raceDistance')?.getError('serverError') }}</mat-error>
+          }
+        </mat-form-field>
 
+        <mat-form-field appearance="outline">
+          <mat-label>Körök száma</mat-label>
+          <input matInput type="number" formControlName="lapsCompleted">
+          @if (form.get('lapsCompleted')?.hasError('min') || form.get('lapsCompleted')?.hasError('max')) {
+            <mat-error>0 és 100 között lehet</mat-error>
+          }
+          @if (form.get('lapsCompleted')?.hasError('serverError')) {
+            <mat-error>{{ form.get('lapsCompleted')?.getError('serverError') }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
+
+    @if (isEditMode) {
       <mat-form-field appearance="outline">
         <mat-label>Körök száma</mat-label>
         <input matInput type="number" formControlName="lapsCompleted">
+        @if (form.get('lapsCompleted')?.hasError('min') || form.get('lapsCompleted')?.hasError('max')) {
+          <mat-error>A körök száma 0 és 100 között lehet</mat-error>
+        }
+        @if (form.get('lapsCompleted')?.hasError('serverError')) {
+          <mat-error>{{ form.get('lapsCompleted')?.getError('serverError') }}</mat-error>
+        }
       </mat-form-field>
-    </div>
+    }
 
   </form>
 </mat-dialog-content>
@@ -93,7 +174,7 @@
 <mat-dialog-actions align="end">
   <button mat-button (click)="cancel()">Mégse</button>
   <button mat-flat-button (click)="submit()" [disabled]="form.invalid || isSubmitting">
-    <mat-icon>add_circle</mat-icon>
-    {{ isSubmitting ? 'Létrehozás...' : 'Létrehozás' }}
+    <mat-icon>{{ isEditMode ? 'save' : 'add_circle' }}</mat-icon>
+    {{ isSubmitting ? (isEditMode ? 'Mentés...' : 'Létrehozás...') : submitLabel }}
   </button>
 </mat-dialog-actions>

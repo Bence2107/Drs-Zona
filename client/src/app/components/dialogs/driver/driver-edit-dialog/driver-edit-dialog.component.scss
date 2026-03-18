@@ -6,7 +6,10 @@
   min-width: 0;
   max-width: 100%;
 
-  mat-form-field { width: 100%; }
+  mat-form-field {
+    margin-bottom: 28px;
+    width: 100%;
+  }
 }
 
 .form-row {
