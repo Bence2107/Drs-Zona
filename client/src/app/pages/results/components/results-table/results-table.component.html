@@ -1,0 +1,205 @@
+<div class="table-container mat-elevation-z4">
+  @if (state.isLoading()) {
+    <div class="loading-shade">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+  }
+
+  @if (!state.isLoading()) {
+    <div class="table-wrapper">
+      @switch (state.viewMode()) {
+        @case ('results') {
+          @if (state.selectedGrandPrixId() === ALL_GP_ID) {
+            <table mat-table [dataSource]="state.seasonOverview()">
+              <ng-container matColumnDef="grandPrixName">
+                <th mat-header-cell *matHeaderCellDef> Nagydíj</th>
+                <td class="gp-name" mat-cell *matCellDef="let r">
+                  @if (state.isMobile()) {
+                    {{ r.grandPrixName | countryFlag }} {{ r.grandPrixShortName }}
+                  } @else {
+                    {{ r.grandPrixName | countryFlag }} {{ r.grandPrixName }}
+                  }
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="winnerName">
+                <th mat-header-cell *matHeaderCellDef> Győztes</th>
+                <td mat-cell *matCellDef="let r"> {{ r.winnerName }}</td>
+              </ng-container>
+              <ng-container matColumnDef="teamName">
+                <th mat-header-cell *matHeaderCellDef> Csapat</th>
+                <td mat-cell *matCellDef="let r"> {{ r.teamName }}</td>
+              </ng-container>
+              <ng-container matColumnDef="laps">
+                <th mat-header-cell *matHeaderCellDef> Körök</th>
+                <td mat-cell *matCellDef="let r"> {{ r.laps }}</td>
+              </ng-container>
+              <ng-container matColumnDef="time">
+                <th mat-header-cell *matHeaderCellDef> Idő</th>
+                <td mat-cell *matCellDef="let r"> {{ r.time }}</td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="state.overviewColumns"></tr>
+              <tr mat-row *matRowDef="let _; columns: state.overviewColumns;"></tr>
+            </table>
+          } @else {
+            <table mat-table [dataSource]="state.raceResults()" [class.is-result-table]="true">
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef> Poz.</th>
+                <td mat-cell *matCellDef="let r"> {{ r.position }}.</td>
+              </ng-container>
+              <ng-container matColumnDef="driver">
+                <th mat-header-cell *matHeaderCellDef> Versenyző</th>
+                <td mat-cell *matCellDef="let r">
+                  <div class="driver-cell">
+                    <span class="driver-name">{{ r.driverName }}</span>
+                    <span class="driver-team">{{ r.constructorName }}</span>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="q1">
+                <th mat-header-cell *matHeaderCellDef> Q1</th>
+                <td mat-cell *matCellDef="let r"> {{ r.q1 }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="q2">
+                <th mat-header-cell *matHeaderCellDef> Q2</th>
+                <td mat-cell *matCellDef="let r"> {{ r.q2 }}</td>
+              </ng-container>
+              <ng-container matColumnDef="q3">
+                <th mat-header-cell *matHeaderCellDef> Q3</th>
+                <td mat-cell *matCellDef="let r"> {{ r.q3 }}</td>
+              </ng-container>
+              <ng-container matColumnDef="laps">
+                <th mat-header-cell *matHeaderCellDef> Kör</th>
+                <td mat-cell *matCellDef="let r"> {{ r.lapsCompleted }}</td>
+              </ng-container>
+              <ng-container matColumnDef="time">
+                <th mat-header-cell *matHeaderCellDef> Idő/Kül.</th>
+                <td mat-cell *matCellDef="let r"> {{ r.timeOrCompleted }}</td>
+              </ng-container>
+              <ng-container matColumnDef="points">
+                <th mat-header-cell *matHeaderCellDef> Pont</th>
+                <td mat-cell *matCellDef="let r"> {{ r.points }}</td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="state.raceColumns()"></tr>
+              <tr mat-row *matRowDef="let _; columns: state.raceColumns();"></tr>
+            </table>
+          }
+        }
+        @case ('drivers') {
+          @if (state.selectedDriverId() === AGGREGATED_ID) {
+            <table mat-table [dataSource]="state.driverStandings()" [class.is-result-table]="true">
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef> Hely</th>
+                <td mat-cell *matCellDef="let r"> {{ r.position }}.</td>
+              </ng-container>
+              <ng-container matColumnDef="driver">
+                <th mat-header-cell *matHeaderCellDef> Versenyző</th>
+                <td mat-cell *matCellDef="let r">
+                  <div class="driver-cell">
+                    <span class="driver-name">{{ r.driverName }}</span>
+                    <span class="driver-team">{{ r.constructorName }}</span>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="points">
+                <th mat-header-cell *matHeaderCellDef> Pont</th>
+                <td mat-cell *matCellDef="let r"><strong>{{ r.points }}</strong></td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="state.driverColumns"></tr>
+              <tr mat-row *matRowDef="let _; columns: state.driverColumns;"></tr>
+            </table>
+          } @else {
+            <table mat-table [dataSource]="state.driverSeasonResults()">
+              <ng-container matColumnDef="grandPrixName">
+                <th mat-header-cell *matHeaderCellDef> Nagydíj</th>
+                <td class="gp-name" mat-cell *matCellDef="let r">
+                  @if (state.isMobile()) {
+                    {{ r.grandPrixName | countryFlag }} {{ r.grandPrixShortName }}
+                  } @else {
+                    {{ r.grandPrixName | countryFlag }} {{ r.grandPrixName }}
+                  }</td>
+              </ng-container>
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Dátum</th>
+                <td mat-cell *matCellDef="let r"> {{ r.date | date:'yyyy.MM.dd' }}</td>
+              </ng-container>
+              <ng-container matColumnDef="teamName">
+                <th mat-header-cell *matHeaderCellDef> Csapat</th>
+                <td mat-cell *matCellDef="let r"> {{ r.teamName }}</td>
+              </ng-container>
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef> Helyezés</th>
+                <td mat-cell *matCellDef="let r"> {{ r.position }}.</td>
+              </ng-container>
+              <ng-container matColumnDef="points">
+                <th mat-header-cell *matHeaderCellDef> Pont</th>
+                <td mat-cell *matCellDef="let r"><strong>{{ r.points }}</strong></td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="state.driverSeasonColumns"></tr>
+              <tr mat-row *matRowDef="let _; columns: state.driverSeasonColumns;"></tr>
+            </table>
+          }
+        }
+        @case ('constructors') {
+          @if (state.selectedConstructorId() === AGGREGATED_ID) {
+            <table mat-table [dataSource]="state.constructorStandings()" [class.is-result-table]="true">
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef> Hely</th>
+                <td mat-cell *matCellDef="let r"> {{ r.position }}.</td>
+              </ng-container>
+              <ng-container matColumnDef="constructor">
+                <th mat-header-cell *matHeaderCellDef> Csapat</th>
+                <td mat-cell *matCellDef="let r">
+                  @if (state.isMobile()) {
+                    {{ r.constructorShortName }}
+                  } @else {
+                    {{ r.constructorName }}
+                  }
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="points">
+                <th mat-header-cell *matHeaderCellDef> Pont</th>
+                <td mat-cell *matCellDef="let r"><strong>{{ r.points }}</strong></td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="state.constructorColumns"></tr>
+              <tr mat-row *matRowDef="let _; columns: state.constructorColumns;"></tr>
+            </table>
+          } @else {
+            <table mat-table [dataSource]="state.constructorSeasonResults()">
+              <ng-container matColumnDef="grandPrixName">
+                <th mat-header-cell *matHeaderCellDef> Nagydíj</th>
+                <td mat-cell *matCellDef="let r">
+                  @if (state.isMobile()) {
+                    {{ r.grandPrixName | countryFlag }} {{ r.grandPrixShortName }}
+                  } @else {
+                    {{ r.grandPrixName | countryFlag }} {{ r.grandPrixName }}
+                  }
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Dátum</th>
+                <td mat-cell *matCellDef="let r"> {{ r.date | date:'yyyy.MM.dd' }}</td>
+              </ng-container>
+              <ng-container matColumnDef="points">
+                <th mat-header-cell *matHeaderCellDef> Pont</th>
+                <td mat-cell *matCellDef="let r"><strong>{{ r.points }}</strong></td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="state.constructorSeasonColumns"></tr>
+              <tr mat-row *matRowDef="let _; columns: state.constructorSeasonColumns;"></tr>
+            </table>
+          }
+        }
+      }
+    </div>
+  }
+
+  @if (!state.isLoading() &&
+  ((state.viewMode() === 'results' && state.selectedGrandPrixId() === ALL_GP_ID && state.seasonOverview().length === 0) ||
+    (state.viewMode() === 'results' && state.selectedGrandPrixId() !== ALL_GP_ID && state.raceResults().length === 0) ||
+    (state.viewMode() === 'drivers' && state.selectedDriverId() === AGGREGATED_ID && state.driverStandings().length === 0) ||
+    (state.viewMode() === 'drivers' && state.selectedDriverId() !== AGGREGATED_ID && state.driverSeasonResults().length === 0) ||
+    (state.viewMode() === 'constructors' && state.selectedConstructorId() === AGGREGATED_ID && state.constructorStandings().length === 0) ||
+    (state.viewMode() === 'constructors' && state.selectedConstructorId() !== AGGREGATED_ID && state.constructorSeasonResults().length === 0))) {
+    <div class="no-data">Nincs megjeleníthető adat. Kérjük válasszon a szűrőkből.</div>
+  }
+</div>

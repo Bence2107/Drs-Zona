@@ -1,0 +1,92 @@
+<div class="header-section">
+  <mat-button-toggle-group
+    [ngModel]="state.selectedSeriesId()"
+    (ngModelChange)="state.onSeriesChange($event)"
+    hideSingleSelectionIndicator="true"
+    class="series-toggle">
+    @for (series of state.seriesList(); track series.id) {
+      <mat-button-toggle [value]="series.id">{{ series.name }}</mat-button-toggle>
+    }
+  </mat-button-toggle-group>
+
+  <mat-button-toggle-group
+    [ngModel]="state.viewMode()"
+    (ngModelChange)="state.onViewModeChange($event)"
+    hideSingleSelectionIndicator="true"
+    class="view-toggle">
+    <mat-button-toggle value="results">Eredmények</mat-button-toggle>
+    <mat-button-toggle value="drivers">Egyéni</mat-button-toggle>
+    <mat-button-toggle value="constructors">Csapat</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+<div class="filter-row">
+  <mat-form-field appearance="outline">
+    <mat-label>Szezon</mat-label>
+    <mat-select
+      [ngModel]="state.selectedSeason()"
+      (selectionChange)="state.onSeasonChange($event.value)"
+      [compareWith]="state.compareSeasons">
+      @for (s of state.seasons(); track s.driversChampId) {
+        <mat-option [value]="s">{{ s.season }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if (state.viewMode() === 'results') {
+    <mat-form-field appearance="outline">
+      <mat-label>Nagydíj</mat-label>
+      <mat-select [ngModel]="state.selectedGrandPrixId()"
+                  (ngModelChange)="state.onGrandPrixChange($event)"
+                  [disabled]="!state.selectedDriversChampId()">
+        <mat-option [value]="state.ALL_GP_ID">Összes (Szezon áttekintés)</mat-option>
+
+        @for (gp of state.grandsPrix(); track gp.id) {
+          <mat-option [value]="gp.id">{{ gp.name! | countryFlag}} {{ gp.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (state.selectedGrandPrixId() !== state.ALL_GP_ID) {
+      <mat-form-field appearance="outline">
+        <mat-label>Esemény</mat-label>
+        <mat-select [ngModel]="state.selectedSession()"
+                    (ngModelChange)="state.loadResults($event)"
+                    [disabled]="!state.selectedGrandPrixId()">
+          @for (sess of state.sessions(); track sess) {
+            <mat-option [value]="sess">{{ sess }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+  }
+
+  @if (state.viewMode() === 'drivers') {
+    <mat-form-field appearance="outline">
+      <mat-label>Versenyző</mat-label>
+      <mat-select [ngModel]="state.selectedDriverId()"
+                  (ngModelChange)="state.onDriverFilterChange($event)"
+                  [disabled]="!state.selectedDriversChampId()">
+        <mat-option [value]="state.AGGREGATED_ID">Összesített</mat-option>
+        @for (driver of state.driverList(); track driver.id) {
+          <mat-option [value]="driver.id">{{ driver.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+
+  @if (state.viewMode() === 'constructors') {
+    <mat-form-field appearance="outline">
+      <mat-label>Csapat</mat-label>
+      <mat-select
+        [ngModel]="state.selectedConstructorId()"
+        (ngModelChange)="state.onConstructorFilterChange($event)"
+        [disabled]="!state.selectedConstructorsChampId()">
+        <mat-option [value]="state.AGGREGATED_ID">Összesített</mat-option>
+        @for (constructor of state.constructorList(); track constructor.id) {
+          <mat-option [value]="constructor.id">{{ constructor.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+</div>
