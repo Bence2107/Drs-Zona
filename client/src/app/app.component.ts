@@ -13,11 +13,11 @@ import {
   MatExpansionPanelTitle
 } from '@angular/material/expansion';
 import {MatIconButton} from '@angular/material/button';
-import {AuthService} from './services/auth.service';
+import {AuthService} from './services/api/auth.service';
 import {CustomSnackbarComponent} from './components/custom-snackbar/custom-snackbar.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {SeriesListDto} from './api/models/series-list-dto';
-import {SeriesService} from './services/series.service';
+import {SeriesService} from './services/api/series.service';
 
 @Component({
   selector: 'app-root',

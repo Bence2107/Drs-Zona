@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NewsListComponent } from './news-list.component';
-import { ArticleService } from '../../../../../services/article.service';
+import { ArticleService } from '../../../../../services/api/article.service';
 import { of, throwError } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';

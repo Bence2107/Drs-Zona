@@ -4,18 +4,18 @@ import {DatePipe, NgClass} from '@angular/common';
 import {ErrorDisplayComponent} from '../../../../../components/error-display/error-display.component';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {ArticleListDto} from '../../../../../api/models/article-list-dto';
-import {ArticleService} from '../../../../../services/article.service';
+import {ArticleService} from '../../../../../services/api/article.service';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {MatFabButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
-import {AuthService} from '../../../../../services/auth.service';
+import {AuthService} from '../../../../../services/api/auth.service';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatFormField, MatLabel} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {FormsModule} from '@angular/forms';
 import {SeriesListDto} from '../../../../../api/models/series-list-dto';
-import {SeriesService} from '../../../../../services/series.service';
+import {SeriesService} from '../../../../../services/api/series.service';
 
 @Component({
   selector: 'app-news-list',

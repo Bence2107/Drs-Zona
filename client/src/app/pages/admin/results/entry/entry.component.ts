@@ -18,7 +18,7 @@ import {Router, RouterLink} from '@angular/router';
 import {DatePipe} from '@angular/common';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
 import {CountryFlagPipe} from '../../../../pipes/country-flag.pipe';
-import {StandingsService} from '../../../../services/standings.service';
+import {StandingsService} from '../../../../services/api/standings.service';
 import {YearLookupDto} from '../../../../api/models/year-lookup-dto';
 import {GrandPrixLookupDto} from '../../../../api/models/grand-prix-lookup-dto';
 import {MatTooltip} from '@angular/material/tooltip';
@@ -26,7 +26,7 @@ import {
   GrandPrixManageDialogComponent
 } from '../../../../components/dialogs/grand-prix/grand-prix-creation-dialog/grand-prix-creation-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
-import {ChampionshipService} from '../../../../services/championship.service';
+import {ChampionshipService} from '../../../../services/api/championship.service';
 
 @Component({
   selector: 'app-entry',

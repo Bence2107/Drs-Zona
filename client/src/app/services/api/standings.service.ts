@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiConfiguration } from '../api/api-configuration';
-import { SeriesLookupDto } from '../api/models/series-lookup-dto';
-import { GrandPrixResultsDto } from '../api/models/grand-prix-results-dto';
+import { ApiConfiguration } from '../../api/api-configuration';
+import { SeriesLookupDto } from '../../api/models/series-lookup-dto';
+import { GrandPrixResultsDto } from '../../api/models/grand-prix-results-dto';
 import {
   apiStandingsGetAllSeriesGet$Json,
   apiStandingsGetByConstructorChampionshipIdConstructsChampIdGet$Json,
@@ -19,18 +19,18 @@ import {
   apiStandingsInsertResultsPost, apiStandingsRecalculateSessionGrandPrixIdSessionPost,
   apiStandingsSaveSessionResultsPost,
   apiStandingsUpdateSingleResultPost
-} from '../api/functions';
-import {DriverStandingsDto} from '../api/models/driver-standings-dto';
-import {ConstructorStandingsDto} from '../api/models/constructor-standings-dto';
-import { SeasonOverviewDto } from '../api/models/season-overview-dto';
-import {DriverSeasonResultDto} from '../api/models/driver-season-result-dto';
-import {ConstructorSeasonResultDto} from '../api/models/constructor-season-result-dto';
+} from '../../api/functions';
+import {DriverStandingsDto} from '../../api/models/driver-standings-dto';
+import {ConstructorStandingsDto} from '../../api/models/constructor-standings-dto';
+import { SeasonOverviewDto } from '../../api/models/season-overview-dto';
+import {DriverSeasonResultDto} from '../../api/models/driver-season-result-dto';
+import {ConstructorSeasonResultDto} from '../../api/models/constructor-season-result-dto';
 import {
   BatchResultCreateDto,
   GrandPrixChampionshipContextDto,
   SessionEditDto,
   SingleResultUpdateDto,
-} from "../api/models";
+} from "../../api/models";
 
 @Injectable({
   providedIn: 'root'

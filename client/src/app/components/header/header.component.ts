@@ -6,12 +6,12 @@ import {MatIcon} from '@angular/material/icon';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../services/api/auth.service';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatDivider} from '@angular/material/list';
 import {CustomSnackbarComponent} from '../custom-snackbar/custom-snackbar.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {ConnectionService} from '../../services/connection-service.service';
+import {ConnectionService} from '../../services/api/connection-service.service';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @Component({

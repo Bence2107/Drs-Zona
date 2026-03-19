@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
-import {ChampionshipRowDto} from '../api/models/championship-row-dto';
+import {ChampionshipRowDto} from '../../api/models/championship-row-dto';
 import {
   apiChampionshipAddParticipationsPost, apiChampionshipCreateChampionshipPost,
   apiChampionshipGetAllChampionshipsBySeriesSeriesIdGet$Json,
@@ -12,17 +12,17 @@ import {
   apiChampionshipRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete,
   apiChampionshipRemoveDriverParticipationDriverIdDriversChampIdDelete,
   apiChampionshipUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost
-} from '../api/functions';
+} from '../../api/functions';
 import {map} from 'rxjs/operators';
-import {GrandPrixLookupDto} from '../api/models/grand-prix-lookup-dto';
-import {DriverLookUpDto} from '../api/models/driver-look-up-dto';
-import {ConstructorLookUpDto} from '../api/models/constructor-look-up-dto';
-import {ParticipationListDto} from '../api/models/participation-list-dto';
-import {ChampionshipCreateDto} from '../api/models/championship-create-dto';
-import {ParticipationAddDto} from '../api/models/participation-add-dto';
-import {YearLookupDto} from '../api/models/year-lookup-dto';
+import {GrandPrixLookupDto} from '../../api/models/grand-prix-lookup-dto';
+import {DriverLookUpDto} from '../../api/models/driver-look-up-dto';
+import {ConstructorLookUpDto} from '../../api/models/constructor-look-up-dto';
+import {ParticipationListDto} from '../../api/models/participation-list-dto';
+import {ChampionshipCreateDto} from '../../api/models/championship-create-dto';
+import {ParticipationAddDto} from '../../api/models/participation-add-dto';
+import {YearLookupDto} from '../../api/models/year-lookup-dto';
 import {HttpClient} from '@angular/common/http';
-import {ApiConfiguration} from '../api/api-configuration';
+import {ApiConfiguration} from '../../api/api-configuration';
 
 @Injectable({
   providedIn: 'root',

@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ApiConfiguration} from '../api/api-configuration';
+import {ApiConfiguration} from '../../api/api-configuration';
 import {
   apiContractsCreatePost, apiContractsDeleteIdDelete,
   apiContractsGetAllGet$Json,
   apiContractsUpdateIdDriverIdTeamIdPost
-} from '../api/functions';
+} from '../../api/functions';
 import {map} from 'rxjs/operators';
-import {DriverListDto} from '../api/models/driver-list-dto';
+import {DriverListDto} from '../../api/models/driver-list-dto';
 import {Observable} from 'rxjs';
-import {ContractCreateDto} from '../api/models/contract-create-dto';
+import {ContractCreateDto} from '../../api/models/contract-create-dto';
 
 @Injectable({
   providedIn: 'root',

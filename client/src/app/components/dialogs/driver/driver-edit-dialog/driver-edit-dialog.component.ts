@@ -7,7 +7,7 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
-import {DriverService} from '../../../../services/driver.service';
+import {DriverService} from '../../../../services/api/driver.service';
 import {DriverDetailDto} from '../../../../api/models/driver-detail-dto';
 import {DriverUpdateDto} from '../../../../api/models/driver-update-dto';
 import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';

@@ -9,7 +9,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import {StandingsService} from '../../../../../services/standings.service';
+import {StandingsService} from '../../../../../services/api/standings.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {GrandPrixChampionshipContextDto} from '../../../../../api/models/grand-prix-championship-context-dto';
 import {BatchResultCreateDto} from '../../../../../api/models/batch-result-create-dto';
@@ -33,7 +33,7 @@ import {DriverLookUpDto} from '../../../../../api/models/driver-look-up-dto';
 import {ConstructorLookUpDto} from '../../../../../api/models/constructor-look-up-dto';
 import {CustomSnackbarComponent} from '../../../../../components/custom-snackbar/custom-snackbar.component';
 import {MatCheckbox} from '@angular/material/checkbox';
-import {ChampionshipService} from '../../../../../services/championship.service';
+import {ChampionshipService} from '../../../../../services/api/championship.service';
 
 @Component({
   selector: 'app-entry-create',

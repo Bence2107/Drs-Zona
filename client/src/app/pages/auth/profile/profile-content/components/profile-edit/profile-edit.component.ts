@@ -7,7 +7,7 @@ import {MatCard} from '@angular/material/card';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {MatError, MatFormField, MatInput, MatLabel, MatSuffix} from '@angular/material/input';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {AuthService} from '../../../../../../services/auth.service';
+import {AuthService} from '../../../../../../services/api/auth.service';
 import {ChangePasswordRequest} from '../../../../../../api/models/change-password-request';
 import {CustomSnackbarComponent} from '../../../../../../components/custom-snackbar/custom-snackbar.component';
 import {Router} from '@angular/router';

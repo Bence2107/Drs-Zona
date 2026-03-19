@@ -1,12 +1,12 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {UIComment} from '../../../../models/ui-comment';
-import {CommentService} from '../../../../services/comment.service';
+import {CommentService} from '../../../../services/api/comment.service';
 import { DatePipe } from '@angular/common';
 import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
 import {FormsModule} from '@angular/forms';
-import {AuthService} from '../../../../services/auth.service';
+import {AuthService} from '../../../../services/api/auth.service';
 import {CommentCreateDto} from '../../../../api/models/comment-create-dto';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {CommentContentUpdateDto} from '../../../../api/models/comment-content-update-dto';
@@ -195,7 +195,7 @@ export class CommentItemComponent {
   }
 
   //Reply Comment:
-  
+
   toggleReplyForm() {
     this.replyFormVisible = !this.replyFormVisible;
     if (this.isEditing) this.isEditing = false;

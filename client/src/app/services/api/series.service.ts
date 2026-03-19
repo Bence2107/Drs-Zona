@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ApiConfiguration} from '../api/api-configuration';
+import {ApiConfiguration} from '../../api/api-configuration';
 import {Observable} from 'rxjs';
-import {SeriesListDto} from '../api/models/series-list-dto';
-import {apiSeriesGetAllSeriesGet$Json, apiSeriesNameNameGet$Json} from '../api/functions';
+import {SeriesListDto} from '../../api/models/series-list-dto';
+import {apiSeriesGetAllSeriesGet$Json, apiSeriesNameNameGet$Json} from '../../api/functions';
 import {map} from 'rxjs/operators';
-import {SeriesDetailDto} from '../api/models/series-detail-dto';
+import {SeriesDetailDto} from '../../api/models/series-detail-dto';
 
 @Injectable({
   providedIn: 'root',

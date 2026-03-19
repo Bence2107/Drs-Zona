@@ -18,7 +18,7 @@ import {MatOption, MatSelect} from '@angular/material/select';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {StandingsService} from '../../../../../services/standings.service';
+import {StandingsService} from '../../../../../services/api/standings.service';
 import {SessionEditDto} from '../../../../../api/models/session-edit-dto';
 import {ResultEditDto} from '../../../../../api/models/result-edit-dto';
 import {SingleResultUpdateDto} from '../../../../../api/models/single-result-update-dto';
@@ -32,7 +32,7 @@ import {
   GrandPrixManageDialogComponent
 } from '../../../../../components/dialogs/grand-prix/grand-prix-creation-dialog/grand-prix-creation-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
-import {GrandsPrixService} from '../../../../../services/grands-prix.service';
+import {GrandsPrixService} from '../../../../../services/api/grands-prix.service';
 
 @Component({
   selector: 'app-entry-detail',

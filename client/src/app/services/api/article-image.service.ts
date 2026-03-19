@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ApiConfiguration} from '../api/api-configuration';
+import {ApiConfiguration} from '../../api/api-configuration';
 import {
   apiArticleImageDraftIdDelete,
   apiArticleImageDraftIdImagesSlotPost,
   apiArticleImageDraftIdPromoteSlugPost
-} from '../api/functions';
+} from '../../api/functions';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 

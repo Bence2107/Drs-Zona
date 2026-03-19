@@ -22,7 +22,7 @@ import {
   ContractEditDialogComponent
 } from '../../../../components/dialogs/contract/contract-edit-dialog/contract-edit-dialog.component';
 import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirm-dialog.component';
-import {ContractsService} from '../../../../services/contracts.service';
+import {ContractsService} from '../../../../services/api/contracts.service';
 import {Router} from '@angular/router';
 
 @Component({

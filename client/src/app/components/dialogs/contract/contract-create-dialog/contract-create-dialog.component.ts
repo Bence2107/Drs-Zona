@@ -1,15 +1,15 @@
 import {Component, OnInit, signal} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
-import {DriverService} from '../../../../services/driver.service';
-import {ConstructorsService} from '../../../../services/constructors.service';
+import {DriverService} from '../../../../services/api/driver.service';
+import {ConstructorsService} from '../../../../services/api/constructors.service';
 import {ConstructorListDto} from '../../../../api/models/constructor-list-dto';
 import {DriverListDto} from '../../../../api/models/driver-list-dto';
 import {MatFormField, MatLabel} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {ContractsService} from '../../../../services/contracts.service';
+import {ContractsService} from '../../../../services/api/contracts.service';
 import {ContractCreateDto} from '../../../../api/models/contract-create-dto';
 
 @Component({

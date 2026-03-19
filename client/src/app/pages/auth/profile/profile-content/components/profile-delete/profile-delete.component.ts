@@ -10,7 +10,7 @@ import {
 import {MatDialog} from '@angular/material/dialog';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {FormsModule} from '@angular/forms';
-import {AuthService} from '../../../../../../services/auth.service';
+import {AuthService} from '../../../../../../services/api/auth.service';
 import {CustomSnackbarComponent} from '../../../../../../components/custom-snackbar/custom-snackbar.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
 

@@ -1,6 +1,6 @@
 import {Component, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {StandingsService} from '../../../../services/standings.service';
+import {StandingsService} from '../../../../services/api/standings.service';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
 import {YearLookupDto} from '../../../../api/models/year-lookup-dto';
 import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirm-dialog.component';
@@ -19,7 +19,7 @@ import {MatFabButton, MatIconButton} from '@angular/material/button';
 import {MatTooltip} from '@angular/material/tooltip';
 import {ParticipationListDto} from '../../../../api/models/participation-list-dto';
 import {Router} from '@angular/router';
-import {ChampionshipService} from '../../../../services/championship.service';
+import {ChampionshipService} from '../../../../services/api/championship.service';
 
 
 @Component({

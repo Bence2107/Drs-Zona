@@ -10,7 +10,7 @@ import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
 import {ChampionshipCreateDto} from '../../../../api/models/championship-create-dto';
 import {FormErrorService} from '../../../../services/form-error.service';
 import {HttpValidationError} from '../../../../services/error-interceptor.service';
-import {ChampionshipService} from '../../../../services/championship.service';
+import {ChampionshipService} from '../../../../services/api/championship.service';
 
 @Component({
   selector: 'app-championshipcreatedialog',

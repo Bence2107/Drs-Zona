@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {PollService} from '../../services/poll.service';
-import {ArticleService} from '../../services/article.service';
-import {SeriesService} from '../../services/series.service';
+import {PollService} from '../../services/api/poll.service';
+import {ArticleService} from '../../services/api/article.service';
+import {SeriesService} from '../../services/api/series.service';
 import {ActivatedRoute} from '@angular/router';
 import {PollListDto} from '../../api/models/poll-list-dto';
 import {ArticleListDto} from '../../api/models/article-list-dto';

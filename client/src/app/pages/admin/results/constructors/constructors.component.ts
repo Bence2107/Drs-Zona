@@ -1,6 +1,6 @@
 import {Component, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {ConstructorsService} from '../../../../services/constructors.service';
+import {ConstructorsService} from '../../../../services/api/constructors.service';
 import {ConstructorListDto} from '../../../../api/models/constructor-list-dto';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {MatIcon} from '@angular/material/icon';

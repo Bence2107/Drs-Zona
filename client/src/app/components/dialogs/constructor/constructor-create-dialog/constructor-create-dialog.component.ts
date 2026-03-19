@@ -6,12 +6,12 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {ConstructorsService} from '../../../../services/constructors.service';
+import {ConstructorsService} from '../../../../services/api/constructors.service';
 import {BrandListDto} from '../../../../api/models/brand-list-dto';
 import {ConstructorCreateDto} from '../../../../api/models/constructor-create-dto';
 import {FormErrorService} from '../../../../services/form-error.service';
 import {HttpValidationError} from '../../../../services/error-interceptor.service';
-import {BrandsService} from '../../../../services/brands.service';
+import {BrandsService} from '../../../../services/api/brands.service';
 
 @Component({
   selector: 'app-constructor-create-dialog',

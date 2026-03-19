@@ -1,8 +1,8 @@
 import {Injectable, signal} from '@angular/core';
-import {AuthResponse} from '../api/models/auth-response';
+import {AuthResponse} from '../../api/models/auth-response';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {LoginRequest} from '../api/models/login-request';
+import {LoginRequest} from '../../api/models/login-request';
 import {Observable, tap} from 'rxjs';
 import {
   apiAuthChangePasswordPost, apiAuthDeleteProfileUserIdDelete,
@@ -11,13 +11,13 @@ import {
   apiAuthMeGet$Json, apiAuthProfilePictureDeletePost, apiAuthProfilePictureUpdatePost,
   ApiAuthProfilePictureUpdatePost$Params, apiAuthProfileUpdatePost,
   apiAuthRegisterPost$Json
-} from '../api/functions';
+} from '../../api/functions';
 import {map} from 'rxjs/operators';
-import {ApiConfiguration} from '../api/api-configuration';
-import {RegisterRequest} from '../api/models/register-request';
-import {UserProfileResponse} from '../api/models/user-profile-response';
-import {ChangePasswordRequest} from '../api/models/change-password-request';
-import {UpdateUserRequest} from '../api/models/update-user-request';
+import {ApiConfiguration} from '../../api/api-configuration';
+import {RegisterRequest} from '../../api/models/register-request';
+import {UserProfileResponse} from '../../api/models/user-profile-response';
+import {ChangePasswordRequest} from '../../api/models/change-password-request';
+import {UpdateUserRequest} from '../../api/models/update-user-request';
 
 @Injectable({
   providedIn: 'root',

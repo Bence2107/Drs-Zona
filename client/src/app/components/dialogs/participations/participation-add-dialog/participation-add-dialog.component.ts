@@ -10,10 +10,10 @@ import {MatDividerModule} from '@angular/material/divider';
 import {YearLookupDto} from '../../../../api/models/year-lookup-dto';
 import {DriverListDto} from '../../../../api/models/driver-list-dto';
 import {ConstructorListDto} from '../../../../api/models/constructor-list-dto';
-import {DriverService} from '../../../../services/driver.service';
-import {ConstructorsService} from '../../../../services/constructors.service';
+import {DriverService} from '../../../../services/api/driver.service';
+import {ConstructorsService} from '../../../../services/api/constructors.service';
 import {MatTooltip} from '@angular/material/tooltip';
-import {ChampionshipService} from '../../../../services/championship.service';
+import {ChampionshipService} from '../../../../services/api/championship.service';
 
 @Component({
   selector: 'app-participation-add-dialog',

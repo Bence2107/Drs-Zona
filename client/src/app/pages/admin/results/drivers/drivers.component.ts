@@ -1,6 +1,6 @@
 import {Component, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {DriverService} from '../../../../services/driver.service';
+import {DriverService} from '../../../../services/api/driver.service';
 import {DriverListDto} from '../../../../api/models/driver-list-dto';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {MatIcon} from '@angular/material/icon';

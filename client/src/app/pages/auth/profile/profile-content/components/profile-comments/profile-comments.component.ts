@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {UIComment} from '../../../../../../models/ui-comment';
-import {CommentService} from '../../../../../../services/comment.service';
+import {CommentService} from '../../../../../../services/api/comment.service';
 import {UserProfileResponse} from '../../../../../../api/models/user-profile-response';
 import {MatCard} from '@angular/material/card';
 import {CommentItemComponent} from '../../../../../../components/lists/comment-list/comment-item/comment-item.component';

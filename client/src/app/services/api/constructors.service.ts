@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ApiConfiguration} from '../api/api-configuration';
+import {ApiConfiguration} from '../../api/api-configuration';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {
@@ -8,11 +8,11 @@ import {
   apiConstructorsGetAllConstructorsGet$Json,
   apiConstructorsGetIdGet$Json, apiConstructorsUpdatePost,
 
-} from '../api/functions';
-import {ConstructorListDto} from '../api/models/constructor-list-dto';
-import {ConstructorDetailDto} from '../api/models/constructor-detail-dto';
-import {ConstructorCreateDto} from '../api/models/constructor-create-dto';
-import {ConstructorUpdateDto} from '../api/models/constructor-update-dto';
+} from '../../api/functions';
+import {ConstructorListDto} from '../../api/models/constructor-list-dto';
+import {ConstructorDetailDto} from '../../api/models/constructor-detail-dto';
+import {ConstructorCreateDto} from '../../api/models/constructor-create-dto';
+import {ConstructorUpdateDto} from '../../api/models/constructor-update-dto';
 
 @Injectable({
   providedIn: 'root',

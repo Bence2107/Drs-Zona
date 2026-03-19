@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ProfileHeaderComponent} from './profile-header/profile-header.component';
 import {ProfileContentComponent} from './profile-content/profile-content.component';
 import {UserProfileResponse} from '../../../api/models/user-profile-response';
-import {AuthService} from '../../../services/auth.service';
+import {AuthService} from '../../../services/api/auth.service';
 
 @Component({
   selector: 'app-profile',

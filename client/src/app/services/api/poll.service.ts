@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ApiConfiguration} from '../api/api-configuration';
+import {ApiConfiguration} from '../../api/api-configuration';
 import {
   apiPollCreateUserIdPost,
   apiPollDeleteIdDelete,
@@ -8,12 +8,12 @@ import {
   apiPollGetByCreatorIdIdGet$Json,
   apiPollGetIdGet$Json,
   apiPollVotePollIdPollOptionIdUserIdPost
-} from '../api/functions';
+} from '../../api/functions';
 import {map} from 'rxjs/operators';
-import {PollListDto} from '../api/models/poll-list-dto';
+import {PollListDto} from '../../api/models/poll-list-dto';
 import {Observable} from 'rxjs';
-import {PollDto} from '../api/models/poll-dto';
-import {PollCreateDto} from '../api/models/poll-create-dto';
+import {PollDto} from '../../api/models/poll-dto';
+import {PollCreateDto} from '../../api/models/poll-create-dto';
 
 @Injectable({
   providedIn: 'root',

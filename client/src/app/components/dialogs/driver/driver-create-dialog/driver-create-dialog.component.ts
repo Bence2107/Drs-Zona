@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
-import {DriverService} from '../../../../services/driver.service';
+import {DriverService} from '../../../../services/api/driver.service';
 import {DriverCreateDto} from '../../../../api/models/driver-create-dto';
 import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';

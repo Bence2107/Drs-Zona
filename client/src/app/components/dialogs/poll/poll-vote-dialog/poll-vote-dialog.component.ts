@@ -4,9 +4,9 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PollDto } from '../../../../api/models/poll-dto';
-import { PollService } from '../../../../services/poll.service';
+import { PollService } from '../../../../services/api/poll.service';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {AuthService} from '../../../../services/auth.service';
+import {AuthService} from '../../../../services/api/auth.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CustomSnackbarComponent} from '../../../custom-snackbar/custom-snackbar.component';
 

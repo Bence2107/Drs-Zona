@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ApiConfiguration} from '../api/api-configuration';
-import {GrandPrixDetailDto} from '../api/models/grand-prix-detail-dto';
+import {ApiConfiguration} from '../../api/api-configuration';
+import {GrandPrixDetailDto} from '../../api/models/grand-prix-detail-dto';
 import {Observable} from 'rxjs';
 import {
   apiGrandPrixCreatePost,
   apiGrandPrixGetAllCircuitsGet$Json,
   apiGrandPrixGetGrandPrixIdGet$Json, apiGrandPrixUpdatePost
-} from '../api/functions';
+} from '../../api/functions';
 import {map} from 'rxjs/operators';
-import {CircuitListDto} from '../api/models/circuit-list-dto';
-import {GrandPrixCreateDto} from '../api/models/grand-prix-create-dto';
-import {GrandPrixUpdateDto} from '../api/models/grand-prix-update-dto';
+import {CircuitListDto} from '../../api/models/circuit-list-dto';
+import {GrandPrixCreateDto} from '../../api/models/grand-prix-create-dto';
+import {GrandPrixUpdateDto} from '../../api/models/grand-prix-update-dto';
 
 @Injectable({
   providedIn: 'root',

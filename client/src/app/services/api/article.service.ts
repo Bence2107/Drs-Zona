@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ApiConfiguration} from '../api/api-configuration';
+import {ApiConfiguration} from '../../api/api-configuration';
 import {Observable} from 'rxjs';
 import {
   apiArticleCreatePost, apiArticleDeleteIdDelete,
   apiArticleGetAllArticlesGet$Json,
   apiArticleGetAllSummaryGet$Json,
   apiArticleGetRecentNumberGet$Json, apiArticleGetSlugGet$Json, apiArticleUpdatePost
-} from '../api/functions';
+} from '../../api/functions';
 import {map} from 'rxjs/operators';
-import {ArticleListDto} from '../api/models/article-list-dto';
-import {ArticleDetailDto} from '../api/models/article-detail-dto';
-import {ArticleCreateDto} from '../api/models/article-create-dto';
-import {ArticleUpdateDto} from '../api/models/article-update-dto';
-import {ArticleListDtoPagedResult} from '../api/models/article-list-dto-paged-result';
+import {ArticleListDto} from '../../api/models/article-list-dto';
+import {ArticleDetailDto} from '../../api/models/article-detail-dto';
+import {ArticleCreateDto} from '../../api/models/article-create-dto';
+import {ArticleUpdateDto} from '../../api/models/article-update-dto';
+import {ArticleListDtoPagedResult} from '../../api/models/article-list-dto-paged-result';
 
 @Injectable({
   providedIn: 'root'

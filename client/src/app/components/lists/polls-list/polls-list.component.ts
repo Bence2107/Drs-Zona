@@ -1,13 +1,13 @@
 import {Component, ViewChild, ElementRef, Input} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PollService } from '../../../services/poll.service';
+import { PollService } from '../../../services/api/poll.service';
 import { PollListDto } from '../../../api/models/poll-list-dto';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PollItemComponent } from './poll-item/poll-item.component';
 import {PollVoteDialogComponent} from '../../dialogs/poll/poll-vote-dialog/poll-vote-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
-import {AuthService} from '../../../services/auth.service';
+import {AuthService} from '../../../services/api/auth.service';
 import {UserProfileResponse} from '../../../api/models/user-profile-response';
 import {PollAddDialogComponent} from '../../dialogs/poll/poll-add-dialog/poll-add-dialog.component';
 

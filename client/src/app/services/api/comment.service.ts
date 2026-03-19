@@ -1,18 +1,18 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ApiConfiguration} from '../api/api-configuration';
+import {ApiConfiguration} from '../../api/api-configuration';
 import {Observable} from 'rxjs';
-import {CommentDetailDto} from '../api/models/comment-detail-dto';
+import {CommentDetailDto} from '../../api/models/comment-detail-dto';
 import {
   apiCommentsCreateUserIdPost, apiCommentsDeleteIdDelete,
   apiCommentsGetCommentRepliesCommentIdGet$Json,
   apiCommentsGetCommentsWithoutRepliesArticleIdGet$Json, apiCommentsGetUsersCommentsUserIdGet$Json,
   apiCommentsUpdateContentPost, apiCommentsVotePost
-} from '../api/functions';
+} from '../../api/functions';
 import {map} from 'rxjs/operators';
-import {CommentCreateDto} from '../api/models/comment-create-dto';
-import {CommentContentUpdateDto} from '../api/models/comment-content-update-dto';
-import {CommentUpdateVoteDto} from '../api/models/comment-update-vote-dto';
+import {CommentCreateDto} from '../../api/models/comment-create-dto';
+import {CommentContentUpdateDto} from '../../api/models/comment-content-update-dto';
+import {CommentUpdateVoteDto} from '../../api/models/comment-update-vote-dto';
 
 @Injectable({
   providedIn: 'root'

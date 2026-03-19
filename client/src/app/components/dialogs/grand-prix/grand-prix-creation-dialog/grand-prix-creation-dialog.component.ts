@@ -16,7 +16,7 @@ import {GrandPrixUpdateDto} from '../../../../api/models/grand-prix-update-dto';
 import {GrandPrixDetailDto} from '../../../../api/models/grand-prix-detail-dto';
 import {FormErrorService} from '../../../../services/form-error.service';
 import {HttpValidationError} from '../../../../services/error-interceptor.service';
-import {GrandsPrixService} from '../../../../services/grands-prix.service';
+import {GrandsPrixService} from '../../../../services/api/grands-prix.service';
 
 export interface GrandPrixDialogData {
   seriesList: SeriesLookupDto[];

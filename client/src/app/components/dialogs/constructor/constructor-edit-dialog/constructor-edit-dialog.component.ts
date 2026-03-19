@@ -8,7 +8,7 @@ import {
   MatDialogTitle
 } from '@angular/material/dialog';
 import {ConstructorDetailDto} from '../../../../api/models/constructor-detail-dto';
-import {ConstructorsService} from '../../../../services/constructors.service';
+import {ConstructorsService} from '../../../../services/api/constructors.service';
 import {BrandListDto} from '../../../../api/models/brand-list-dto';
 import {ConstructorUpdateDto} from '../../../../api/models/constructor-update-dto';
 import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
@@ -17,7 +17,7 @@ import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {FormErrorService} from '../../../../services/form-error.service';
 import {HttpValidationError} from '../../../../services/error-interceptor.service';
-import {BrandsService} from '../../../../services/brands.service';
+import {BrandsService} from '../../../../services/api/brands.service';
 
 @Component({
   selector: 'app-constructor-edit-dialog',

@@ -1,11 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { MatCard } from '@angular/material/card';
-import {CommentService} from '../../../services/comment.service';
+import {CommentService} from '../../../services/api/comment.service';
 import {UIComment} from '../../../models/ui-comment';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommentItemComponent} from './comment-item/comment-item.component';
 import {MatIcon} from '@angular/material/icon';
-import {AuthService} from '../../../services/auth.service';
+import {AuthService} from '../../../services/api/auth.service';
 import {CommentCreateDto} from '../../../api/models/comment-create-dto';
 import {HttpValidationError} from '../../../services/error-interceptor.service';
 

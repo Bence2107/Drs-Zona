@@ -4,7 +4,7 @@ import {
 } from '../../../../components/dialogs/championship/championshipcreatedialog/championship-create-dialog.component';
 import {Component, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {StandingsService} from '../../../../services/standings.service';
+import {StandingsService} from '../../../../services/api/standings.service';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {FormsModule} from '@angular/forms';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
@@ -25,7 +25,7 @@ import {MatTooltip} from '@angular/material/tooltip';
 import {MatFormField, MatLabel} from '@angular/material/input';
 import {MatOption} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
-import {ChampionshipService} from '../../../../services/championship.service';
+import {ChampionshipService} from '../../../../services/api/championship.service';
 
 @Component({
   selector: 'app-championships',

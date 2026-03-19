@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ApiConfiguration} from '../api/api-configuration';
+import {ApiConfiguration} from '../../api/api-configuration';
 import {Observable} from 'rxjs';
-import {DriverListDto} from '../api/models/driver-list-dto';
-import {apiDriversGetAllDriversGet$Json} from '../api/fn/drivers/api-drivers-get-all-drivers-get-json';
+import {DriverListDto} from '../../api/models/driver-list-dto';
+import {apiDriversGetAllDriversGet$Json} from '../../api/fn/drivers/api-drivers-get-all-drivers-get-json';
 import {map} from 'rxjs/operators';
-import {apiDriversCreatePost, apiDriversGetIdGet$Json, apiDriversUpdatePost} from '../api/functions';
-import {DriverDetailDto} from '../api/models/driver-detail-dto';
-import {DriverCreateDto} from '../api/models/driver-create-dto';
-import {DriverUpdateDto} from '../api/models/driver-update-dto';
+import {apiDriversCreatePost, apiDriversGetIdGet$Json, apiDriversUpdatePost} from '../../api/functions';
+import {DriverDetailDto} from '../../api/models/driver-detail-dto';
+import {DriverCreateDto} from '../../api/models/driver-create-dto';
+import {DriverUpdateDto} from '../../api/models/driver-update-dto';
 
 @Injectable({
   providedIn: 'root',

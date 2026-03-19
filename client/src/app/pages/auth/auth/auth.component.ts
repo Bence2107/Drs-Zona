@@ -4,13 +4,13 @@ import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} fr
 import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
 import {MatCard} from '@angular/material/card';
-import {AuthService} from '../../../services/auth.service';
+import {AuthService} from '../../../services/api/auth.service';
 import {LoginRequest} from '../../../api/models/login-request';
 import {Router} from '@angular/router';
 import {RegisterRequest} from '../../../api/models/register-request';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CustomSnackbarComponent} from '../../../components/custom-snackbar/custom-snackbar.component';
-import {ConnectionService} from '../../../services/connection-service.service';
+import {ConnectionService} from '../../../services/api/connection-service.service';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {ErrorDisplayComponent} from '../../../components/error-display/error-display.component';
 import {HttpValidationError} from '../../../services/error-interceptor.service';

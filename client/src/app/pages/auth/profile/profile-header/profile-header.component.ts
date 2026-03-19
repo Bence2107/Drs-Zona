@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import { MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
-import { AuthService } from '../../../../services/auth.service';
+import { AuthService } from '../../../../services/api/auth.service';
 import { UserProfileResponse } from '../../../../api/models/user-profile-response';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';

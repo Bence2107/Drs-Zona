@@ -8,7 +8,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import {PollService} from '../../../../services/poll.service';
+import {PollService} from '../../../../services/api/poll.service';
 import {
   MatDialogActions,
   MatDialogClose,
@@ -21,9 +21,9 @@ import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/m
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {PollCreateDto} from '../../../../api/models/poll-create-dto';
-import {AuthService} from '../../../../services/auth.service';
+import {AuthService} from '../../../../services/api/auth.service';
 import {SeriesListDto} from '../../../../api/models/series-list-dto';
-import {SeriesService} from '../../../../services/series.service';
+import {SeriesService} from '../../../../services/api/series.service';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {CustomSnackbarComponent} from '../../../custom-snackbar/custom-snackbar.component';
 import {MatSnackBar} from '@angular/material/snack-bar';

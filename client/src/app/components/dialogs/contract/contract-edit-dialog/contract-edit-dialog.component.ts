@@ -7,14 +7,14 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
-import { DriverService } from "../../../../services/driver.service";
-import {ConstructorsService} from '../../../../services/constructors.service';
+import { DriverService } from "../../../../services/api/driver.service";
+import {ConstructorsService} from '../../../../services/api/constructors.service';
 import {ConstructorListDto, ContractListDto, DriverListDto} from "../../../../api/models";
 import {MatFormField, MatLabel} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {ContractsService} from '../../../../services/contracts.service';
+import {ContractsService} from '../../../../services/api/contracts.service';
 
 @Component({
   selector: 'app-contract-edit-dialog',
