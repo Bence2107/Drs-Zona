@@ -8,7 +8,6 @@ namespace Services.Implementations;
 
 public class ConstructorsService(
     IConstructorsRepository constructorRepo, 
-    IConstructorCompetitionRepository constructorCompetitionRepo,
     IBrandsRepository brandsRepo,
     IContractsRepository contractsRepo
 ) : IConstructorsService

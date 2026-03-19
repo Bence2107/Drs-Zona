@@ -8,7 +8,6 @@ namespace Services.Implementations;
 
 public class DriverService(
     IDriversRepository driverRepo, 
-    IDriverParticipationRepository driverParticipationRepo,
     IContractsRepository contractsDepo
 ) : IDriverService 
 {
