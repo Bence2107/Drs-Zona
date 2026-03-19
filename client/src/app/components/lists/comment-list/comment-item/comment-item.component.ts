@@ -64,6 +64,7 @@ export class CommentItemComponent {
 
   loadReplies() {
     if (this.comment.loaded || !this.comment.id) return;
+    this.fetchReplies();
 
     this.comment.loadingReplies = true;
     this.commentService.getCommentsReplies(this.comment.id).subscribe({
@@ -91,6 +92,24 @@ export class CommentItemComponent {
   }
 
   //Helpers:
+  reloadReplies() {
+    if (!this.comment.id) return;
+    this.comment.loaded = false;
+    this.fetchReplies();
+  }
+
+  private fetchReplies() {
+    this.comment.loadingReplies = true;
+    this.commentService.getCommentsReplies(this.comment.id!).subscribe({
+      next: (replies) => {
+        this.comment.replies = replies as UIComment[];
+        this.comment.replyCount = replies.length;
+        this.comment.loaded = true;
+        this.comment.loadingReplies = false;
+      },
+      error: () => this.comment.loadingReplies = false
+    });
+  }
 
   autoResize(event: Event) {
     const el = event.target as HTMLTextAreaElement;
