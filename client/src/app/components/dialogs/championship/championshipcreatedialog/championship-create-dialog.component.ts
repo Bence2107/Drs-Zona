@@ -31,8 +31,6 @@ export class ChampionshipCreateDialogComponent implements OnInit {
   isSubmitting = false;
   form: FormGroup
 
-  get seriesList() { return this.data.seriesList; }
-
   private readonly fieldMap: { [key: string]: string } = {
     'seriesid': 'seriesId',
     'season': 'season',
@@ -91,6 +89,8 @@ export class ChampionshipCreateDialogComponent implements OnInit {
       this.form.get('constructorsName') as FormControl,
     ]);
   }
+
+  get seriesList() { return this.data.seriesList; }
 
   submit() {
     if (this.form.invalid) return;

@@ -54,59 +54,12 @@ export class AuthComponent implements OnInit {
     });
   }
 
-  private initForms(): void {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
-    });
-
-    this.registerForm = this.fb.group({
-      username: ['', [Validators.required, Validators.maxLength(50)]],
-      fullName: ['', [Validators.required, Validators.maxLength(100)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-    });
-
-    [this.loginEmail, this.loginPassword,
-      this.regUsername, this.regFullName, this.regEmail, this.regPassword]
-      .forEach(c => this.clearServerErrorOnChange(c));
-  }
-
-  // Login getters
   get loginEmail() { return this.loginForm.get('email') as FormControl; }
   get loginPassword() { return this.loginForm.get('password') as FormControl; }
-
-  // Register getters
   get regUsername() { return this.registerForm.get('username') as FormControl; }
   get regFullName() { return this.registerForm.get('fullName') as FormControl; }
   get regEmail() { return this.registerForm.get('email') as FormControl; }
   get regPassword() { return this.registerForm.get('password') as FormControl; }
-
-  // Szerver errorokat a megfelelő FormControl-ra rakja
-  private applyServerErrors(form: FormGroup, error: HttpValidationError): void {
-    const fieldMap: { [key: string]: string } = {
-      // backend field neve -> FormControl neve
-      'email': 'email',
-      'password': 'password',
-      'username': 'username',
-      'fullname': 'fullName',
-    };
-
-    let hasFieldError = false;
-    for (const backendField of Object.keys(error.fieldErrors)) {
-      const controlName = fieldMap[backendField] ?? backendField;
-      const control = form.get(controlName);
-      if (control) {
-        control.setErrors({ serverError: error.fieldErrors[backendField][0] });
-        hasFieldError = true;
-      }
-    }
-
-    // Ha nincs field-specifikus hiba, globális hiba az email alá kerül
-    if (!hasFieldError && error.title) {
-      form.get('email')?.setErrors({ serverError: error.title });
-    }
-  }
 
   login(): void {
     if (this.loginForm.invalid) return;
@@ -163,5 +116,49 @@ export class AuthComponent implements OnInit {
       }
     });
   }
+
+  private initForms(): void {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8)]]
+    });
+
+    this.registerForm = this.fb.group({
+      username: ['', [Validators.required, Validators.maxLength(50)]],
+      fullName: ['', [Validators.required, Validators.maxLength(100)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+    });
+
+    [this.loginEmail, this.loginPassword,
+      this.regUsername, this.regFullName, this.regEmail, this.regPassword]
+      .forEach(c => this.clearServerErrorOnChange(c));
+  }
+
+  private applyServerErrors(form: FormGroup, error: HttpValidationError): void {
+    const fieldMap: { [key: string]: string } = {
+      // backend field neve -> FormControl neve
+      'email': 'email',
+      'password': 'password',
+      'username': 'username',
+      'fullname': 'fullName',
+    };
+
+    let hasFieldError = false;
+    for (const backendField of Object.keys(error.fieldErrors)) {
+      const controlName = fieldMap[backendField] ?? backendField;
+      const control = form.get(controlName);
+      if (control) {
+        control.setErrors({ serverError: error.fieldErrors[backendField][0] });
+        hasFieldError = true;
+      }
+    }
+
+    // Ha nincs field-specifikus hiba, globális hiba az email alá kerül
+    if (!hasFieldError && error.title) {
+      form.get('email')?.setErrors({ serverError: error.title });
+    }
+  }
+
 
 }

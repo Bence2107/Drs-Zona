@@ -34,17 +34,21 @@ import {ContractsService} from '../../../../services/contracts.service';
   styleUrl: './contract-edit-dialog.component.scss',
 })
 export class ContractEditDialogComponent implements OnInit{
-  private fb = inject(FormBuilder);
-  private dialogRef = inject(MatDialogRef<ContractEditDialogComponent>);
-  private contractsService = inject(ContractsService);
-  private driverService = inject(DriverService);
-  private constructorService = inject(ConstructorsService);
-  data = inject(MAT_DIALOG_DATA) as { contract: ContractListDto };
-
   drivers = signal<DriverListDto[]>([]);
   constructors = signal<ConstructorListDto[]>([]);
+
+  data = inject(MAT_DIALOG_DATA) as { contract: ContractListDto };
   isSubmitting = false;
   form!: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<ContractEditDialogComponent>,
+    private constructorService: ConstructorsService,
+    private contractsService: ContractsService,
+    private driverService: DriverService
+  ) {
+  }
 
   ngOnInit() {
     const c = this.data.contract;

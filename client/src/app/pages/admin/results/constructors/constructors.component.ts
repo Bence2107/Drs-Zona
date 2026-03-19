@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ConstructorsService} from '../../../../services/constructors.service';
 import {ConstructorListDto} from '../../../../api/models/constructor-list-dto';
@@ -10,8 +10,10 @@ import {MatTooltip} from '@angular/material/tooltip';
 import {
   ConstructorCreateDialogComponent
 } from '../../../../components/dialogs/constructor/constructor-create-dialog/constructor-create-dialog.component';
-import ConstructorEditDialogComponent from '../../../../components/dialogs/constructor/constructor-edit-dialog/constructor-edit-dialog.component';
 import {Router} from '@angular/router';
+import {
+  ConstructorEditDialogComponent
+} from '../../../../components/dialogs/constructor/constructor-edit-dialog/constructor-edit-dialog.component';
 
 @Component({
   selector: 'app-constructors',
@@ -28,13 +30,15 @@ import {Router} from '@angular/router';
   templateUrl: './constructors.component.html',
   styleUrl: './constructors.component.scss',
 })
-export class ConstructorsComponent {
-  private dialog = inject(MatDialog);
-  private constructorService = inject(ConstructorsService);
-  private router = inject(Router);
-
+export class ConstructorsComponent implements OnInit{
   constructors = signal<ConstructorListDto[]>([]);
   isLoading = signal(false);
+
+  constructor(
+    private dialog: MatDialog,
+    private constructorService: ConstructorsService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loadConstructors();

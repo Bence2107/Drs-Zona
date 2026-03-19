@@ -13,18 +13,18 @@ import {UserProfileResponse} from '../../../../../../api/models/user-profile-res
   styleUrl: './profile-polls.component.scss',
 })
 export class ProfilePollsComponent implements OnInit {
-    polls: PollListDto[] = [];
-    @Input() userData: UserProfileResponse | null = null;
+  polls: PollListDto[] = [];
+  @Input() userData: UserProfileResponse | null = null;
 
-    constructor(private pollService: PollService) {}
+  constructor(private pollService: PollService) {}
 
-    ngOnInit(): void {
-      if (this.userData?.userId) {
-        this.pollService.getPollsByCreator(this.userData.userId, undefined).subscribe(
-          (polls: PollListDto[]) => {
-            this.polls = polls;
-          }
-        )
-      }
+  ngOnInit(): void {
+    if (this.userData?.userId) {
+      this.pollService.getPollsByCreator(this.userData.userId, undefined).subscribe(
+        (polls: PollListDto[]) => {
+          this.polls = polls;
+        }
+      )
     }
+  }
 }

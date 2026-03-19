@@ -1,4 +1,4 @@
-import {Component, inject, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {UserProfileResponse} from '../../../../../../api/models/user-profile-response';
 import {MatCard} from '@angular/material/card';
 import {MatList, MatListItem} from '@angular/material/list';
@@ -20,7 +20,8 @@ import {DatePipe} from '@angular/common';
 export class ProfileGeneralComponent {
   @Input() userData: UserProfileResponse | null = null;
 
-  private datePipe = inject(DatePipe);
+  constructor(private datePipe: DatePipe) {}
+
 
   get profileFields() { return [
     { label: 'Teljes név:', value: this.userData?.fullName, icon: 'person' },
@@ -29,4 +30,5 @@ export class ProfileGeneralComponent {
     { label: "Létrehozva:", value: this.datePipe.transform(this.userData?.createdAt, 'yyyy. MM. dd. HH:mm') , icon: 'calendar_today' },
   ];
     }
+
 }

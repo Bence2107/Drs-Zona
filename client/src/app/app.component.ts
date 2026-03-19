@@ -34,9 +34,9 @@ export class AppComponent implements OnInit{
 
   constructor(
     private breakpointObserver: BreakpointObserver,
+    private snackBar: MatSnackBar,
     private authService: AuthService,
-    private seriesService: SeriesService,
-    private snackBar: MatSnackBar) {
+    private seriesService: SeriesService) {
      this.authService.loadProfile();
   }
 
@@ -57,8 +57,16 @@ export class AppComponent implements OnInit{
 
   }
 
+  get username(): string | null {
+    return this.authService.currentProfile()?.username ?? null;
+  }
+
   isLoggedIn() {
     return this.authService.isLoggedIn();
+  }
+
+  isAuthor(): boolean {
+    return this.authService.currentProfile()?.role === 'Author';
   }
 
   logout() {
@@ -68,14 +76,5 @@ export class AppComponent implements OnInit{
       horizontalPosition: 'center',
     });
     return this.authService.logout();
-  }
-
-  get username(): string | null {
-    return this.authService.currentProfile()?.username ?? null;
-  }
-
-
-  isAuthor(): boolean {
-    return this.authService.currentProfile()?.role === 'Author';
   }
 }

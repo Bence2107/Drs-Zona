@@ -38,7 +38,7 @@ import {BrandsService} from '../../../../services/brands.service';
   templateUrl: './constructor-edit-dialog.component.html',
   styleUrl: './constructor-edit-dialog.component.scss',
 })
-class ConstructorEditDialogComponent implements OnInit{
+export class ConstructorEditDialogComponent implements OnInit{
   data = inject(MAT_DIALOG_DATA) as { constructor: ConstructorDetailDto };
   brands = signal<BrandListDto[]>([]);
   isSubmitting = false;
@@ -131,5 +131,3 @@ class ConstructorEditDialogComponent implements OnInit{
 
   cancel() { this.dialogRef.close(false); }
 }
-
-export default ConstructorEditDialogComponent

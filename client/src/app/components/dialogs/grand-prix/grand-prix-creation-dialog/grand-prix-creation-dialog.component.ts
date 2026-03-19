@@ -38,10 +38,10 @@ export interface GrandPrixDialogData {
   styleUrl: './grand-prix-creation-dialog.component.scss',
 })
 export class GrandPrixManageDialogComponent implements OnInit {
+  circuits = signal<CircuitListDto[]>([]);
+
   form: FormGroup;
   data = inject(MAT_DIALOG_DATA) as GrandPrixDialogData;
-
-  circuits = signal<CircuitListDto[]>([]);
   isSubmitting = false;
   isEditMode = false;
 
@@ -58,10 +58,6 @@ export class GrandPrixManageDialogComponent implements OnInit {
     'lapscompleted': 'lapsCompleted',
   };
 
-
-  get seriesList() { return this.data.seriesList; }
-  get title() { return this.isEditMode ? 'Nagydíj szerkesztése' : 'Új nagydíj létrehozása'; }
-  get submitLabel() { return this.isEditMode ? 'Mentés' : 'Létrehozás'; }
 
   constructor(
     private fb: FormBuilder,
@@ -83,6 +79,10 @@ export class GrandPrixManageDialogComponent implements OnInit {
       lapsCompleted: [null, [Validators.min(0), Validators.max(100)]],
     });
   }
+
+  get seriesList() { return this.data.seriesList; }
+  get title() { return this.isEditMode ? 'Nagydíj szerkesztése' : 'Új nagydíj létrehozása'; }
+  get submitLabel() { return this.isEditMode ? 'Mentés' : 'Létrehozás'; }
 
   ngOnInit() {
     this.grandPrixService.getAllCircuitsToList().subscribe(res => this.circuits.set(res));

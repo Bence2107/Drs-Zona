@@ -30,16 +30,20 @@ import {ContractCreateDto} from '../../../../api/models/contract-create-dto';
   styleUrl: './contract-create-dialog.component.scss',
 })
 export class ContractCreateDialogComponent implements OnInit{
-  private fb = inject(FormBuilder);
-  private dialogRef = inject(MatDialogRef<ContractCreateDialogComponent>);
-  private contractsService = inject(ContractsService);
-  private driverService = inject(DriverService);
-  private constructorService = inject(ConstructorsService);
-
   drivers = signal<DriverListDto[]>([]);
   constructors = signal<ConstructorListDto[]>([]);
+
   isSubmitting = false;
   form!: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<ContractCreateDialogComponent>,
+    private constructorService: ConstructorsService,
+    private contractsService: ContractsService,
+    private driverService: DriverService
+  )
+  {}
 
   ngOnInit() {
     this.form = this.fb.group({

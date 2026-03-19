@@ -6,7 +6,7 @@ import {ApiConfiguration} from './api/api-configuration';
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import localeHu from '@angular/common/locales/hu';
 import {registerLocaleData} from '@angular/common';
-import {authInterceptor} from './interceptors/auth';
+import {authInterceptor} from './interceptors/auth.interceptor';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import {MatPaginatorIntl} from '@angular/material/paginator';
 import {getHungarianPaginatorIntl} from './shared/getHungarianPaginator';

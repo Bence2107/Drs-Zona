@@ -31,8 +31,6 @@ import {HttpValidationError} from '../../../../services/error-interceptor.servic
   styleUrl: './driver-create-dialog.component.scss',
 })
 export class DriverCreateDialogComponent implements OnInit{
-
-
   isSubmitting = false;
   form!: FormGroup;
 

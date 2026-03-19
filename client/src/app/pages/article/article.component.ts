@@ -14,7 +14,7 @@ import {MatIcon} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatDialog} from '@angular/material/dialog';
-import {ConfirmDialogComponent} from '../../components/dialogs/confirmdialog/confirmdialog.component';
+import {ConfirmDialogComponent} from '../../components/dialogs/confirmdialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-article',
@@ -56,9 +56,29 @@ export class ArticleComponent implements OnInit {
     this.fetchArticle();
   }
 
+
+  get userId(): string | null {
+    return this.authService.currentProfile()?.userId ?? null;
+  }
+
+  get avatarUrl(): string | null {
+    const url = this.article.authorImageUrl;
+    if (url == null) return "img/user/avatars/avatar.jpg";
+    return `${url}`;
+  }
+
   private addCacheBuster(url: string | null | undefined): string | null {
     if (!url) return null;
     return `${url}?cache=${new Date().getTime()}`;
+  }
+
+  protected isTheAuthorOrAdmin(): boolean {
+    const role = this.authService.currentProfile()?.role;
+    if (role === "Admin") {
+      return true;
+    }
+
+    return this.article?.authorId == this.userId;
   }
 
   fetchArticle() {
@@ -90,25 +110,6 @@ export class ArticleComponent implements OnInit {
         }
       });
     }
-  }
-
-  get userId(): string | null {
-    return this.authService.currentProfile()?.userId ?? null;
-  }
-
-  protected isTheAuthorOrAdmin(): boolean {
-    const role = this.authService.currentProfile()?.role;
-    if (role === "Admin") {
-      return true;
-    }
-
-    return this.article?.authorId == this.userId;
-  }
-
-  get avatarUrl(): string | null {
-    const url = this.article.authorImageUrl;
-    if (url == null) return "img/user/avatars/avatar.jpg";
-    return `${url}`;
   }
 
   deleteArticle() {

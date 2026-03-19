@@ -58,9 +58,9 @@ import {HttpValidationError} from '../../../../services/error-interceptor.servic
 })
 export class PollAddDialogComponent implements OnInit {
   pollForm: FormGroup;
-  minDate = new Date();
   series: SeriesListDto[] = [];
   optionsError = '';
+  minDate = new Date();
 
   private readonly pollFieldMap: { [key: string]: string } = {
     'title': 'title',

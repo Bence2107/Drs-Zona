@@ -60,7 +60,6 @@ import {ChampionshipService} from '../../../../services/championship.service';
 export class EntryComponent implements OnInit {
   seriesList = signal<SeriesLookupDto[]>([]);
   selectedSeriesId = signal<string | null>(null);
-
   yearLookups = signal<YearLookupDto[]>([]);
   years = signal<number[]>([]);
   selectedYear = signal<number | null>(null);
@@ -75,27 +74,7 @@ export class EntryComponent implements OnInit {
     private resultService: StandingsService,
   ) {}
 
-  ngOnInit() {
-    this.loadSeries();
-  }
-
-  onSeriesChange(seriesId: string) {
-    this.selectedSeriesId.set(seriesId);
-    this.loadYears(seriesId);
-  }
-
-
-  onYearChange(year: number) {
-    this.selectedYear.set(year);
-
-    const match = this.yearLookups().find(y => parseInt(y.season!) === year);
-    if (match) {
-      this.selectedChampionship.set(match.driversChampId ?? null);
-      this.loadGrandsPrix(match.driversChampId!);
-    }
-  }
-
-  loadSeries() {
+  private loadSeries() {
     this.resultService.getAllSeries().subscribe(res => {
       const filtered = res.filter(s => {
         const name = s.name?.toLowerCase() ?? '';
@@ -104,6 +83,10 @@ export class EntryComponent implements OnInit {
       this.seriesList.set(filtered);
       if (res.length > 0) this.onSeriesChange(filtered[0].id!);
     });
+  }
+
+  ngOnInit() {
+    this.loadSeries();
   }
 
   loadYears(seriesId: string) {
@@ -129,6 +112,21 @@ export class EntryComponent implements OnInit {
       this.grandsPrix.set(res);
       this.isLoading.set(false);
     });
+  }
+
+  onSeriesChange(seriesId: string) {
+    this.selectedSeriesId.set(seriesId);
+    this.loadYears(seriesId);
+  }
+
+  onYearChange(year: number) {
+    this.selectedYear.set(year);
+
+    const match = this.yearLookups().find(y => parseInt(y.season!) === year);
+    if (match) {
+      this.selectedChampionship.set(match.driversChampId ?? null);
+      this.loadGrandsPrix(match.driversChampId!);
+    }
   }
 
   openCreateDialog() {

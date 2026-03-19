@@ -33,6 +33,12 @@ import {ChampionshipService} from '../../../../services/championship.service';
   styleUrl: './participation-add-dialog.component.scss',
 })
 export class ParticipationAddDialogComponent implements OnInit {
+  data = inject(MAT_DIALOG_DATA) as { lookup: YearLookupDto };
+  allDrivers = signal<DriverListDto[]>([]);
+  allConstructors = signal<ConstructorListDto[]>([]);
+  isSubmitting = false;
+  form!: FormGroup;
+
   constructor(
     private dialogRef: MatDialogRef<ParticipationAddDialogComponent>,
     private fb: FormBuilder,
@@ -41,12 +47,6 @@ export class ParticipationAddDialogComponent implements OnInit {
     private driverService: DriverService,
   ) {}
 
-
-  data = inject(MAT_DIALOG_DATA) as { lookup: YearLookupDto };
-  allDrivers = signal<DriverListDto[]>([]);
-  allConstructors = signal<ConstructorListDto[]>([]);
-  isSubmitting = false;
-  form!: FormGroup;
 
   get driverRows(): FormArray {
     return this.form.get('drivers') as FormArray;
@@ -73,14 +73,14 @@ export class ParticipationAddDialogComponent implements OnInit {
     }));
   }
 
-  removeDriverRow(index: number) {
-    this.driverRows.removeAt(index);
-  }
-
   addConstructorRow() {
     this.constructorRows.push(this.fb.group({
       constructorId: ['', Validators.required]
     }));
+  }
+
+  removeDriverRow(index: number) {
+    this.driverRows.removeAt(index);
   }
 
   removeConstructorRow(index: number) {

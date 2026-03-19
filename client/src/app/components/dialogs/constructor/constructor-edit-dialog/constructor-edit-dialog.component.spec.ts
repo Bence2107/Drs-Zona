@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ConstructorEditDialogComponent} from './constructor-edit-dialog.component';
 
-import ConstructorEditDialogComponent from './constructor-edit-dialog.component';
 
 describe('ConstructorEditDialogComponent', () => {
   let component: ConstructorEditDialogComponent;

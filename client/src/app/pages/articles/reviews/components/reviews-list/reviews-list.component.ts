@@ -73,6 +73,12 @@ export class ReviewsListComponent implements OnInit {
     this.fetchArticles();
   }
 
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.fetchArticles();
+  }
+
   fetchArticles() {
     this.isLoading = true;
     this.errorOccurred = false;
@@ -89,13 +95,6 @@ export class ReviewsListComponent implements OnInit {
       }
     });
   }
-
-  onPageChange(event: PageEvent) {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.fetchArticles();
-  }
-
 
   protected isAuthorOrAdmin(): boolean {
     const role = this.authService.currentProfile()?.role;

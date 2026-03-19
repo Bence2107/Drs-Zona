@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {DriverService} from '../../../../services/driver.service';
 import {DriverListDto} from '../../../../api/models/driver-list-dto';
@@ -33,18 +33,20 @@ import {Router} from '@angular/router';
   styleUrl: './drivers.component.scss',
 })
 export class DriversComponent implements OnInit{
-  private dialog = inject(MatDialog);
-  private driverService = inject(DriverService);
-  private router = inject(Router);
-
   drivers = signal<DriverListDto[]>([]);
   isLoading = signal(false);
+
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    private driverService: DriverService
+  ) {}
 
   ngOnInit() {
     this.loadDrivers();
   }
 
-  loadDrivers() {
+  private loadDrivers() {
     this.isLoading.set(true);
     this.driverService.getAllDrivers().subscribe({
       next: res => {

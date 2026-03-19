@@ -10,7 +10,7 @@ import {ActivatedRoute, Router,} from '@angular/router';
 import {AngularEditorConfig, AngularEditorModule} from '@kolkov/angular-editor';
 import {v4 as uuidv4} from 'uuid';
 import {ArticleImageService} from '../../../../services/article-image.service';
-import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirmdialog.component';
+import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirm-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {ArticleService} from '../../../../services/article.service';
 import {ArticleCreateDto} from '../../../../api/models/article-create-dto';
@@ -68,18 +68,37 @@ interface ArticleForm {
 export class ArticleManageComponent implements OnInit, OnDestroy {
   articleToEdit?: ArticleDetailDto | null = null;
   articleForm!: FormGroup<ArticleForm>;
-  isLoading = false;
-
-  series: SeriesListDto[] = [];
-  private isSubmitted = false;
-
-  get isReview(): boolean {
-    return this.articleForm.get('isReview')?.value ?? false;
-  }
-
   draftId = uuidv4()
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: 'auto',
+    minHeight: '200px',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'yes',
+    enableToolbar: true,
+    showToolbar: true,
+    placeholder: 'Írd be a szöveget ide...',
+    defaultParagraphSeparator: 'p',
+    defaultFontName: 'Arial',
+    defaultFontSize: '',
+    fonts: [
+      {class: 'arial', name: 'Arial'},
+      {class: 'times-new-roman', name: 'Times New Roman'},
+      {class: 'calibri', name: 'Calibri'},
+    ],
+    toolbarHiddenButtons: [
+      ['insertImage', 'insertVideo']
+    ]
+  };
   imagePreviews: { [key: string]: string } = {};
+  isLoading = false;
+  private isSubmitted = false;
   isUploading: { [key: string]: boolean } = {};
+  series: SeriesListDto[] = [];
+
 
   constructor(
     private fb: FormBuilder,
@@ -93,39 +112,6 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private formErrorService: FormErrorService
   ) {
-  }
-
-  ngOnInit(): void {
-    this.seriesService.getSeriesList().subscribe(data => this.series = data);
-
-    this.initEmptyForm();
-
-    const slug = this.route.snapshot.paramMap.get('slug');
-    if (slug) {
-      this.articleService.getBySlug(slug).subscribe(article => {
-        this.articleToEdit = article;
-        this.draftId = article.id!;
-        this.loadArticleData(article);
-      });
-    }
-
-    this.articleForm.get('isReview')?.valueChanges.subscribe(isReview => {
-      const summary = this.articleForm.get('summary') as FormGroup;
-
-      if (isReview) {
-        summary.get('secondSection')?.setValidators(Validators.required);
-        summary.get('thirdSection')?.setValidators(Validators.required);
-        summary.get('fourthSection')?.setValidators(Validators.required);
-      } else {
-        summary.get('secondSection')?.clearValidators();
-        summary.get('thirdSection')?.clearValidators();
-        summary.get('fourthSection')?.clearValidators();
-      }
-
-      summary.get('secondSection')?.updateValueAndValidity();
-      summary.get('thirdSection')?.updateValueAndValidity();
-      summary.get('fourthSection')?.updateValueAndValidity();
-    });
   }
 
   private readonly articleFieldMap: { [key: string]: string } = {
@@ -142,6 +128,41 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
     'thirdsection': 'thirdSection',
     'fourthsection': 'fourthSection',
   };
+
+  private buildCreatePayLoad(): ArticleCreateDto {
+    const userId = this.authService.currentProfile()?.userId;
+    const raw = this.articleForm.getRawValue();
+
+
+    return {
+      title: raw.title,
+      lead: raw.lead,
+      slug: raw.slug,
+      tag: raw.tag,
+      authorId: userId,
+      grandPrixId: raw.grandPrixId || null,
+      isReview: raw.isReview,
+      firstSection: raw.firstSection,
+      lastSection: raw.lastSection,
+      ...(raw.isReview ? {summary: raw.summary} : {}),
+    };
+  }
+
+  private buildUpdatePayLoad(): ArticleUpdateDto {
+    const raw = this.articleForm.getRawValue();
+
+    return {
+      id: this.articleToEdit!.id,
+      title: raw.title,
+      lead: raw.lead,
+      slug: raw.slug,
+      grandPrixId: raw.grandPrixId || null,
+      isReview: raw.isReview,
+      firstSection: raw.firstSection,
+      lastSection: raw.lastSection,
+      ...(raw.isReview ? {summary: raw.summary} : {}),
+    };
+  }
 
   private initEmptyForm() {
     this.articleForm = this.fb.group<ArticleForm>({
@@ -214,6 +235,43 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
     };
   }
 
+  get isReview(): boolean {
+    return this.articleForm.get('isReview')?.value ?? false;
+  }
+
+  ngOnInit(): void {
+    this.seriesService.getSeriesList().subscribe(data => this.series = data);
+
+    this.initEmptyForm();
+
+    const slug = this.route.snapshot.paramMap.get('slug');
+    if (slug) {
+      this.articleService.getBySlug(slug).subscribe(article => {
+        this.articleToEdit = article;
+        this.draftId = article.id!;
+        this.loadArticleData(article);
+      });
+    }
+
+    this.articleForm.get('isReview')?.valueChanges.subscribe(isReview => {
+      const summary = this.articleForm.get('summary') as FormGroup;
+
+      if (isReview) {
+        summary.get('secondSection')?.setValidators(Validators.required);
+        summary.get('thirdSection')?.setValidators(Validators.required);
+        summary.get('fourthSection')?.setValidators(Validators.required);
+      } else {
+        summary.get('secondSection')?.clearValidators();
+        summary.get('thirdSection')?.clearValidators();
+        summary.get('fourthSection')?.clearValidators();
+      }
+
+      summary.get('secondSection')?.updateValueAndValidity();
+      summary.get('thirdSection')?.updateValueAndValidity();
+      summary.get('fourthSection')?.updateValueAndValidity();
+    });
+  }
+
   ngOnDestroy(): void {
     if (!this.isSubmitted) {
       this.imageService.deleteDraft(this.draftId).subscribe({
@@ -230,30 +288,74 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
     }
   }
 
-  editorConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: 'auto',
-    minHeight: '200px',
-    maxHeight: 'auto',
-    width: 'auto',
-    minWidth: '0',
-    translate: 'yes',
-    enableToolbar: true,
-    showToolbar: true,
-    placeholder: 'Írd be a szöveget ide...',
-    defaultParagraphSeparator: 'p',
-    defaultFontName: 'Arial',
-    defaultFontSize: '',
-    fonts: [
-      {class: 'arial', name: 'Arial'},
-      {class: 'times-new-roman', name: 'Times New Roman'},
-      {class: 'calibri', name: 'Calibri'},
-    ],
-    toolbarHiddenButtons: [
-      ['insertImage', 'insertVideo']
-    ]
-  };
+  onCancel(): void {
+    if (Object.keys(this.imagePreviews).length === 0 && this.articleForm.pristine) {
+      this.router.navigate(['/news']);
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Művelet megszakítása',
+        message: 'Biztosan kilépsz? Minden feltöltött kép és beírt adat elvész.',
+        confirmText: 'Igen, kilépek',
+        cancelText: 'Mégse'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.isLoading = true;
+        this.imageService.deleteDraft(this.draftId).subscribe({
+          next: () => {
+            this.isLoading = false;
+            this.router.navigate(['news']);
+          },
+          error: (err) => {
+            console.error(err);
+            this.isLoading = false;
+            this.router.navigate(['news']);
+          }
+        });
+      }
+    });
+  }
+
+  onEditorBlur(controlPath: string) {
+    const control = this.articleForm.get(controlPath);
+    if (control) {
+      control.markAsTouched();
+      control.updateValueAndValidity();
+    }
+  }
+
+  onFileSelected(event: any, slot: string) {
+    const file: File = event.target.files[0];
+    if (!file) return;
+
+    this.isUploading[slot] = true;
+
+    this.imageService.uploadDraftImage(this.draftId, slot, file).subscribe({
+      next: (url: string) => {
+        this.imagePreviews[slot] = `${url}?t=${new Date().getTime()}`;
+        this.isUploading[slot] = false;
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Kép sikeresen feltöltve', actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
+      },
+      error: () => {
+        this.snackBar.openFromComponent(CustomSnackbarComponent, {
+          data: { message: 'Hiba a feltöltés során!', actionLabel: 'Rendben' },
+          duration: 3000,
+          horizontalPosition: 'center',
+        });
+        this.isUploading[slot] = false;
+      }
+    });
+  }
 
   onSubmit(): void {
     this.articleForm.markAllAsTouched();
@@ -304,110 +406,6 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
 
         this.formErrorService.applyServerErrors(this.articleForm, rootErrors, this.articleFieldMap);
         this.formErrorService.applyServerErrors(summaryGroup, summaryErrors, this.summaryFieldMap);
-      }
-    });
-  }
-
-  onFileSelected(event: any, slot: string) {
-    const file: File = event.target.files[0];
-    if (!file) return;
-
-    this.isUploading[slot] = true;
-
-    this.imageService.uploadDraftImage(this.draftId, slot, file).subscribe({
-      next: (url: string) => {
-        this.imagePreviews[slot] = `${url}?t=${new Date().getTime()}`;
-        this.isUploading[slot] = false;
-        this.snackBar.openFromComponent(CustomSnackbarComponent, {
-          data: { message: 'Kép sikeresen feltöltve', actionLabel: 'Rendben' },
-          duration: 3000,
-          horizontalPosition: 'center',
-        });
-      },
-      error: () => {
-        this.snackBar.openFromComponent(CustomSnackbarComponent, {
-          data: { message: 'Hiba a feltöltés során!', actionLabel: 'Rendben' },
-          duration: 3000,
-          horizontalPosition: 'center',
-        });
-        this.isUploading[slot] = false;
-      }
-    });
-  }
-
-  private buildCreatePayLoad(): ArticleCreateDto {
-    const userId = this.authService.currentProfile()?.userId;
-    const raw = this.articleForm.getRawValue();
-
-
-    return {
-      title: raw.title,
-      lead: raw.lead,
-      slug: raw.slug,
-      tag: raw.tag,
-      authorId: userId,
-      grandPrixId: raw.grandPrixId || null,
-      isReview: raw.isReview,
-      firstSection: raw.firstSection,
-      lastSection: raw.lastSection,
-      ...(raw.isReview ? {summary: raw.summary} : {}),
-    };
-  }
-
-  private buildUpdatePayLoad(): ArticleUpdateDto {
-    const raw = this.articleForm.getRawValue();
-
-    return {
-      id: this.articleToEdit!.id,
-      title: raw.title,
-      lead: raw.lead,
-      slug: raw.slug,
-      grandPrixId: raw.grandPrixId || null,
-      isReview: raw.isReview,
-      firstSection: raw.firstSection,
-      lastSection: raw.lastSection,
-      ...(raw.isReview ? {summary: raw.summary} : {}),
-    };
-  }
-
-  onEditorBlur(controlPath: string) {
-    const control = this.articleForm.get(controlPath);
-    if (control) {
-      control.markAsTouched();
-      control.updateValueAndValidity();
-    }
-  }
-
-  onCancel(): void {
-    if (Object.keys(this.imagePreviews).length === 0 && this.articleForm.pristine) {
-      this.router.navigate(['/news']);
-      return;
-    }
-
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
-      data: {
-        title: 'Művelet megszakítása',
-        message: 'Biztosan kilépsz? Minden feltöltött kép és beírt adat elvész.',
-        confirmText: 'Igen, kilépek',
-        cancelText: 'Mégse'
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.isLoading = true;
-        this.imageService.deleteDraft(this.draftId).subscribe({
-          next: () => {
-            this.isLoading = false;
-            this.router.navigate(['news']);
-          },
-          error: (err) => {
-            console.error(err);
-            this.isLoading = false;
-            this.router.navigate(['news']);
-          }
-        });
       }
     });
   }

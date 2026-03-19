@@ -6,7 +6,7 @@ import {MatIcon} from '@angular/material/icon';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData
-} from '../../../../../../components/dialogs/confirmdialog/confirmdialog.component';
+} from '../../../../../../components/dialogs/confirmdialog/confirm-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {FormsModule} from '@angular/forms';

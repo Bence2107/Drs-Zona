@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ContractListDto} from '../../../../api/models/contract-list-dto';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
@@ -21,7 +21,7 @@ import {
 import {
   ContractEditDialogComponent
 } from '../../../../components/dialogs/contract/contract-edit-dialog/contract-edit-dialog.component';
-import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirmdialog.component';
+import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirm-dialog.component';
 import {ContractsService} from '../../../../services/contracts.service';
 import {Router} from '@angular/router';
 
@@ -48,21 +48,24 @@ import {Router} from '@angular/router';
   templateUrl: './contracts.component.html',
   styleUrl: './contracts.component.scss',
 })
-export class ContractsComponent implements OnInit{
-  private dialog = inject(MatDialog);
-  private contractsService = inject(ContractsService);
-  private router = inject(Router);
-
+export class ContractsComponent implements OnInit {
   contracts = signal<ContractListDto[]>([]);
   isLoading = signal(false);
 
   columns = ['driver', 'team', 'actions'];
 
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    private contractsService: ContractsService
+  )
+  {}
+
   ngOnInit() {
     this.loadContracts();
   }
 
-  loadContracts() {
+  private loadContracts() {
     this.isLoading.set(true);
     this.contractsService.getAllContracts().subscribe({
       next: res => {
@@ -74,7 +77,7 @@ export class ContractsComponent implements OnInit{
   }
 
   openCreateDialog() {
-    const ref = this.dialog.open(ContractCreateDialogComponent, { width: '480px' });
+    const ref = this.dialog.open(ContractCreateDialogComponent, {width: '480px'});
     ref.afterClosed().subscribe(result => {
       if (result) this.loadContracts();
     });
@@ -83,7 +86,7 @@ export class ContractsComponent implements OnInit{
   openEditDialog(contract: ContractListDto) {
     const ref = this.dialog.open(ContractEditDialogComponent, {
       width: '480px',
-      data: { contract }
+      data: {contract}
     });
     ref.afterClosed().subscribe(result => {
       if (result) this.loadContracts();

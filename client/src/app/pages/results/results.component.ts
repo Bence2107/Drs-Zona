@@ -48,9 +48,9 @@ const AGGREGATED_ID = 'aggregated';
 })
 export class ResultsComponent implements OnInit {
   constructor(
-    private standingsService: StandingsService,
     private authService: AuthService,
     private championshipService: ChampionshipService,
+    private standingsService: StandingsService
   ) {}
 
   private breakpointObserver = inject(BreakpointObserver);
@@ -116,6 +116,34 @@ export class ResultsComponent implements OnInit {
     this.loadAllSeries();
   }
 
+  refreshData() {
+    const drChampId = this.selectedDriversChampId();
+    const coChampId = this.selectedConstructorsChampId();
+
+    if (this.viewMode() === 'results' && drChampId) {
+      this.championshipService.getGrandPrixByChampionship(drChampId).subscribe(res => {
+        this.grandsPrix.set(res);
+        this.isLoading.set(false);
+      });
+    } else if (this.viewMode() === 'drivers' && drChampId) {
+      this.isLoading.set(true);
+      this.standingsService.getDriverStandings(drChampId).subscribe(res => {
+        this.driverStandings.set(res.results || []);
+        this.isLoading.set(false);
+      });
+    } else if (this.viewMode() === 'constructors' && coChampId) {
+      this.isLoading.set(true);
+      this.standingsService.getConstructorStandings(coChampId).subscribe(res => {
+        this.constructorStandings.set(res.results || []);
+        this.isLoading.set(false);
+      });
+    }
+  }
+
+  compareSeasons(o1: YearLookupDto, o2: YearLookupDto): boolean {
+    return o1 && o2 ? o1.driversChampId === o2.driversChampId : o1 === o2;
+  }
+
   loadAllSeries() {
     this.standingsService.getAllSeries().subscribe(res => {
       const filtered = res.filter(s => {
@@ -127,8 +155,98 @@ export class ResultsComponent implements OnInit {
     });
   }
 
-  compareSeasons(o1: YearLookupDto, o2: YearLookupDto): boolean {
-    return o1 && o2 ? o1.driversChampId === o2.driversChampId : o1 === o2;
+  onConstructorFilterChange(constructorId: string) {
+    this.selectedConstructorId.set(constructorId);
+    if (constructorId === AGGREGATED_ID) {
+      this.constructorSeasonResults.set([]);
+      this.refreshData();
+    } else {
+      const coChampId = this.selectedConstructorsChampId();
+      if (!coChampId) return;
+      this.isLoading.set(true);
+      this.standingsService.getConstructorsResultsBySeason(constructorId, coChampId).subscribe({
+        next: (res) => {
+          this.constructorSeasonResults.set(res || []);
+          this.isLoading.set(false);
+        },
+        error: () => this.isLoading.set(false)
+      });
+    }
+  }
+
+  onDriverFilterChange(driverId: string) {
+    this.selectedDriverId.set(driverId);
+    if (driverId === AGGREGATED_ID) {
+      this.driverSeasonResults.set([]);
+      this.refreshData();
+    } else {
+      const drChampId = this.selectedDriversChampId();
+      if (!drChampId) return;
+      this.isLoading.set(true);
+      this.standingsService.getDriverResultsBySeason(driverId, drChampId).subscribe({
+        next: (res) => {
+          this.driverSeasonResults.set(res || []);
+          this.isLoading.set(false);
+        },
+        error: () => this.isLoading.set(false)
+      });
+    }
+  }
+
+  onGrandPrixChange(gpId: string) {
+    if (gpId === ALL_GP_ID) {
+      this.loadSeasonOverview(this.selectedDriversChampId()!);
+      return;
+    }
+
+    this.selectedGrandPrixId.set(gpId);
+    this.selectedSession.set(null);
+    this.isLoading.set(true);
+
+    this.standingsService.getSessionsByGrandPrix(gpId).subscribe({
+      next: (sessions) => {
+        this.sessions.set(sessions);
+        if (sessions.length > 0) {
+          const preferredSession = sessions.find(s => s === 'Futam') ||
+            sessions.find(s => s === 'Sprint') ||
+            sessions[sessions.length - 1];
+
+          this.loadResults(preferredSession);
+        } else {
+          this.isLoading.set(false);
+        }
+      },
+      error: () => this.isLoading.set(false)
+    });
+  }
+
+  onSeasonChange(season: YearLookupDto) {
+    this.selectedSeason.set(season);
+    this.selectedDriversChampId.set(season.driversChampId!);
+    this.selectedConstructorsChampId.set(season.constructorsChampId!);
+
+    this.selectedGrandPrixId.set(ALL_GP_ID);
+    this.selectedSession.set(null);
+    this.selectedDriverId.set(AGGREGATED_ID);
+    this.selectedConstructorId.set(AGGREGATED_ID);
+    this.driverSeasonResults.set([]);
+    this.constructorSeasonResults.set([]);
+
+    if (this.viewMode() === 'results') {
+      this.loadSeasonOverview(season.driversChampId!);
+
+      this.championshipService.getGrandPrixByChampionship(season.driversChampId!).subscribe(res => {
+        this.grandsPrix.set(res);
+      });
+    } else if (this.viewMode() === 'drivers') {
+      this.loadDriverList(season.driversChampId!);
+      this.refreshData();
+    } else if (this.viewMode() === 'constructors') {
+      this.loadConstructorList(season.constructorsChampId!);
+      this.refreshData();
+    } else {
+      this.refreshData();
+    }
   }
 
   onSeriesChange(seriesId: string) {
@@ -168,85 +286,6 @@ export class ResultsComponent implements OnInit {
     }
   }
 
-  onSeasonChange(season: YearLookupDto) {
-    this.selectedSeason.set(season);
-    this.selectedDriversChampId.set(season.driversChampId!);
-    this.selectedConstructorsChampId.set(season.constructorsChampId!);
-
-    this.selectedGrandPrixId.set(ALL_GP_ID);
-    this.selectedSession.set(null);
-    this.selectedDriverId.set(AGGREGATED_ID);
-    this.selectedConstructorId.set(AGGREGATED_ID);
-    this.driverSeasonResults.set([]);
-    this.constructorSeasonResults.set([]);
-
-    if (this.viewMode() === 'results') {
-      this.loadSeasonOverview(season.driversChampId!);
-
-      this.championshipService.getGrandPrixByChampionship(season.driversChampId!).subscribe(res => {
-        this.grandsPrix.set(res);
-      });
-    } else if (this.viewMode() === 'drivers') {
-      this.loadDriverList(season.driversChampId!);
-      this.refreshData();
-    } else if (this.viewMode() === 'constructors') {
-      this.loadConstructorList(season.constructorsChampId!);
-      this.refreshData();
-    } else {
-      this.refreshData();
-    }
-  }
-
-  private loadDriverList(drChampId: string) {
-    this.championshipService.getDriversByDriversChampionship(drChampId).subscribe(res => {
-      this.driverList.set(res);
-    });
-  }
-
-  private loadConstructorList(coChampId: string) {
-    this.championshipService.getConstructorsByConstChampionship(coChampId).subscribe(res => {
-      this.constructorList.set(res);
-    });
-  }
-
-  onDriverFilterChange(driverId: string) {
-    this.selectedDriverId.set(driverId);
-    if (driverId === AGGREGATED_ID) {
-      this.driverSeasonResults.set([]);
-      this.refreshData();
-    } else {
-      const drChampId = this.selectedDriversChampId();
-      if (!drChampId) return;
-      this.isLoading.set(true);
-      this.standingsService.getDriverResultsBySeason(driverId, drChampId).subscribe({
-        next: (res) => {
-          this.driverSeasonResults.set(res || []);
-          this.isLoading.set(false);
-        },
-        error: () => this.isLoading.set(false)
-      });
-    }
-  }
-
-  onConstructorFilterChange(constructorId: string) {
-    this.selectedConstructorId.set(constructorId);
-    if (constructorId === AGGREGATED_ID) {
-      this.constructorSeasonResults.set([]);
-      this.refreshData();
-    } else {
-      const coChampId = this.selectedConstructorsChampId();
-      if (!coChampId) return;
-      this.isLoading.set(true);
-      this.standingsService.getConstructorsResultsBySeason(constructorId, coChampId).subscribe({
-        next: (res) => {
-          this.constructorSeasonResults.set(res || []);
-          this.isLoading.set(false);
-        },
-        error: () => this.isLoading.set(false)
-      });
-    }
-  }
-
   loadSeasonOverview(drChampId: string) {
     this.isLoading.set(true);
     this.selectedGrandPrixId.set(ALL_GP_ID);
@@ -258,6 +297,37 @@ export class ResultsComponent implements OnInit {
         this.isLoading.set(false);
       },
       error: () => this.isLoading.set(false)
+    });
+  }
+
+  loadResults(session: string) {
+    this.selectedSession.set(session);
+    const gpId = this.selectedGrandPrixId();
+    if (!gpId || !session) return;
+
+    this.isLoading.set(true);
+    this.standingsService.getGrandPrixResults(gpId, session).subscribe({
+      next: (res) => {
+        this.raceResults.set(res.results || []);
+        this.isLoading.set(false);
+      },
+      error: () => this.isLoading.set(false)
+    });
+  }
+
+  isAdmin(): boolean {
+      return this.authService.currentProfile()?.role === 'Admin' || this.authService.currentProfile()?.role === 'Manager';
+  }
+
+  private loadConstructorList(coChampId: string) {
+    this.championshipService.getConstructorsByConstChampionship(coChampId).subscribe(res => {
+      this.constructorList.set(res);
+    });
+  }
+
+  private loadDriverList(drChampId: string) {
+    this.championshipService.getDriversByDriversChampionship(drChampId).subscribe(res => {
+      this.driverList.set(res);
     });
   }
 
@@ -285,75 +355,5 @@ export class ResultsComponent implements OnInit {
         this.isLoading.set(false);
       }
     });
-  }
-
-  refreshData() {
-    const drChampId = this.selectedDriversChampId();
-    const coChampId = this.selectedConstructorsChampId();
-
-    if (this.viewMode() === 'results' && drChampId) {
-      this.championshipService.getGrandPrixByChampionship(drChampId).subscribe(res => {
-        this.grandsPrix.set(res);
-        this.isLoading.set(false);
-      });
-    } else if (this.viewMode() === 'drivers' && drChampId) {
-      this.isLoading.set(true);
-      this.standingsService.getDriverStandings(drChampId).subscribe(res => {
-        this.driverStandings.set(res.results || []);
-        this.isLoading.set(false);
-      });
-    } else if (this.viewMode() === 'constructors' && coChampId) {
-      this.isLoading.set(true);
-      this.standingsService.getConstructorStandings(coChampId).subscribe(res => {
-        this.constructorStandings.set(res.results || []);
-        this.isLoading.set(false);
-      });
-    }
-  }
-
-  onGrandPrixChange(gpId: string) {
-    if (gpId === ALL_GP_ID) {
-      this.loadSeasonOverview(this.selectedDriversChampId()!);
-      return;
-    }
-
-    this.selectedGrandPrixId.set(gpId);
-    this.selectedSession.set(null);
-    this.isLoading.set(true);
-
-    this.standingsService.getSessionsByGrandPrix(gpId).subscribe({
-      next: (sessions) => {
-        this.sessions.set(sessions);
-        if (sessions.length > 0) {
-          const preferredSession = sessions.find(s => s === 'Futam') ||
-            sessions.find(s => s === 'Sprint') ||
-            sessions[sessions.length - 1];
-
-          this.loadResults(preferredSession);
-        } else {
-          this.isLoading.set(false);
-        }
-      },
-      error: () => this.isLoading.set(false)
-    });
-  }
-
-  loadResults(session: string) {
-    this.selectedSession.set(session);
-    const gpId = this.selectedGrandPrixId();
-    if (!gpId || !session) return;
-
-    this.isLoading.set(true);
-    this.standingsService.getGrandPrixResults(gpId, session).subscribe({
-      next: (res) => {
-        this.raceResults.set(res.results || []);
-        this.isLoading.set(false);
-      },
-      error: () => this.isLoading.set(false)
-    });
-  }
-
-  isAdmin(): boolean {
-      return this.authService.currentProfile()?.role === 'Admin' || this.authService.currentProfile()?.role === 'Manager';
   }
 }

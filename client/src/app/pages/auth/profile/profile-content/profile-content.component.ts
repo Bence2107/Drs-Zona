@@ -34,6 +34,8 @@ import {ProfilePollsComponent} from './components/profile-polls/profile-polls.co
 export class ProfileContentComponent implements OnInit, OnDestroy {
   @Input() userData: UserProfileResponse | null = null;
   @Input() avatarUrl: string | null = null;
+  activeTab = 'general';
+
 
   private breakpointObserver = inject(BreakpointObserver);
   private readonly TAB_KEY = 'profile_active_tab';
@@ -44,7 +46,6 @@ export class ProfileContentComponent implements OnInit, OnDestroy {
     )
   );
 
-  activeTab = 'general';
 
   ngOnInit(): void {
     const savedTab = sessionStorage.getItem(this.TAB_KEY);

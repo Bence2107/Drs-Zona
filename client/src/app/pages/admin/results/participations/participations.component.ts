@@ -3,7 +3,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {StandingsService} from '../../../../services/standings.service';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
 import {YearLookupDto} from '../../../../api/models/year-lookup-dto';
-import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirmdialog.component';
+import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirm-dialog.component';
 import {
   ParticipationAddDialogComponent
 } from '../../../../components/dialogs/participations/participation-add-dialog/participation-add-dialog.component';

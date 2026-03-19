@@ -56,57 +56,13 @@ export class ProfileEditComponent implements OnInit {
     ]);
   }
 
-  // Profile getters
   get profFullName() { return this.profileForm.get('fullName') as FormControl; }
   get profUsername() { return this.profileForm.get('username') as FormControl; }
   get profEmail() { return this.profileForm.get('email') as FormControl; }
 
-  // Password getters
   get passCurrentPassword() { return this.passwordForm.get('currentPassword') as FormControl; }
   get passNewPassword() { return this.passwordForm.get('newPassword') as FormControl; }
   get passConfirmPassword() { return this.passwordForm.get('confirmPassword') as FormControl; }
-
-  private clearServerErrorOnChange(controls: FormControl[]): void {
-    controls.forEach(control => {
-      control.valueChanges.subscribe(() => {
-        if (control.hasError('serverError')) {
-          const errors = { ...control.errors };
-          delete errors['serverError'];
-          control.setErrors(Object.keys(errors).length ? errors : null);
-        }
-      });
-    });
-  }
-
-  private applyServerErrors(form: FormGroup, error: HttpValidationError): void {
-    if (!error?.fieldErrors) {
-      form.get('email')?.setErrors({ serverError: error?.title ?? 'Ismeretlen hiba' });
-      return;
-    }
-
-    const fieldMap: { [key: string]: string } = {
-      'email': 'email',
-      'username': 'username',
-      'fullname': 'fullName',
-      'currentpassword': 'currentPassword',
-      'newpassword': 'newPassword',
-      'newpasswordagain': 'confirmPassword',
-    };
-
-    let hasFieldError = false;
-    for (const backendField of Object.keys(error.fieldErrors)) {
-      const controlName = fieldMap[backendField] ?? backendField;
-      const control = form.get(controlName);
-      if (control) {
-        control.setErrors({ serverError: error.fieldErrors[backendField][0] });
-        hasFieldError = true;
-      }
-    }
-
-    if (!hasFieldError && error.title) {
-      form.get('email')?.setErrors({ serverError: error.title });
-    }
-  }
 
   forceRefresh() {
     const currentUrl = this.router.url;
@@ -167,5 +123,47 @@ export class ProfileEditComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  private clearServerErrorOnChange(controls: FormControl[]): void {
+    controls.forEach(control => {
+      control.valueChanges.subscribe(() => {
+        if (control.hasError('serverError')) {
+          const errors = { ...control.errors };
+          delete errors['serverError'];
+          control.setErrors(Object.keys(errors).length ? errors : null);
+        }
+      });
+    });
+  }
+
+  private applyServerErrors(form: FormGroup, error: HttpValidationError): void {
+    if (!error?.fieldErrors) {
+      form.get('email')?.setErrors({ serverError: error?.title ?? 'Ismeretlen hiba' });
+      return;
+    }
+
+    const fieldMap: { [key: string]: string } = {
+      'email': 'email',
+      'username': 'username',
+      'fullname': 'fullName',
+      'currentpassword': 'currentPassword',
+      'newpassword': 'newPassword',
+      'newpasswordagain': 'confirmPassword',
+    };
+
+    let hasFieldError = false;
+    for (const backendField of Object.keys(error.fieldErrors)) {
+      const controlName = fieldMap[backendField] ?? backendField;
+      const control = form.get(controlName);
+      if (control) {
+        control.setErrors({ serverError: error.fieldErrors[backendField][0] });
+        hasFieldError = true;
+      }
+    }
+
+    if (!hasFieldError && error.title) {
+      form.get('email')?.setErrors({ serverError: error.title });
+    }
   }
 }
