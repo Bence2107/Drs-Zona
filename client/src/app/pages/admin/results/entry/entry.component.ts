@@ -14,7 +14,7 @@ import {
   MatCardTitle
 } from '@angular/material/card';
 import {MatButton, MatFabButton, MatIconButton} from '@angular/material/button';
-import {Router, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {DatePipe} from '@angular/common';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
 import {CountryFlagPipe} from '../../../../pipes/country-flag.pipe';
@@ -69,24 +69,69 @@ export class EntryComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
+    private route: ActivatedRoute,
     private router: Router,
     private championshipService: ChampionshipService,
     private resultService: StandingsService,
   ) {}
 
-  private loadSeries() {
+  ngOnInit() {
+    const champIdFromQuery = this.route.snapshot.queryParamMap.get('champId');
+    const seasonFromQuery = this.route.snapshot.queryParamMap.get('season');
+
     this.resultService.getAllSeries().subscribe(res => {
       const filtered = res.filter(s => {
         const name = s.name?.toLowerCase() ?? '';
         return !name.includes('wec') && !name.includes('nascar');
       });
       this.seriesList.set(filtered);
-      if (res.length > 0) this.onSeriesChange(filtered[0].id!);
+      if (filtered.length === 0) return;
+
+      if (champIdFromQuery) {
+        this.preselectByChampId(champIdFromQuery, filtered);
+      } else if (seasonFromQuery) {
+        this.loadYearsAndPreselectSeason(filtered[0].id!, parseInt(seasonFromQuery));
+      } else {
+        this.onSeriesChange(filtered[0].id!);
+      }
     });
   }
 
-  ngOnInit() {
-    this.loadSeries();
+  private preselectByChampId(champId: string, series: SeriesLookupDto[]) {
+    const tryNext = (index: number) => {
+      if (index >= series.length) {
+        this.onSeriesChange(series[0].id!);
+        return;
+      }
+      this.championshipService.getSeasonsBySeries(series[index].id!).subscribe(lookups => {
+        const match = lookups.find(
+          l => l.driversChampId === champId || l.constructorsChampId === champId
+        );
+        if (match) {
+          this.selectedSeriesId.set(series[index].id!);
+          this.yearLookups.set(lookups);
+          const years = lookups.map(y => parseInt(y.season!)).filter(y => !isNaN(y)).sort((a, b) => b - a);
+          this.years.set(years);
+          this.selectedYear.set(parseInt(match.season!));
+          this.selectedChampionship.set(match.driversChampId ?? null);
+          this.loadGrandsPrix(match.driversChampId!);
+        } else {
+          tryNext(index + 1);
+        }
+      });
+    };
+    tryNext(0);
+  }
+
+  private loadYearsAndPreselectSeason(seriesId: string, targetYear: number) {
+    this.selectedSeriesId.set(seriesId);
+    this.championshipService.getSeasonsBySeries(seriesId).subscribe(res => {
+      this.yearLookups.set(res);
+      const years = res.map(y => parseInt(y.season!)).filter(y => !isNaN(y)).sort((a, b) => b - a);
+      this.years.set(years);
+      const yearToSelect = years.includes(targetYear) ? targetYear : years[0];
+      if (yearToSelect) this.onYearChange(yearToSelect);
+    });
   }
 
   loadYears(seriesId: string) {

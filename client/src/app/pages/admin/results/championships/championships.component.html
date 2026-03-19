@@ -94,7 +94,7 @@
             <button mat-button [routerLink]="['/admin/participations', champ.driversChampId]">
               <mat-icon>group</mat-icon> Résztvevők
             </button>
-            <button mat-button [routerLink]="['/admin/results/entry']" [queryParams]="{ season: champ.season }">
+            <button mat-button [routerLink]="['/admin/results/entry']" [queryParams]="{ champId: champ.driversChampId }">
               <mat-icon>add_circle</mat-icon> Eredmény felvitel
             </button>
             <span class="spacer"></span>

@@ -18,7 +18,7 @@ import {MatDivider} from '@angular/material/list';
 import {MatFabButton, MatIconButton} from '@angular/material/button';
 import {MatTooltip} from '@angular/material/tooltip';
 import {ParticipationListDto} from '../../../../api/models/participation-list-dto';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ChampionshipService} from '../../../../services/api/championship.service';
 
 
@@ -57,20 +57,55 @@ export class ParticipationsComponent implements OnInit{
 
   constructor(
     public dialog: MatDialog,
+    private route: ActivatedRoute,
     private router: Router,
     private championshipService: ChampionshipService,
     private resultService: StandingsService
   ) {}
 
   ngOnInit() {
+    const champIdFromRoute = this.route.snapshot.paramMap.get('champId');
+
     this.resultService.getAllSeries().subscribe(res => {
       const filtered = res.filter(s => {
         const name = s.name?.toLowerCase() ?? '';
         return !name.includes('wec') && !name.includes('nascar');
       });
       this.seriesList.set(filtered);
-      if (res.length > 0) this.onSeriesChange(filtered[0].id!);
+      if (filtered.length > 0) this.onSeriesChange(filtered[0].id!);
+
+      if (champIdFromRoute) {
+        this.preselectByChampId(champIdFromRoute, filtered);
+      } else {
+        this.onSeriesChange(filtered[0].id!);
+      }
     });
+  }
+
+  private preselectByChampId(champId: string, series: SeriesLookupDto[]) {
+    const tryNext = (index: number) => {
+      if (index >= series.length) {
+        this.onSeriesChange(series[0].id!);
+        return;
+      }
+      this.championshipService.getSeasonsBySeries(series[index].id!).subscribe(lookups => {
+        const match = lookups.find(
+          l => l.driversChampId === champId || l.constructorsChampId === champId
+        );
+        if (match) {
+          this.selectedSeriesId.set(series[index].id!);
+          this.yearLookups.set(lookups);
+          const years = lookups.map(y => parseInt(y.season!)).filter(y => !isNaN(y)).sort((a, b) => b - a);
+          this.years.set(years);
+          this.selectedYear.set(parseInt(match.season!));
+          this.selectedYearLookup.set(match);
+          this.loadParticipations(match);
+        } else {
+          tryNext(index + 1);
+        }
+      });
+    };
+    tryNext(0);
   }
 
   onSeriesChange(seriesId: string) {
