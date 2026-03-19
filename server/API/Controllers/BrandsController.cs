@@ -6,7 +6,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BrandController(IBrandService brandService) : ControllerBase
+public class BrandController(IBrandService brandService) : ControllerBase 
 {
     [HttpGet("getAll")]
     public async Task<ActionResult<BrandListDto>> GetAll()

@@ -6,7 +6,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SeriesController(ISeriesService seriesService) : ControllerBase
+public class SeriesController(ISeriesService seriesService) : ControllerBase 
 {
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<SeriesDetailDto>> GetSeriesById([FromRoute]Guid id)

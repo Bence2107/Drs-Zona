@@ -5,7 +5,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class HealthCheckController(EfContext context) : ControllerBase
+public class HealthCheckController(EfContext context) : ControllerBase 
 {
     [HttpGet("ping")]
     public async Task<ActionResult> Ping()

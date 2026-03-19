@@ -11,8 +11,8 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class AuthController(
     IAuthService authService, 
-    IUserImageService userImageService)
-: ControllerBase
+    IUserImageService userImageService
+) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<ActionResult<AuthResponse>> Register([FromBody] RegisterRequest request)

@@ -6,7 +6,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ConstructorsController(IConstructorsService constructorsService): ControllerBase
+public class ConstructorsController(IConstructorsService constructorsService): ControllerBase 
 {
     [HttpGet("get/{id:guid}")]
     public async Task<ActionResult<ConstructorDetailDto>> Get([FromRoute]Guid id)

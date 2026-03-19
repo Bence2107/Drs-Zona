@@ -6,7 +6,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class GrandPrixController (IGrandPrixService grandPrixService): ControllerBase
+public class GrandPrixController (IGrandPrixService grandPrixService): ControllerBase 
 {
     [HttpGet("get/{grandPrixId:guid}")]
     public async Task<ActionResult<GrandPrixDetailDto>> GetGrandPrixById([FromRoute] Guid grandPrixId)

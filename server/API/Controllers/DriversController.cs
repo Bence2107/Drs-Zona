@@ -6,7 +6,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DriversController(IDriverService driverService): ControllerBase
+public class DriversController(IDriverService driverService): ControllerBase 
 {
     [HttpGet("get/{id:guid}")]
     public async Task<ActionResult<DriverDetailDto>> Get([FromRoute]Guid id)

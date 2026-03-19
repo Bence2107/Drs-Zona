@@ -6,7 +6,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ContractsController(IContractsService contractsService) : ControllerBase
+public class ContractsController(IContractsService contractsService) : ControllerBase 
 {
     [HttpGet("getAll")]
     public async Task<ActionResult<List<ContractListDto>>> GetAll()

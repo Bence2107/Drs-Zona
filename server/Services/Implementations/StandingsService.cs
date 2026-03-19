@@ -10,18 +10,14 @@ namespace Services.Implementations;
 public class StandingsService(
     IConstructorsChampionshipsRepository constructorChampRepo,
     IConstructorCompetitionRepository constructorCompetitionRepo,
-    IConstructorsRepository constructorsRepo,
-    IContractsRepository contractsRepo,
     IDriversChampionshipsRepository driverChampRepo,
     IDriverParticipationRepository driverParticipationRepo,
-    IDriversRepository driversRepo,
     IGrandsPrixRepository grandsPrixRepo,
     IQualifyingResultRepository qualifyingRepo,
     IResultsRepository resultsRepo,
     ISeriesRepository seriesRepo
 ) : IStandingsService 
 {
-    
     public async Task<ResponseResult<List<SeriesLookupDto>>> GetAllSeries()
     {
         var series = await seriesRepo.GetAllSeries();
@@ -29,168 +25,85 @@ public class StandingsService(
         return ResponseResult<List<SeriesLookupDto>>.Success(dtoS);
     }
     
-    public async Task<ResponseResult<ParticipationListDto>> GetParticipations(Guid driversChampId, Guid constructorsChampId)
+    public async Task<ResponseResult<ConstructorStandingsDto>> GetConstructorStandings(Guid constructorsChampionId)
     {
-        var driverParticipations = await driverParticipationRepo.GetByChampionshipId(driversChampId);
-        var constructorCompetitions = await constructorCompetitionRepo.GetByChampionshipId(constructorsChampId);
+        var constructorChampionship = await constructorChampRepo.GetByIdWithSeries(constructorsChampionId);
+        if (constructorChampionship == null) 
+            return ResponseResult<ConstructorStandingsDto>.Failure("A konstruktőri bajnokság nem található");
 
-        var drivers = new List<DriverParticipationDto>();
-        foreach (var dp in driverParticipations)
-        {
-            var contracts = await contractsRepo.GetByDriverId(dp.DriverId);
-            var currentConstructorId = contracts.LastOrDefault()?.ConstructorId;
-        
-            var teamSnapshot = constructorCompetitions
-                .FirstOrDefault(cc => cc.ConstructorId == currentConstructorId)
-                ?.ConstructorNameSnapshot;
-
-            drivers.Add(new DriverParticipationDto(
-                DriverId: dp.DriverId,
-                Name: dp.DriverNameSnapshot,
-                Nationality: dp.Driver?.Nationality ?? "N/A",
-                Age: dp.Driver != null ? GetAge(dp.Driver.BirthDate) : 0,
-                DriverNumber: dp.DriverNumber,
-                TeamName: teamSnapshot ?? "N/A"
-            ));
-        }
-
-        var constructors = constructorCompetitions
-            .Where(cc => cc.Constructor != null)
-            .Select(cc => new ConstructorListDto(
-                Id: cc.ConstructorId,
-                Name: cc.ConstructorNameSnapshot
-            )).ToList();
-
-        return ResponseResult<ParticipationListDto>.Success(new ParticipationListDto(
-            driversChampId,
-            constructorsChampId,
-            drivers,
-            constructors
-        ));
-    }
+        var results = await resultsRepo.GetByConstructorsChampionshipId(constructorsChampionId);
     
-    public async Task<ResponseResult<List<ChampionshipRowDto>>> GetAllChampionshipsBySeries(Guid seriesId)
-    {
-        var driversChamps = await driverChampRepo.GetBySeriesId(seriesId);
-        var constChamps = await constructorChampRepo.GetBySeriesId(seriesId);
+        if (results.Count == 0)
+            return ResponseResult<ConstructorStandingsDto>.Success(new ConstructorStandingsDto(constructorsChampionId, []));
 
-        var result = driversChamps
-            .Join(constChamps,
-                d => d.Season,
-                c => c.Season,
-                (d, c) => new ChampionshipRowDto(
-                    DriversChampId: d.Id,
-                    ConstructorsChampId: c.Id,
-                    Season: d.Season,
-                    Status: d.Status,
-                    SeriesName: d.Series?.Name ?? string.Empty,
-                    DriversChampName: d.Name,
-                    ConstructorsChampName: c.Name
-                ))
-            .OrderByDescending(x => x.Season)
-            .ToList();
+        var standingsResult = results
+            .GroupBy(r => r.ConstructorId)
+            .Select(group =>
+            {
+                var latestResult = group.Last(); 
+        
+                return new
+                {
+                    ConstructorId = group.Key,
+                    Name = latestResult.ConstructorNameSnapshot,
+                    ShortName = latestResult.ConstructorNicknameSnapshot,
+                    Points = group.Sum(r => r.ConstructorPoints),
+                    BestFinish = group.Min(r => r.FinishPosition) 
+                };
+            })
+            .OrderByDescending(x => x.Points)
+            .ThenBy(x => x.BestFinish)
+            .Select((x, index) => new ConstructorStandingsResultDto(
+                index + 1, 
+                x.ConstructorId,
+                x.Name,
+                x.ShortName,
+                x.Points
+            ))
+            .ToArray();
 
-        return ResponseResult<List<ChampionshipRowDto>>.Success(result);
-    }
-
-    public async Task<ResponseResult<List<YearLookupDto>>> GetSeasonsBySeries(Guid seriesId)
-    {
-        var driversChamps = await driverChampRepo.GetBySeriesId(seriesId);
-        var constructorChamps = await constructorChampRepo.GetBySeriesId(seriesId);
-
-        var dtoS = driversChamps
-            .Join(
-                constructorChamps,
-                d => d.Season,
-                c => c.Season,
-                (d, c) => new YearLookupDto(
-                    d.Season.ToString(),
-                    d.Id,
-                    c.Id
-                )
-            )
-            .OrderByDescending(y => y.Season)
-            .ToList();
-
-        return ResponseResult<List<YearLookupDto>>.Success(dtoS);
-    }
-
-    public async Task<ResponseResult<List<DriverLookUpDto>>> GetDriversBySeason(Guid driversChampId)
-    {
-        var driverParticipations = await driverParticipationRepo.GetByChampionshipId(driversChampId);
-        var resultList = new List<DriverLookUpDto>();
-
-        foreach (var dp in driverParticipations)
-        {
-            var contracts = await contractsRepo.GetByDriverId(dp.DriverId);
-            var currentConstructorId = contracts.LastOrDefault()?.ConstructorId;
-
-            resultList.Add(new DriverLookUpDto(
-                Id: dp.DriverId,
-                Name: dp.DriverNameSnapshot,
-                ConstructorId: currentConstructorId
-            ));
-        }
-
-        return ResponseResult<List<DriverLookUpDto>>.Success(
-            resultList.OrderBy(d => d.Name).ToList()
+        return ResponseResult<ConstructorStandingsDto>.Success(
+            new ConstructorStandingsDto(constructorsChampionId, standingsResult)
         );
     }
-
-    public async Task<ResponseResult<List<ConstructorLookUpDto>>> GetConstructorsBySeason(Guid constructorId)
+    
+    public async Task<ResponseResult<List<ConstructorSeasonResultDto>>> GetConstructorResultsBySeason(Guid constructorId, Guid constructorChampId)
     {
-        var constructorParticipationsOnChampionship =
-            await constructorCompetitionRepo.GetByChampionshipId(constructorId);
-
-        var dto = constructorParticipationsOnChampionship.Select(cp =>
-                new ConstructorLookUpDto(
-                    Id: cp.Constructor!.Id,
-                    Name: cp.ConstructorNameSnapshot,
-                    ShortName: cp.ConstructorNicknameSnapshot
-                )
-            )
-            .OrderBy(cp => cp.Name)
+        var rawResults = await resultsRepo.GetByConstructorsChampionshipId(constructorChampId);
+        var results = rawResults
+            .Where(r => r.ConstructorId == constructorId &&  string.Equals(r.Session, "Futam", StringComparison.OrdinalIgnoreCase))
+            .GroupBy(r => new { r.GrandPrixId, r.GrandPrix?.Name, r.GrandPrix?.ShortName,r.GrandPrix?.EndTime, r.GrandPrix?.RoundNumber })
+            .OrderBy(g => g.Key.RoundNumber)
+            .Select(group => new ConstructorSeasonResultDto(
+                group.Key.Name ?? "N/A Grand Prix",
+                group.Key.ShortName ?? "N/A GP",
+                group.Key.EndTime ?? DateTime.MinValue,
+                group.Sum(r => r.ConstructorPoints) 
+            ))
             .ToList();
 
-        return ResponseResult<List<ConstructorLookUpDto>>.Success(dto);
-    }
-
-    public async Task<ResponseResult<List<GrandPrixLookupDto>>> GetGrandsPrixByChampionship(Guid driverChampId)
-    {
-        var champ = await driverChampRepo.GetById(driverChampId);
-        if (champ == null) return ResponseResult<List<GrandPrixLookupDto>>.Failure("Bajnokság nem található");
-        
-        var gps = await grandsPrixRepo.GetBySeriesAndYear(champ.SeriesId, int.Parse(champ.Season));
-        var dtoS = gps.Select(gp =>
-            {
-                var hasResults = resultsRepo.HasGrandPrixResults(gp);
-                var dto = new GrandPrixLookupDto(
-                    gp.Id,
-                    gp.ShortName!,
-                    hasResults.Result,
-                    gp.Circuit!.Name,
-                    gp.RoundNumber,
-                    gp.Circuit!.Location,
-                    gp.StartTime,
-                    gp.EndTime,
-                    gp.RaceDistance,
-                    gp.LapsCompleted
-                );
-
-                return dto;
-            })
-            .OrderBy(gp => gp.RoundNumber)
-            .ToList();
-       
-        return ResponseResult<List<GrandPrixLookupDto>>.Success(dtoS);
+        return ResponseResult<List<ConstructorSeasonResultDto>>.Success(results);
     }
     
-    public async Task<ResponseResult<List<string>>> GetSessionsByGrandPrix(Guid grandPrixId)
+    public async Task<ResponseResult<List<DriverSeasonResultDto>>> GetDriverResultsBySeason(Guid driverId, Guid driverChampId)
     {
-        var sessions = await resultsRepo.GetAvailableSessionsByGrandPrixId(grandPrixId);
-        return ResponseResult<List<string>>.Success(sessions);
-    }
+        var rawResults = await resultsRepo.GetByDriversChampionshipId(driverChampId);
+        var results = rawResults
+            .Where(r => r.DriverId == driverId &&  string.Equals(r.Session, "Futam", StringComparison.OrdinalIgnoreCase))
+            .OrderBy(r => r.GrandPrix?.RoundNumber)
+            .Select(r => new DriverSeasonResultDto(
+                r.GrandPrix?.Name ?? "N/A Grand Prix",
+                r.GrandPrix?.ShortName ?? "N/A GP",
+                r.GrandPrix?.EndTime ?? DateTime.MinValue,
+                r.ConstructorNicknameSnapshot,
+                r.FinishPosition,
+                r.DriverPoints
+            ))
+            .ToList();
 
+        return ResponseResult<List<DriverSeasonResultDto>>.Success(results);
+    }
+    
     public async Task<ResponseResult<DriverStandingsDto>> GetDriverStandings(Guid driverChampId)
     {
         var driverChampionship = await driverChampRepo.GetByIdWithSeries(driverChampId);
@@ -239,45 +152,43 @@ public class StandingsService(
 
     }
 
-    public async Task<ResponseResult<ConstructorStandingsDto>> GetConstructorStandings(Guid constructorsChampionId)
+    public async Task<ResponseResult<GrandPrixChampionshipContextDto>> GetGrandPrixContext(Guid grandPrixId)
     {
-        var constructorChampionship = await constructorChampRepo.GetByIdWithSeries(constructorsChampionId);
-        if (constructorChampionship == null) 
-            return ResponseResult<ConstructorStandingsDto>.Failure("A konstruktőri bajnokság nem található");
+        var gp = await grandsPrixRepo.GetGrandPrixById(grandPrixId);
+        if (gp == null) return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Nagydíj nem található");
 
-        var results = await resultsRepo.GetByConstructorsChampionshipId(constructorsChampionId);
-    
-        if (results.Count == 0)
-            return ResponseResult<ConstructorStandingsDto>.Success(new ConstructorStandingsDto(constructorsChampionId, []));
+        var series = await seriesRepo.GetSeriesById(gp.SeriesId);
+        if (series == null) return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Széria nem található");
 
-        var standingsResult = results
-            .GroupBy(r => r.ConstructorId)
-            .Select(group =>
-            {
-                var latestResult = group.Last(); 
+        var driversChamp = (await driverChampRepo.GetBySeriesId(gp.SeriesId))
+            .FirstOrDefault(c => c.Season == series.LastYear.ToString());
+        if (driversChamp == null) return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Egyéni bajnokság nem található");
+
+        var consChamp = (await constructorChampRepo.GetBySeriesId(gp.SeriesId))
+            .FirstOrDefault(c => c.Season == series.LastYear.ToString());
+        if (consChamp == null) return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Konstruktőri bajnokság nem található");
+
+        var allPossibleSessions = series.PointSystem switch
+        {
+            "F1"     => new List<string> { "Sprint Időmérő", "Időmérő" ,"Sprint", "Futam" },
+            "F2"     => new List<string> { "Időmérő", "Sprint", "Futam" },
+            _        => new List<string> { "Futam" }
+        };
         
-                return new
-                {
-                    ConstructorId = group.Key,
-                    Name = latestResult.ConstructorNameSnapshot,
-                    ShortName = latestResult.ConstructorNicknameSnapshot,
-                    Points = group.Sum(r => r.ConstructorPoints),
-                    BestFinish = group.Min(r => r.FinishPosition) 
-                };
-            })
-            .OrderByDescending(x => x.Points)
-            .ThenBy(x => x.BestFinish)
-            .Select((x, index) => new ConstructorStandingsResultDto(
-                index + 1, 
-                x.ConstructorId,
-                x.Name,
-                x.ShortName,
-                x.Points
-            ))
-            .ToArray();
+        var existingResults = await resultsRepo.GetByGrandPrixId(grandPrixId);
+    
+        var completedSessionNames = existingResults
+            .Select(r => r.Session)
+            .Distinct()
+            .ToList();
 
-        return ResponseResult<ConstructorStandingsDto>.Success(
-            new ConstructorStandingsDto(constructorsChampionId, standingsResult)
+        // 4. Szűrés: Csak azok a session-ök maradnak, amik még nincsenek az adatbázisban
+        var availableSessions = allPossibleSessions
+            .Where(session => !completedSessionNames.Contains(session, StringComparer.OrdinalIgnoreCase))
+            .ToList();
+
+        return ResponseResult<GrandPrixChampionshipContextDto>.Success(
+            new GrandPrixChampionshipContextDto(driversChamp.Id, consChamp.Id, series.PointSystem, availableSessions)
         );
     }
 
@@ -350,41 +261,26 @@ public class StandingsService(
         );
     }
     
-    public async Task<ResponseResult<List<DriverSeasonResultDto>>> GetDriverResultsBySeason(Guid driverId, Guid driverChampId)
+    public async Task<ResponseResult<List<YearLookupDto>>> GetSeasonsBySeries(Guid seriesId)
     {
-        var rawResults = await resultsRepo.GetByDriversChampionshipId(driverChampId);
-        var results = rawResults
-            .Where(r => r.DriverId == driverId &&  string.Equals(r.Session, "Futam", StringComparison.OrdinalIgnoreCase))
-            .OrderBy(r => r.GrandPrix?.RoundNumber)
-            .Select(r => new DriverSeasonResultDto(
-                r.GrandPrix?.Name ?? "N/A Grand Prix",
-                r.GrandPrix?.ShortName ?? "N/A GP",
-                r.GrandPrix?.EndTime ?? DateTime.MinValue,
-                r.ConstructorNicknameSnapshot,
-                r.FinishPosition,
-                r.DriverPoints
-            ))
+        var driversChamps = await driverChampRepo.GetBySeriesId(seriesId);
+        var constructorChamps = await constructorChampRepo.GetBySeriesId(seriesId);
+
+        var dtoS = driversChamps
+            .Join(
+                constructorChamps,
+                d => d.Season,
+                c => c.Season,
+                (d, c) => new YearLookupDto(
+                    d.Season.ToString(),
+                    d.Id,
+                    c.Id
+                )
+            )
+            .OrderByDescending(y => y.Season)
             .ToList();
 
-        return ResponseResult<List<DriverSeasonResultDto>>.Success(results);
-    }
-    
-    public async Task<ResponseResult<List<ConstructorSeasonResultDto>>> GetConstructorResultsBySeason(Guid constructorId, Guid constructorChampId)
-    {
-        var rawResults = await resultsRepo.GetByConstructorsChampionshipId(constructorChampId);
-        var results = rawResults
-            .Where(r => r.ConstructorId == constructorId &&  string.Equals(r.Session, "Futam", StringComparison.OrdinalIgnoreCase))
-            .GroupBy(r => new { r.GrandPrixId, r.GrandPrix?.Name, r.GrandPrix?.ShortName,r.GrandPrix?.EndTime, r.GrandPrix?.RoundNumber })
-            .OrderBy(g => g.Key.RoundNumber)
-            .Select(group => new ConstructorSeasonResultDto(
-                group.Key.Name ?? "N/A Grand Prix",
-                group.Key.ShortName ?? "N/A GP",
-                group.Key.EndTime ?? DateTime.MinValue,
-                group.Sum(r => r.ConstructorPoints) 
-            ))
-            .ToList();
-
-        return ResponseResult<List<ConstructorSeasonResultDto>>.Success(results);
+        return ResponseResult<List<YearLookupDto>>.Success(dtoS);
     }
     
     public async Task<ResponseResult<List<SeasonOverviewDto>>> GetSeasonOverview(Guid driverChampId)
@@ -408,98 +304,64 @@ public class StandingsService(
 
         return ResponseResult<List<SeasonOverviewDto>>.Success(overview);
     }
-
-    public async Task<ResponseResult<bool>> CreateChampionship(ChampionshipCreateDto dto)
-    {
-        var driversChamp = new DriversChampionship
-        {
-            Id = Guid.NewGuid(),
-            SeriesId = dto.SeriesId,
-            Season = dto.Season,
-            Name = dto.DriversName,
-            Status = "Upcoming"
-        };
-
-        var constructorsChamp = new ConstructorsChampionship
-        {
-            Id = Guid.NewGuid(),
-            SeriesId = dto.SeriesId,
-            Season = dto.Season,
-            Name = dto.ConstructorsName,
-            Status = "Upcoming"
-        };
-
-        await driverChampRepo.Create(driversChamp);
-        await constructorChampRepo.Create(constructorsChamp);
-
-        return ResponseResult<bool>.Success(true);
-    }
     
-    public async Task<ResponseResult<bool>> UpdateChampionshipStatus(Guid driversChampId, Guid constructorsChampId, string status)
+    public async Task<ResponseResult<List<string>>> GetSessionsByGrandPrix(Guid grandPrixId)
     {
-        var driversChamp = await driverChampRepo.GetById(driversChampId);
-        if (driversChamp == null) return ResponseResult<bool>.Failure("Egyéni bajnokság nem található");
-
-        var constructorsChamp = await constructorChampRepo.GetByIdWithSeries(constructorsChampId);
-        if (constructorsChamp == null) return ResponseResult<bool>.Failure("Konstruktőri bajnokság nem található");
-
-        driversChamp.Status = status;
-        constructorsChamp.Status = status;
-
-        await driverChampRepo.Modify(driversChamp);
-        await constructorChampRepo.Update(constructorsChamp);
-
-        return ResponseResult<bool>.Success(true);
+        var sessions = await resultsRepo.GetAvailableSessionsByGrandPrixId(grandPrixId);
+        return ResponseResult<List<string>>.Success(sessions);
     }
-    
-    public async Task<ResponseResult<bool>> AddParticipations(ParticipationAddDto dto)
+
+    public async Task<ResponseResult<SessionEditDto>> GetSessionForEdit(Guid grandPrixId, string session)
     {
-        foreach (var constructorId in dto.ConstructorIds)
+        var gp = await grandsPrixRepo.GetGrandPrixById(grandPrixId);
+        var series = await seriesRepo.GetSeriesById(gp!.SeriesId);
+        bool isF1Qualy = series!.PointSystem == "F1" && session.Contains("Időmérő");
+
+        var rawResults = await resultsRepo.GetBySession(grandPrixId, session);
+        var ordered = rawResults.OrderBy(r => r.FinishPosition).ToList();
+    
+        if (ordered.Count == 0)
+            return ResponseResult<SessionEditDto>.Success(new SessionEditDto(grandPrixId, session, []));
+
+        var leader = ordered.First();
+        var resultsDto = new List<ResultEditDto>();
+
+        foreach (var r in ordered)
         {
-            var alreadyExists = await constructorCompetitionRepo.CheckIfExists(constructorId, dto.ConstructorsChampId);
-            if (alreadyExists) continue;
-            
-            var constructor = await constructorsRepo.GetByIdWithBrand(constructorId);
-            if (constructor == null) return ResponseResult<bool>.Failure("Constructor dosen't exist");
-                
-            await constructorCompetitionRepo.Create(new ConstructorCompetition
+            string? q1 = null, q2 = null, q3 = null;
+
+            // Ha F1 időmérő, kikérjük a részidőket és formázzuk őket
+            if (isF1Qualy)
             {
-                ConstructorId = constructorId,
-                ConstChampId = dto.ConstructorsChampId,
-                ConstructorNameSnapshot = constructor.Name,
-                ConstructorNicknameSnapshot = constructor.Nickname
-            });
+                var q = await qualifyingRepo.GetByResultId(r.Id);
+                if (q != null)
+                {
+                    q1 = FormatAbsoluteTime(q.Q1);
+                    q2 = FormatAbsoluteTime(q.Q2);
+                    q3 = FormatAbsoluteTime(q.Q3);
+                }
+            }
+
+            resultsDto.Add(new ResultEditDto(
+                ResultId:          r.Id,
+                DriverId:          r.DriverId,
+                CarNumber:         r.CarNumber,
+                DriverName:        r.DriverNameSnapshot,
+                ConstructorId:     r.ConstructorId,
+                ConstructorName:   r.ConstructorNicknameSnapshot,
+                FinishPosition:    r.FinishPosition,
+                RaceTime:          FormatRaceTimeForEdit(r.RaceTime, leader.RaceTime, r.LapsCompleted, leader.LapsCompleted, r.Status, r.FinishPosition, session),
+                LapsCompleted:     r.LapsCompleted,
+                Status:            r.Status,
+                IsPole:            r.IsPolePosition,
+                IsFastestLap:      r.IsFastestLap,
+                Q1:                q1,
+                Q2:                q2,
+                Q3:                q3
+            ));
         }
 
-        foreach (var driver in dto.Drivers)
-        {
-            var alreadyExists = await driverParticipationRepo.CheckIfExists(driver.DriverId, dto.DriversChampId);
-            if (alreadyExists) continue;
-            var driverEntity = await driversRepo.GetDriverById(driver.DriverId);
-            if (driverEntity == null) return ResponseResult<bool>.Failure("Driver dosen't exist");
-                
-            await driverParticipationRepo.Create(new DriverParticipation
-            {
-                DriverId = driver.DriverId,
-                DriverChampId = dto.DriversChampId,
-                DriverNumber = driver.DriverNumber,
-                DriverNameSnapshot = driverEntity.Name
-            });
-        }
-
-        return ResponseResult<bool>.Success(true);
-    }
-
-    public async Task<ResponseResult<bool>> RemoveDriverParticipation(Guid driverId, Guid driversChampId)
-    {
-        await driverParticipationRepo.Delete(driverId, driversChampId);
-        return ResponseResult<bool>.Success(true);
-    }
-
-    public async Task<ResponseResult<bool>> RemoveConstructorCompetition(Guid constructorId, Guid constructorsChampId)
-    {
-        await constructorCompetitionRepo.Delete(constructorId, constructorsChampId);
-        return ResponseResult<bool>.Success(true);
+        return ResponseResult<SessionEditDto>.Success(new SessionEditDto(grandPrixId, session, resultsDto));
     }
     
     public async Task<ResponseResult<bool>> InsertResults(BatchResultCreateDto dto) {
@@ -613,99 +475,6 @@ public class StandingsService(
         }
         return await InsertResults(dto);
     }
-
-    public async Task<ResponseResult<GrandPrixChampionshipContextDto>> GetGrandPrixContext(Guid grandPrixId)
-    {
-        var gp = await grandsPrixRepo.GetGrandPrixById(grandPrixId);
-        if (gp == null) return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Nagydíj nem található");
-
-        var series = await seriesRepo.GetSeriesById(gp.SeriesId);
-        if (series == null) return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Széria nem található");
-
-        var driversChamp = (await driverChampRepo.GetBySeriesId(gp.SeriesId))
-            .FirstOrDefault(c => c.Season == series.LastYear.ToString());
-        if (driversChamp == null) return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Egyéni bajnokság nem található");
-
-        var consChamp = (await constructorChampRepo.GetBySeriesId(gp.SeriesId))
-            .FirstOrDefault(c => c.Season == series.LastYear.ToString());
-        if (consChamp == null) return ResponseResult<GrandPrixChampionshipContextDto>.Failure("Konstruktőri bajnokság nem található");
-
-        var allPossibleSessions = series.PointSystem switch
-        {
-            "F1"     => new List<string> { "Sprint Időmérő", "Időmérő" ,"Sprint", "Futam" },
-            "F2"     => new List<string> { "Időmérő", "Sprint", "Futam" },
-            _        => new List<string> { "Futam" }
-        };
-        
-        var existingResults = await resultsRepo.GetByGrandPrixId(grandPrixId);
-    
-        var completedSessionNames = existingResults
-            .Select(r => r.Session)
-            .Distinct()
-            .ToList();
-
-        // 4. Szűrés: Csak azok a session-ök maradnak, amik még nincsenek az adatbázisban
-        var availableSessions = allPossibleSessions
-            .Where(session => !completedSessionNames.Contains(session, StringComparer.OrdinalIgnoreCase))
-            .ToList();
-
-        return ResponseResult<GrandPrixChampionshipContextDto>.Success(
-            new GrandPrixChampionshipContextDto(driversChamp.Id, consChamp.Id, series.PointSystem, availableSessions)
-        );
-    }
-
-    public async Task<ResponseResult<SessionEditDto>> GetSessionForEdit(Guid grandPrixId, string session)
-    {
-        var gp = await grandsPrixRepo.GetGrandPrixById(grandPrixId);
-        var series = await seriesRepo.GetSeriesById(gp!.SeriesId);
-        bool isF1Qualy = series!.PointSystem == "F1" && session.Contains("Időmérő");
-
-        var rawResults = await resultsRepo.GetBySession(grandPrixId, session);
-        var ordered = rawResults.OrderBy(r => r.FinishPosition).ToList();
-    
-        if (ordered.Count == 0)
-            return ResponseResult<SessionEditDto>.Success(new SessionEditDto(grandPrixId, session, []));
-
-        var leader = ordered.First();
-        var resultsDto = new List<ResultEditDto>();
-
-        foreach (var r in ordered)
-        {
-            string? q1 = null, q2 = null, q3 = null;
-
-            // Ha F1 időmérő, kikérjük a részidőket és formázzuk őket
-            if (isF1Qualy)
-            {
-                var q = await qualifyingRepo.GetByResultId(r.Id);
-                if (q != null)
-                {
-                    q1 = FormatAbsoluteTime(q.Q1);
-                    q2 = FormatAbsoluteTime(q.Q2);
-                    q3 = FormatAbsoluteTime(q.Q3);
-                }
-            }
-
-            resultsDto.Add(new ResultEditDto(
-                ResultId:          r.Id,
-                DriverId:          r.DriverId,
-                CarNumber:         r.CarNumber,
-                DriverName:        r.DriverNameSnapshot,
-                ConstructorId:     r.ConstructorId,
-                ConstructorName:   r.ConstructorNicknameSnapshot,
-                FinishPosition:    r.FinishPosition,
-                RaceTime:          FormatRaceTimeForEdit(r.RaceTime, leader.RaceTime, r.LapsCompleted, leader.LapsCompleted, r.Status, r.FinishPosition, session),
-                LapsCompleted:     r.LapsCompleted,
-                Status:            r.Status,
-                IsPole:            r.IsPolePosition,
-                IsFastestLap:      r.IsFastestLap,
-                Q1:                q1,
-                Q2:                q2,
-                Q3:                q3
-            ));
-        }
-
-        return ResponseResult<SessionEditDto>.Success(new SessionEditDto(grandPrixId, session, resultsDto));
-    }
     
     public async Task<ResponseResult<bool>> UpdateSingleResult(SingleResultUpdateDto dto)
     {
@@ -790,7 +559,7 @@ public class StandingsService(
 
         return ResponseResult<bool>.Success(true);
     }
-
+    
     public async Task<ResponseResult<bool>> RecalculateSession(Guid grandPrixId, string session)
     {
         var gp = await grandsPrixRepo.GetGrandPrixById(grandPrixId);
@@ -828,7 +597,7 @@ public class StandingsService(
 
         return ResponseResult<bool>.Success(true);
     }
-
+    
     private static (double driverPoints, double constructorPoints) CalculatePoints(
         string scoringSystem, string session, int finishPosition, bool isPole = false, bool isFastestLap = false)
     {
@@ -839,7 +608,7 @@ public class StandingsService(
             _        => (0, 0)
         };
     }
-
+    
     private static (double, double) CalculateF1Points(string session, int position)
     {
         var points = session switch
@@ -889,7 +658,6 @@ public class StandingsService(
         return (driverPoints, driverPoints); // Konstruktőrök is megkapják
     }
     
-
     private async Task<int> GetStartPosition(
         string pointSystem, string session, Guid grandPrixId, Guid driverId, int fallback)
     {
@@ -1019,7 +787,7 @@ public class StandingsService(
         }
 
         var isRace = session.Equals("Futam", StringComparison.OrdinalIgnoreCase) || 
-                      session.Equals("Sprint", StringComparison.OrdinalIgnoreCase);
+                     session.Equals("Sprint", StringComparison.OrdinalIgnoreCase);
 
         if (isRace && myLaps < leaderLaps) return "-"; 
 
@@ -1043,7 +811,7 @@ public class StandingsService(
         }
 
         var isRace = session.Equals("Futam", StringComparison.OrdinalIgnoreCase) || 
-                      session.Equals("Sprint", StringComparison.OrdinalIgnoreCase);
+                     session.Equals("Sprint", StringComparison.OrdinalIgnoreCase);
 
         if (isRace && result.LapsCompleted < leaderLaps)
         {
@@ -1056,12 +824,5 @@ public class StandingsService(
         return d.TotalMinutes >= 1
             ? $"+{(int)d.TotalMinutes}:{d.Seconds:D2}.{d.Milliseconds:D3}s"
             : $"+{d.Seconds}.{d.Milliseconds:D3}s";
-    }
-    
-    private static int GetAge(DateTime birthDate)
-    {
-        var years = DateTime.Now.Year - birthDate.Year;
-        if (DateTime.Now < birthDate.AddYears(years)) years--;
-        return years;
     }
 }

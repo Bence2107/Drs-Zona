@@ -105,6 +105,7 @@ builder.Services.AddScoped<IQualifyingResultRepository, QualifyingResultReposito
 builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<IChampionshipService, ChampionshipService>();
 builder.Services.AddScoped<IConstructorsService, ConstructorsService>();
 builder.Services.AddScoped<IContractsService, ContractsService>();
 builder.Services.AddScoped<ICommentService, CommentService>();

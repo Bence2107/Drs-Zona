@@ -6,7 +6,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CommentsController(ICommentService commentService): ControllerBase
+public class CommentsController(ICommentService commentService): ControllerBase 
 {
     private Guid? GetCurrentUserId()
     {
