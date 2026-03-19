@@ -135,7 +135,7 @@ public class CommentService(
             comment.ReplyToCommentId = commentCreateDto.ReplyToCommentId.Value;
         }
         
-        await commentsRepo.Add(comment);
+        await commentsRepo.Create(comment);
         return ResponseResult<bool>.Success(true);
     }
 
@@ -168,7 +168,7 @@ public class CommentService(
 
         if (existingVote == null)
         {
-            await commentVotesRepo.Add(new CommentVote { UserId = userId, CommentId = commentId, IsUpvote = isUpvote });
+            await commentVotesRepo.Create(new CommentVote { UserId = userId, CommentId = commentId, IsUpvote = isUpvote });
             if (isUpvote) comment.UpVotes++; else comment.DownVotes++;
         }
         else if (existingVote.IsUpvote == isUpvote)

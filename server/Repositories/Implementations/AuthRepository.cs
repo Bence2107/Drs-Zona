@@ -5,7 +5,7 @@ using Repositories.Interfaces;
 
 namespace Repositories.Implementations;
 
-public class AuthRepository(EfContext context) : IAuthRepository
+public class AuthRepository(EfContext context) : IAuthRepository 
 {
     private readonly DbSet<User> _users = context.Users;
 
@@ -20,25 +20,6 @@ public class AuthRepository(EfContext context) : IAuthRepository
         return await _users.FindAsync(userId);
     }
 
-    public async Task<User?> GetUserByUsername(string username)
-    {
-        return await _users
-            .FirstOrDefaultAsync(u => u.Username == username);
-    }
-
-    public async Task<User> CreateUser(User user)
-    {
-        _users.Add(user);
-        await context.SaveChangesAsync();
-        return user;
-    }
-
-    public async Task UpdateUser(User user)
-    {
-        _users.Update(user);
-        await context.SaveChangesAsync();
-    }
-
     public async Task<bool> UserExistsByEmail(string email)
     {
         return await _users.AnyAsync(u => u.Email == email);
@@ -48,8 +29,21 @@ public class AuthRepository(EfContext context) : IAuthRepository
     {
         return await _users.AnyAsync(u => u.Username == username);
     }
+    
+    public async Task<User> Create(User user)
+    {
+        _users.Add(user);
+        await context.SaveChangesAsync();
+        return user;
+    }
 
-    public async Task<bool> DeleteUser(User user)
+    public async Task Update(User user)
+    {
+        _users.Update(user);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<bool> Delete(User user)
     {
         try
         {

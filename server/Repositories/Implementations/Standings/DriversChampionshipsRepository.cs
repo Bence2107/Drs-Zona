@@ -11,14 +11,13 @@ public class DriversChampionshipsRepository(EfContext context) : IDriversChampio
     
     public async Task<DriversChampionship?> GetById(Guid id) => await _driversChampionships.FirstOrDefaultAsync(d => d.Id == id);
     
-    public async Task<List<DriversChampionship>> GetAll() => await _driversChampionships.ToListAsync();
 
     public async Task<List<DriversChampionship>> GetBySeriesId(Guid seriesId) =>
         await _driversChampionships
             .Include(c => c.Series)
             .Where(c => c.SeriesId == seriesId).ToListAsync();
 
-    public async Task Add(DriversChampionship championship)
+    public async Task Create(DriversChampionship championship)
     {
         await _driversChampionships.AddAsync(championship);
         await context.SaveChangesAsync();
@@ -30,26 +29,9 @@ public class DriversChampionshipsRepository(EfContext context) : IDriversChampio
         await context.SaveChangesAsync();
     }
 
-    public async Task Delete(Guid id)
-    {
-        var driversChampionship = await GetById(id);
-        if(driversChampionship == null) return;
-        
-        _driversChampionships.Remove(driversChampionship);
-        await context.SaveChangesAsync();
-    }
 
     public async Task<DriversChampionship?> GetByIdWithSeries(Guid id) => await _driversChampionships
         .Include(d => d.Series)
         .FirstOrDefaultAsync(d => d.Id == id);
-
-    public async Task<List<DriversChampionship>> GetBySeason(string season) => await _driversChampionships
-        .Where(dc => dc.Season == season)
-        .ToListAsync();
-
-    public async Task<List<DriversChampionship>> GetByStatus(string status) => await _driversChampionships.
-        Where(dc => dc.Status == status)
-        .ToListAsync();
-
-    public async Task<bool> CheckIfIdExists(Guid id) => await _driversChampionships.AnyAsync(d => d.Id == id);
+    
 }

@@ -51,7 +51,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
                 IsLoggedIn = false
             };
 
-            await authRepository.CreateUser(user);
+            await authRepository.Create(user);
             var authResponse = await GenerateAuthResponse(user);
 
             return ResponseResult<AuthResponse>.Success(authResponse);
@@ -90,7 +90,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
             user.LastActive = DateTime.UtcNow;
             user.IsLoggedIn = true;
             
-            await authRepository.UpdateUser(user);
+            await authRepository.Update(user);
 
             var authResponse = await GenerateAuthResponse(user);
             return ResponseResult<AuthResponse>.Success(authResponse);
@@ -145,7 +145,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
             user.FullName = request.FullName;
             user.Username = request.Username;
 
-            await authRepository.UpdateUser(user);
+            await authRepository.Update(user);
             return ResponseResult<bool>.Success(true);
         }
         catch (Exception ex)
@@ -187,7 +187,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
         try
         {
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
-            await authRepository.UpdateUser(user);
+            await authRepository.Update(user);
 
             return ResponseResult<bool>.Success(true);
         }
@@ -237,7 +237,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
             user.IsLoggedIn = false;
             user.CurrentSessionId = null;
             
-            await authRepository.UpdateUser(user);
+            await authRepository.Update(user);
             return ResponseResult<bool>.Success(true);
         }
         catch (Exception ex)
@@ -260,7 +260,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
 
         try
         {
-            await authRepository.DeleteUser(user);
+            await authRepository.Delete(user);
             return ResponseResult<bool>.Success(true);
         }
         catch (Exception ex)
@@ -277,7 +277,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
         if (user != null)
         {
             user.LastActive = DateTime.UtcNow;
-            await authRepository.UpdateUser(user);
+            await authRepository.Update(user);
         }
     }
 
@@ -289,7 +289,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
 
         user.CurrentSessionId = sessionId;
         user.IsLoggedIn = true;
-        await authRepository.UpdateUser(user);
+        await authRepository.Update(user);
 
         return new AuthResponse
         {

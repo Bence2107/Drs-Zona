@@ -15,7 +15,7 @@ public class ArticleService(
     IGrandsPrixRepository gpRepo,
     IArticleImageService articleImageService, 
     IUserImageService userImageService
-) : IArticleService
+) : IArticleService 
 {
     public async Task<ResponseResult<ArticleDetailDto>> GetArticleById(Guid id)
     {
@@ -200,7 +200,7 @@ public class ArticleService(
 
     public async Task<ResponseResult<bool>> UpdateArticle(ArticleUpdateDto dto)
     {
-        var article = await articleRepo.GetArticleById(dto.Id);
+        var article = await articleRepo.GetById(dto.Id);
         if (article == null) return ResponseResult<bool>.Failure("Article not found");
 
         if (dto.GrandPrixId.HasValue && !await gpRepo.CheckIfIdExists(dto.GrandPrixId.Value))
@@ -228,7 +228,7 @@ public class ArticleService(
 
     public async Task<ResponseResult<bool>> DeleteArticle(Guid id)
     {
-        var article = await articleRepo.GetArticleById(id);
+        var article = await articleRepo.GetById(id);
         if (article == null)
         {
             return ResponseResult<bool>.Failure("Article not found");

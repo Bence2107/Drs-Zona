@@ -5,7 +5,7 @@ using Repositories.Interfaces.Standings;
 
 namespace Repositories.Implementations.Standings;
 
-public class DriversRepository(EfContext context) : IDriversRepository
+public class DriversRepository(EfContext context) : IDriversRepository 
 {
     private readonly DbSet<Driver> _drivers = context.Drivers;
     
@@ -33,12 +33,4 @@ public class DriversRepository(EfContext context) : IDriversRepository
         _drivers.Remove(driver);
         await context.SaveChangesAsync();
     }
-
-    public async Task<List<Driver>> GetByNationality(string nationality) => await _drivers
-        .Where(d => d.Nationality == nationality)
-        .ToListAsync();
-    
-    public async Task<Driver?> GetByName(string name) => await _drivers.FirstOrDefaultAsync(d => d.Name == name);
-
-    public async Task<bool> CheckIfIdExists(Guid id) => await _drivers.AnyAsync(d => d.Id == id);
 }

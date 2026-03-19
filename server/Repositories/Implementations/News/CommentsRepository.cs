@@ -5,31 +5,11 @@ using Repositories.Interfaces.News;
 
 namespace Repositories.Implementations.News;
 
-public class CommentsRepository(EfContext context) : ICommentsRepository
+public class CommentsRepository(EfContext context) : ICommentsRepository 
 {
     private readonly DbSet<Comment> _comments = context.Comments;
     
     public async Task<Comment?> GetCommentById(Guid id) => await _comments.FirstOrDefaultAsync(comment => comment.Id == id);
-    
-    public async Task Add(Comment comment)
-    {
-        await _comments.AddAsync(comment);
-        await context.SaveChangesAsync();
-    }
-
-    public async Task Update(Comment comment)
-    {
-        _comments.Update(comment);
-        await context.SaveChangesAsync();
-    }
-
-    public async Task Delete(Guid id)
-    {
-        var comment = await GetCommentById(id);
-        if(comment == null) return;
-        _comments.Remove(comment);
-        await context.SaveChangesAsync();
-    }
     
     public async Task<List<Comment>> GetUsersComments(Guid userId)
     {
@@ -54,7 +34,40 @@ public class CommentsRepository(EfContext context) : ICommentsRepository
 
         return filteredComments;
     }
+    
+    public async Task<List<Comment>> GetCommentsWithoutReplies(Guid articleId) => await _comments
+        .Include(comment => comment.User)
+        .Where(comment => comment.ArticleId == articleId && comment.ReplyToCommentId == null)
+        .ToListAsync();
 
+    public async Task<List<Comment>> GetRepliesToAComment(Guid replyCommentId) => await _comments
+        .Include(comment => comment.User)
+        .Where(comment => comment.ReplyToCommentId == replyCommentId)
+        .ToListAsync();
+
+    public async Task<int> GetNumberOfReplies(Guid commentId) => await _comments
+        .CountAsync(comment => comment.ReplyToCommentId == commentId);
+    
+    public async Task Create(Comment comment)
+    {
+        await _comments.AddAsync(comment);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task Update(Comment comment)
+    {
+        _comments.Update(comment);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task Delete(Guid id)
+    {
+        var comment = await GetCommentById(id);
+        if(comment == null) return;
+        _comments.Remove(comment);
+        await context.SaveChangesAsync();
+    } 
+    
     private static bool HasRootInOwnComments(Comment comment, List<Comment> userComments, Dictionary<Guid, Comment> parentMap)
     {
         var current = comment;
@@ -70,19 +83,4 @@ public class CommentsRepository(EfContext context) : ICommentsRepository
         }
         return false;
     }
-
-    public async Task<List<Comment>> GetCommentsWithoutReplies(Guid articleId) => await _comments
-        .Include(comment => comment.User)
-        .Where(comment => comment.ArticleId == articleId && comment.ReplyToCommentId == null)
-        .ToListAsync();
-
-    public async Task<List<Comment>> GetRepliesToAComment(Guid replyCommentId) => await _comments
-        .Include(comment => comment.User)
-        .Where(comment => comment.ReplyToCommentId == replyCommentId)
-        .ToListAsync();
-
-    public async Task<int> GetNumberOfReplies(Guid commentId) => await _comments
-        .CountAsync(comment => comment.ReplyToCommentId == commentId);
-
-    public bool CheckIfIdExists(Guid id) => _comments.Any(comment => comment.Id == id);
 }

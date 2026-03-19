@@ -430,7 +430,7 @@ public class StandingsService (
             Status = "Upcoming"
         };
 
-        await driverChampRepo.Add(driversChamp);
+        await driverChampRepo.Create(driversChamp);
         await constructorChampRepo.Create(constructorsChamp);
 
         return ResponseResult<bool>.Success(true);
@@ -560,7 +560,7 @@ public class StandingsService (
                 await resultsRepo.Create(newResult);
                 
                 if (isF1Qualy) {
-                    await qualifyingRepo.AddAsync(new QualifyingResult { 
+                    await qualifyingRepo.Create(new QualifyingResult { 
                         ResultId = newResult.Id, 
                         Q1 = string.IsNullOrWhiteSpace(r.Q1) ? null : ParseAbsoluteTime(r.Q1), 
                         Q2 = string.IsNullOrWhiteSpace(r.Q2) ? null : ParseAbsoluteTime(r.Q2), 
@@ -593,9 +593,9 @@ public class StandingsService (
                         q.Q1 = parsedQ1; 
                         q.Q2 = parsedQ2; 
                         q.Q3 = parsedQ3;
-                        await qualifyingRepo.UpdateAsync(q);
+                        await qualifyingRepo.Update(q);
                     } else {
-                        await qualifyingRepo.AddAsync(new QualifyingResult { 
+                        await qualifyingRepo.Create(new QualifyingResult { 
                             ResultId = existingResult.Id, Q1 = parsedQ1, Q2 = parsedQ2, Q3 = parsedQ3 
                         });
                     }
@@ -779,14 +779,14 @@ public class StandingsService (
                 Q2 = parsedQ2,
                 Q3 = parsedQ3
             };
-            await qualifyingRepo.AddAsync(qualy);
+            await qualifyingRepo.Create(qualy);
         }
         else
         {
             qualy.Q1 = parsedQ1;
             qualy.Q2 = parsedQ2;
             qualy.Q3 = parsedQ3;
-            await qualifyingRepo.UpdateAsync(qualy);
+            await qualifyingRepo.Update(qualy);
         }
 
         return ResponseResult<bool>.Success(true);

@@ -5,7 +5,7 @@ using Repositories.Interfaces.Polls;
 
 namespace Repositories.Implementations.Polls;
 
-public class PollsRepository(EfContext context) : IPollsRepository
+public class PollsRepository(EfContext context) : IPollsRepository 
 {
     private readonly DbSet<Poll> _polls = context.Polls;
     
@@ -31,6 +31,10 @@ public class PollsRepository(EfContext context) : IPollsRepository
         await _polls
             .Where(p => p.AuthorId == authorId && (tag == null || p.Tag == tag))
             .ToListAsync();
+
+    public async Task<Poll?> GetByIdWithAuthor(Guid id) => await _polls
+        .Include(p => p.Author)
+        .FirstOrDefaultAsync(p => p.Id == id);
     
     public async Task Add(Poll poll)
     {
@@ -46,11 +50,4 @@ public class PollsRepository(EfContext context) : IPollsRepository
         _polls.Remove(poll);
         await context.SaveChangesAsync();
     }
-
-    public async Task<Poll?> GetByIdWithAuthor(Guid id) => await _polls
-        .Include(p => p.Author)
-        .FirstOrDefaultAsync(p => p.Id == id);
-    
-    
-    public async Task<bool> CheckIfIdExists(Guid id) => await _polls.AnyAsync(p => p.Id == id);
 }

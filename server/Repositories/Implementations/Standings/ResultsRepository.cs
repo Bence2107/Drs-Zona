@@ -6,52 +6,14 @@ using Repositories.Interfaces.Standings;
 
 namespace Repositories.Implementations.Standings;
 
-public class ResultsRepository(EfContext context) : IResultsRepository
+public class ResultsRepository(EfContext context) : IResultsRepository 
 {
     private readonly DbSet<Result> _results = context.Results;
 
     public async Task<Result?> GetResultById(Guid id) => await _results.FirstOrDefaultAsync(r => r.Id == id);
-
-    public async Task<List<Result>> GetAllResults() => await _results.ToListAsync();
-
-    public async Task Create(Result result)
-    {
-        await _results.AddAsync(result);
-        await context.SaveChangesAsync();
-    }
-
-    public async Task Update(Result result)
-    {
-        _results.Update(result);
-        await context.SaveChangesAsync();
-    }
-
-    public async Task Delete(Guid id)
-    {
-        var result = await GetResultById(id);
-        if(result == null) return;
-        
-        _results.Remove(result);
-        await context.SaveChangesAsync();
-    }
     
-    public async Task<Result?> GetResultWithAll(Guid id) => await _results
-        .Include(r => r.Driver)
-        .Include(r => r.Constructor)
-        .Include(r => r.DriversChampionship)
-        .Include(r => r.ConsChampionship)
-        .FirstOrDefaultAsync(r => r.Id == id);
-
     public async Task<List<Result>> GetByGrandPrixId(Guid grandPrixId) => await _results
         .Where(r => r.GrandPrixId == grandPrixId)
-        .ToListAsync();
-
-    public async Task<List<Result>> GetByDriverId(Guid driverId) => await _results
-        .Where(r => r.DriverId == driverId)
-        .ToListAsync();
-
-    public async Task<List<Result>> GetByConstructorId(Guid constructorId) => await _results
-        .Where(r => r.ConstructorId == constructorId)
         .ToListAsync();
 
     public async Task<List<Result>> GetBySession(Guid grandPrixId, string session) => await _results
@@ -83,7 +45,27 @@ public class ResultsRepository(EfContext context) : IResultsRepository
             .ToListAsync();
     }
     
-    public async Task<bool> CheckIfIdExists(Guid id) => await _results.AnyAsync(d => d.Id == id);
+    public async Task Create(Result result)
+    {
+        await _results.AddAsync(result);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task Update(Result result)
+    {
+        _results.Update(result);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task Delete(Guid id)
+    {
+        var result = await GetResultById(id);
+        if(result == null) return;
+        
+        _results.Remove(result);
+        await context.SaveChangesAsync();
+    }
+    
     public async Task<bool> HasGrandPrixResults(GrandPrix gp)
     {
         return await _results.AnyAsync(r => r.GrandPrixId == gp.Id);
