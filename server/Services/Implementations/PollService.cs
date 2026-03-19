@@ -72,7 +72,7 @@ public class PollService(
         ));
     }
 
-    public async Task<ResponseResult<List<PollListDto>>> GetPollByCreatorId(Guid creatorId, string? tag = null)
+    public async Task<ResponseResult<List<PollListDto>>> GetPollsByCreatorId(Guid creatorId, string? tag = null)
     {
         var polls = await pollRepository.GetByCreatorId(creatorId, tag);
         var dto = polls.Select(poll => new PollListDto(
@@ -117,21 +117,7 @@ public class PollService(
 
         return ResponseResult<List<PollListDto>>.Success(dto);
     }
-
-    public async Task<ResponseResult<List<PollListDto>>> ListAllPolls(string? tag = null)
-    {
-        var polls = await pollRepository.GetAll(tag);
-        var dto = polls.Select(poll => new PollListDto(
-            Id: poll.Id,
-            Title: poll.Title,
-            Tag: poll.Tag,
-            Description: poll.Description,
-            ExpiresAt: poll.ExpiresAt
-        )).ToList();
-
-        return ResponseResult<List<PollListDto>>.Success(dto);
-    }
-
+    
     public async Task<ResponseResult<bool>> Create(PollCreateDto dto, Guid? currentUserId = null)
     {
         if (currentUserId is not null && !await userRepository.CheckIfIdExists(currentUserId))
@@ -220,20 +206,6 @@ public class PollService(
         };
 
         await pollVoteRepository.Create(vote);
-        return ResponseResult<bool>.Success(true);
-    }
-
-    public async Task<ResponseResult<bool>> RemoveVote(Guid pollId, Guid pollOptionId, Guid userId)
-    {
-        var vote = await pollVoteRepository.GetUserVoteForPoll(userId, pollOptionId);
-        if (vote == null)
-            return ResponseResult<bool>.Failure("Szavazás nem található");
-
-        var option = await pollOptionsRepository.GetPollOptionById(pollOptionId);
-        if (option == null || option.PollId != pollId)
-            return ResponseResult<bool>.Failure("Opció nem található");
-
-        await pollVoteRepository.Delete(userId, pollOptionId);
         return ResponseResult<bool>.Success(true);
     }
     

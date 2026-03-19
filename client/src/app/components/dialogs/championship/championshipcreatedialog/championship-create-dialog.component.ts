@@ -7,7 +7,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
-import {ResultsService} from '../../../../services/results.service';
+import {StandingsService} from '../../../../services/standings.service';
 import {ChampionshipCreateDto} from '../../../../api/models/championship-create-dto';
 import {FormErrorService} from '../../../../services/form-error.service';
 import {HttpValidationError} from '../../../../services/error-interceptor.service';
@@ -43,7 +43,7 @@ export class ChampionshipCreateDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<ChampionshipCreateDialogComponent>,
-    private resultService: ResultsService,
+    private resultService: StandingsService,
     private formErrorService: FormErrorService,
   ) {
     this.form =  this.fb.group({

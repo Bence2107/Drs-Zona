@@ -7,24 +7,8 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ArticleController(IArticleService articleService): ControllerBase
+public class ArticleController(IArticleService articleService): ControllerBase 
 {
-    [HttpGet("get/{id:guid}")]
-    public async Task<ActionResult<ArticleDetailDto>> Get([FromRoute]Guid id)
-    {
-        var response = await articleService.GetArticleById(id);
-        if (!response.IsSuccess)
-        {
-            return BadRequest(new
-            {
-                response.ErrorField, 
-                response.Message
-            });
-        }
-        
-        return Ok(response.Value);
-    }
-    
     [HttpGet("get/{slug}")]
     public async Task<ActionResult<ArticleDetailDto>> GetBySlug([FromRoute]string slug)
     {

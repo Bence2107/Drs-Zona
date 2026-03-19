@@ -8,13 +8,13 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface ApiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete$Params {
+export interface ApiChampionshipRemoveDriverParticipationDriverIdDriversChampIdDelete$Params {
   driverId: string;
   driversChampId: string;
 }
 
-export function apiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete(http: HttpClient, rootUrl: string, params: ApiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete.PATH, 'delete');
+export function apiChampionshipRemoveDriverParticipationDriverIdDriversChampIdDelete(http: HttpClient, rootUrl: string, params: ApiChampionshipRemoveDriverParticipationDriverIdDriversChampIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiChampionshipRemoveDriverParticipationDriverIdDriversChampIdDelete.PATH, 'delete');
   if (params) {
     rb.path('driverId', params.driverId, {});
     rb.path('driversChampId', params.driversChampId, {});
@@ -30,4 +30,4 @@ export function apiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelet
   );
 }
 
-apiStandingsRemoveDriverParticipationDriverIdDriversChampIdDelete.PATH = '/api/Standings/removeDriverParticipation/{driverId}/{driversChampId}';
+apiChampionshipRemoveDriverParticipationDriverIdDriversChampIdDelete.PATH = '/api/Championship/removeDriverParticipation/{driverId}/{driversChampId}';

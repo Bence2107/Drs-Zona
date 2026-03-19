@@ -98,7 +98,7 @@ public class ChampionshipController(IChampionshipService championshipService): C
         return Ok(response.Value);
     }
     
-     [HttpPost("createChampionship")]
+    [HttpPost("createChampionship")]
     public async Task<ActionResult> CreateChampionship([FromBody] ChampionshipCreateDto dto)
     {
         var response = await championshipService.CreateChampionship(dto);

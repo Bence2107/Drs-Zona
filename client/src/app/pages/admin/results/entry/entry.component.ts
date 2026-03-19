@@ -18,7 +18,7 @@ import {Router, RouterLink} from '@angular/router';
 import {DatePipe} from '@angular/common';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
 import {CountryFlagPipe} from '../../../../pipes/country-flag.pipe';
-import {ResultsService} from '../../../../services/results.service';
+import {StandingsService} from '../../../../services/standings.service';
 import {YearLookupDto} from '../../../../api/models/year-lookup-dto';
 import {GrandPrixLookupDto} from '../../../../api/models/grand-prix-lookup-dto';
 import {MatTooltip} from '@angular/material/tooltip';
@@ -67,7 +67,7 @@ export class EntryComponent implements OnInit {
   grandsPrix = signal<GrandPrixLookupDto[]>([]);
   isLoading = signal(false);
 
-  constructor(private resultService: ResultsService, private dialog: MatDialog, private router: Router) {}
+  constructor(private resultService: StandingsService, private dialog: MatDialog, private router: Router) {}
 
   ngOnInit() {
     this.loadSeries();

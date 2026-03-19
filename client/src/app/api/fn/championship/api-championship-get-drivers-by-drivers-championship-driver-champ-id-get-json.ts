@@ -9,12 +9,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { DriverLookUpDto } from '../../models/driver-look-up-dto';
 
-export interface ApiStandingsGetDriversByDriversChampionshipDriverChampIdGet$Json$Params {
+export interface ApiChampionshipGetDriversByDriversChampionshipDriverChampIdGet$Json$Params {
   driverChampId: string;
 }
 
-export function apiStandingsGetDriversByDriversChampionshipDriverChampIdGet$Json(http: HttpClient, rootUrl: string, params: ApiStandingsGetDriversByDriversChampionshipDriverChampIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DriverLookUpDto>>> {
-  const rb = new RequestBuilder(rootUrl, apiStandingsGetDriversByDriversChampionshipDriverChampIdGet$Json.PATH, 'get');
+export function apiChampionshipGetDriversByDriversChampionshipDriverChampIdGet$Json(http: HttpClient, rootUrl: string, params: ApiChampionshipGetDriversByDriversChampionshipDriverChampIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DriverLookUpDto>>> {
+  const rb = new RequestBuilder(rootUrl, apiChampionshipGetDriversByDriversChampionshipDriverChampIdGet$Json.PATH, 'get');
   if (params) {
     rb.path('driverChampId', params.driverChampId, {});
   }
@@ -29,4 +29,4 @@ export function apiStandingsGetDriversByDriversChampionshipDriverChampIdGet$Json
   );
 }
 
-apiStandingsGetDriversByDriversChampionshipDriverChampIdGet$Json.PATH = '/api/Standings/getDriversByDriversChampionship/{driverChampId}';
+apiChampionshipGetDriversByDriversChampionshipDriverChampIdGet$Json.PATH = '/api/Championship/getDriversByDriversChampionship/{driverChampId}';

@@ -9,20 +9,20 @@ import { RequestBuilder } from '../../request-builder';
 
 import { ParticipationListDto } from '../../models/participation-list-dto';
 
-export interface ApiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Json$Params {
+export interface ApiChampionshipGetParticipationsDriversChampIdConstructorsChampIdGet$Plain$Params {
   driversChampId: string;
   constructorsChampId: string;
 }
 
-export function apiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Json(http: HttpClient, rootUrl: string, params: ApiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<ParticipationListDto>> {
-  const rb = new RequestBuilder(rootUrl, apiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Json.PATH, 'get');
+export function apiChampionshipGetParticipationsDriversChampIdConstructorsChampIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiChampionshipGetParticipationsDriversChampIdConstructorsChampIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<ParticipationListDto>> {
+  const rb = new RequestBuilder(rootUrl, apiChampionshipGetParticipationsDriversChampIdConstructorsChampIdGet$Plain.PATH, 'get');
   if (params) {
     rb.path('driversChampId', params.driversChampId, {});
     rb.path('constructorsChampId', params.constructorsChampId, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'text/json', context })
+    rb.build({ responseType: 'text', accept: 'text/plain', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -31,4 +31,4 @@ export function apiStandingsGetParticipationsDriversChampIdConstructorsChampIdGe
   );
 }
 
-apiStandingsGetParticipationsDriversChampIdConstructorsChampIdGet$Json.PATH = '/api/Standings/getParticipations/{driversChampId}/{constructorsChampId}';
+apiChampionshipGetParticipationsDriversChampIdConstructorsChampIdGet$Plain.PATH = '/api/Championship/getParticipations/{driversChampId}/{constructorsChampId}';

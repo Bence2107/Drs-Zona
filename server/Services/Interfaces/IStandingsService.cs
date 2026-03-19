@@ -12,7 +12,6 @@ public interface IStandingsService
     Task<ResponseResult<DriverStandingsDto>> GetDriverStandings(Guid driverChampId);
     Task<ResponseResult<GrandPrixChampionshipContextDto>> GetGrandPrixContext(Guid grandPrixId);
     Task<ResponseResult<GrandPrixResultsDto>> GetGrandPrixResults(Guid grandPrixId, string session);
-    Task<ResponseResult<List<YearLookupDto>>> GetSeasonsBySeries(Guid seriesId);
     Task<ResponseResult<List<SeasonOverviewDto>>> GetSeasonOverview(Guid driverChampId);
     Task<ResponseResult<SessionEditDto>> GetSessionForEdit(Guid grandPrixId, string session);
     Task<ResponseResult<List<string>>> GetSessionsByGrandPrix(Guid grandPrixId);

@@ -39,7 +39,6 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
         
         return Ok(response.Value);
     }
-
     
     [HttpGet("getSeasonGrandsPrix/{seriesId:guid}/{year:int}")]
     public async Task<ActionResult<GrandPrixDetailDto>> GetSeasonGrandsPrix([FromRoute] Guid seriesId, [FromRoute] int year)
@@ -88,14 +87,5 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
         }
         
         return Ok(result.Value);
-    }
-    
-    [HttpDelete("delete/{id:guid}")]
-    public async Task<ActionResult> Delete([FromRoute]Guid id)
-    {
-        var response = await grandPrixService.Delete(id);
-        if (!response.IsSuccess) return NotFound(response.Message);
-
-        return Ok();
     }
 }

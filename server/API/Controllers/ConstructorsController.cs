@@ -24,13 +24,6 @@ public class ConstructorsController(IConstructorsService constructorsService): C
         return Ok(response.Value);
     }
     
-    [HttpGet("getAllByChampionship/{championshipId:guid}")]
-    public async Task<ActionResult<List<ConstructorListDto>>> GetAll([FromRoute]Guid championshipId)
-    {
-        var response = await constructorsService.ListAllConstructorsByChampionship(championshipId);
-        return Ok(response.Value);
-    }
-    
     [HttpGet("getAllConstructors")]
     public async Task<ActionResult<List<ConstructorListDto>>> GetAllConstructors()
     {

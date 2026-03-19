@@ -19,15 +19,15 @@ export class DriverService {
     protected apiConfig: ApiConfiguration
   ) { }
 
-  getAllDrivers(): Observable<DriverListDto[]> {
-    return apiDriversGetAllDriversGet$Json(this.http, this.apiConfig.rootUrl).pipe(
-      map(response => response.body as DriverListDto[])
-    );
-  }
-
   getDriverById(id: string): Observable<DriverDetailDto> {
     return apiDriversGetIdGet$Json(this.http, this.apiConfig.rootUrl, {id: id}).pipe(
       map(response => response.body as DriverDetailDto)
+    );
+  }
+
+  getAllDrivers(): Observable<DriverListDto[]> {
+    return apiDriversGetAllDriversGet$Json(this.http, this.apiConfig.rootUrl).pipe(
+      map(response => response.body as DriverListDto[])
     );
   }
 

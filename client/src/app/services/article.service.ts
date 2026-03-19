@@ -22,6 +22,14 @@ export class ArticleService {
 
   constructor(private http: HttpClient, private apiConfig: ApiConfiguration) { }
 
+  getBySlug(slug: string): Observable<ArticleDetailDto> {
+    return apiArticleGetSlugGet$Json(this.http, this.apiConfig.rootUrl, {slug: slug}).pipe(
+      map(response => {
+        return response.body as ArticleDetailDto ?? [];
+      })
+    )
+  }
+
   getAllArticles(page: number, pageSize:number, tag: string | undefined) : Observable<ArticleListDtoPagedResult> {
     return apiArticleGetAllArticlesGet$Json(this.http, this.apiConfig.rootUrl, {page: page, pageSize: pageSize, tag: tag}).pipe(
       map(response => {
@@ -47,14 +55,6 @@ export class ArticleService {
         return body.value as ArticleListDto[] ?? [];
       })
     );
-  }
-
-  getBySlug(slug: string): Observable<ArticleDetailDto> {
-    return apiArticleGetSlugGet$Json(this.http, this.apiConfig.rootUrl, {slug: slug}).pipe(
-      map(response => {
-        return response.body as ArticleDetailDto ?? [];
-      })
-    )
   }
 
   create(payload: ArticleCreateDto): Observable<void> {

@@ -8,8 +8,6 @@ export interface ArticleDetailDto {
   datePublished?: string;
   dateUpdated?: string;
   firstSection?: string | null;
-  grandPrixId?: string | null;
-  grandPrixName?: string | null;
   id?: string;
   isReview?: boolean;
   lastImageUrl?: string | null;

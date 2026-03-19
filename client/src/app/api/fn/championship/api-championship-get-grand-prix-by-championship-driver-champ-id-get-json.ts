@@ -9,18 +9,18 @@ import { RequestBuilder } from '../../request-builder';
 
 import { GrandPrixLookupDto } from '../../models/grand-prix-lookup-dto';
 
-export interface ApiStandingsGetGrandPrixByChampionshipDriverChampIdGet$Plain$Params {
+export interface ApiChampionshipGetGrandPrixByChampionshipDriverChampIdGet$Json$Params {
   driverChampId: string;
 }
 
-export function apiStandingsGetGrandPrixByChampionshipDriverChampIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiStandingsGetGrandPrixByChampionshipDriverChampIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<GrandPrixLookupDto>>> {
-  const rb = new RequestBuilder(rootUrl, apiStandingsGetGrandPrixByChampionshipDriverChampIdGet$Plain.PATH, 'get');
+export function apiChampionshipGetGrandPrixByChampionshipDriverChampIdGet$Json(http: HttpClient, rootUrl: string, params: ApiChampionshipGetGrandPrixByChampionshipDriverChampIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<GrandPrixLookupDto>>> {
+  const rb = new RequestBuilder(rootUrl, apiChampionshipGetGrandPrixByChampionshipDriverChampIdGet$Json.PATH, 'get');
   if (params) {
     rb.path('driverChampId', params.driverChampId, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: 'text/plain', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -29,4 +29,4 @@ export function apiStandingsGetGrandPrixByChampionshipDriverChampIdGet$Plain(htt
   );
 }
 
-apiStandingsGetGrandPrixByChampionshipDriverChampIdGet$Plain.PATH = '/api/Standings/getGrandPrixByChampionship/{driverChampId}';
+apiChampionshipGetGrandPrixByChampionshipDriverChampIdGet$Json.PATH = '/api/Championship/getGrandPrixByChampionship/{driverChampId}';

@@ -12,7 +12,7 @@ import { GrandPrixLookupDto } from '../../api/models/grand-prix-lookup-dto';
 import { GrandRrixResultDto } from '../../api/models/grand-rrix-result-dto';
 import { DriverStandingsResultDto } from '../../api/models/driver-standings-result-dto';
 import { ConstructorStandingsResultDto } from '../../api/models/constructor-standings-result-dto';
-import { ResultsService } from '../../services/results.service';
+import { StandingsService } from '../../services/standings.service';
 import { SeasonOverviewDto } from '../../api/models/season-overview-dto';
 import { DriverLookUpDto } from '../../api/models/driver-look-up-dto';
 import { ConstructorLookUpDto } from '../../api/models/constructor-look-up-dto';
@@ -46,7 +46,7 @@ const AGGREGATED_ID = 'aggregated';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent implements OnInit {
-  constructor(private standingsService: ResultsService, private authService: AuthService) {}
+  constructor(private standingsService: StandingsService, private authService: AuthService) {}
 
   private breakpointObserver = inject(BreakpointObserver);
 

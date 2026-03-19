@@ -7,16 +7,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ChampionshipCreateDto } from '../../models/championship-create-dto';
 
-export interface ApiStandingsCreateChampionshipPost$Params {
-      body?: ChampionshipCreateDto
+export interface ApiArticleImageDraftIdDelete$Params {
+  draftId: string;
 }
 
-export function apiStandingsCreateChampionshipPost(http: HttpClient, rootUrl: string, params?: ApiStandingsCreateChampionshipPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiStandingsCreateChampionshipPost.PATH, 'post');
+export function apiArticleImageDraftIdDelete(http: HttpClient, rootUrl: string, params: ApiArticleImageDraftIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiArticleImageDraftIdDelete.PATH, 'delete');
   if (params) {
-    rb.body(params.body, 'application/*+json');
+    rb.path('draftId', params.draftId, {});
   }
 
   return http.request(
@@ -29,4 +28,4 @@ export function apiStandingsCreateChampionshipPost(http: HttpClient, rootUrl: st
   );
 }
 
-apiStandingsCreateChampionshipPost.PATH = '/api/Standings/createChampionship';
+apiArticleImageDraftIdDelete.PATH = '/api/article-image/{draftId}';

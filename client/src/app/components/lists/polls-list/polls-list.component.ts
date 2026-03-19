@@ -34,7 +34,7 @@ export class PollListComponent {
   }
 
   openPollDetails(pollId: string) {
-    this.pollService.getPoll(pollId).subscribe({
+    this.pollService.getPollById(pollId).subscribe({
       next: (pollData) => {
         const dialogRef = this.dialog.open(PollVoteDialogComponent, {
           width: '700px',

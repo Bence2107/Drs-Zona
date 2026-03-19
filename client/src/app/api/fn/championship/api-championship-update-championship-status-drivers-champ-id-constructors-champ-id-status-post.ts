@@ -8,14 +8,14 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface ApiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost$Params {
+export interface ApiChampionshipUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost$Params {
   driversChampId: string;
   constructorsChampId: string;
   status: string;
 }
 
-export function apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost(http: HttpClient, rootUrl: string, params: ApiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost.PATH, 'post');
+export function apiChampionshipUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost(http: HttpClient, rootUrl: string, params: ApiChampionshipUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiChampionshipUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost.PATH, 'post');
   if (params) {
     rb.path('driversChampId', params.driversChampId, {});
     rb.path('constructorsChampId', params.constructorsChampId, {});
@@ -32,4 +32,4 @@ export function apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsCh
   );
 }
 
-apiStandingsUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost.PATH = '/api/Standings/updateChampionshipStatus/{driversChampId}/{constructorsChampId}/{status}';
+apiChampionshipUpdateChampionshipStatusDriversChampIdConstructorsChampIdStatusPost.PATH = '/api/Championship/updateChampionshipStatus/{driversChampId}/{constructorsChampId}/{status}';

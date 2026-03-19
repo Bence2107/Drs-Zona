@@ -20,7 +20,7 @@ export class ProfilePollsComponent implements OnInit {
 
     ngOnInit(): void {
       if (this.userData?.userId) {
-        this.pollService.getPollsByUser(this.userData.userId, undefined).subscribe(
+        this.pollService.getPollsByCreator(this.userData.userId, undefined).subscribe(
           (polls: PollListDto[]) => {
             this.polls = polls;
           }

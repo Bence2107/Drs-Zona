@@ -43,7 +43,7 @@ export class PollVoteDialogComponent {
   }
 
   private refreshData() {
-    this.pollService.getPoll(this.poll.id!).subscribe({
+    this.pollService.getPollById(this.poll.id!).subscribe({
       next: (updatedPoll) => {
         this.poll = updatedPoll;
       },
@@ -72,7 +72,7 @@ export class PollVoteDialogComponent {
   }
 
   removePoll() {
-     this.pollService.removePoll(this.poll.id!).subscribe({
+     this.pollService.deletePoll(this.poll.id!).subscribe({
        next: () => this.dialogRef.close()
      });
   }

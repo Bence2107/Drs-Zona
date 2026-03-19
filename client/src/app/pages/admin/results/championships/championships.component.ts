@@ -4,7 +4,7 @@ import {
 } from '../../../../components/dialogs/championship/championshipcreatedialog/championship-create-dialog.component';
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {ResultsService} from '../../../../services/results.service';
+import {StandingsService} from '../../../../services/standings.service';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {FormsModule} from '@angular/forms';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
@@ -59,7 +59,7 @@ import {MatSelect} from '@angular/material/select';
 })
 export class ChampionshipsComponent implements OnInit {
   private dialog = inject(MatDialog);
-  private resultService = inject(ResultsService);
+  private resultService = inject(StandingsService);
   private router = inject(Router);
 
   seriesList = signal<SeriesLookupDto[]>([]);

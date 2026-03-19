@@ -10,7 +10,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {CircuitListDto} from '../../../../api/models/circuit-list-dto';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
-import {ResultsService} from '../../../../services/results.service';
+import {StandingsService} from '../../../../services/standings.service';
 import {CountryFlagPipe} from '../../../../pipes/country-flag.pipe';
 import {GrandPrixCreateDto} from '../../../../api/models/grand-prix-create-dto';
 import {GrandPrixUpdateDto} from '../../../../api/models/grand-prix-update-dto';
@@ -66,7 +66,7 @@ export class GrandPrixManageDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialogRef:MatDialogRef<GrandPrixManageDialogComponent>,
-    private resultService: ResultsService,
+    private resultService: StandingsService,
     private formErrorService: FormErrorService,
   ) {
 

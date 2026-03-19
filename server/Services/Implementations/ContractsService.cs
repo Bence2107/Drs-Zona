@@ -24,6 +24,7 @@ public class ContractsService(
             .ToList();
         return ResponseResult<List<ContractListDto>>.Success(dto);
     }
+    
     public async Task<ResponseResult<bool>> Create(ContractCreateDto dto)
     {
         var contract = new Contract

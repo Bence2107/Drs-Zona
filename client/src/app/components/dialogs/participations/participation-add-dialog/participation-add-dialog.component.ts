@@ -10,7 +10,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {YearLookupDto} from '../../../../api/models/year-lookup-dto';
 import {DriverListDto} from '../../../../api/models/driver-list-dto';
 import {ConstructorListDto} from '../../../../api/models/constructor-list-dto';
-import {ResultsService} from '../../../../services/results.service';
+import {StandingsService} from '../../../../services/standings.service';
 import {DriverService} from '../../../../services/driver.service';
 import {ConstructorsService} from '../../../../services/constructors.service';
 import {MatTooltip} from '@angular/material/tooltip';
@@ -35,7 +35,7 @@ import {MatTooltip} from '@angular/material/tooltip';
 export class ParticipationAddDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<ParticipationAddDialogComponent>);
-  private resultService = inject(ResultsService);
+  private resultService = inject(StandingsService);
   private driverService = inject(DriverService);
   private constructorService = inject(ConstructorsService);
 

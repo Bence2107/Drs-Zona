@@ -261,28 +261,6 @@ public class StandingsService(
         );
     }
     
-    public async Task<ResponseResult<List<YearLookupDto>>> GetSeasonsBySeries(Guid seriesId)
-    {
-        var driversChamps = await driverChampRepo.GetBySeriesId(seriesId);
-        var constructorChamps = await constructorChampRepo.GetBySeriesId(seriesId);
-
-        var dtoS = driversChamps
-            .Join(
-                constructorChamps,
-                d => d.Season,
-                c => c.Season,
-                (d, c) => new YearLookupDto(
-                    d.Season.ToString(),
-                    d.Id,
-                    c.Id
-                )
-            )
-            .OrderByDescending(y => y.Season)
-            .ToList();
-
-        return ResponseResult<List<YearLookupDto>>.Success(dtoS);
-    }
-    
     public async Task<ResponseResult<List<SeasonOverviewDto>>> GetSeasonOverview(Guid driverChampId)
     {
         var rawResults = await resultsRepo.GetByDriversChampionshipId(driverChampId);

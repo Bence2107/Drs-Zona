@@ -7,16 +7,21 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ParticipationAddDto } from '../../models/participation-add-dto';
 
-export interface ApiStandingsAddParticipationsPost$Params {
-      body?: ParticipationAddDto
+export interface ApiArticleImageDraftIdImagesSlotPost$Params {
+  draftId: string;
+  slot: string;
+      body?: {
+'file'?: Blob;
+}
 }
 
-export function apiStandingsAddParticipationsPost(http: HttpClient, rootUrl: string, params?: ApiStandingsAddParticipationsPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiStandingsAddParticipationsPost.PATH, 'post');
+export function apiArticleImageDraftIdImagesSlotPost(http: HttpClient, rootUrl: string, params: ApiArticleImageDraftIdImagesSlotPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiArticleImageDraftIdImagesSlotPost.PATH, 'post');
   if (params) {
-    rb.body(params.body, 'application/*+json');
+    rb.path('draftId', params.draftId, {});
+    rb.path('slot', params.slot, {});
+    rb.body(params.body, 'multipart/form-data');
   }
 
   return http.request(
@@ -29,4 +34,4 @@ export function apiStandingsAddParticipationsPost(http: HttpClient, rootUrl: str
   );
 }
 
-apiStandingsAddParticipationsPost.PATH = '/api/Standings/addParticipations';
+apiArticleImageDraftIdImagesSlotPost.PATH = '/api/article-image/{draftId}/images/{slot}';

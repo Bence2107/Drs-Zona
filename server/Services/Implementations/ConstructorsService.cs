@@ -63,20 +63,6 @@ public class ConstructorsService(
         return ResponseResult<List<ConstructorListDto>>.Success(dto);
     }
     
-    public async Task<ResponseResult<List<ConstructorListDto>>> ListAllConstructorsByChampionship(Guid championshipId)
-    {
-        var constructors = await constructorCompetitionRepo.GetConstructorsByChampionshipId(championshipId);
-        if (constructors.Count == 0) return ResponseResult<List<ConstructorListDto>>.Failure("Championship does not have any constructors");
-        
-        var dto = constructors.Select(c => new ConstructorListDto(
-            Id: c!.Id,
-            Name: c.Name
-        ))
-        .ToList();
-
-        return ResponseResult<List<ConstructorListDto>>.Success(dto);
-    }
-
     public async Task<ResponseResult<bool>> Create(ConstructorCreateDto constructorCreateDto)
     {
         var existingConstructor = await constructorRepo.GetByName(constructorCreateDto.Name);

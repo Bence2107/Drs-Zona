@@ -10,5 +10,4 @@ public interface IGrandPrixService
     Task<ResponseResult<List<GrandPrixListDto>>> GetSeasonGrandPrixList(Guid seriesId, int year);
     Task<ResponseResult<bool>> Create(GrandPrixCreateDto grandPrixCreateDto);
     Task<ResponseResult<bool>> Update(GrandPrixUpdateDto grandPrixUpdateDto);
-    Task<ResponseResult<bool>> Delete(Guid id);
 }

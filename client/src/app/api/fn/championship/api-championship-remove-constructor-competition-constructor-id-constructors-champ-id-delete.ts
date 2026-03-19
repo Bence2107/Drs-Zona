@@ -8,13 +8,13 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface ApiStandingsRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete$Params {
+export interface ApiChampionshipRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete$Params {
   constructorId: string;
   constructorsChampId: string;
 }
 
-export function apiStandingsRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete(http: HttpClient, rootUrl: string, params: ApiStandingsRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiStandingsRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete.PATH, 'delete');
+export function apiChampionshipRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete(http: HttpClient, rootUrl: string, params: ApiChampionshipRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiChampionshipRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete.PATH, 'delete');
   if (params) {
     rb.path('constructorId', params.constructorId, {});
     rb.path('constructorsChampId', params.constructorsChampId, {});
@@ -30,4 +30,4 @@ export function apiStandingsRemoveConstructorCompetitionConstructorIdConstructor
   );
 }
 
-apiStandingsRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete.PATH = '/api/Standings/removeConstructorCompetition/{constructorId}/{constructorsChampId}';
+apiChampionshipRemoveConstructorCompetitionConstructorIdConstructorsChampIdDelete.PATH = '/api/Championship/removeConstructorCompetition/{constructorId}/{constructorsChampId}';

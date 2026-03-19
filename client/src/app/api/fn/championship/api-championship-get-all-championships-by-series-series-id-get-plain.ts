@@ -9,18 +9,18 @@ import { RequestBuilder } from '../../request-builder';
 
 import { ChampionshipRowDto } from '../../models/championship-row-dto';
 
-export interface ApiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json$Params {
+export interface ApiChampionshipGetAllChampionshipsBySeriesSeriesIdGet$Plain$Params {
   seriesId: string;
 }
 
-export function apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json(http: HttpClient, rootUrl: string, params: ApiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ChampionshipRowDto>>> {
-  const rb = new RequestBuilder(rootUrl, apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json.PATH, 'get');
+export function apiChampionshipGetAllChampionshipsBySeriesSeriesIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiChampionshipGetAllChampionshipsBySeriesSeriesIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ChampionshipRowDto>>> {
+  const rb = new RequestBuilder(rootUrl, apiChampionshipGetAllChampionshipsBySeriesSeriesIdGet$Plain.PATH, 'get');
   if (params) {
     rb.path('seriesId', params.seriesId, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'text/json', context })
+    rb.build({ responseType: 'text', accept: 'text/plain', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -29,4 +29,4 @@ export function apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json(http: Ht
   );
 }
 
-apiStandingsGetAllChampionshipsBySeriesSeriesIdGet$Json.PATH = '/api/Standings/getAllChampionshipsBySeries/{seriesId}';
+apiChampionshipGetAllChampionshipsBySeriesSeriesIdGet$Plain.PATH = '/api/Championship/getAllChampionshipsBySeries/{seriesId}';

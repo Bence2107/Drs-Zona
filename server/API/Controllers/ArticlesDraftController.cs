@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces.images;
 
 [ApiController]
-[Route("api/article-drafts")]
+[Route("api/article-image")]
 [Authorize] 
-public class ArticleDraftController(IArticleImageService articleImageService) : ControllerBase
+public class ArticleImageController(IArticleImageService articleImageService) : ControllerBase 
 {
     private static readonly string[] AllowedSlots = ["primary", "secondary", "third", "last"];
     private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png", ".webp"];

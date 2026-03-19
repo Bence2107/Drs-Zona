@@ -23,22 +23,6 @@ public class StandingsController(IStandingsService standingsService): Controller
         
         return Ok(response.Value);   
     }
-    
-    [HttpGet("getByDriversChampionshipId/{driversChampId:guid}")]
-    public async Task<ActionResult<DriverStandingsDto>> GetDriverStandings(Guid driversChampId)
-    {
-        var response = await standingsService.GetDriverStandings(driversChampId);
-        if (!response.IsSuccess)
-        {
-            return BadRequest(new
-            {
-                response.ErrorField, 
-                response.Message
-            });
-        }
-        
-        return Ok(response.Value);
-    }
 
     [HttpGet("getByConstructorChampionshipId/{constructsChampId:guid}")]
     public async Task<ActionResult<ConstructorStandingsDto>> GetConstructorStandings(Guid constructsChampId)
@@ -55,7 +39,7 @@ public class StandingsController(IStandingsService standingsService): Controller
         
         return Ok(response.Value);
     }
-    
+
     [HttpGet("getConstructorsResultsBySeason/{constructorId:guid}/{constructorChampId:guid}")]
     public async Task<ActionResult<List<ConstructorSeasonResultDto>>> GetConstructorsResultsBySeason(Guid constructorId, Guid constructorChampId)
     {
@@ -71,7 +55,23 @@ public class StandingsController(IStandingsService standingsService): Controller
         
         return Ok(response.Value);
     }
-    
+
+    [HttpGet("getByDriversChampionshipId/{driversChampId:guid}")]
+    public async Task<ActionResult<DriverStandingsDto>> GetDriverStandings(Guid driversChampId)
+    {
+        var response = await standingsService.GetDriverStandings(driversChampId);
+        if (!response.IsSuccess)
+        {
+            return BadRequest(new
+            {
+                response.ErrorField, 
+                response.Message
+            });
+        }
+        
+        return Ok(response.Value);
+    }
+
     [HttpGet("getDriverResultsBySeason/{driverId:guid}/{driverChampId:guid}")]
     public async Task<ActionResult<List<DriverSeasonResultDto>>> GetDriverResultsBySeason(Guid driverId, Guid driverChampId)
     {
@@ -85,6 +85,15 @@ public class StandingsController(IStandingsService standingsService): Controller
             });
         }
         
+        return Ok(response.Value);
+    }
+    
+    [HttpGet("getGrandPrixContext/{grandPrixId:guid}")]
+    public async Task<ActionResult<GrandPrixChampionshipContextDto>> GetGrandPrixContext(Guid grandPrixId)
+    {
+        var response = await standingsService.GetGrandPrixContext(grandPrixId);
+        if (!response.IsSuccess)
+            return BadRequest(new { response.ErrorField, response.Message });
         return Ok(response.Value);
     }
     
@@ -108,22 +117,6 @@ public class StandingsController(IStandingsService standingsService): Controller
     public async Task<ActionResult<List<SeasonOverviewDto>>> GetSeasonOverview(Guid driverChampId)
     {
         var response = await standingsService.GetSeasonOverview(driverChampId);
-        if (!response.IsSuccess)
-        {
-            return BadRequest(new
-            {
-                response.ErrorField, 
-                response.Message
-            });
-        }
-        
-        return Ok(response.Value);
-    }
-    
-    [HttpGet("getSeasonsBySeries/{seriesId:guid}")]
-    public async Task<ActionResult<List<YearLookupDto>>> GetSeasonsBySeries(Guid seriesId)
-    {
-        var response = await standingsService.GetSeasonsBySeries(seriesId);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -177,15 +170,6 @@ public class StandingsController(IStandingsService standingsService): Controller
         if (!response.IsSuccess)
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
-    }
-    
-    [HttpGet("getGrandPrixContext/{grandPrixId:guid}")]
-    public async Task<ActionResult<GrandPrixChampionshipContextDto>> GetGrandPrixContext(Guid grandPrixId)
-    {
-        var response = await standingsService.GetGrandPrixContext(grandPrixId);
-        if (!response.IsSuccess)
-            return BadRequest(new { response.ErrorField, response.Message });
-        return Ok(response.Value);
     }
     
     [HttpPost("updateSingleResult")]

@@ -12,7 +12,7 @@ namespace Drs_Zona.API.Controllers;
 public class AuthController(
     IAuthService authService, 
     IUserImageService userImageService
-) : ControllerBase
+) : ControllerBase 
 {
     [HttpPost("register")]
     public async Task<ActionResult<AuthResponse>> Register([FromBody] RegisterRequest request)

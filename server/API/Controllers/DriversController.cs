@@ -24,12 +24,6 @@ public class DriversController(IDriverService driverService): ControllerBase
         return Ok(response.Value);
     }
     
-    [HttpGet("getAllByChampionship/{championshipId:guid}")]
-    public async Task<ActionResult<List<DriverDetailDto>>> GetAll(Guid championshipId)
-    {
-        var response = await driverService.ListAllDriversByChampionships(championshipId);
-        return Ok(response.Value);
-    }
     
     [HttpGet("getAllDrivers")]
     public async Task<ActionResult<List<DriverListDto>>> GetAllDrivers()

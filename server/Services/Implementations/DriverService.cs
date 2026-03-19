@@ -60,31 +60,6 @@ public class DriverService(
         return ResponseResult<List<DriverListDto>>.Success(orderedDto);
     }
     
-    public async Task<ResponseResult<List<DriverListDto>>> ListAllDriversByChampionships(Guid championshipId)
-    {
-        var drivers = await driverParticipationRepo.GetDriversByChampionship(championshipId);
-        if (drivers.Count == 0)
-        {
-            return ResponseResult<List<DriverListDto>>.Success([]);
-        }
-
-        var dto = new List<DriverListDto>();
-        foreach (var d in drivers)
-        {
-            var currentContracts = await contractsDepo.GetByDriverId(d!.Id);
-            var currentTeamName = currentContracts.LastOrDefault()?.Constructor?.Name;
-
-            dto.Add(new DriverListDto(
-                d.Id,
-                d.Name,
-                d.Nationality,
-                GetDriversAge(d.BirthDate),
-                currentTeamName
-            ));
-        }
-
-        return ResponseResult<List<DriverListDto>>.Success(dto);
-    }
 
     public async Task<ResponseResult<bool>> Create(DriverCreateDto dto)
     {

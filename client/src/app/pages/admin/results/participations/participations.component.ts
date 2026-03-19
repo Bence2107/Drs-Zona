@@ -1,6 +1,6 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {ResultsService} from '../../../../services/results.service';
+import {StandingsService} from '../../../../services/standings.service';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
 import {YearLookupDto} from '../../../../api/models/year-lookup-dto';
 import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirmdialog.component';
@@ -45,7 +45,7 @@ import {Router} from '@angular/router';
 })
 export class ParticipationsComponent implements OnInit{
   private dialog = inject(MatDialog);
-  private resultService = inject(ResultsService);
+  private resultService = inject(StandingsService);
   private router = inject(Router);
 
   seriesList = signal<SeriesLookupDto[]>([]);

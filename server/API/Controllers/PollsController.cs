@@ -6,7 +6,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PollController(IPollService pollService): ControllerBase
+public class PollController(IPollService pollService): ControllerBase 
 {
     private Guid? GetCurrentUserId()
     {
@@ -34,7 +34,7 @@ public class PollController(IPollService pollService): ControllerBase
     [HttpGet("getByCreatorId/{id:guid}")]
     public async Task<ActionResult<List<PollListDto>>> GetByCreatorId([FromRoute] Guid id,  [FromQuery] string? tag = null)
     {
-        var response = await pollService.GetPollByCreatorId(id, tag);
+        var response = await pollService.GetPollsByCreatorId(id, tag);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -45,13 +45,6 @@ public class PollController(IPollService pollService): ControllerBase
         }
         
         return Ok(response.Value);
-    }
-    
-    [HttpGet("getAll")]
-    public async Task<ActionResult<List<PollListDto>>> GetAll([FromQuery] string? tag = null)
-    {
-        var response = await pollService.ListAllPolls(tag);
-        return Ok(response);
     }
     
     [HttpGet("getAllActive")]
@@ -90,23 +83,6 @@ public class PollController(IPollService pollService): ControllerBase
     public async Task<ActionResult> Vote([FromRoute]Guid pollId, [FromRoute]Guid pollOptionId, [FromRoute] Guid userId)
     {
         var result = await pollService.Vote(pollId, pollOptionId, userId);
-
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new
-            {
-                result.ErrorField, 
-                result.Message
-            });
-        }
-
-        return Ok(result.Value);
-    }
-    
-    [HttpPost("removeVote/{pollId:guid}/{pollOptionId:guid}/{userId:guid}")]
-    public async Task<ActionResult> RemoveVote([FromRoute]Guid pollId, [FromRoute]Guid pollOptionId, [FromRoute] Guid userId)
-    {
-        var result = await pollService.RemoveVote(pollId, pollOptionId, userId);
 
         if (!result.IsSuccess)
         {

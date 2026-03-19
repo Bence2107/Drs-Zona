@@ -21,15 +21,14 @@ import {PollCreateDto} from '../api/models/poll-create-dto';
 export class PollService {
   constructor(private http: HttpClient, private apiConfig: ApiConfiguration) {}
 
-  getAllActive(tag: string | undefined): Observable<PollListDto[]> {
-    return apiPollGetAllActiveGet$Json(this.http, this.apiConfig.rootUrl, {tag: tag}).pipe(
+  getPollById(id: string): Observable<PollDto> {
+    return apiPollGetIdGet$Json(this.http, this.apiConfig.rootUrl, {id: id}).pipe(
       map(response => {
-        const body = response.body as any;
-        return body.value as PollListDto[] ?? []
+        return response.body as PollDto;
       })
     )
   }
-  getPollsByUser(id: string, tag: string | undefined): Observable<PollListDto[]> {
+  getPollsByCreator(id: string, tag: string | undefined): Observable<PollListDto[]> {
     return apiPollGetByCreatorIdIdGet$Json(this.http, this.apiConfig.rootUrl, {id: id, tag: tag }).pipe(
       map(response => {
         return response.body as PollListDto[];
@@ -38,18 +37,13 @@ export class PollService {
     )
   }
 
-  getPoll(id: string): Observable<PollDto> {
-    return apiPollGetIdGet$Json(this.http, this.apiConfig.rootUrl, {id: id}).pipe(
+  getAllActive(tag: string | undefined): Observable<PollListDto[]> {
+    return apiPollGetAllActiveGet$Json(this.http, this.apiConfig.rootUrl, {tag: tag}).pipe(
       map(response => {
-        return response.body as PollDto;
+        const body = response.body as any;
+        return body.value as PollListDto[] ?? []
       })
     )
-  }
-
-  vote(pollId: string, pollOptionId: string, userId: string): Observable<any> {
-    return apiPollVotePollIdPollOptionIdUserIdPost(this.http, this.apiConfig.rootUrl, {
-      pollId, pollOptionId, userId
-    });
   }
 
   createPoll(dto: PollCreateDto, userId: string) {
@@ -58,7 +52,13 @@ export class PollService {
     );
   }
 
-  removePoll(id: string){
+  vote(pollId: string, pollOptionId: string, userId: string): Observable<any> {
+    return apiPollVotePollIdPollOptionIdUserIdPost(this.http, this.apiConfig.rootUrl, {
+      pollId, pollOptionId, userId
+    });
+  }
+
+  deletePoll(id: string){
     return apiPollDeleteIdDelete(this.http, this.apiConfig.rootUrl, {id: id}).pipe(
       map(() => void 0)
     );

@@ -18,7 +18,7 @@ import {MatOption, MatSelect} from '@angular/material/select';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {ResultsService} from '../../../../../services/results.service';
+import {StandingsService} from '../../../../../services/standings.service';
 import {SessionEditDto} from '../../../../../api/models/session-edit-dto';
 import {ResultEditDto} from '../../../../../api/models/result-edit-dto';
 import {SingleResultUpdateDto} from '../../../../../api/models/single-result-update-dto';
@@ -69,7 +69,7 @@ export class EntryDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private resultsService: ResultsService,
+    private resultsService: StandingsService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {}

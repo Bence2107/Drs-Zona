@@ -16,14 +16,6 @@ export class SeriesService {
     protected apiConfig: ApiConfiguration
   ) { }
 
-  getSeriesList(): Observable<SeriesListDto[]> {
-    return apiSeriesGetAllSeriesGet$Json(this.http, this.apiConfig.rootUrl).pipe(
-      map(response => {
-        return response.body as SeriesListDto[];
-      })
-    )
-  }
-
   getByName(name: string): Observable<SeriesDetailDto> {
     return apiSeriesNameNameGet$Json(this.http, this.apiConfig.rootUrl, {name: name}).pipe(
       map(response => {
@@ -32,4 +24,11 @@ export class SeriesService {
     )
   }
 
+  getSeriesList(): Observable<SeriesListDto[]> {
+    return apiSeriesGetAllSeriesGet$Json(this.http, this.apiConfig.rootUrl).pipe(
+      map(response => {
+        return response.body as SeriesListDto[];
+      })
+    )
+  }
 }

@@ -52,11 +52,11 @@ export class AuthService {
     );
   }
 
-  loadProfile(): void {
-    if (!this.isLoggedIn()) return;
-    apiAuthMeGet$Json(this.http, this.apiConfig.rootUrl).subscribe({
-      next: (response) => this.currentProfile.set(response.body),
-      error: () => this.currentProfile.set(null)
+  logout(): void {
+    apiAuthLogoutPost(this.http, this.apiConfig.rootUrl).subscribe({
+      complete: () => {
+        this.clearSession();
+      }
     });
   }
 
@@ -107,17 +107,15 @@ export class AuthService {
     );
   }
 
+  //-----private methods----
 
-  logout(): void {
-    apiAuthLogoutPost(this.http, this.apiConfig.rootUrl).subscribe({
-      complete: () => {
-        this.clearSession();
-      }
+  loadProfile(): void {
+    if (!this.isLoggedIn()) return;
+    apiAuthMeGet$Json(this.http, this.apiConfig.rootUrl).subscribe({
+      next: (response) => this.currentProfile.set(response.body),
+      error: () => this.currentProfile.set(null)
     });
   }
-
-
-
 
   getToken(): string | null {
     return this.currentUser()?.token ?? null;
@@ -128,7 +126,6 @@ export class AuthService {
     if (!user?.token || !user?.expiresAt) return false;
     return new Date(user.expiresAt) > new Date();
   }
-
 
   private loadFromStorage(): AuthResponse | null {
     const stored = localStorage.getItem(this.TOKEN_KEY);

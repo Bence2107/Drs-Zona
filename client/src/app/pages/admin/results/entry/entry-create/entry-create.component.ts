@@ -9,7 +9,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import {ResultsService} from '../../../../../services/results.service';
+import {StandingsService} from '../../../../../services/standings.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {GrandPrixChampionshipContextDto} from '../../../../../api/models/grand-prix-championship-context-dto';
 import {BatchResultCreateDto} from '../../../../../api/models/batch-result-create-dto';
@@ -69,7 +69,7 @@ export class EntryCreateComponent implements OnInit{
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private resultsService: ResultsService,
+    private resultsService: StandingsService,
     private snackBar: MatSnackBar
   ) {
     effect(() => {

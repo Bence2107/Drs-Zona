@@ -64,7 +64,6 @@ export class CommentService {
     }).pipe(map(() => void 0));
   }
 
-
   deleteComment(id: string): Observable<void> {
     return apiCommentsDeleteIdDelete(this.http, this.apiConfig.rootUrl, {id: id}).pipe(map(() => void 0));
   }

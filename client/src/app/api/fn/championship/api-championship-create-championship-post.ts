@@ -7,15 +7,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { ChampionshipCreateDto } from '../../models/championship-create-dto';
 
-export interface ApiGrandPrixDeleteIdDelete$Params {
-  id: string;
+export interface ApiChampionshipCreateChampionshipPost$Params {
+      body?: ChampionshipCreateDto
 }
 
-export function apiGrandPrixDeleteIdDelete(http: HttpClient, rootUrl: string, params: ApiGrandPrixDeleteIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiGrandPrixDeleteIdDelete.PATH, 'delete');
+export function apiChampionshipCreateChampionshipPost(http: HttpClient, rootUrl: string, params?: ApiChampionshipCreateChampionshipPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiChampionshipCreateChampionshipPost.PATH, 'post');
   if (params) {
-    rb.path('id', params.id, {});
+    rb.body(params.body, 'application/*+json');
   }
 
   return http.request(
@@ -28,4 +29,4 @@ export function apiGrandPrixDeleteIdDelete(http: HttpClient, rootUrl: string, pa
   );
 }
 
-apiGrandPrixDeleteIdDelete.PATH = '/api/GrandPrix/delete/{id}';
+apiChampionshipCreateChampionshipPost.PATH = '/api/Championship/createChampionship';

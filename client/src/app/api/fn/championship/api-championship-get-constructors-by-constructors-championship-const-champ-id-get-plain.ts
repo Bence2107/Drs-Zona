@@ -9,12 +9,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { ConstructorLookUpDto } from '../../models/constructor-look-up-dto';
 
-export interface ApiStandingsGetConstructorsByConstructorsChampionshipConstChampIdGet$Plain$Params {
+export interface ApiChampionshipGetConstructorsByConstructorsChampionshipConstChampIdGet$Plain$Params {
   constChampId: string;
 }
 
-export function apiStandingsGetConstructorsByConstructorsChampionshipConstChampIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiStandingsGetConstructorsByConstructorsChampionshipConstChampIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ConstructorLookUpDto>>> {
-  const rb = new RequestBuilder(rootUrl, apiStandingsGetConstructorsByConstructorsChampionshipConstChampIdGet$Plain.PATH, 'get');
+export function apiChampionshipGetConstructorsByConstructorsChampionshipConstChampIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiChampionshipGetConstructorsByConstructorsChampionshipConstChampIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ConstructorLookUpDto>>> {
+  const rb = new RequestBuilder(rootUrl, apiChampionshipGetConstructorsByConstructorsChampionshipConstChampIdGet$Plain.PATH, 'get');
   if (params) {
     rb.path('constChampId', params.constChampId, {});
   }
@@ -29,4 +29,4 @@ export function apiStandingsGetConstructorsByConstructorsChampionshipConstChampI
   );
 }
 
-apiStandingsGetConstructorsByConstructorsChampionshipConstChampIdGet$Plain.PATH = '/api/Standings/getConstructorsByConstructorsChampionship/{constChampId}';
+apiChampionshipGetConstructorsByConstructorsChampionshipConstChampIdGet$Plain.PATH = '/api/Championship/getConstructorsByConstructorsChampionship/{constChampId}';

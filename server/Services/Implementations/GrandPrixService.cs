@@ -120,13 +120,4 @@ public class GrandPrixService (
         await grandsPrixRepository.Update(existing);
         return ResponseResult<bool>.Success(true);
     }
-
-    public async Task<ResponseResult<bool>> Delete(Guid id)
-    {
-        var existing = await grandsPrixRepository.GetGrandPrixById(id);
-        if (existing == null) return ResponseResult<bool>.Failure("Grand Prix not found");
-
-        await grandsPrixRepository.Delete(id);
-        return ResponseResult<bool>.Success(true);
-    }
 }

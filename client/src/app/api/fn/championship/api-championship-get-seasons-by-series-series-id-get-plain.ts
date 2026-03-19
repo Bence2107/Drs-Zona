@@ -9,12 +9,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { YearLookupDto } from '../../models/year-lookup-dto';
 
-export interface ApiStandingsGetSeasonsBySeriesSeriesIdGet$Plain$Params {
+export interface ApiChampionshipGetSeasonsBySeriesSeriesIdGet$Plain$Params {
   seriesId: string;
 }
 
-export function apiStandingsGetSeasonsBySeriesSeriesIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiStandingsGetSeasonsBySeriesSeriesIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<YearLookupDto>>> {
-  const rb = new RequestBuilder(rootUrl, apiStandingsGetSeasonsBySeriesSeriesIdGet$Plain.PATH, 'get');
+export function apiChampionshipGetSeasonsBySeriesSeriesIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiChampionshipGetSeasonsBySeriesSeriesIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<YearLookupDto>>> {
+  const rb = new RequestBuilder(rootUrl, apiChampionshipGetSeasonsBySeriesSeriesIdGet$Plain.PATH, 'get');
   if (params) {
     rb.path('seriesId', params.seriesId, {});
   }
@@ -29,4 +29,4 @@ export function apiStandingsGetSeasonsBySeriesSeriesIdGet$Plain(http: HttpClient
   );
 }
 
-apiStandingsGetSeasonsBySeriesSeriesIdGet$Plain.PATH = '/api/Standings/getSeasonsBySeries/{seriesId}';
+apiChampionshipGetSeasonsBySeriesSeriesIdGet$Plain.PATH = '/api/Championship/getSeasonsBySeries/{seriesId}';
