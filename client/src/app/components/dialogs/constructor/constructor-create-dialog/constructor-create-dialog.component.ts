@@ -11,6 +11,7 @@ import {BrandListDto} from '../../../../api/models/brand-list-dto';
 import {ConstructorCreateDto} from '../../../../api/models/constructor-create-dto';
 import {FormErrorService} from '../../../../services/form-error.service';
 import {HttpValidationError} from '../../../../services/error-interceptor.service';
+import {BrandsService} from '../../../../services/brands.service';
 
 @Component({
   selector: 'app-constructor-create-dialog',
@@ -45,6 +46,7 @@ export class ConstructorCreateDialogComponent implements OnInit {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<ConstructorCreateDialogComponent>,
     private constructorService: ConstructorsService,
+    private brandsService: BrandsService,
     private formErrorService: FormErrorService,
   ) {}
 
@@ -63,7 +65,7 @@ export class ConstructorCreateDialogComponent implements OnInit {
       seasons:        [1, [Validators.required, Validators.min(1), Validators.max(99)]],
     });
 
-    this.constructorService.getAllBrands().subscribe(res => this.brands.set(res));
+    this.brandsService.getAllBrands().subscribe(res => this.brands.set(res));
 
     this.formErrorService.clearServerErrorOnChange([
       this.form.get('brandId') as FormControl,

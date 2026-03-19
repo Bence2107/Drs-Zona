@@ -2,7 +2,7 @@ import {ChampionshipRowDto, SeriesLookupDto} from "../../../../api/models";
 import {
   ChampionshipCreateDialogComponent
 } from '../../../../components/dialogs/championship/championshipcreatedialog/championship-create-dialog.component';
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {StandingsService} from '../../../../services/standings.service';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
@@ -25,6 +25,7 @@ import {MatTooltip} from '@angular/material/tooltip';
 import {MatFormField, MatLabel} from '@angular/material/input';
 import {MatOption} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
+import {ChampionshipService} from '../../../../services/championship.service';
 
 @Component({
   selector: 'app-championships',
@@ -58,17 +59,20 @@ import {MatSelect} from '@angular/material/select';
   styleUrl: './championships.component.scss',
 })
 export class ChampionshipsComponent implements OnInit {
-  private dialog = inject(MatDialog);
-  private resultService = inject(StandingsService);
-  private router = inject(Router);
-
   seriesList = signal<SeriesLookupDto[]>([]);
   selectedSeriesId = signal<string | null>(null);
   championships = signal<ChampionshipRowDto[]>([]);
   isLoading = signal(false);
 
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    private championshipService: ChampionshipService,
+    private standingsService: StandingsService
+  ) {}
+
   ngOnInit() {
-    this.resultService.getAllSeries().subscribe(res => {
+    this.standingsService.getAllSeries().subscribe(res => {
       const filtered = res.filter(s => {
         const name = s.name?.toLowerCase() ?? '';
         return !name.includes('wec') && !name.includes('nascar');
@@ -89,7 +93,7 @@ export class ChampionshipsComponent implements OnInit {
     const seriesId = this.selectedSeriesId();
     if (!seriesId) return;
     this.isLoading.set(true);
-    this.resultService.getAllChampionshipsBySeries(seriesId).subscribe({
+    this.championshipService.getAllChampionshipsBySeries(seriesId).subscribe({
       next: res => {
         this.championships.set(res);
         this.isLoading.set(false);
@@ -103,7 +107,7 @@ export class ChampionshipsComponent implements OnInit {
   }
 
   updateStatus(champ: ChampionshipRowDto, status: string) {
-    this.resultService.updateChampionship(
+    this.championshipService.updateChampionship(
       champ.driversChampId!,
       champ.constructorsChampId!,
       status

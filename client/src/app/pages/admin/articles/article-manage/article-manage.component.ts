@@ -196,7 +196,6 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
       tag: article.tag!,
       lead: article.lead!,
       slug: article.slug!,
-      grandPrixId: article.grandPrixId,
       isReview: article.isReview,
       firstSection: article.firstSection!,
       lastSection: article.lastSection!,

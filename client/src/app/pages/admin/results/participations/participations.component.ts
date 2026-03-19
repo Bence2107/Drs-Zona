@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {StandingsService} from '../../../../services/standings.service';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
@@ -19,6 +19,7 @@ import {MatFabButton, MatIconButton} from '@angular/material/button';
 import {MatTooltip} from '@angular/material/tooltip';
 import {ParticipationListDto} from '../../../../api/models/participation-list-dto';
 import {Router} from '@angular/router';
+import {ChampionshipService} from '../../../../services/championship.service';
 
 
 @Component({
@@ -44,9 +45,6 @@ import {Router} from '@angular/router';
   styleUrl: './participations.component.scss',
 })
 export class ParticipationsComponent implements OnInit{
-  private dialog = inject(MatDialog);
-  private resultService = inject(StandingsService);
-  private router = inject(Router);
 
   seriesList = signal<SeriesLookupDto[]>([]);
   selectedSeriesId = signal<string | null>(null);
@@ -56,6 +54,13 @@ export class ParticipationsComponent implements OnInit{
   selectedYearLookup = signal<YearLookupDto | null>(null);
   participations = signal<ParticipationListDto | null>(null);
   isLoading = signal(false);
+
+  constructor(
+    public dialog: MatDialog,
+    private router: Router,
+    private championshipService: ChampionshipService,
+    private resultService: StandingsService
+  ) {}
 
   ngOnInit() {
     this.resultService.getAllSeries().subscribe(res => {
@@ -70,7 +75,7 @@ export class ParticipationsComponent implements OnInit{
 
   onSeriesChange(seriesId: string) {
     this.selectedSeriesId.set(seriesId);
-    this.resultService.getSeasonsBySeries(seriesId).subscribe(res => {
+    this.championshipService.getSeasonsBySeries(seriesId).subscribe(res => {
       this.yearLookups.set(res);
       const years = res.map(y => parseInt(y.season!)).filter(y => !isNaN(y)).sort((a, b) => b - a);
       this.years.set(years);
@@ -90,7 +95,7 @@ export class ParticipationsComponent implements OnInit{
   loadParticipations(lookup: YearLookupDto) {
     if (!lookup.driversChampId || !lookup.constructorsChampId) return;
     this.isLoading.set(true);
-    this.resultService.getParticipations(lookup.driversChampId, lookup.constructorsChampId).subscribe({
+    this.championshipService.getParticipations(lookup.driversChampId, lookup.constructorsChampId).subscribe({
       next: res => {
         this.participations.set(res);
         this.isLoading.set(false);
@@ -114,7 +119,7 @@ export class ParticipationsComponent implements OnInit{
 
     ref.afterClosed().subscribe(confirmed => {
       if (!confirmed) return;
-      this.resultService.removeDriverParticipation(driverId, lookup.driversChampId!).subscribe({
+      this.championshipService.removeDriverParticipation(driverId, lookup.driversChampId!).subscribe({
         next: () => this.loadParticipations(lookup)
       });
     });
@@ -135,7 +140,7 @@ export class ParticipationsComponent implements OnInit{
 
     ref.afterClosed().subscribe(confirmed => {
       if (!confirmed) return;
-      this.resultService.removeConstructorParticipation(constructorId, lookup.constructorsChampId!).subscribe({
+      this.championshipService.removeConstructorParticipation(constructorId, lookup.constructorsChampId!).subscribe({
         next: () => this.loadParticipations(lookup)
       });
     });

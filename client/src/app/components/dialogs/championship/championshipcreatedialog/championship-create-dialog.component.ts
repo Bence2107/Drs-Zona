@@ -7,10 +7,10 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
-import {StandingsService} from '../../../../services/standings.service';
 import {ChampionshipCreateDto} from '../../../../api/models/championship-create-dto';
 import {FormErrorService} from '../../../../services/form-error.service';
 import {HttpValidationError} from '../../../../services/error-interceptor.service';
+import {ChampionshipService} from '../../../../services/championship.service';
 
 @Component({
   selector: 'app-championshipcreatedialog',
@@ -43,8 +43,8 @@ export class ChampionshipCreateDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<ChampionshipCreateDialogComponent>,
-    private resultService: StandingsService,
     private formErrorService: FormErrorService,
+    private championshipService: ChampionshipService,
   ) {
     this.form =  this.fb.group({
       seriesId:         ['', Validators.required],
@@ -103,7 +103,7 @@ export class ChampionshipCreateDialogComponent implements OnInit {
       constructorsName: this.form.value.constructorsName
     };
 
-    this.resultService.createChampionship(dto).subscribe({
+    this.championshipService.createChampionship(dto).subscribe({
       next: () => {
         this.isSubmitting = false;
         this.dialogRef.close(true);

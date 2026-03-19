@@ -26,6 +26,7 @@ import {
   GrandPrixManageDialogComponent
 } from '../../../../components/dialogs/grand-prix/grand-prix-creation-dialog/grand-prix-creation-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
+import {ChampionshipService} from '../../../../services/championship.service';
 
 @Component({
   selector: 'app-entry',
@@ -67,7 +68,12 @@ export class EntryComponent implements OnInit {
   grandsPrix = signal<GrandPrixLookupDto[]>([]);
   isLoading = signal(false);
 
-  constructor(private resultService: StandingsService, private dialog: MatDialog, private router: Router) {}
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    private championshipService: ChampionshipService,
+    private resultService: StandingsService,
+  ) {}
 
   ngOnInit() {
     this.loadSeries();
@@ -101,7 +107,7 @@ export class EntryComponent implements OnInit {
   }
 
   loadYears(seriesId: string) {
-    this.resultService.getSeasonsBySeries(seriesId).subscribe(res => {
+    this.championshipService.getSeasonsBySeries(seriesId).subscribe(res => {
       this.yearLookups.set(res);
 
       const years = res
@@ -119,7 +125,7 @@ export class EntryComponent implements OnInit {
 
   loadGrandsPrix(champId: string) {
     this.isLoading.set(true);
-    this.resultService.getGrandPrixByChampionship(champId).subscribe(res => {
+    this.championshipService.getGrandPrixByChampionship(champId).subscribe(res => {
       this.grandsPrix.set(res);
       this.isLoading.set(false);
     });

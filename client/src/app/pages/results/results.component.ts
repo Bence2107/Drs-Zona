@@ -29,6 +29,7 @@ import {AuthService} from '../../services/auth.service';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatDivider} from '@angular/material/list';
+import {ChampionshipService} from '../../services/championship.service';
 
 type ViewMode = 'results' | 'drivers' | 'constructors';
 const ALL_GP_ID = 'all-season-overview';
@@ -46,7 +47,11 @@ const AGGREGATED_ID = 'aggregated';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent implements OnInit {
-  constructor(private standingsService: StandingsService, private authService: AuthService) {}
+  constructor(
+    private standingsService: StandingsService,
+    private authService: AuthService,
+    private championshipService: ChampionshipService,
+  ) {}
 
   private breakpointObserver = inject(BreakpointObserver);
 
@@ -89,8 +94,6 @@ export class ResultsComponent implements OnInit {
     const isQualy = session.includes('időmérő');
 
     const isF1 = this.seriesList().find(s => s.id === this.selectedSeriesId())?.name?.includes('Formula 1');
-    console.log("F1-e? : " + isF1);
-    console.log("Időmérő? " + isQualy);
 
     if (isQualy) {
       return isF1
@@ -130,7 +133,7 @@ export class ResultsComponent implements OnInit {
 
   onSeriesChange(seriesId: string) {
     this.selectedSeriesId.set(seriesId);
-    this.standingsService.getSeasonsBySeries(seriesId).subscribe(res => {
+    this.championshipService.getSeasonsBySeries(seriesId).subscribe(res => {
       this.seasons.set(res);
       if (res.length > 0) {
         const latestSeason = res[0];
@@ -180,7 +183,7 @@ export class ResultsComponent implements OnInit {
     if (this.viewMode() === 'results') {
       this.loadSeasonOverview(season.driversChampId!);
 
-      this.standingsService.getGrandPrixByChampionship(season.driversChampId!).subscribe(res => {
+      this.championshipService.getGrandPrixByChampionship(season.driversChampId!).subscribe(res => {
         this.grandsPrix.set(res);
       });
     } else if (this.viewMode() === 'drivers') {
@@ -195,13 +198,13 @@ export class ResultsComponent implements OnInit {
   }
 
   private loadDriverList(drChampId: string) {
-    this.standingsService.getDriversByDriversChampionship(drChampId).subscribe(res => {
+    this.championshipService.getDriversByDriversChampionship(drChampId).subscribe(res => {
       this.driverList.set(res);
     });
   }
 
   private loadConstructorList(coChampId: string) {
-    this.standingsService.getConstructorsByConstChampionship(coChampId).subscribe(res => {
+    this.championshipService.getConstructorsByConstChampionship(coChampId).subscribe(res => {
       this.constructorList.set(res);
     });
   }
@@ -260,7 +263,7 @@ export class ResultsComponent implements OnInit {
 
   private loadLatestGrandPrix(drChampId: string) {
     this.isLoading.set(true);
-    this.standingsService.getGrandPrixByChampionship(drChampId).subscribe(res => {
+    this.championshipService.getGrandPrixByChampionship(drChampId).subscribe(res => {
       this.grandsPrix.set(res);
       if (res.length > 0) {
         const latestGP = res[res.length - 1];
@@ -289,7 +292,7 @@ export class ResultsComponent implements OnInit {
     const coChampId = this.selectedConstructorsChampId();
 
     if (this.viewMode() === 'results' && drChampId) {
-      this.standingsService.getGrandPrixByChampionship(drChampId).subscribe(res => {
+      this.championshipService.getGrandPrixByChampionship(drChampId).subscribe(res => {
         this.grandsPrix.set(res);
         this.isLoading.set(false);
       });

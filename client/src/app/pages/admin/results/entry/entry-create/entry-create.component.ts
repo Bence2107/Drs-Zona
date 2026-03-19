@@ -33,6 +33,7 @@ import {DriverLookUpDto} from '../../../../../api/models/driver-look-up-dto';
 import {ConstructorLookUpDto} from '../../../../../api/models/constructor-look-up-dto';
 import {CustomSnackbarComponent} from '../../../../../components/custom-snackbar/custom-snackbar.component';
 import {MatCheckbox} from '@angular/material/checkbox';
+import {ChampionshipService} from '../../../../../services/championship.service';
 
 @Component({
   selector: 'app-entry-create',
@@ -69,8 +70,9 @@ export class EntryCreateComponent implements OnInit{
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
+    private snackBar: MatSnackBar,
+    private championshipService: ChampionshipService,
     private resultsService: StandingsService,
-    private snackBar: MatSnackBar
   ) {
     effect(() => {
       const session = this.selectedSession();
@@ -246,10 +248,10 @@ export class EntryCreateComponent implements OnInit{
   }
 
   loadLookups(driverChampId: string, consChampId: string) {
-    this.resultsService.getDriversByDriversChampionship(driverChampId).subscribe(list => this.drivers.set(list));
-    this.resultsService.getConstructorsByConstChampionship(consChampId).subscribe(list => this.constructors.set(list));
+    this.championshipService.getDriversByDriversChampionship(driverChampId).subscribe(list => this.drivers.set(list));
+    this.championshipService.getConstructorsByConstChampionship(consChampId).subscribe(list => this.constructors.set(list));
 
-    this.resultsService.getDriversByDriversChampionship(driverChampId).subscribe(driverList => {
+    this.championshipService.getDriversByDriversChampionship(driverChampId).subscribe(driverList => {
       this.drivers.set(driverList);
 
       driverList.forEach(() => {

@@ -32,6 +32,7 @@ import {
   GrandPrixManageDialogComponent
 } from '../../../../../components/dialogs/grand-prix/grand-prix-creation-dialog/grand-prix-creation-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
+import {GrandsPrixService} from '../../../../../services/grands-prix.service';
 
 @Component({
   selector: 'app-entry-detail',
@@ -66,12 +67,13 @@ import {MatDialog} from '@angular/material/dialog';
 export class EntryDetailComponent implements OnInit {
 
   constructor(
+    private dialog: MatDialog,
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder,
-    private resultsService: StandingsService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private grandPrixService: GrandsPrixService,
+    private resultsService: StandingsService,
   ) {}
 
   gpId = signal<string>('');
@@ -134,7 +136,7 @@ export class EntryDetailComponent implements OnInit {
   }
 
   openEditGrandPrixDialog() {
-    this.resultsService.getGrandPrixById(this.gpId()).subscribe({
+    this.grandPrixService.getGrandPrixById(this.gpId()).subscribe({
       next: (gp) => {
         this.grandPrix.set(gp);
         const ref = this.dialog.open(GrandPrixManageDialogComponent, {

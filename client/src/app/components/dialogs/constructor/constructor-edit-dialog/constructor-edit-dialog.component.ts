@@ -17,6 +17,7 @@ import {MatButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {FormErrorService} from '../../../../services/form-error.service';
 import {HttpValidationError} from '../../../../services/error-interceptor.service';
+import {BrandsService} from '../../../../services/brands.service';
 
 @Component({
   selector: 'app-constructor-edit-dialog',
@@ -58,8 +59,9 @@ class ConstructorEditDialogComponent implements OnInit{
   };
 
   constructor(
-    private fb: FormBuilder,
     private dialogRef: MatDialogRef<ConstructorEditDialogComponent>,
+    private fb: FormBuilder,
+    private brandsService: BrandsService,
     private constructorService: ConstructorsService,
     private formErrorService: FormErrorService,
   ) {}
@@ -80,7 +82,7 @@ class ConstructorEditDialogComponent implements OnInit{
       seasons:        [c.seasons, [Validators.required, Validators.min(1), Validators.max(99)]],
     });
 
-    this.constructorService.getAllBrands().subscribe(res => this.brands.set(res));
+    this.brandsService.getAllBrands().subscribe(res => this.brands.set(res));
 
 
     this.formErrorService.clearServerErrorOnChange([

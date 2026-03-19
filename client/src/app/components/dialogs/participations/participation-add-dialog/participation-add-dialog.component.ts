@@ -10,10 +10,10 @@ import {MatDividerModule} from '@angular/material/divider';
 import {YearLookupDto} from '../../../../api/models/year-lookup-dto';
 import {DriverListDto} from '../../../../api/models/driver-list-dto';
 import {ConstructorListDto} from '../../../../api/models/constructor-list-dto';
-import {StandingsService} from '../../../../services/standings.service';
 import {DriverService} from '../../../../services/driver.service';
 import {ConstructorsService} from '../../../../services/constructors.service';
 import {MatTooltip} from '@angular/material/tooltip';
+import {ChampionshipService} from '../../../../services/championship.service';
 
 @Component({
   selector: 'app-participation-add-dialog',
@@ -33,18 +33,19 @@ import {MatTooltip} from '@angular/material/tooltip';
   styleUrl: './participation-add-dialog.component.scss',
 })
 export class ParticipationAddDialogComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private dialogRef = inject(MatDialogRef<ParticipationAddDialogComponent>);
-  private resultService = inject(StandingsService);
-  private driverService = inject(DriverService);
-  private constructorService = inject(ConstructorsService);
+  constructor(
+    private dialogRef: MatDialogRef<ParticipationAddDialogComponent>,
+    private fb: FormBuilder,
+    private constructorService: ConstructorsService,
+    private championshipService: ChampionshipService,
+    private driverService: DriverService,
+  ) {}
+
 
   data = inject(MAT_DIALOG_DATA) as { lookup: YearLookupDto };
-
   allDrivers = signal<DriverListDto[]>([]);
   allConstructors = signal<ConstructorListDto[]>([]);
   isSubmitting = false;
-
   form!: FormGroup;
 
   get driverRows(): FormArray {
@@ -101,7 +102,7 @@ export class ParticipationAddDialogComponent implements OnInit {
       constructorIds: this.constructorRows.value.map((r: any) => r.constructorId)
     };
 
-    this.resultService.addParticipation(dto).subscribe({
+    this.championshipService.addParticipation(dto).subscribe({
       next: () => {
         this.isSubmitting = false;
         this.dialogRef.close(true);
