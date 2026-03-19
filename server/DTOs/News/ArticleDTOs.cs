@@ -102,8 +102,6 @@ public record ArticleDetailDto(
     List<string> MiddleSections,
     Guid? AuthorId,
     string AuthorName,
-    Guid? GrandPrixId,
-    string? GrandPrixName,
     DateTime DatePublished,
     DateTime DateUpdated,
     string? PrimaryImageUrl,

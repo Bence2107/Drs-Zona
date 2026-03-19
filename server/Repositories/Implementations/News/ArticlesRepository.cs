@@ -11,12 +11,10 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
     
     public async Task<Article?> GetArticleById(Guid id) => await _articles
         .Include(article => article.Author)
-        .Include(article => article.GrandPrix)
         .FirstOrDefaultAsync(article => article.Id == id);
     
     public async Task<Article?> GetArticleBySlug(string slug) => await _articles
         .Include(article => article.Author)
-        .Include(article => article.GrandPrix)
         .FirstOrDefaultAsync(article => article.Slug == slug);
 
     public async Task<(List<Article> Items, int TotalCount)> GetPagedArticles(int page, int pageSize, string? tag)
@@ -91,7 +89,6 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
 
     public async Task<Article?> GetByIdWithAll(Guid id) => await _articles
         .Include(article => article.Author)
-        .Include(article => article.GrandPrix)
         .FirstOrDefaultAsync(article => article.Id == id);
 
     public async Task<List<Article>> GetRecentNews(int count, string? tag = null)

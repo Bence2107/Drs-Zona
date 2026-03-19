@@ -43,8 +43,6 @@ public class ArticleService(
             MiddleSections: middleSections,
             AuthorId: article.AuthorId,
             AuthorName: article.Author!.FullName,
-            GrandPrixId: article.GrandPrixId,
-            GrandPrixName: article.GrandPrix?.Name,
             DatePublished: article.DatePublished,
             DateUpdated: article.DateUpdated,
             PrimaryImageUrl: articleImageService.GetImageUrl(article.Slug, "primary.jpg"),
@@ -81,8 +79,6 @@ public class ArticleService(
             MiddleSections: middleSections,
             AuthorId: article.AuthorId,
             AuthorName: article.Author!.FullName,
-            GrandPrixId: article.GrandPrixId,
-            GrandPrixName: article.GrandPrix?.Name,
             DatePublished: article.DatePublished,
             DateUpdated: article.DateUpdated,
             PrimaryImageUrl: articleImageService.GetImageUrl(article.Slug, "primary.jpg"),
@@ -187,7 +183,6 @@ public class ArticleService(
             FirstSection = dto.FirstSection,
             LastSection = dto.LastSection,
             AuthorId = dto.AuthorId,
-            GrandPrixId = dto.GrandPrixId,
             DatePublished = DateTime.UtcNow,
             DateUpdated = DateTime.UtcNow
         };
@@ -212,7 +207,6 @@ public class ArticleService(
             return ResponseResult<bool>.Failure("GrandPrixId", "Grand Prix not found");
 
         article.Id = dto.Id;
-        article.GrandPrixId = dto.GrandPrixId;
         article.Title = dto.Title;
         article.Lead = dto.Lead;
         article.Slug = dto.Slug;

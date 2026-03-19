@@ -61,16 +61,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                     .WithMany()
                     .HasForeignKey(a => a.AuthorId)
                     .OnDelete(DeleteBehavior.SetNull);
-
-                // Article -> GrandPrix (Many-to-One)
-                options
-                    .HasOne(a => a.GrandPrix)
-                    .WithMany()
-                    .HasForeignKey(a => a.GrandPrixId)
-                    .OnDelete(DeleteBehavior.NoAction)
-                    .IsRequired(false);
                 
-                options.Property(a => a.GrandPrixId).HasDefaultValue(null);
                 options.Property(a => a.IsSummary).HasDefaultValue(false);
                 options.Property(a => a.SecondSection).HasDefaultValue(null);
                 options.Property(a => a.ThirdSection).HasDefaultValue(null);

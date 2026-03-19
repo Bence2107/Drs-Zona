@@ -17,11 +17,6 @@ public class Article
     [JsonIgnore]
     public virtual User? Author { get; set; }
     
-    [Column("grand_prix_id")]
-    public Guid? GrandPrixId { get; set; }
-    [JsonIgnore]
-    public virtual GrandPrix? GrandPrix { get; set; }
-    
     [Required]
     [Column("title")]
     public required string Title { get; set; }
