@@ -3,12 +3,12 @@ using Services.Types;
 
 namespace Services.Interfaces;
 
-public interface IDriverService
+public interface IDriverService 
 {
     Task<ResponseResult<DriverDetailDto>> GetDriverById(Guid id);
     Task<ResponseResult<List<DriverListDto>>> GetAllDrivers();
     Task<ResponseResult<List<DriverListDto>>> ListAllDriversByChampionships(Guid championshipId);
-    Task<ResponseResult<bool>> CreateDriver(DriverCreateDto dto);
-    Task<ResponseResult<bool>> UpdateDriver(DriverUpdateDto dto);
-    Task<ResponseResult<bool>> DeleteDriver(Guid id);
+    Task<ResponseResult<bool>> Create(DriverCreateDto dto);
+    Task<ResponseResult<bool>> Update(DriverUpdateDto dto);
+    Task<ResponseResult<bool>> Delete(Guid id);
 }

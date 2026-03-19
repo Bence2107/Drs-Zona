@@ -77,7 +77,7 @@ public class ConstructorsService(
         return ResponseResult<List<ConstructorListDto>>.Success(dto);
     }
 
-    public async Task<ResponseResult<bool>> CreateConstructor(ConstructorCreateDto constructorCreateDto)
+    public async Task<ResponseResult<bool>> Create(ConstructorCreateDto constructorCreateDto)
     {
         var existingConstructor = await constructorRepo.GetByName(constructorCreateDto.Name);
         if (existingConstructor != null) return ResponseResult<bool>.Failure("Constructor already is in the Championship");
@@ -105,7 +105,7 @@ public class ConstructorsService(
         return ResponseResult<bool>.Success(true);
     }
 
-    public async Task<ResponseResult<bool>> UpdateConstructor(ConstructorUpdateDto constructorUpdateDto)
+    public async Task<ResponseResult<bool>> Update(ConstructorUpdateDto constructorUpdateDto)
     {
         var constructor = await constructorRepo.GetConstructorById(constructorUpdateDto.Id);
         if (constructor == null) return ResponseResult<bool>.Failure("Constructor not found");

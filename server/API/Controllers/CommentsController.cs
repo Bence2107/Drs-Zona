@@ -67,7 +67,7 @@ public class CommentsController(ICommentService commentService): ControllerBase
     [HttpPost("create/{userId:guid}")]
     public async Task<ActionResult> Create([FromBody]CommentCreateDto dto, [FromRoute]Guid userId)
     {
-        var result = await commentService.AddComment(dto, userId);
+        var result = await commentService.Create(dto, userId);
 
         if (!result.IsSuccess)
         {

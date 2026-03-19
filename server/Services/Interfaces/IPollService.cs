@@ -3,7 +3,7 @@ using Services.Types;
 
 namespace Services.Interfaces;
 
-public interface IPollService
+public interface IPollService 
 {
     Task<ResponseResult<PollDto>> GetPollById(Guid pollId, Guid? currentUserId = null);
     Task<ResponseResult<List<PollListDto>>> GetPollByCreatorId(Guid creatorId, string? tag = null);

@@ -144,7 +144,7 @@ public class CommentTests
             ReplyToCommentId: null
         );
 
-        var result = await _service.AddComment(dto, user.Id);
+        var result = await _service.Create(dto, user.Id);
 
         result.IsSuccess.Should().BeTrue();
         _context.Comments.Should().HaveCount(2);
@@ -165,7 +165,7 @@ public class CommentTests
             ReplyToCommentId: null
         );
 
-        var result = await _service.AddComment(dto, user.Id);
+        var result = await _service.Create(dto, user.Id);
 
         result.IsSuccess.Should().BeFalse();
         _context.Comments.Should().BeEmpty();

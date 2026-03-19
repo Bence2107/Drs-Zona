@@ -16,31 +16,6 @@ public class ArticleImageService(IWebHostEnvironment env): IArticleImageService
 
         return File.Exists(physicalPath) ? $"/{relativePath}" : null;
     }
-    
-    public async Task<string?> SaveImage(string slug, IFormFile file, string imageName)
-    {
-        var uploadsPath = Path.Combine(env.ContentRootPath, "uploads", "images", "articles", slug);
-        Directory.CreateDirectory(uploadsPath);
-        
-        var fileName = $"{imageName}{Path.GetExtension(file.FileName)}";
-        var filePath = Path.Combine(uploadsPath, fileName);
-
-        await using (var stream = new FileStream(filePath, FileMode.Create))
-        {
-            await file.CopyToAsync(stream);
-        }
-        
-        return GetImageUrl(slug, imageName);
-    }
-    
-    public async Task DeleteArticleImages(string slug)
-    {
-        var folderPath = Path.Combine(env.ContentRootPath, "uploads", "images", "articles", slug);
-        if (Directory.Exists(folderPath))
-        {
-            await Task.Run(() => Directory.Delete(folderPath, true));
-        }
-    }
 
     private static string GetDraftImageUrl(string draftId, string imageName)
     {

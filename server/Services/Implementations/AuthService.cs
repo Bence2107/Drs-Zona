@@ -13,8 +13,8 @@ using Services.Types;
 
 namespace Services.Implementations;
 
-public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> jwtSettings, IUserImageService userImageService)
-    : IAuthService
+public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> jwtSettings, IUserImageService userImageService
+) : IAuthService 
 {
     private readonly JwtSettings _jwtSettings = jwtSettings.Value;
 

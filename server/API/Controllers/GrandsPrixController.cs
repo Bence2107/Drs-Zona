@@ -60,7 +60,7 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
     [HttpPost("create")]
     public async Task<ActionResult> Create([FromBody]GrandPrixCreateDto dto)
     {
-        var result = await grandPrixService.CreateGrandPrix(dto);
+        var result = await grandPrixService.Create(dto);
 
         if (!result.IsSuccess)
         {
@@ -77,7 +77,7 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
     [HttpPost("update")]
     public async Task<ActionResult> Update([FromBody]GrandPrixUpdateDto dto)
     {
-        var result = await grandPrixService.UpdateGrandPrix(dto);
+        var result = await grandPrixService.Update(dto);
         if (!result.IsSuccess)
         {
             return BadRequest(new
@@ -93,7 +93,7 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
     [HttpDelete("delete/{id:guid}")]
     public async Task<ActionResult> Delete([FromRoute]Guid id)
     {
-        var response = await grandPrixService.DeleteGrandPrix(id);
+        var response = await grandPrixService.Delete(id);
         if (!response.IsSuccess) return NotFound(response.Message);
 
         return Ok();

@@ -43,7 +43,7 @@ public class ConstructorsController(IConstructorsService constructorsService): C
     [HttpPost("create")]
     public async Task<ActionResult> Create([FromBody] ConstructorCreateDto dto)
     {
-        var result = await constructorsService.CreateConstructor(dto);
+        var result = await constructorsService.Create(dto);
 
         if (!result.IsSuccess)
         {
@@ -60,7 +60,7 @@ public class ConstructorsController(IConstructorsService constructorsService): C
     [HttpPost("update")]
     public async Task<ActionResult> Update([FromBody]ConstructorUpdateDto dto)
     {
-        var result = await constructorsService.UpdateConstructor(dto);
+        var result = await constructorsService.Update(dto);
         if (!result.IsSuccess)
         {
             return BadRequest(new

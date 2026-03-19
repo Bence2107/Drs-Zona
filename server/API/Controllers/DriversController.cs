@@ -43,7 +43,7 @@ public class DriversController(IDriverService driverService): ControllerBase
     [HttpPost("create")]
     public async Task<ActionResult> Create([FromBody] DriverCreateDto dto)
     {
-        var result = await driverService.CreateDriver(dto);
+        var result = await driverService.Create(dto);
 
         if (!result.IsSuccess)
         {
@@ -61,7 +61,7 @@ public class DriversController(IDriverService driverService): ControllerBase
     [HttpPost("update")]
     public async Task<ActionResult> Update([FromBody]DriverUpdateDto dto)
     {
-        var result = await driverService.UpdateDriver(dto);
+        var result = await driverService.Update(dto);
         if (!result.IsSuccess)
         {
             return BadRequest(new
@@ -88,7 +88,7 @@ public class DriversController(IDriverService driverService): ControllerBase
             });
         }
 
-        var result = await driverService.DeleteDriver(id);
+        var result = await driverService.Delete(id);
         if (!result.IsSuccess)
         {
             return BadRequest(new

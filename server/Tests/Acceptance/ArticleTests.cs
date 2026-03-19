@@ -214,7 +214,7 @@ public class ArticleTests
     {
         var dto = new ArticleUpdateDto(Guid.NewGuid(), null, "Title", "Slug", false, "Lead", "First", "Last", null);
 
-        var result = await _service.UpdateArticle(dto);
+        var result = await _service.Update(dto);
 
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("Article not found");
@@ -232,7 +232,7 @@ public class ArticleTests
             new SummaryDto("Sec", "Third", "Fourth")
         );
 
-        var result = await _service.UpdateArticle(updateDto);
+        var result = await _service.Update(updateDto);
 
         result.IsSuccess.Should().BeTrue();
         var updated = await _context.Articles.FindAsync(article.Id);
@@ -246,7 +246,7 @@ public class ArticleTests
     {
         var dto = new ArticleCreateDto(Guid.NewGuid(), Guid.NewGuid(), "T", "S", "F1",false, "L", "F", "L", null);
 
-        var result = await _service.CreateArticle(dto);
+        var result = await _service.Create(dto);
 
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("Author not found");
@@ -259,7 +259,7 @@ public class ArticleTests
         await _context.Articles.AddAsync(article);
         await _context.SaveChangesAsync();
 
-        var result = await _service.DeleteArticle(article.Id);
+        var result = await _service.Delete(article.Id);
 
         result.IsSuccess.Should().BeTrue();
         _context.Articles.Should().BeEmpty();

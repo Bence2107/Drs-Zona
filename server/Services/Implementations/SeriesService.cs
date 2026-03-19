@@ -10,7 +10,7 @@ public class SeriesService(
     ISeriesRepository seriesRepo,
     IDriversChampionshipsRepository driversChampRepo,
     IConstructorsChampionshipsRepository constructorsChampRepo
-) : ISeriesService
+) : ISeriesService 
 {
     public async Task<ResponseResult<SeriesDetailDto>> GetSeriesById(Guid seriesId)
     {

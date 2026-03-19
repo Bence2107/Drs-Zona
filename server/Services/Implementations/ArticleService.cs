@@ -89,6 +89,26 @@ public class ArticleService(
         ));
     }
 
+    public async Task<ResponseResult<List<ArticleListDto>>> GetRecentArticles(int count, string? tag = null)
+    {
+        var articles = await articleRepo.GetRecentNews(count, tag);
+        
+        var dtoS = articles.Select(a => new ArticleListDto(
+                Id: a.Id,
+                Title: a.Title,
+                Lead: a.Lead,
+                Tag: a.Tag,
+                IsReview: a.IsSummary,
+                Slug: a.Slug,
+                DatePublished: a.DatePublished,
+                PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
+            ))
+            .OrderByDescending(a => a.DatePublished)
+            .ToList();
+        
+        return ResponseResult<List<ArticleListDto>>.Success(dtoS);
+    }
+
     public async Task<ResponseResult<PagedResult<ArticleListDto>>> ListArticles(int page, int pageSize, string? tag = null)
     {
         var (articles, totalCount) = await articleRepo.GetPagedArticles(page, pageSize, tag);      
@@ -116,7 +136,7 @@ public class ArticleService(
         
         return ResponseResult<PagedResult<ArticleListDto>>.Success(result);
     }
-    
+
     public async Task<ResponseResult<PagedResult<ArticleListDto>>> ListAllSummary(int page, int pageSize, string? tag = null)
     {
         var (articles, totalCount) = await articleRepo.GetPagedReviews(page, pageSize, tag);      
@@ -145,27 +165,7 @@ public class ArticleService(
         return ResponseResult<PagedResult<ArticleListDto>>.Success(result);
     }
 
-    public async Task<ResponseResult<List<ArticleListDto>>> GetRecentArticles(int count, string? tag = null)
-    {
-        var articles = await articleRepo.GetRecentNews(count, tag);
-        
-        var dtoS = articles.Select(a => new ArticleListDto(
-                Id: a.Id,
-                Title: a.Title,
-                Lead: a.Lead,
-                Tag: a.Tag,
-                IsReview: a.IsSummary,
-                Slug: a.Slug,
-                DatePublished: a.DatePublished,
-                PrimaryImageUrl: articleImageService.GetImageUrl(a.Slug, "primary.jpg")
-            ))
-            .OrderByDescending(a => a.DatePublished)
-            .ToList();
-        
-        return ResponseResult<List<ArticleListDto>>.Success(dtoS);
-    }
-
-    public async Task<ResponseResult<bool>> CreateArticle(ArticleCreateDto dto)
+    public async Task<ResponseResult<bool>> Create(ArticleCreateDto dto)
     {
         if (!await userRepo.CheckIfIdExists(dto.AuthorId))
             return ResponseResult<bool>.Failure("AuthorId", "Author not found");
@@ -198,7 +198,7 @@ public class ArticleService(
         return ResponseResult<bool>.Success(true);
     }
 
-    public async Task<ResponseResult<bool>> UpdateArticle(ArticleUpdateDto dto)
+    public async Task<ResponseResult<bool>> Update(ArticleUpdateDto dto)
     {
         var article = await articleRepo.GetById(dto.Id);
         if (article == null) return ResponseResult<bool>.Failure("Article not found");
@@ -226,7 +226,7 @@ public class ArticleService(
         return ResponseResult<bool>.Success(true);
     }
 
-    public async Task<ResponseResult<bool>> DeleteArticle(Guid id)
+    public async Task<ResponseResult<bool>> Delete(Guid id)
     {
         var article = await articleRepo.GetById(id);
         if (article == null)

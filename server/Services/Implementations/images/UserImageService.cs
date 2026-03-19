@@ -75,13 +75,14 @@ public class UserImageService(IWebHostEnvironment env) : IUserImageService
         {
             var userFolder = GetUserFolderPath(userId);
 
-            if (Directory.Exists(userFolder))
+            if (!Directory.Exists(userFolder))
             {
-                await Task.Run(() => Directory.Delete(userFolder, true));
-                return ResponseResult<bool>.Success(true);
-            }
+                return ResponseResult<bool>.Failure("Folder", "A Profilkép nem található");
 
-            return ResponseResult<bool>.Failure("Folder", "A Profilkép nem található");
+            }
+            await Task.Run(() => Directory.Delete(userFolder, true));
+            return ResponseResult<bool>.Success(true);
+
         }
         catch (Exception)
         {

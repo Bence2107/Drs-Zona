@@ -20,7 +20,7 @@ public class ContractsController(IContractsService contractsService) : Controlle
     [HttpPost("create")]
     public async Task<ActionResult> Create([FromBody] ContractCreateDto dto)
     {
-        var response = await contractsService.CreateContract(dto);
+        var response = await contractsService.Create(dto);
         if (!response.IsSuccess)
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
@@ -29,7 +29,7 @@ public class ContractsController(IContractsService contractsService) : Controlle
     [HttpPost("update/{id:guid}/{driverId:guid}/{teamId:guid}")]
     public async Task<ActionResult> Update(Guid id, Guid driverId, Guid teamId)
     {
-        var response = await contractsService.UpdateContract(id, driverId, teamId);
+        var response = await contractsService.Update(id, driverId, teamId);
         if (!response.IsSuccess)
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
@@ -38,7 +38,7 @@ public class ContractsController(IContractsService contractsService) : Controlle
     [HttpDelete("delete/{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
     {
-        var response = await contractsService.DeleteContract(id);
+        var response = await contractsService.Delete(id);
         if (!response.IsSuccess)
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();

@@ -65,7 +65,7 @@ public class ArticleController(IArticleService articleService): ControllerBase
     [HttpPost("create")]
     public async Task<ActionResult> Create([FromBody]ArticleCreateDto dto)
     {
-        var result = await articleService.CreateArticle(dto);
+        var result = await articleService.Create(dto);
 
         if (!result.IsSuccess)
         {
@@ -82,7 +82,7 @@ public class ArticleController(IArticleService articleService): ControllerBase
     [HttpPost("update")]
     public async Task<ActionResult> Update([FromBody]ArticleUpdateDto dto)
     {
-        var result = await articleService.UpdateArticle(dto);
+        var result = await articleService.Update(dto);
         if (!result.IsSuccess)
         {
             return BadRequest(new
@@ -108,7 +108,7 @@ public class ArticleController(IArticleService articleService): ControllerBase
             });
         }
         
-        var result = await articleService.DeleteArticle(id);
+        var result = await articleService.Delete(id);
         if (!result.IsSuccess)
         {
             return BadRequest(new

@@ -7,20 +7,19 @@ using Services.Types;
 
 namespace Services.Implementations;
 
-public class StandingsService (
-    IDriversChampionshipsRepository driverChampRepo,
-    IDriversRepository driversRepo,
+public class StandingsService(
     IConstructorsChampionshipsRepository constructorChampRepo,
-    IConstructorsRepository constructorsRepo,
-    IResultsRepository resultsRepo,
-    IGrandsPrixRepository grandsPrixRepo,
-    IDriverParticipationRepository driverParticipationRepo,
     IConstructorCompetitionRepository constructorCompetitionRepo,
-    ISeriesRepository seriesRepo,
+    IConstructorsRepository constructorsRepo,
     IContractsRepository contractsRepo,
-    IQualifyingResultRepository qualifyingRepo
-)
-    : IStandingsService
+    IDriversChampionshipsRepository driverChampRepo,
+    IDriverParticipationRepository driverParticipationRepo,
+    IDriversRepository driversRepo,
+    IGrandsPrixRepository grandsPrixRepo,
+    IQualifyingResultRepository qualifyingRepo,
+    IResultsRepository resultsRepo,
+    ISeriesRepository seriesRepo
+) : IStandingsService 
 {
     
     public async Task<ResponseResult<List<SeriesLookupDto>>> GetAllSeries()
@@ -791,7 +790,45 @@ public class StandingsService (
 
         return ResponseResult<bool>.Success(true);
     }
-    
+
+    public async Task<ResponseResult<bool>> RecalculateSession(Guid grandPrixId, string session)
+    {
+        var gp = await grandsPrixRepo.GetGrandPrixById(grandPrixId);
+        if (gp == null) return ResponseResult<bool>.Failure("Nagydíj nem található");
+
+        var series = await seriesRepo.GetSeriesById(gp.SeriesId);
+        if (series == null) return ResponseResult<bool>.Failure("Széria nem található");
+
+        var sessionResults = await resultsRepo.GetBySession(grandPrixId, session);
+        if (sessionResults.Count == 0) return ResponseResult<bool>.Failure("Nincs eredmény ebben a sessionben");
+        
+
+        foreach (var result in sessionResults)
+        {
+            var (driverPoints, constructorPoints) = CalculatePoints(
+                series.PointSystem,
+                session,
+                result.FinishPosition,
+                result.IsPolePosition, 
+                result.IsFastestLap    
+            );
+
+            result.DriverPoints      = driverPoints;
+            result.ConstructorPoints = constructorPoints;
+            result.StartPosition     = await GetStartPosition(
+                series.PointSystem,
+                session,
+                grandPrixId,
+                result.DriverId,
+                result.StartPosition
+            );
+
+            await resultsRepo.Update(result);
+        }
+
+        return ResponseResult<bool>.Success(true);
+    }
+
     private static (double driverPoints, double constructorPoints) CalculatePoints(
         string scoringSystem, string session, int finishPosition, bool isPole = false, bool isFastestLap = false)
     {
@@ -850,44 +887,6 @@ public class StandingsService (
         if (isFastestLap && position <= 10) driverPoints += 1;
 
         return (driverPoints, driverPoints); // Konstruktőrök is megkapják
-    }
-    
-    public async Task<ResponseResult<bool>> RecalculateSession(Guid grandPrixId, string session)
-    {
-        var gp = await grandsPrixRepo.GetGrandPrixById(grandPrixId);
-        if (gp == null) return ResponseResult<bool>.Failure("Nagydíj nem található");
-
-        var series = await seriesRepo.GetSeriesById(gp.SeriesId);
-        if (series == null) return ResponseResult<bool>.Failure("Széria nem található");
-
-        var sessionResults = await resultsRepo.GetBySession(grandPrixId, session);
-        if (sessionResults.Count == 0) return ResponseResult<bool>.Failure("Nincs eredmény ebben a sessionben");
-        
-
-        foreach (var result in sessionResults)
-        {
-            var (driverPoints, constructorPoints) = CalculatePoints(
-                series.PointSystem,
-                session,
-                result.FinishPosition,
-                result.IsPolePosition, 
-                result.IsFastestLap    
-            );
-
-            result.DriverPoints      = driverPoints;
-            result.ConstructorPoints = constructorPoints;
-            result.StartPosition     = await GetStartPosition(
-                series.PointSystem,
-                session,
-                grandPrixId,
-                result.DriverId,
-                result.StartPosition
-            );
-
-            await resultsRepo.Update(result);
-        }
-
-        return ResponseResult<bool>.Success(true);
     }
     
 

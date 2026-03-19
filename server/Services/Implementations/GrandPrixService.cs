@@ -10,8 +10,8 @@ namespace Services.Implementations;
 public class GrandPrixService (
     IGrandsPrixRepository grandsPrixRepository,
     ICircuitsRepository circuitsRepository,
-    ISeriesRepository seriesRepository)
-: IGrandPrixService
+    ISeriesRepository seriesRepository
+) : IGrandPrixService 
 {
     public async Task<ResponseResult<GrandPrixDetailDto>> GetGrandPrixById(Guid id)
     {
@@ -78,7 +78,7 @@ public class GrandPrixService (
         return ResponseResult<List<GrandPrixListDto>>.Success(grandsPrix);
     }
 
-    public async Task<ResponseResult<bool>> CreateGrandPrix(GrandPrixCreateDto grandPrixCreateDto)
+    public async Task<ResponseResult<bool>> Create(GrandPrixCreateDto grandPrixCreateDto)
     {
         if (await circuitsRepository.GetCircuitById(grandPrixCreateDto.CircuitId) == null)
         {
@@ -108,7 +108,7 @@ public class GrandPrixService (
         return ResponseResult<bool>.Success(true);
     }
 
-    public async Task<ResponseResult<bool>> UpdateGrandPrix(GrandPrixUpdateDto grandPrixUpdateDto)
+    public async Task<ResponseResult<bool>> Update(GrandPrixUpdateDto grandPrixUpdateDto)
     {
         var existing = await grandsPrixRepository.GetGrandPrixById(grandPrixUpdateDto.Id);
         if (existing == null) return ResponseResult<bool>.Failure("Grand Prix not found");
@@ -121,7 +121,7 @@ public class GrandPrixService (
         return ResponseResult<bool>.Success(true);
     }
 
-    public async Task<ResponseResult<bool>> DeleteGrandPrix(Guid id)
+    public async Task<ResponseResult<bool>> Delete(Guid id)
     {
         var existing = await grandsPrixRepository.GetGrandPrixById(id);
         if (existing == null) return ResponseResult<bool>.Failure("Grand Prix not found");

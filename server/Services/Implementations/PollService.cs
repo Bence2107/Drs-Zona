@@ -14,7 +14,7 @@ public class PollService(
     IPollOptionsRepository pollOptionsRepository,
     IPollVotesRepository pollVoteRepository,
     IAuthRepository userRepository
-) : IPollService
+) : IPollService 
 {
     public async Task<ResponseResult<PollDto>> GetPollById(Guid pollId, Guid? currentUserId = null)
     {

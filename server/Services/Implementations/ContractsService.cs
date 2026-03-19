@@ -24,7 +24,7 @@ public class ContractsService(
             .ToList();
         return ResponseResult<List<ContractListDto>>.Success(dto);
     }
-    public async Task<ResponseResult<bool>> CreateContract(ContractCreateDto dto)
+    public async Task<ResponseResult<bool>> Create(ContractCreateDto dto)
     {
         var contract = new Contract
         {
@@ -36,7 +36,7 @@ public class ContractsService(
         return ResponseResult<bool>.Success(true);
     }
 
-    public async Task<ResponseResult<bool>> UpdateContract(Guid id, Guid driverId, Guid teamId)
+    public async Task<ResponseResult<bool>> Update(Guid id, Guid driverId, Guid teamId)
     {
         var contract = await contractsRepo.GetContractById(id);
         if (contract == null) return ResponseResult<bool>.Failure("Contract not found");
@@ -48,7 +48,7 @@ public class ContractsService(
         return ResponseResult<bool>.Success(true);
     }
 
-    public async Task<ResponseResult<bool>> DeleteContract(Guid id)
+    public async Task<ResponseResult<bool>> Delete(Guid id)
     {
         var exists = await contractsRepo.CheckIfIdExists(id);
         if (!exists) return ResponseResult<bool>.Failure("Contract not found");

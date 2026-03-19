@@ -16,9 +16,10 @@ public interface IStandingsService
     Task<ResponseResult<DriverStandingsDto>> GetDriverStandings(Guid driverChampId);
     Task<ResponseResult<ConstructorStandingsDto>> GetConstructorStandings(Guid constructorsChampionId);
     Task<ResponseResult<GrandPrixResultsDto>> GetGrandPrixResults(Guid grandPrixId, string session);
+    
+    Task<ResponseResult<List<SeasonOverviewDto>>> GetSeasonOverview(Guid driverChampId);
     Task<ResponseResult<List<DriverSeasonResultDto>>> GetDriverResultsBySeason(Guid driverId, Guid driverChampId);
     Task<ResponseResult<List<ConstructorSeasonResultDto>>> GetConstructorResultsBySeason(Guid constructorId, Guid constructorChampId);
-    Task<ResponseResult<List<SeasonOverviewDto>>> GetSeasonOverview(Guid driverChampId);
     Task<ResponseResult<bool>> CreateChampionship(ChampionshipCreateDto createDto);
     Task<ResponseResult<bool>> UpdateChampionshipStatus(Guid driversChampId, Guid constructorsChampId, string status);
     Task<ResponseResult<bool>> AddParticipations(ParticipationAddDto dto);

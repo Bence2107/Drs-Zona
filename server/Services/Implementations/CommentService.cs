@@ -12,8 +12,8 @@ public class CommentService(
     ICommentsRepository commentsRepo, 
     IAuthRepository usersRepo, 
     IUserImageService userImageService,
-    ICommentVotesRepository commentVotesRepo) 
-: ICommentService
+    ICommentVotesRepository commentVotesRepo
+) : ICommentService 
 {
     public async Task<ResponseResult<List<CommentDetailDto>>> GetArticleCommentsWithoutReplies(Guid articleId, Guid? currentUserId = null)
     {
@@ -114,7 +114,7 @@ public class CommentService(
         return ResponseResult<List<CommentDetailDto>>.Success(comments);
     }
 
-    public async Task<ResponseResult<bool>> AddComment(CommentCreateDto commentCreateDto, Guid userId)
+    public async Task<ResponseResult<bool>> Create(CommentCreateDto commentCreateDto, Guid userId)
     {
         if (!await usersRepo.CheckIfIdExists(userId)) return ResponseResult<bool>.Failure("User not found");
         
