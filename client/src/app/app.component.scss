@@ -70,6 +70,7 @@ html, body {
 }
 
 .app-container {
+  position: relative;
   height: calc(100vh - 70px);
   background : var(--main-bg);
 }
@@ -278,22 +279,28 @@ html, body {
 }
 
 .toggle-anchor {
-  position: absolute;
-  top: 15px;
-  left: 0;
-  z-index: 9999 !important;
-  background-color: var(--primary-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  position: fixed;
+  top: 120px;
+  left: 210px;
+  transform: translateX(-50%);
+  transition: left 0.3s ease;
+  z-index: 99999 !important;  
+  background-color: var(--primary-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 50% !important;
+  width: 32px !important;
+  height: 32px !important;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateX(-50%);
-  transition: left 0.1s ease, transform 0.1s ease;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 0 !important;
+}
+
+.toggle-anchor.closed-pos {
+  left: 30px;
+  transform: translateX(0);
 }
 
 .toggle-anchor:hover {
@@ -308,10 +315,6 @@ html, body {
   color: var(--text-main);
 }
 
-.toggle-anchor.closed-pos {
-  left: 30px;
-  transform: translateX(0);
-}
 
 .main-content-host.menu-closed {
   border: none;
