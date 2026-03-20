@@ -3,13 +3,13 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  color: var(--primary-text);
-  background-color: var(--primary-bg);
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 14px;
   width: 100%;
   box-sizing: border-box;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: var(--primary-bg);
+  color: var(--text-main);
+  font-size: 14px;
 
   span {
     flex: 1;

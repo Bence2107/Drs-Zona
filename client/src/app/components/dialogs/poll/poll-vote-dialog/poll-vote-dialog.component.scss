@@ -17,6 +17,7 @@
 
   &.read-only {
     opacity: 0.7;
+
     .poll-option-row {
       cursor: not-allowed;
       pointer-events: none;
@@ -46,11 +47,11 @@
       background-color: transparent;
 
       .inner-circle {
+        display: block;
         width: 12px;
         height: 12px;
-        background-color: var(--accent-color);
         border-radius: 50%;
-        display: block;
+        background-color: var(--accent-color);
       }
     }
 
@@ -66,15 +67,15 @@
   margin-bottom: 12px;
 
   .radio-indicator {
-    width: 22px;
-    height: 22px;
-    border: 2px solid var(--border-color);
-    border-radius: 50%;
-    margin-right: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-right: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
     transition: all 0.2s ease;
   }
 
@@ -92,23 +93,23 @@
 
 .progress-container {
   height: 8px;
-  background-color: var(--secondary-bg);
   border-radius: 4px;
   overflow: hidden;
+  background-color: var(--secondary-bg);
 
   .progress-fill {
     height: 100%;
-    background-color: var(--accent-color);
     border-radius: 4px;
+    background-color: var(--accent-color);
     transition: width 0.8s ease-out;
   }
 }
 
 .login-warning {
   margin-top: 15px;
-  color: #ff4444;
   font-size: 0.9rem;
   text-align: center;
+  color: #ff4444;
 }
 
 ::ng-deep .polls-menu-panel {

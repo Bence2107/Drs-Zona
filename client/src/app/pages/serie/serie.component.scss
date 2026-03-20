@@ -1,27 +1,29 @@
 @use '@angular/material' as mat;
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 main {
-  margin: 0 auto;
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
   padding: 10px 5%;
   min-height: 85vh;
   animation: fadeIn 0.2s ease-out;
 }
 
 h1 {
-  color: var(--text-main);
-  text-align: center;
   margin: 20px;
+  text-align: center;
+  color: var(--text-main);
 }
 
 h2 {
+  margin: 20px 10px 10px;
   color: var(--text-main);
-  margin: 20px 10px 10px 10px; // Kicsit több hely a listák felett
 }
 
 .content-container {
@@ -30,35 +32,35 @@ h2 {
   margin: 0 auto;
 }
 
-// A szürke külső keret
 .outer-card {
   display: flex;
-  flex-direction: column; // Hogy egymás alá kerüljenek ha több lenne
+  flex-direction: column;
   gap: 20px;
   margin-top: 30px;
   margin-bottom: 30px;
-  background-color: var(--secondary-bg);
-  border-radius: 20px;
-  overflow: hidden;
   padding: 20px;
   border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: var(--secondary-bg);
 }
 
-// A belső fehér/sötét kártya
 .inner-card {
-  background-color: var(--primary-bg);
-  border-radius: 20px;
-  overflow: hidden;
   padding: 20px;
   border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: var(--primary-bg);
 
-  h1, h2, h3, p { color: var(--text-main); }
+  h1, h2, h3, p {
+    color: var(--text-main);
+  }
 
   p {
+    padding: 10px 0;
     font-size: 1.1em;
     line-height: 1.6;
     text-align: justify;
-    padding: 10px 0;
   }
 
   img[mat-card-image] {
@@ -72,23 +74,25 @@ h2 {
 }
 
 .join-us {
-  text-align: center;
   margin-top: 20px;
   padding: 15px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
 }
 
-// Loading & Error Styles (Konzisztens a Home-al)
 .loading-container {
-  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  width: 100%;
   gap: 25px;
   padding: 60px 0;
 
-  h3 { color: var(--text-main); font-size: 1.4em; }
+  h3 {
+    font-size: 1.4em;
+    color: var(--text-main);
+  }
 
   mat-progress-bar {
     width: 100%;
@@ -100,7 +104,7 @@ h2 {
 
 @keyframes fadeIn {
   from { opacity: 0.3; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1;   transform: translateY(0); }
 }
 
 @media (max-width: 600px) {

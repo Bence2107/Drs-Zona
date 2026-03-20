@@ -32,24 +32,20 @@
 
     ::ng-deep .mat-button-toggle-label-content {
       color: white !important;
+
       mat-icon { color: white !important; }
     }
   }
 }
 
 .mat-button-toggle-checked .mat-button-toggle-status-indicator {
+  display: inline-block !important;
+  visibility: visible !important;
   width: 8px !important;
   height: 8px !important;
-  background-color: var(--text-main) !important;
-  border-radius: 50% !important;
-  display: inline-block !important;
   margin-right: 8px;
-  visibility: visible !important;
-
-  ::ng-deep .mat-button-toggle-label-content {
-    color: white !important;
-    mat-icon { color: white !important; }
-  }
+  border-radius: 50% !important;
+  background-color: var(--text-main) !important;
 }
 
 .mat-button-toggle-label-content {

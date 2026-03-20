@@ -12,15 +12,19 @@ html {
 }
 
 html, body {
+  height: 100%;
   background-color: var(--primary-bg);
-  height: 100%; }
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-:root , [data-theme="light"] {
-  --main-bg: radial-gradient(circle,rgba(248, 244, 244, 1) 0%, rgba(237, 235, 235, 1) 100%);
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+
+:root,
+[data-theme='light'] {
+  --main-bg: radial-gradient(circle, rgba(248, 244, 244, 1) 0%, rgba(237, 235, 235, 1) 100%);
   --primary-bg: #f8f4f4;
   --secondary-bg: #eae3e3;
   --header-bg: #ffffff;
@@ -33,8 +37,8 @@ body {
   --hover-bg: #f0f0f0;
 }
 
-[data-theme="dark"] {
-  --main-bg: radial-gradient(circle,rgba(39, 39, 59, 1) 0%, rgba(33, 33, 46, 1) 100%);
+[data-theme='dark'] {
+  --main-bg: radial-gradient(circle, rgba(39, 39, 59, 1) 0%, rgba(33, 33, 46, 1) 100%);
   --primary-bg: #21212e;
   --secondary-bg: #181924;
   --header-bg: #1c1c27;
@@ -47,11 +51,13 @@ body {
   --hover-bg: #2d2d3a;
 }
 
+
 app-root {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
+
 
 @include mat.button-overrides((
   filled-container-color: #f8274f,
@@ -76,7 +82,7 @@ app-root {
 @include mat.progress-bar-overrides((
   active-indicator-color: #f8274f,
   track-color: #21212e,
-  track-height: 50px
+  track-height: 50px,
 ));
 
 @include mat.slide-toggle-overrides((
@@ -152,7 +158,7 @@ app-root {
   divider-color: var(--border-color),
   state-layer-color: var(--text-main),
   hover-state-layer-opacity: 0.12,
-  focus-state-layer-opacity: 0.20
+  focus-state-layer-opacity: 0.20,
 ));
 
 @include mat.snack-bar-overrides((
@@ -169,7 +175,7 @@ app-root {
 @include mat.dialog-overrides((
   container-color: var(--primary-bg),
   subhead-color: var(--text-main),
-  supporting-text-color: var(--text-secondary)
+  supporting-text-color: var(--text-secondary),
 ));
 
 @include mat.checkbox-overrides((
@@ -201,19 +207,16 @@ app-root {
   focus-state-layer-color: var(--selected-color),
 ));
 
-mat-option.mat-mdc-option .mat-pseudo-checkbox {
-  display: none !important;
-}
-
-.mat-mdc-option .mat-pseudo-checkbox {
-  display: none !important;
-}
-
 @include mat.table-overrides((
   background-color: var(--primary-bg),
   header-headline-color: var(--accent-color),
   row-item-label-text-color: var(--text-main),
 ));
+
+mat-option.mat-mdc-option .mat-pseudo-checkbox,
+.mat-mdc-option .mat-pseudo-checkbox {
+  display: none !important;
+}
 
 .mat-mdc-row:hover .mat-mdc-cell {
   background-color: var(--hover-bg);
@@ -223,65 +226,39 @@ mat-option.mat-mdc-option .mat-pseudo-checkbox {
   background-color: var(--secondary-bg);
   border-radius: 8px !important;
   margin-top: 4px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.5) !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5) !important;
+
+  .mat-mdc-option {
+    background-color: transparent !important;
+    opacity: 1 !important;
+
+    .mdc-list-item__primary-text {
+      color: var(--text-main) !important;
+    }
+
+    &.mdc-list-item--selected {
+      background-color: var(--accent-color) !important;
+
+      .mdc-list-item__primary-text {
+        color: white !important;
+      }
+    }
+
+    &:hover:not(.mdc-list-item--selected) {
+      background-color: var(--hover-bg) !important;
+    }
+  }
+
+  .mat-pseudo-checkbox {
+    display: none !important;
+  }
 }
 
-.custom-nav-panel .mat-mdc-option {
-  background-color: transparent !important;
-  opacity: 1 !important;
-}
-
-.custom-nav-panel .mat-mdc-option .mdc-list-item__primary-text {
-  color: var(--text-main) !important;
-}
-
-.custom-nav-panel .mat-mdc-option.mdc-list-item--selected {
-  background-color: var(--accent-color) !important;
-}
-
-.custom-nav-panel .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text {
-  color: white !important;
-}
-
-.custom-nav-panel .mat-pseudo-checkbox {
-  display: none !important;
-}
-
-.custom-nav-panel .mat-mdc-option:hover:not(.mdc-list-item--selected) {
-  background-color: var(--hover-bg) !important;
-}
 
 .admin-fab-menu {
   .admin-menu-section {
     padding: 4px 16px 2px;
     pointer-events: none;
-    color: var(--text-main) !important;
-
-    .admin-section-label {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: var(--text-main) !important;
-      letter-spacing: 0.08em;
-      opacity: 0.6;
-    }
-  }
-
-  .mat-mdc-menu-item .mdc-list-item__primary-text {
-    color: var(--text-main) !important;
-  }
-
-  .mat-mdc-menu-item .mat-icon {
-    color: var(--text-main) !important;
-  }
-}
-
-.admin-fab-menu.mat-mdc-menu-panel {
-  .mdc-list-item__primary-text {
-    color: var(--text-main) !important;
-  }
-
-  .mat-icon {
     color: var(--text-main) !important;
   }
 
@@ -293,9 +270,20 @@ mat-option.mat-mdc-option .mat-pseudo-checkbox {
     opacity: 0.6;
     color: var(--text-main) !important;
   }
+
+  .mat-mdc-menu-item {
+    .mdc-list-item__primary-text {
+      color: var(--text-main) !important;
+    }
+
+    .mat-icon {
+      color: var(--text-main) !important;
+    }
+  }
 }
 
-inline-field--small input[type="number"]::-webkit-inner-spin-button,
-.inline-field--small input[type="number"]::-webkit-outer-spin-button {
+
+inline-field--small input[type='number']::-webkit-inner-spin-button,
+.inline-field--small input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }

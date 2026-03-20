@@ -1,83 +1,83 @@
 .primary_news-container {
   display: flex;
   flex-wrap: wrap;
+  gap: 30px;
   width: 100%;
   padding: 30px 2%;
-  gap: 30px;
-  border-radius: 30px 12px 30px 12px;
-  background-color: var(--secondary-bg);
-  box-sizing: border-box;
   margin-bottom: 20px;
+  border-radius: 30px 12px 30px 12px;
+  box-sizing: border-box;
+  background-color: var(--secondary-bg);
 }
 
 .new-item {
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   width: calc(33.33% - 20px);
-  border-radius: 20px;
   padding: 0;
+  border: 1px solid transparent;
+  border-radius: 20px;
   overflow: hidden;
   background-color: var(--primary-bg);
+  cursor: pointer;
   transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
-  border: 1px solid transparent;
-}
 
-.new-item:hover {
-  transform: scale(1.01);
-  border: 1px solid #ed2449;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  box-shadow: 0 5px 15px rgba(237, 36, 73, 0.4);
-}
+  &:hover {
+    transform: scale(1.01);
+    border-color: #ed2449;
+    box-shadow: 0 5px 15px rgba(237, 36, 73, 0.4);
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  }
 
-.new-item img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
+  img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
 }
 
 .text-content {
-  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding: 20px;
 }
 
 .news-label {
-  color: var(--text-main);
+  margin: 0;
   font-size: 1.3em;
   font-weight: bold;
-  margin: 0;
   line-height: 1.2;
+  color: var(--text-main);
 }
 
 .news-desc {
+  margin: 0;
   font-size: 1em;
   color: var(--text-secondary);
-  margin: 0;
 }
 
 .news-date {
-  font-size: 0.85em;
-  color: #ed2449;
-  font-weight: 500;
   margin-top: auto;
+  font-size: 0.85em;
+  font-weight: 500;
+  color: #ed2449;
 }
 
 .series-tag {
   display: inline-block;
+  width: fit-content;
   padding: 4px 10px;
+  margin-bottom: 5px;
   border-radius: 6px;
   font-size: 0.75em;
   font-weight: 800;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-  color: white;
-  width: fit-content;
   letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: white;
 
-  &.tag-F1 { background-color: #ed2449; }
-  &.tag-F2 { background-color: #00bfff; }
+  &.tag-F1  { background-color: #ed2449; }
+  &.tag-F2  { background-color: #00bfff; }
   &.tag-WEC { background-color: #003399; }
   &.tag-Nascar {
     background-color: #ffcc00;
@@ -85,19 +85,20 @@
   }
 }
 
-.loading-container, .error-display-container {
-  width: 100%;
+.loading-container,
+.error-display-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  width: 100%;
   padding: 40px;
   gap: 20px;
-}
 
-.loading-container h3 {
-  color: var(--text-main);
-  margin: 0;
+  h3 {
+    margin: 0;
+    color: var(--text-main);
+  }
 }
 
 mat-progress-bar {
@@ -107,9 +108,9 @@ mat-progress-bar {
 }
 
 .empty-msg {
-  text-align: center;
   width: 100%;
   padding: 40px;
+  text-align: center;
   color: var(--text-secondary);
 }
 
@@ -124,6 +125,7 @@ mat-progress-bar {
     padding: 20px 5%;
     gap: 20px;
   }
+
   .new-item {
     width: 100%;
   }

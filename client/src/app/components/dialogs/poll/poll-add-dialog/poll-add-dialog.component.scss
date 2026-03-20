@@ -1,14 +1,13 @@
 .dialog-container {
   display: flex;
   flex-direction: column;
-  align-items: center; // Középre rendezi a mezőket
+  align-items: center;
   gap: 8px;
   padding: 20px 0;
   min-width: 0;
   max-width: 100%;
 }
 
-// Itt állítjuk be, hogy a mezők ne legyenek túl szélesek
 .narrow-field {
   width: 85%;
   max-width: 380px;
@@ -17,23 +16,29 @@
 .options-box {
   width: 85%;
   max-width: 380px;
-  background: rgba(255, 255, 255, 0.03);
   padding: 15px;
   border-radius: 12px;
   border: 1px dashed rgba(255, 94, 94, 0.2);
+  background: rgba(255, 255, 255, 0.03);
 
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-    h3 { margin: 0; font-size: 0.85rem; color: var(--text-secondary); }
+
+    h3 {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
   }
 
   .option-row {
     display: flex;
-    gap: 8px;
     align-items: center;
+    gap: 8px;
+
     mat-form-field { flex: 1; }
   }
 }

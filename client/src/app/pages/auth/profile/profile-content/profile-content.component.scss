@@ -4,6 +4,7 @@
 
     ::ng-deep .mat-button-toggle-label-content {
       color: white !important;
+
       mat-icon { color: white !important; }
     }
   }
@@ -14,18 +15,13 @@
 }
 
 .mat-button-toggle-checked .mat-button-toggle-status-indicator {
+  display: inline-block !important;
+  visibility: visible !important;
   width: 8px !important;
   height: 8px !important;
-  background-color: var(--text-main) !important;
-  border-radius: 50% !important;
-  display: inline-block !important;
   margin-right: 8px;
-  visibility: visible !important;
-
-  ::ng-deep .mat-button-toggle-label-content {
-    color: white !important;
-    mat-icon { color: white !important; }
-  }
+  border-radius: 50% !important;
+  background-color: var(--text-main) !important;
 }
 
 .mat-button-toggle-label-content {
@@ -35,44 +31,41 @@
 }
 
 .mobile-nav-dropdown {
+  display: block;
   width: 100%;
   margin-bottom: 20px;
-  background-color: var(--secondary-bg);
   border-radius: 8px;
-  display: block;
+  background-color: var(--secondary-bg);
 
   ::ng-deep .mat-mdc-form-field-subscript-wrapper {
     display: none !important;
   }
 
   ::ng-deep .mat-mdc-text-field-wrapper {
-    height: 48px !important;
-    padding: 0 16px !important;
     display: flex !important;
     align-items: center !important;
+    height: 48px !important;
+    padding: 0 16px !important;
     background-color: transparent !important;
   }
 
   ::ng-deep .mat-mdc-form-field-flex {
-    height: 100% !important;
     align-items: center !important;
+    height: 100% !important;
   }
 
   ::ng-deep .mat-mdc-form-field-infix {
-    padding: 0 !important;
-    border-top: none !important;
-    flex: auto !important;
     display: flex !important;
     align-items: center !important;
+    flex: auto !important;
+    padding: 0 !important;
+    border-top: none !important;
   }
 
-  ::ng-deep .mat-mdc-select-value {
-    color: var(--text-main) !important;
-    opacity: 1 !important;
-  }
-
+  ::ng-deep .mat-mdc-select-value,
   ::ng-deep .mat-mdc-select-value-text {
     color: var(--text-main) !important;
+    opacity: 1 !important;
   }
 
   ::ng-deep .mat-mdc-select-arrow svg {
@@ -89,13 +82,13 @@
 @media screen and (min-width: 769px) and (max-width: 1242px) {
   .custom-toggle-group {
     display: flex !important;
+    align-items: stretch !important;
     width: 100% !important;
     height: 72px !important;
-    background-color: var(--secondary-bg);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     overflow: hidden;
-    align-items: stretch !important; /* Kényszeríti a gombokat a függőleges nyújtásra */
+    background-color: var(--secondary-bg);
 
     .mat-button-toggle {
       flex: 1;
@@ -112,11 +105,11 @@
       }
 
       ::ng-deep .mat-button-toggle-button {
-        height: 100% !important;
-        width: 100% !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        width: 100% !important;
+        height: 100% !important;
       }
 
       ::ng-deep .mat-button-toggle-label-content {
@@ -124,21 +117,21 @@
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        padding: 0 !important;
-        height: 100% !important;
         width: 100% !important;
+        height: 100% !important;
+        padding: 0 !important;
         line-height: 1.2 !important;
 
         mat-icon {
-          margin: 0 0 4px 0 !important;
+          margin: 0 0 4px !important;
           font-size: 22px !important;
           width: 22px !important;
           height: 22px !important;
         }
 
         span {
-          font-size: 11px !important;
           display: block;
+          font-size: 11px !important;
           text-align: center;
           white-space: normal;
         }
@@ -149,12 +142,14 @@
 
         ::ng-deep .mat-button-toggle-label-content {
           color: white !important;
+
           mat-icon { color: white !important; }
         }
       }
     }
   }
 }
+
 @media screen and (min-width: 1121px) {
   .custom-toggle-group {
     display: inline-flex;

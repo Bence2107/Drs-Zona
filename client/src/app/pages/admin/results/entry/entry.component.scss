@@ -38,35 +38,18 @@
   margin-bottom: 1.5rem;
 }
 
+.series-select {
+  display: none;
+}
+
 .season-section {
   display: flex;
   justify-content: center;
   margin: 2rem auto;
 
-  .season-field, .series-select {
+  .season-field,
+  .series-select {
     width: 180px;
-  }
-}
-
-.series-select {
-  display: none;
-}
-
-@media (max-width: 600px) {
-  .series-section { display: none; }
-
-  .series-select, .season-field {
-    width: 100%;
-    display: flex;
-    margin: 0 auto 1.5rem;
-  }
-
-  .season-section {
-    width: 100%;
-
-    .season-field {
-      width: 100%;
-    }
   }
 }
 
@@ -99,13 +82,8 @@
     transition: background 0.2s;
   }
 
-  &.has-results .card-stripe {
-    background: #4caf50;
-  }
-
-  &:not(.has-results) .card-stripe {
-    background: var(--accent-color);
-  }
+  &.has-results .card-stripe     { background: #4caf50; }
+  &:not(.has-results) .card-stripe { background: var(--accent-color); }
 
   mat-card-header {
     display: flex;
@@ -115,47 +93,37 @@
   }
 
   .round-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
     min-width: 36px;
     height: 36px;
+    margin-top: 2px;
     border-radius: 8px;
     background: var(--accent-color);
     color: white;
     font-size: 12px;
     font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 2px;
   }
 
   .header-content {
     flex: 1;
 
-    mat-card-title {
-      font-size: 15px !important;
-      font-weight: 600;
-      color: var(--text-main) !important;
-      line-height: 1.3;
-    }
-
-    mat-card-subtitle {
-      font-size: 12px !important;
-      color: var(--text-secondary) !important;
-      margin-top: 2px;
-    }
+    mat-card-title    { font-size: 15px !important; font-weight: 600; line-height: 1.3; color: var(--text-main) !important; }
+    mat-card-subtitle { font-size: 12px !important; margin-top: 2px; color: var(--text-secondary) !important; }
   }
 
   .status-badge {
     display: flex;
     align-items: center;
+    flex-shrink: 0;
     gap: 4px;
-    font-size: 11px;
-    font-weight: 600;
     padding: 4px 8px;
     border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
     white-space: nowrap;
-    flex-shrink: 0;
 
     mat-icon {
       font-size: 14px;
@@ -163,15 +131,8 @@
       height: 14px;
     }
 
-    &.done {
-      background: rgba(76, 175, 80, 0.15);
-      color: #4caf50;
-    }
-
-    &.pending {
-      background: rgba(248, 39, 79, 0.12);
-      color: var(--accent-color);
-    }
+    &.done    { background: rgba(76, 175, 80, 0.15); color: #4caf50; }
+    &.pending { background: rgba(248, 39, 79, 0.12); color: var(--accent-color); }
   }
 
   mat-card-content {
@@ -188,8 +149,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--text-secondary);
     font-size: 13px;
+    color: var(--text-secondary);
 
     mat-icon {
       font-size: 16px;
@@ -209,7 +170,7 @@
   }
 }
 
-loading-state {
+.loading-state {
   display: flex;
   justify-content: center;
   padding: 4rem 0;
@@ -240,7 +201,7 @@ loading-state {
 
 @keyframes fadeIn {
   from { opacity: 0.3; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1;   transform: translateY(0); }
 }
 
 @media (max-width: 600px) {
@@ -248,8 +209,20 @@ loading-state {
     padding: 1rem;
   }
 
-  .season-section, .series-section {
+  .series-section,
+  .season-section {
     justify-content: center;
+  }
+
+  .series-select,
+  .season-field {
+    display: flex;
+    width: 100%;
+    margin: 0 auto 1.5rem;
+  }
+
+  .season-section .season-field {
+    width: 100%;
   }
 
   .gp-grid {
