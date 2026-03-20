@@ -13,25 +13,28 @@ import {AuthService} from '../../services/api/auth.service';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatDivider} from '@angular/material/list';
-import {ResultsStateService} from './components/results-state.service';
-import {ResultsFiltersComponent} from './components/results-filters/results-filters.component';
-import {ResultsTableComponent} from './components/results-table/results-table.component';
+import {StandingsStateService} from './components/standings-state.service';
+import {StandingsFiltersComponent} from './components/standings-filters/standings-filters.component';
+import {StandingsTableComponent} from './components/standings-table/standings-table.component';
 
 @Component({
   selector: 'app-results',
   standalone: true,
   imports: [
     CommonModule, FormsModule, MatButtonToggleModule,
-    MatFormFieldModule, MatSelectModule, MatTableModule, MatProgressSpinnerModule, MatIcon, RouterLink, MatFabButton, MatTooltip, MatMenuTrigger, MatMenu, MatMenuItem, MatDivider, ResultsFiltersComponent, ResultsTableComponent
+    MatFormFieldModule, MatSelectModule, MatTableModule,
+    MatProgressSpinnerModule, MatIcon, RouterLink, MatFabButton,
+    MatTooltip, MatMenuTrigger, MatMenu, MatMenuItem, MatDivider,
+    StandingsFiltersComponent, StandingsTableComponent
   ],
-  templateUrl: './results.component.html',
-  styleUrls: ['./results.component.scss'],
+  templateUrl: './standings.component.html',
+  styleUrls: ['./standings.component.scss'],
   providers: [
-    ResultsStateService
+    StandingsStateService
   ]
 })
-export class ResultsComponent implements OnInit {
-  state = inject(ResultsStateService);
+export class StandingsComponent implements OnInit {
+  state = inject(StandingsStateService);
   private authService = inject(AuthService);
 
   ngOnInit() {

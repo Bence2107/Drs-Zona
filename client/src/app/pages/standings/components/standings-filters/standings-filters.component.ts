@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {ResultsStateService} from '../results-state.service';
+import {StandingsStateService} from '../standings-state.service';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {MatFormField, MatLabel} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
@@ -18,9 +18,9 @@ import {CountryFlagPipe} from '../../../../pipes/country-flag.pipe';
     MatOption,
     CountryFlagPipe
   ],
-  templateUrl: './results-filters.component.html',
-  styleUrl: './results-filters.component.scss',
+  templateUrl: './standings-filters.component.html',
+  styleUrl: './standings-filters.component.scss',
 })
-export class ResultsFiltersComponent {
-  state = inject(ResultsStateService);
+export class StandingsFiltersComponent {
+  state = inject(StandingsStateService);
 }

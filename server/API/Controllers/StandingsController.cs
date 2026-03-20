@@ -1,4 +1,5 @@
 using DTOs.Standings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
@@ -154,6 +155,7 @@ public class StandingsController(IStandingsService standingsService): Controller
         return Ok(response.Value);
     }
 
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("insertResults")]
     public async Task<ActionResult> InsertResults([FromBody]BatchResultCreateDto dto)
     {
@@ -163,6 +165,7 @@ public class StandingsController(IStandingsService standingsService): Controller
         return Ok();
     }
     
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("saveSessionResults")]
     public async Task<ActionResult> SaveSessionResults([FromBody]BatchResultCreateDto dto)
     {
@@ -172,6 +175,7 @@ public class StandingsController(IStandingsService standingsService): Controller
         return Ok();
     }
     
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("updateSingleResult")]
     public async Task<ActionResult> UpdateSingleResult([FromBody] SingleResultUpdateDto dto)
     {
@@ -181,6 +185,7 @@ public class StandingsController(IStandingsService standingsService): Controller
         return Ok();
     }
     
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("recalculateSession/{grandPrixId:guid}/{session}")]
     public async Task<ActionResult> RecalculateSession(Guid grandPrixId, string session)
     {

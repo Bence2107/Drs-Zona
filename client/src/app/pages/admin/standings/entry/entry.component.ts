@@ -72,14 +72,14 @@ export class EntryComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private championshipService: ChampionshipService,
-    private resultService: StandingsService,
+    private standingsService: StandingsService,
   ) {}
 
   ngOnInit() {
     const champIdFromQuery = this.route.snapshot.queryParamMap.get('champId');
     const seasonFromQuery = this.route.snapshot.queryParamMap.get('season');
 
-    this.resultService.getAllSeries().subscribe(res => {
+    this.standingsService.getAllSeries().subscribe(res => {
       const filtered = res.filter(s => {
         const name = s.name?.toLowerCase() ?? '';
         return !name.includes('wec') && !name.includes('nascar');

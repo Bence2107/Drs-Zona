@@ -118,16 +118,7 @@ public class DriverService(
         await driverRepo.Update(driver);
         return ResponseResult<bool>.Success(true);
     }
-
-    public async Task<ResponseResult<bool>> Delete(Guid id)
-    {
-        var driver = await driverRepo.GetDriverById(id);
-        if (driver == null) return ResponseResult<bool>.Failure("Driver not found.");
-
-        await driverRepo.Delete(driver.Id);
-        return ResponseResult<bool>.Success(true);
-    }
-
+    
     private static int GetDriversAge(DateTime birthDate)
     {
         var years = DateTime.Now.Year - birthDate.Year;

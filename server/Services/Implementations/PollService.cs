@@ -103,20 +103,6 @@ public class PollService(
 
         return ResponseResult<List<PollListDto>>.Success(dto);
     }
-
-    public async Task<ResponseResult<List<PollListDto>>> GetExpiredPolls(string? tag = null)
-    {
-        var expiredPolls = await pollRepository.GetExpired(tag);
-        var dto = expiredPolls.Select(poll => new PollListDto(
-            Id: poll.Id,
-            Title: poll.Title,
-            Tag: poll.Tag,
-            Description: poll.Description,
-            ExpiresAt: poll.ExpiresAt
-        )).ToList();
-
-        return ResponseResult<List<PollListDto>>.Success(dto);
-    }
     
     public async Task<ResponseResult<bool>> Create(PollCreateDto dto, Guid? currentUserId = null)
     {

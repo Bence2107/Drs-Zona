@@ -1,4 +1,5 @@
 ﻿using DTOs.RaceTracks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
@@ -24,6 +25,7 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
         return Ok(response.Value);
     }
 
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpGet("getAllCircuits")]
     public async Task<ActionResult<CircuitListDto>> GetAllCircuits()
     {
@@ -56,6 +58,7 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
         return Ok(response.Value);
     }
     
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("create")]
     public async Task<ActionResult> Create([FromBody]GrandPrixCreateDto dto)
     {
@@ -73,6 +76,7 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
         return Ok(result.Value);
     }
     
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("update")]
     public async Task<ActionResult> Update([FromBody]GrandPrixUpdateDto dto)
     {

@@ -1,4 +1,5 @@
 ﻿using DTOs.Standings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
@@ -8,6 +9,7 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class DriversController(IDriverService driverService): ControllerBase 
 {
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpGet("get/{id:guid}")]
     public async Task<ActionResult<DriverDetailDto>> Get([FromRoute]Guid id)
     {
@@ -24,7 +26,7 @@ public class DriversController(IDriverService driverService): ControllerBase
         return Ok(response.Value);
     }
     
-    
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpGet("getAllDrivers")]
     public async Task<ActionResult<List<DriverListDto>>> GetAllDrivers()
     {
@@ -34,6 +36,7 @@ public class DriversController(IDriverService driverService): ControllerBase
         return Ok(response.Value);
     }
 
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("create")]
     public async Task<ActionResult> Create([FromBody] DriverCreateDto dto)
     {
@@ -51,7 +54,7 @@ public class DriversController(IDriverService driverService): ControllerBase
         return Ok(result.Value);
     }
     
-    
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("update")]
     public async Task<ActionResult> Update([FromBody]DriverUpdateDto dto)
     {
@@ -66,31 +69,5 @@ public class DriversController(IDriverService driverService): ControllerBase
         }
         
         return Ok(result.Value);
-    }
-    
-    
-    [HttpDelete("delete/{id:guid}")]
-    public async Task<ActionResult> Delete([FromRoute]Guid id)
-    {
-        var driverResponse = await driverService.GetDriverById(id);
-        if (!driverResponse.IsSuccess)
-        {
-            return BadRequest(new
-            {
-                driverResponse.ErrorField, 
-                driverResponse.Message
-            });
-        }
-
-        var result = await driverService.Delete(id);
-        if (!result.IsSuccess)
-        {
-            return BadRequest(new
-            {
-                result.ErrorField, 
-                result.Message
-            });
-        }
-        return Ok();
     }
 }

@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {AGGREGATED_ID, ALL_GP_ID, ResultsStateService} from '../results-state.service';
+import {AGGREGATED_ID, ALL_GP_ID, StandingsStateService} from '../standings-state.service';
 import {
   MatCell, MatCellDef,
   MatColumnDef,
@@ -33,11 +33,11 @@ import {CircuitInfoComponent} from '../circuit-info/circuit-info.component';
     CountryFlagPipe,
     CircuitInfoComponent
   ],
-  templateUrl: './results-table.component.html',
-  styleUrl: './results-table.component.scss',
+  templateUrl: './standings-table.component.html',
+  styleUrl: './standings-table.component.scss',
 })
-export class ResultsTableComponent {
-  state = inject(ResultsStateService);
+export class StandingsTableComponent {
+  state = inject(StandingsStateService);
   protected readonly ALL_GP_ID = ALL_GP_ID;
   protected readonly AGGREGATED_ID = AGGREGATED_ID;
 }

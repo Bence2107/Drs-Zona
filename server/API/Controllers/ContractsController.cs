@@ -1,4 +1,5 @@
 using DTOs.Standings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
@@ -8,6 +9,7 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class ContractsController(IContractsService contractsService) : ControllerBase 
 {
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpGet("getAll")]
     public async Task<ActionResult<List<ContractListDto>>> GetAll()
     {
@@ -17,6 +19,7 @@ public class ContractsController(IContractsService contractsService) : Controlle
         return Ok(response.Value);
     }
 
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("create")]
     public async Task<ActionResult> Create([FromBody] ContractCreateDto dto)
     {
@@ -25,7 +28,8 @@ public class ContractsController(IContractsService contractsService) : Controlle
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
     }
-
+    
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("update/{id:guid}/{driverId:guid}/{teamId:guid}")]
     public async Task<ActionResult> Update(Guid id, Guid driverId, Guid teamId)
     {
@@ -34,7 +38,8 @@ public class ContractsController(IContractsService contractsService) : Controlle
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
     }
-
+    
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpDelete("delete/{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
     {

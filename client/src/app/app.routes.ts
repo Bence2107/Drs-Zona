@@ -6,15 +6,15 @@ import {ArticleComponent} from './pages/article/article.component';
 import {AuthComponent} from './pages/auth/auth/auth.component';
 import {ProfileComponent} from './pages/auth/profile/profile.component';
 import {authGuard, guestGuard} from './guards/auth.guard';
-import {ResultsComponent} from './pages/results/results.component';
-import {EntryComponent} from './pages/admin/results/entry/entry.component';
-import {ChampionshipsComponent} from './pages/admin/results/championships/championships.component';
-import {ParticipationsComponent} from './pages/admin/results/participations/participations.component';
-import {DriversComponent} from './pages/admin/results/drivers/drivers.component';
-import {ConstructorsComponent} from './pages/admin/results/constructors/constructors.component';
-import {ContractsComponent} from './pages/admin/results/contracts/contracts.component';
-import {EntryDetailComponent} from './pages/admin/results/entry/entry-detail/entry-detail.component';
-import {EntryCreateComponent} from './pages/admin/results/entry/entry-create/entry-create.component';
+import {StandingsComponent} from './pages/standings/standings.component';
+import {EntryComponent} from './pages/admin/standings/entry/entry.component';
+import {ChampionshipsComponent} from './pages/admin/standings/championships/championships.component';
+import {ParticipationsComponent} from './pages/admin/standings/participations/participations.component';
+import {DriversComponent} from './pages/admin/standings/drivers/drivers.component';
+import {ConstructorsComponent} from './pages/admin/standings/constructors/constructors.component';
+import {ContractsComponent} from './pages/admin/standings/contracts/contracts.component';
+import {EntryDetailComponent} from './pages/admin/standings/entry/entry-detail/entry-detail.component';
+import {EntryCreateComponent} from './pages/admin/standings/entry/entry-create/entry-create.component';
 import {ArticleManageComponent} from './pages/admin/articles/article-manage/article-manage.component';
 import {SerieComponent} from './pages/serie/serie.component';
 
@@ -24,7 +24,7 @@ export const routes: Routes = [
   { path: "news", component: NewsComponent },
   { path: "reviews", component: ReviewsComponent },
   { path: "article/:slug", component: ArticleComponent },
-  { path: "results", component: ResultsComponent },
+  { path: "results", component: StandingsComponent },
   { path: "serie/:name", component: SerieComponent},
   { path: "admin/results/entry", component:  EntryComponent },
   { path: "admin/championships", component:  ChampionshipsComponent },

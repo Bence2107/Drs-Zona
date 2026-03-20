@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Context;
 using DotNetEnv;
@@ -66,14 +67,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = jwtSettings.Issuer,
             ValidAudience = jwtSettings.Audience,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtSettings.Secret))
+                Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+            RoleClaimType = ClaimTypes.Role
         };
+        
     });
 
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"))
     .AddPolicy("EditorOrAdmin", policy => policy.RequireRole("Editor", "Admin"))
-    .AddPolicy("WriterOrAdmin", policy => policy.RequireRole("Writer", "Admin"));
+    .AddPolicy("AuthorOrAdmin", policy => policy.RequireRole("Author", "Admin"));
 
 
 //Repositories:

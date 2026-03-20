@@ -1,4 +1,5 @@
 ﻿using DTOs.Polls;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
@@ -31,6 +32,7 @@ public class PollController(IPollService pollService): ControllerBase
         return Ok(response.Value);
     }
     
+    [Authorize]
     [HttpGet("getByCreatorId/{id:guid}")]
     public async Task<ActionResult<List<PollListDto>>> GetByCreatorId([FromRoute] Guid id,  [FromQuery] string? tag = null)
     {
@@ -54,13 +56,7 @@ public class PollController(IPollService pollService): ControllerBase
         return Ok(response);
     }
     
-    [HttpGet("getAllExpired")]
-    public async Task<ActionResult<List<PollListDto>>> GetAllExpired([FromQuery] string? tag = null)
-    {
-        var response = await pollService.GetExpiredPolls(tag);
-        return Ok(response);
-    }
-    
+    [Authorize]
     [HttpPost("create/{userId:guid}")]
     public async Task<ActionResult> Create([FromBody]PollCreateDto dto)
     {
@@ -79,6 +75,7 @@ public class PollController(IPollService pollService): ControllerBase
         return Ok(result.Value);
     }
     
+    [Authorize]
     [HttpPost("vote/{pollId:guid}/{pollOptionId:guid}/{userId:guid}")]
     public async Task<ActionResult> Vote([FromRoute]Guid pollId, [FromRoute]Guid pollOptionId, [FromRoute] Guid userId)
     {
@@ -96,6 +93,7 @@ public class PollController(IPollService pollService): ControllerBase
         return Ok(result.Value);
     }
 
+    [Authorize]
     [HttpDelete("delete/{id:guid}")]
     public async Task<ActionResult> Delete([FromRoute]Guid id)
     {

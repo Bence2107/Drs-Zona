@@ -21,7 +21,7 @@ export const ALL_GP_ID = 'all-season-overview';
 export const AGGREGATED_ID = 'aggregated';
 
 @Injectable()
-export class ResultsStateService implements OnInit{
+export class StandingsStateService implements OnInit{
   private standingsService = inject(StandingsService);
   private championshipService = inject(ChampionshipService);
   private breakpointObserver = inject(BreakpointObserver);

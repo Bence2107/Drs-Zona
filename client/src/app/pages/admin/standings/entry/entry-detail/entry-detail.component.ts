@@ -73,7 +73,7 @@ export class EntryDetailComponent implements OnInit {
     private router: Router,
     private snackBar: MatSnackBar,
     private grandPrixService: GrandsPrixService,
-    private resultsService: StandingsService,
+    private standingsService: StandingsService,
   ) {}
 
   gpId = signal<string>('');
@@ -109,7 +109,7 @@ export class EntryDetailComponent implements OnInit {
   }
 
   private loadSeriesList() {
-    this.resultsService.getAllSeries().subscribe({
+    this.standingsService.getAllSeries().subscribe({
       next: data => {
         const filtered = data.filter(s => {
           const name = s.name?.toLowerCase() ?? '';
@@ -122,7 +122,7 @@ export class EntryDetailComponent implements OnInit {
 
   loadSessions() {
     this.isLoading.set(true);
-    this.resultsService.getSessionsByGrandPrix(this.gpId()).subscribe({
+    this.standingsService.getSessionsByGrandPrix(this.gpId()).subscribe({
       next: sessions => {
         this.sessions.set(sessions);
         if (sessions.length > 0) {
@@ -166,7 +166,7 @@ export class EntryDetailComponent implements OnInit {
   onSessionChange(session: string) {
     this.selectedSession.set(session);
     this.isLoading.set(true);
-    this.resultsService.getSessionForEdit(this.gpId(), session).subscribe({
+    this.standingsService.getSessionForEdit(this.gpId(), session).subscribe({
       next: data => {
         this.sessionData.set(data);
         this.buildForms(data.results ?? []);
@@ -232,7 +232,7 @@ export class EntryDetailComponent implements OnInit {
       q3: v.q3
     };
 
-    this.resultsService.updateSingleResult(dto).subscribe({
+    this.standingsService.updateSingleResult(dto).subscribe({
       next: () => {
         this.isSaving.set(false);
         this.snackBar.openFromComponent(CustomSnackbarComponent, {
@@ -294,7 +294,7 @@ export class EntryDetailComponent implements OnInit {
       })
     };
 
-    this.resultsService.saveSessionResults(dto).subscribe({
+    this.standingsService.saveSessionResults(dto).subscribe({
       next: () => {
         this.isSaving.set(false);
         this.snackBar.openFromComponent(CustomSnackbarComponent, {
@@ -316,7 +316,7 @@ export class EntryDetailComponent implements OnInit {
 
   recalculate() {
     this.isSaving.set(true);
-    this.resultsService.recalculateSession(this.gpId(), this.selectedSession()).subscribe({
+    this.standingsService.recalculateSession(this.gpId(), this.selectedSession()).subscribe({
       next: () => {
         this.isSaving.set(false);
         this.snackBar.openFromComponent(CustomSnackbarComponent, {
@@ -347,7 +347,7 @@ export class EntryDetailComponent implements OnInit {
 
   loadContext() {
       this.isLoading.set(true);
-      this.resultsService.getGrandPrixContext(this.gpId()).subscribe({
+      this.standingsService.getGrandPrixContext(this.gpId()).subscribe({
         next: ctx => {
           this.context.set(ctx);
           this.loadSessions();

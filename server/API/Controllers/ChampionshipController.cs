@@ -1,4 +1,5 @@
 ﻿using DTOs.Standings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
@@ -98,6 +99,7 @@ public class ChampionshipController(IChampionshipService championshipService): C
         return Ok(response.Value);
     }
     
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("createChampionship")]
     public async Task<ActionResult> CreateChampionship([FromBody] ChampionshipCreateDto dto)
     {
@@ -107,6 +109,7 @@ public class ChampionshipController(IChampionshipService championshipService): C
         return Ok();
     }
     
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("updateChampionshipStatus/{driversChampId:guid}/{constructorsChampId:guid}/{status}")]
     public async Task<ActionResult> UpdateChampionshipStatus(Guid driversChampId, Guid constructorsChampId, string status)
     {
@@ -116,6 +119,7 @@ public class ChampionshipController(IChampionshipService championshipService): C
         return Ok();
     }
     
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("addParticipations")]
     public async Task<ActionResult> AddParticipations([FromBody] ParticipationAddDto dto)
     {
@@ -125,6 +129,7 @@ public class ChampionshipController(IChampionshipService championshipService): C
         return Ok();
     }
 
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpDelete("removeDriverParticipation/{driverId:guid}/{driversChampId:guid}")]
     public async Task<ActionResult> RemoveDriverParticipation(Guid driverId, Guid driversChampId)
     {
@@ -133,7 +138,8 @@ public class ChampionshipController(IChampionshipService championshipService): C
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
     }
-
+    
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpDelete("removeConstructorCompetition/{constructorId:guid}/{constructorsChampId:guid}")]
     public async Task<ActionResult> RemoveConstructorCompetition(Guid constructorId, Guid constructorsChampId)
     {

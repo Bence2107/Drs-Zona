@@ -72,7 +72,7 @@ export class EntryCreateComponent implements OnInit{
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private championshipService: ChampionshipService,
-    private resultsService: StandingsService,
+    private standingsService: StandingsService,
   ) {
     effect(() => {
       const session = this.selectedSession();
@@ -121,7 +121,7 @@ export class EntryCreateComponent implements OnInit{
 
   loadContext() {
     this.isLoadingContext.set(true);
-    this.resultsService.getGrandPrixContext(this.gpId()).subscribe({
+    this.standingsService.getGrandPrixContext(this.gpId()).subscribe({
       next: ctx => {
         this.context.set(ctx);
         if (ctx.availableSessions) {
@@ -217,7 +217,7 @@ export class EntryCreateComponent implements OnInit{
       })
     };
 
-    this.resultsService.insertResults(dto).subscribe({
+    this.standingsService.insertResults(dto).subscribe({
       next: () => {
         this.isSaving.set(false);
         this.snackBar.openFromComponent(CustomSnackbarComponent, {

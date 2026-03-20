@@ -1,4 +1,5 @@
 ﻿using DTOs.News;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
@@ -48,6 +49,7 @@ public class CommentsController(ICommentService commentService): ControllerBase
         return Ok(response.Value);
     }
     
+    [Authorize]
     [HttpGet("getUsersComments/{userId:guid}")]
     public async Task<ActionResult<List<CommentDetailDto>>> GetUsersComments([FromRoute] Guid userId)
     {
@@ -64,6 +66,7 @@ public class CommentsController(ICommentService commentService): ControllerBase
         return Ok(response.Value);
     }
     
+    [Authorize]
     [HttpPost("create/{userId:guid}")]
     public async Task<ActionResult> Create([FromBody]CommentCreateDto dto, [FromRoute]Guid userId)
     {
@@ -81,6 +84,7 @@ public class CommentsController(ICommentService commentService): ControllerBase
         return Ok(result.Value);
     }
     
+    [Authorize]
     [HttpPost("updateContent")]
     public async Task<ActionResult> UpdateContent([FromBody]CommentContentUpdateDto commentUpdateVoteDto)
     {
@@ -97,6 +101,7 @@ public class CommentsController(ICommentService commentService): ControllerBase
         return Ok(result.Value);
     }
     
+    [Authorize]
     [HttpPost("vote")]
     public async Task<ActionResult> Vote([FromBody] CommentUpdateVoteDto request)
     {
@@ -106,6 +111,7 @@ public class CommentsController(ICommentService commentService): ControllerBase
         return Ok(result.Value);
     }
     
+    [Authorize]
     [HttpDelete("delete/{id:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     public async Task<ActionResult> Delete([FromRoute]Guid id)

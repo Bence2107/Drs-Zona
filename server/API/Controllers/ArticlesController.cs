@@ -1,4 +1,5 @@
 ﻿using DTOs.News;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using Services.Types;
@@ -46,6 +47,7 @@ public class ArticleController(IArticleService articleService): ControllerBase
         return Ok(response);
     }
     
+    [Authorize(Policy = "AuthorOrAdmin")]
     [HttpPost("create")]
     public async Task<ActionResult> Create([FromBody]ArticleCreateDto dto)
     {
@@ -63,6 +65,7 @@ public class ArticleController(IArticleService articleService): ControllerBase
         return Ok(result.Value);
     }
 
+    [Authorize(Policy = "AuthorOrAdmin")]
     [HttpPost("update")]
     public async Task<ActionResult> Update([FromBody]ArticleUpdateDto dto)
     {
@@ -78,7 +81,7 @@ public class ArticleController(IArticleService articleService): ControllerBase
         
         return Ok(result.Value);
     }
-
+    [Authorize(Policy = "AuthorOrAdmin")]
     [HttpDelete("delete/{id:guid}")]
     public async Task<ActionResult> Delete([FromRoute]Guid id)
     {

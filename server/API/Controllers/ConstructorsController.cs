@@ -1,4 +1,5 @@
 ﻿using DTOs.Standings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
@@ -8,6 +9,7 @@ namespace Drs_Zona.API.Controllers;
 [Route("api/[controller]")]
 public class ConstructorsController(IConstructorsService constructorsService): ControllerBase 
 {
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpGet("get/{id:guid}")]
     public async Task<ActionResult<ConstructorDetailDto>> Get([FromRoute]Guid id)
     {
@@ -24,6 +26,7 @@ public class ConstructorsController(IConstructorsService constructorsService): C
         return Ok(response.Value);
     }
     
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpGet("getAllConstructors")]
     public async Task<ActionResult<List<ConstructorListDto>>> GetAllConstructors()
     {
@@ -33,6 +36,7 @@ public class ConstructorsController(IConstructorsService constructorsService): C
         return Ok(response.Value);
     }
     
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("create")]
     public async Task<ActionResult> Create([FromBody] ConstructorCreateDto dto)
     {
@@ -50,6 +54,7 @@ public class ConstructorsController(IConstructorsService constructorsService): C
         return Ok(result.Value);
     }
     
+    [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("update")]
     public async Task<ActionResult> Update([FromBody]ConstructorUpdateDto dto)
     {

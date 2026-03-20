@@ -60,13 +60,13 @@ export class ParticipationsComponent implements OnInit{
     private route: ActivatedRoute,
     private router: Router,
     private championshipService: ChampionshipService,
-    private resultService: StandingsService
+    private standingsService: StandingsService
   ) {}
 
   ngOnInit() {
     const champIdFromRoute = this.route.snapshot.paramMap.get('champId');
 
-    this.resultService.getAllSeries().subscribe(res => {
+    this.standingsService.getAllSeries().subscribe(res => {
       const filtered = res.filter(s => {
         const name = s.name?.toLowerCase() ?? '';
         return !name.includes('wec') && !name.includes('nascar');
