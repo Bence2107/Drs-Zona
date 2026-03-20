@@ -3,13 +3,15 @@ using Entities.Models.RaceTracks;
 using Repositories.Interfaces.RaceTracks;
 using Repositories.Interfaces.Standings;
 using Services.Interfaces;
+using Services.Interfaces.images;
 using Services.Types;
 
 namespace Services.Implementations;
 
 public class GrandPrixService (
-    IGrandsPrixRepository grandsPrixRepository,
     ICircuitsRepository circuitsRepository,
+    ICircuitImagesService  circuitImagesService,
+    IGrandsPrixRepository grandsPrixRepository,
     ISeriesRepository seriesRepository
 ) : IGrandPrixService 
 {
@@ -25,18 +27,19 @@ public class GrandPrixService (
         if (series == null) return ResponseResult<GrandPrixDetailDto>.Failure("Series is not found");
 
         var circuitDto = new CircuitDetailDto(
-            Id: id,
+            Id: circuit.Id,
             Name: circuit.Name,
             Length: circuit.Length,
             Type: circuit.Type,
             Location: circuit.Location,
-            FastestLap: circuit.FastestLap
+            FastestLap: circuit.FastestLap,
+            LightImageUrl: circuitImagesService.GetImageUrl(circuit.Id, "light"),
+            DarkImageUrl: circuitImagesService.GetImageUrl(circuit.Id, "dark")
         );
 
         var detailDto = new GrandPrixDetailDto(
             Id: grandPrix.Id,
             SeriesId: grandPrix.SeriesId,
-            CircuitId: grandPrix.CircuitId,
             Name: grandPrix.Name,
             SeriesName: grandPrix.Series!.Name,
             RoundNumber: grandPrix.RoundNumber,

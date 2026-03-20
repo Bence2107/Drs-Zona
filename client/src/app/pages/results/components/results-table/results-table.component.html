@@ -203,3 +203,12 @@
     <div class="no-data">Nincs megjeleníthető adat. Kérjük válasszon a szűrőkből.</div>
   }
 </div>
+
+
+@if (
+  state.viewMode() === 'results' &&
+  state.selectedGrandPrixId() &&
+  state.selectedGrandPrixId() !== ALL_GP_ID
+  ) {
+  <app-circuit-info [grandPrixId]="state.selectedGrandPrixId()!" />
+}

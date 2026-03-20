@@ -1,0 +1,69 @@
+@if (isLoading()) {
+  <div class="circuit-loading">
+    <mat-spinner diameter="32" />
+  </div>
+} @else if (detail(); as gp) {
+  <div class="circuit-card">
+    <div class="circuit-header">
+      <div class="circuit-title-block">
+        <span class="round-badge">{{ gp.roundNumber }}. forduló</span>
+        <h3 class="circuit-name">{{ gp.circuitDetail!.name }}</h3>
+        <span class="circuit-location">
+          <mat-icon>location_on</mat-icon>
+          {{ gp.circuitDetail!.location }}
+        </span>
+      </div>
+
+      @if (circuitImageUrl) {
+        <img [src]="circuitImageUrl"
+             [alt]="gp.circuitDetail!.name"
+             class="circuit-image" />
+      }
+    </div>
+
+    <div class="circuit-stats">
+      <div class="stat-item">
+        <mat-icon>straighten</mat-icon>
+        <div class="stat-body">
+          <span class="stat-label">Hossz</span>
+          <span class="stat-value">{{ formatLength(gp.circuitDetail!.length!) }}</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <mat-icon>loop</mat-icon>
+        <div class="stat-body">
+          <span class="stat-label">Körök</span>
+          <span class="stat-value">{{ gp.lapsCompleted }}</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <mat-icon>route</mat-icon>
+        <div class="stat-body">
+          <span class="stat-label">Versenytáv</span>
+          <span class="stat-value">{{ gp.raceDistance }} km</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <mat-icon>speed</mat-icon>
+        <div class="stat-body">
+          <span class="stat-label">Leggyorsabb kör</span>
+          <span class="stat-value mono">{{ gp.circuitDetail!.fastestLap }}</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <mat-icon>map</mat-icon>
+        <div class="stat-body">
+          <span class="stat-label">Típus</span>
+          <span class="stat-value">{{ gp.circuitDetail!.type }}</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <mat-icon>calendar_today</mat-icon>
+        <div class="stat-body">
+          <span class="stat-label">Időszak</span>
+          <span class="stat-value">{{ formatDate(gp.startTime!) }} – {{ formatDate(gp.endTime!) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+}

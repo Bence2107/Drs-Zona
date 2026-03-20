@@ -31,6 +31,7 @@
   <ItemGroup>
     <Folder Include="uploads\" />
     <Folder Include="uploads\dumps\articles\" />
+    <Folder Include="uploads\images\circuits\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

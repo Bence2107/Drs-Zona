@@ -1,0 +1,118 @@
+.circuit-loading {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.circuit-card {
+  background: var(--secondary-bg);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-top: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  animation: fadeIn 0.25s ease-out;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.circuit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.circuit-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.round-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-color, #e10600);
+}
+
+.circuit-name {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.circuit-location {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary, rgba(0, 0, 0, 0.55));
+
+  mat-icon {
+    font-size: 0.95rem;
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+}
+
+.circuit-image {
+  width: 260px;
+  height: 200px;
+  object-fit: contain;
+
+  @media (max-width: 600px) {
+    width: 100px;
+    height: 65px;
+  }
+}
+
+.circuit-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem 1rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  mat-icon {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--accent-color, #e10600);
+    opacity: 0.75;
+    flex-shrink: 0;
+  }
+}
+
+.stat-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary, rgba(0, 0, 0, 0.5));
+}
+
+.stat-value {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+
+  &.mono {
+    font-size: 0.82rem;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}

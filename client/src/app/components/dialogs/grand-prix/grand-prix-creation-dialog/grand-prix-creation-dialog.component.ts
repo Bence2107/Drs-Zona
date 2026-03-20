@@ -112,7 +112,6 @@ export class GrandPrixManageDialogComponent implements OnInit {
   private loadEditData(data: GrandPrixDetailDto) {
     this.form.patchValue({
       seriesId:      data.seriesId,
-      circuitId:     data.circuitId,
       name:          data.name,
       shortName:     data.name,
       roundNumber:   data.roundNumber,

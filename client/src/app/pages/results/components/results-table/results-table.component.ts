@@ -13,6 +13,7 @@ import {
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {DatePipe} from '@angular/common';
 import {CountryFlagPipe} from '../../../../pipes/country-flag.pipe';
+import {CircuitInfoComponent} from '../circuit-info/circuit-info.component';
 
 @Component({
   selector: 'app-results-table',
@@ -29,7 +30,8 @@ import {CountryFlagPipe} from '../../../../pipes/country-flag.pipe';
     DatePipe,
     MatCellDef,
     MatHeaderCellDef,
-    CountryFlagPipe
+    CountryFlagPipe,
+    CircuitInfoComponent
   ],
   templateUrl: './results-table.component.html',
   styleUrl: './results-table.component.scss',

@@ -8,7 +8,9 @@ public record CircuitDetailDto(
     double Length,
     string Type,
     string Location,
-    string FastestLap
+    string FastestLap,
+    string? LightImageUrl,
+    string? DarkImageUrl
 );
 
 public record CircuitListDto(
@@ -82,7 +84,6 @@ public record GrandPrixListDto(
 public record GrandPrixDetailDto(
     Guid Id,
     Guid SeriesId,
-    Guid CircuitId,
     string Name,
     string SeriesName,
     int RoundNumber,
