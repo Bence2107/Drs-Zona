@@ -137,7 +137,6 @@ export class AuthComponent implements OnInit {
 
   private applyServerErrors(form: FormGroup, error: HttpValidationError): void {
     const fieldMap: { [key: string]: string } = {
-      // backend field neve -> FormControl neve
       'email': 'email',
       'password': 'password',
       'username': 'username',
@@ -154,7 +153,6 @@ export class AuthComponent implements OnInit {
       }
     }
 
-    // Ha nincs field-specifikus hiba, globális hiba az email alá kerül
     if (!hasFieldError && error.title) {
       form.get('email')?.setErrors({ serverError: error.title });
     }

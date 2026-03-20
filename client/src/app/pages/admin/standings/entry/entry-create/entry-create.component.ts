@@ -153,8 +153,8 @@ export class EntryCreateComponent implements OnInit{
       status:        ['Finished', Validators.required],
       isPole:        [false],
       isFastestLap:  [false],
-      q1: [null], // Új mező
-      q2: [null], // Új mező
+      q1: [null],
+      q2: [null],
       q3: [null]
     });
 

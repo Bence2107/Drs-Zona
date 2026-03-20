@@ -56,8 +56,6 @@ export class CommentItemComponent {
   constructor(private commentService: CommentService, private authService: AuthService) {}
 
 
-  //Getters:
-
   isMyComment(commentUsername: string | null | undefined): boolean {
     return this.authService.currentProfile()?.username === commentUsername;
   }
@@ -91,7 +89,6 @@ export class CommentItemComponent {
     return "img/user/avatars/avatar.jpg";
   }
 
-  //Helpers:
   reloadReplies() {
     if (!this.comment.id) return;
     this.comment.loaded = false;
@@ -116,8 +113,6 @@ export class CommentItemComponent {
     el.style.height = 'auto';
     el.style.height = el.scrollHeight + 'px';
   }
-
-  //Edit Comment:
 
   editComment() {
     if(this.comment.content) {
@@ -174,8 +169,6 @@ export class CommentItemComponent {
     });
   }
 
-  // comment-item.component.ts
-
   vote(isUpvote: boolean) {
     const profile = this.authService.currentProfile();
     if (!profile || !this.comment.id) return;
@@ -212,8 +205,6 @@ export class CommentItemComponent {
       }
     });
   }
-
-  //Reply Comment:
 
   toggleReplyForm() {
     this.replyFormVisible = !this.replyFormVisible;
@@ -257,8 +248,6 @@ export class CommentItemComponent {
       }
     });
   }
-
-  //Delete Comment:
 
   deleteComment(id: string) {
     if(id.length > 0){

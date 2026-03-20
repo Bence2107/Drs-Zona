@@ -107,8 +107,6 @@ export class AuthService {
     );
   }
 
-  //-----private methods----
-
   loadProfile(): void {
     if (!this.isLoggedIn()) return;
     apiAuthMeGet$Json(this.http, this.apiConfig.rootUrl).subscribe({

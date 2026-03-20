@@ -93,7 +93,7 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
       ['insertImage', 'insertVideo']
     ]
   };
-  
+
   imagePreviews: { [key: string]: string } = {};
   isLoading = false;
   private isSubmitted = false;
@@ -386,7 +386,6 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
       error: (err: HttpValidationError) => {
         this.isLoading = false;
 
-        // Summary nested group külön kezelése
         const summaryGroup = this.articleForm.get('summary') as FormGroup;
         const summaryErrors: HttpValidationError = {
           title: err.title,
