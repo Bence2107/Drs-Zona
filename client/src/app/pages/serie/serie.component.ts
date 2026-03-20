@@ -11,7 +11,7 @@ import {MatProgressBar} from '@angular/material/progress-bar';
 import {ErrorDisplayComponent} from '../../components/error-display/error-display.component';
 import {PollListComponent} from '../../components/lists/polls-list/polls-list.component';
 import {RecentNewsComponent} from '../../components/lists/recent-news-list/recent-news.component';
-import {MatCard, MatCardContent, MatCardHeader, MatCardImage, MatCardTitle} from '@angular/material/card';
+import {MatCard, MatCardContent, MatCardImage} from '@angular/material/card';
 
 @Component({
   selector: 'app-serie',
@@ -21,8 +21,6 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardImage, MatCardTitle} from
     PollListComponent,
     RecentNewsComponent,
     MatCard,
-    MatCardHeader,
-    MatCardTitle,
     MatCardContent,
     MatCardImage
   ],

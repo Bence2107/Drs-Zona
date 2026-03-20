@@ -66,20 +66,20 @@
 
 .series-tag {
   display: inline-block;
-  width: fit-content;
   padding: 4px 10px;
-  margin-bottom: 5px;
   border-radius: 6px;
   font-size: 0.75em;
   font-weight: 800;
-  letter-spacing: 0.5px;
   text-transform: uppercase;
+  margin-bottom: 5px;
   color: white;
+  width: fit-content;
+  letter-spacing: 0.5px;
 
-  &.tag-F1  { background-color: #ed2449; }
-  &.tag-F2  { background-color: #00bfff; }
-  &.tag-WEC { background-color: #003399; }
-  &.tag-Nascar {
+  &.tag-f1 { background-color: #ed2449; }
+  &.tag-f2 { background-color: #00bfff; }
+  &.tag-wec { background-color: #003399; }
+  &.tag-nascar {
     background-color: #ffcc00;
     color: #1a1a1a;
   }

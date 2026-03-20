@@ -16,7 +16,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  background: var(--primary-bg);
+  background: var(--secondary-bg);
   color: var(--text-main);
   border-radius: 16px;
   border: 1px solid rgba(255, 94, 94, 0.05);
@@ -118,10 +118,10 @@
   width: fit-content;
   letter-spacing: 0.5px;
 
-  &.tag-F1 { background-color: #ed2449; }
-  &.tag-F2 { background-color: #00bfff; }
-  &.tag-WEC { background-color: #003399; }
-  &.tag-Nascar {
+  &.tag-f1 { background-color: #ed2449; }
+  &.tag-f2 { background-color: #00bfff; }
+  &.tag-wec { background-color: #003399; }
+  &.tag-nascar {
     background-color: #ffcc00;
     color: #1a1a1a;
   }

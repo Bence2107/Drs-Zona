@@ -11,8 +11,8 @@
 
           <mat-card-content class="text-content">
             @if (new_item.tag) {
-              <span class="series-tag" [ngClass]="'tag-' + new_item.tag">
-                {{ new_item.tag }}
+              <span class="series-tag" [ngClass]="'tag-' + new_item!.tag!.toLowerCase().trim()">
+                 {{ new_item!.tag }}
               </span>
             }
 

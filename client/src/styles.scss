@@ -222,6 +222,15 @@ mat-option.mat-mdc-option .mat-pseudo-checkbox,
   background-color: var(--hover-bg);
 }
 
+::ng-deep .angular-editor-textarea {
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
+
+::ng-deep .angular-editor-toolbar {
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
 .custom-nav-panel {
   background-color: var(--secondary-bg);
   border-radius: 8px !important;

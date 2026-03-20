@@ -4,8 +4,8 @@
   <mat-card-header>
     <div class="header-container">
       @if (poll?.tag) {
-        <span class="series-tag tag-{{ poll?.tag }}">
-          {{ poll?.tag }}
+        <span class="series-tag" [ngClass]="'tag-' + poll!.tag!.toLowerCase().trim()">
+          {{ poll!.tag }}
         </span>
       }
       <mat-card-title class="poll-title">

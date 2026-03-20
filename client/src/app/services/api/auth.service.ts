@@ -138,4 +138,8 @@ export class AuthService {
     this.currentProfile.set(null);
     this.router.navigate(['/home']);
   }
+
+  getUserRole() {
+    return this.currentUser()?.role;
+  }
 }

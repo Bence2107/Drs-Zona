@@ -73,7 +73,7 @@ export class PollVoteDialogComponent {
 
   removePoll() {
      this.pollService.deletePoll(this.poll.id!).subscribe({
-       next: () => this.dialogRef.close()
+       next: () => this.dialogRef.close('deleted')
      });
   }
 }

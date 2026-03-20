@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import {PollService} from '../../../../services/api/poll.service';
 import {
+  MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
@@ -76,7 +77,8 @@ export class PollAddDialogComponent implements OnInit {
     private seriesService: SeriesService,
     private dialogRef: MatDialogRef<PollAddDialogComponent>,
     private snackBar: MatSnackBar,
-    private formErrorService: FormErrorService
+    private formErrorService: FormErrorService,
+    @Inject(MAT_DIALOG_DATA) public data: { selectedShortName?: string },
   ) {
     this.pollForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]],
@@ -91,7 +93,13 @@ export class PollAddDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.seriesService.getSeriesList().subscribe(data => this.series = data);
+    this.seriesService.getSeriesList().subscribe(data => {
+      this.series = data
+
+      if (this.data?.selectedShortName) {
+        this.pollForm.get('tag')?.setValue(this.data.selectedShortName);
+      }
+    });
 
     this.formErrorService.clearServerErrorOnChange([
       this.pollForm.get('title') as FormControl,
@@ -99,6 +107,7 @@ export class PollAddDialogComponent implements OnInit {
       this.pollForm.get('description') as FormControl,
       this.pollForm.get('expiresAt') as FormControl,
     ]);
+
   }
 
   get options() {

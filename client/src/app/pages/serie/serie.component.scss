@@ -13,6 +13,8 @@ main {
   padding: 10px 5%;
   min-height: 85vh;
   animation: fadeIn 0.2s ease-out;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+
 }
 
 h1 {
@@ -100,6 +102,10 @@ h2 {
     height: 8px;
     border-radius: 4px;
   }
+}
+
+.description-content {
+  color: var(--text-main);
 }
 
 @keyframes fadeIn {

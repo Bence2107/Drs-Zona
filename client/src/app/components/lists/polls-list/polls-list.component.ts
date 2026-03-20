@@ -1,4 +1,4 @@
-import {Component, ViewChild, ElementRef, Input} from '@angular/core';
+import {Component, ViewChild, ElementRef, Input, EventEmitter, Output} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PollService } from '../../../services/api/poll.service';
 import { PollListDto } from '../../../api/models/poll-list-dto';
@@ -22,6 +22,8 @@ export class PollListComponent {
   @ViewChild('carousel', { static: false }) carousel!: ElementRef;
   @Input() userData: UserProfileResponse | null = null;
   @Input() polls: PollListDto[] = [];
+  @Input() currentSeriesShortName?: string;
+  @Output() pollChanged = new EventEmitter<void>();
   constructor(private pollService: PollService, private dialog: MatDialog, private authService: AuthService) {}
 
   get userId(): string | null {
@@ -43,6 +45,9 @@ export class PollListComponent {
 
         dialogRef.afterClosed().subscribe((updatedPoll) => {
           if (updatedPoll) {
+            this.polls = this.polls.filter(p => p.id !== pollId);
+          }
+          else if (updatedPoll) {
             const index = this.polls.findIndex(p => p.id === updatedPoll.id);
             if (index !== -1) {
               this.polls[index] = updatedPoll;
@@ -56,12 +61,13 @@ export class PollListComponent {
   protected openCreatePollDialog() {
       const dialogRef = this.dialog.open(PollAddDialogComponent, {
         width: '1000px',
-        disableClose: true
+        disableClose: true,
+        data: { selectedShortName: this.currentSeriesShortName }
       });
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.pollService.getAllActive(undefined).subscribe(data => this.polls = data);
+          this.pollChanged.emit();
         }
       });
   }

@@ -82,7 +82,7 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
     showToolbar: true,
     placeholder: 'Írd be a szöveget ide...',
     defaultParagraphSeparator: 'p',
-    defaultFontName: 'Arial',
+    defaultFontName: ' Roboto, Helvetica Neue, sans-serif;',
     defaultFontSize: '',
     fonts: [
       {class: 'arial', name: 'Arial'},
@@ -93,6 +93,7 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
       ['insertImage', 'insertVideo']
     ]
   };
+  
   imagePreviews: { [key: string]: string } = {};
   isLoading = false;
   private isSubmitted = false;

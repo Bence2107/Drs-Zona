@@ -3,13 +3,14 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 20px 0;
+  padding: 40px 0;
   min-width: 0;
   max-width: 100%;
 }
 
 .narrow-field {
   width: 85%;
+  margin-top: 8px;
   max-width: 380px;
 }
 
