@@ -43,6 +43,6 @@ export class StandingsComponent implements OnInit {
 
   isAdmin(): boolean {
     return this.authService.currentProfile()?.role === 'Admin'
-      || this.authService.currentProfile()?.role === 'Manager';
+      || this.authService.currentProfile()?.role === 'Editor';
   }
 }
