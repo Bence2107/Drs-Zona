@@ -7,6 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="coverlet.msbuild" Version="8.0.1">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.12" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.12" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.12" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
@@ -15,20 +20,33 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="coverlet.collector" Version="6.0.2" />
+        <PackageReference Include="coverlet.collector" Version="8.0.1">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="FluentAssertions" Version="7.0.0" />
         <PackageReference Include="Moq" Version="4.20.72" />
         <PackageReference Include="JunitXml.TestLogger" Version="5.0.0" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\API\API.csproj" />
       <ProjectReference Include="..\Repositories\Repositories.csproj" />
       <ProjectReference Include="..\Services\Services.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="reports\" />
+      <Folder Include="Services\Integrations\" />
       <Folder Include="TestResults\" />
     </ItemGroup>
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <PreserveCompilationContext>true</PreserveCompilationContext>
+        <MvcTestingPreserveCompilationContext>true</MvcTestingPreserveCompilationContext>
+    </PropertyGroup>
 
 </Project>

@@ -4,38 +4,41 @@ using Entities.Models;
 using Entities.Models.News;
 using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Repositories.Implementations;
 using Repositories.Implementations.News;
 using Services.Implementations;
-using Services.Implementations.images; 
+using Services.Implementations.images;
 using Services.Interfaces;
 using Xunit;
 
-namespace Tests.Acceptance;
+namespace Tests.Services.Integrations;
 
-public class CommentTests
+public class CommentIntegrationTests
 {
     private readonly EfContext _context;
     private readonly ICommentService _service;
 
-    public CommentTests()
+    public CommentIntegrationTests()
     {
         _context = InMemoryDbFactory.CreateContext();
-        
-        var mockEnv = new Mock<IWebHostEnvironment>();
+    
+      var mockEnv = new Mock<IWebHostEnvironment>();
+      mockEnv.Setup(e => e.ContentRootPath).Returns("wwwroot");
         var imageService = new UserImageService(mockEnv.Object);
 
         _service = new CommentService(
+            new ArticlesRepository(_context),
             new CommentsRepository(_context),
             new AuthRepository(_context),
-           imageService,
+            imageService,
             new CommentVotesRepository(_context)
         );
     }
 
     [Fact]
-    public async Task US_04_AC_01_GetCommentReplies_ShouldReturnAllRepliesForComment()
+    public async Task GetCommentReplies_ShouldReturnAllRepliesForComment()
     {
         var user = CreateUser();
         var parentCommentId = Guid.NewGuid();
@@ -99,19 +102,24 @@ public class CommentTests
     public async Task GetUsersComments_ShouldReturnComments()
     {
         var user = CreateUser();
+        var article = CreateArticle();
 
         var comment = new Comment
         {
             Id = Guid.NewGuid(),
             UserId = user.Id,
+            ArticleId = article.Id,
             Content = "User comment",
-            User = user
+            User = user,
+            DateCreated = DateTime.UtcNow,
+            DateUpdated = DateTime.UtcNow
         };
 
-        _context.Users.Add(user);
-        _context.Comments.Add(comment);
+        await _context.Users.AddAsync(user);
+        await _context.Articles.AddAsync(article);
+        await _context.Comments.AddAsync(comment);
         await _context.SaveChangesAsync();
-
+        
         var result = await _service.GetUsersComments(user.Id);
 
         result.IsSuccess.Should().BeTrue();
@@ -137,19 +145,21 @@ public class CommentTests
         _context.Articles.Add(article);
         _context.Comments.Add(parentComment);
         await _context.SaveChangesAsync();
+        
+        var articleExists = await _context.Articles.AnyAsync(a => a.Id == article.Id);
+        articleExists.Should().BeTrue("article should be saved");
 
         var dto = new CommentCreateDto(
-            ArticleId: parentComment.Id,
+            ArticleId: article.Id,
             Content: "New comment",
-            ReplyToCommentId: null
+            ReplyToCommentId: parentComment.Id
         );
 
         var result = await _service.Create(dto, user.Id);
 
-        result.IsSuccess.Should().BeTrue();
+        result.IsSuccess.Should().BeTrue(result.Message);
         _context.Comments.Should().HaveCount(2);
     }
-
 
     [Fact]
     public async Task AddComment_ShouldFail_WhenArticleDoesNotExist()
@@ -198,7 +208,7 @@ public class CommentTests
         var result = await _service.UpdateCommentsVote(dto);
 
         result.IsSuccess.Should().BeFalse();
-        result.Message.Should().Be("Comment not found");
+        result.Message.Should().Be("A komment nem található.");
     }
 
     [Fact]
@@ -249,6 +259,9 @@ public class CommentTests
         Lead = "Lead",            
         Tag = "F1",
         FirstSection = "First",
-        LastSection = "Last"
+        LastSection = "Last",
+        DatePublished = DateTime.UtcNow,
+        DateUpdated = DateTime.UtcNow,
+        AuthorId = Guid.NewGuid()
     };
 }

@@ -49,9 +49,12 @@ var jwtSettings = new JwtSettings
     ExpirationMinutes = int.Parse(Environment.GetEnvironmentVariable("JWT_EXPIRATION_MINUTES") ?? "1440")
 };
 
-builder.Services.AddDbContext<EfContext>(options =>
-    options.UseNpgsql(connectionString)    
-);
+if (!builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddDbContext<EfContext>(options =>
+        options.UseNpgsql(connectionString)    
+    );
+}
 
 builder.Services.AddSingleton(Microsoft.Extensions.Options.Options.Create(jwtSettings));
 
@@ -194,20 +197,28 @@ var cacheControlHeader = new StaticFileOptions
     }
 };
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
-    RequestPath = "/uploads",
-    OnPrepareResponse = cacheControlHeader.OnPrepareResponse
-});
+var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
 
-app.UseStaticFiles(new StaticFileOptions
+if (Directory.Exists(uploadsPath))
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "client", "dist", "drs-zona", "browser")),
-    RequestPath = ""
-});
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(uploadsPath),
+        RequestPath = "/uploads",
+        OnPrepareResponse = cacheControlHeader.OnPrepareResponse
+    });
+}
+
+var clientPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "client", "dist", "drs-zona", "browser");
+
+if (Directory.Exists(clientPath))
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(clientPath),
+        RequestPath = ""
+    });
+}
 
 
 app.UseHttpsRedirection();
@@ -219,3 +230,5 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+public abstract partial class Program { }
