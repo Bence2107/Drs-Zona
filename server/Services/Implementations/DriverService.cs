@@ -59,19 +59,18 @@ public class DriverService(
         return ResponseResult<List<DriverListDto>>.Success(orderedDto);
     }
     
-
     public async Task<ResponseResult<bool>> Create(DriverCreateDto dto)
     {
-        if (dto.BirthDate > DateTime.Today.AddYears(-15))
-        {
-            return ResponseResult<bool>.Failure(nameof(dto.BirthDate), "Driver cannot be younger than 15 year");
-        }
-
         if (dto.BirthDate > DateTime.Now)
         {
             return ResponseResult<bool>.Failure("Birth date cannot be in the future.");
         }
-
+        
+        if (dto.BirthDate > DateTime.Today.AddYears(-15))
+        {
+            return ResponseResult<bool>.Failure(nameof(dto.BirthDate), "Driver cannot be younger than 15 year");
+        }
+        
         var driver = new Driver
         {
             Name = dto.Name,
@@ -94,16 +93,16 @@ public class DriverService(
         var driver = await driverRepo.GetDriverById(dto.Id);
         if (driver == null) return ResponseResult<bool>.Failure("Driver not found.");
         
+        if (dto.BirthDate > DateTime.Now)
+        {
+            return ResponseResult<bool>.Failure(nameof(driver.BirthDate), "Birth date cannot be in the future.");
+        }
+        
         if (dto.BirthDate > DateTime.Today.AddYears(-15))
         {
             return ResponseResult<bool>.Failure(nameof(driver.BirthDate), "Driver cannot be younger than 15 year");
         }
-
-        if (dto.BirthDate > DateTime.Now)
-        {
-            return ResponseResult<bool>.Failure("Birth date cannot be in the future.");
-        }
-
+        
         driver.Id = dto.Id;
         driver.Name = dto.Name;
         driver.Nationality = dto.Nationality;

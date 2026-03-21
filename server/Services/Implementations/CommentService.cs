@@ -9,6 +9,7 @@ using Services.Types;
 namespace Services.Implementations;
 
 public class CommentService(
+    IArticlesRepository articlesRepo,
     ICommentsRepository commentsRepo, 
     IAuthRepository usersRepo, 
     IUserImageService userImageService,
@@ -117,6 +118,14 @@ public class CommentService(
     public async Task<ResponseResult<bool>> Create(CommentCreateDto commentCreateDto, Guid userId)
     {
         if (!await usersRepo.CheckIfIdExists(userId)) return ResponseResult<bool>.Failure("User not found");
+        
+        if (!await articlesRepo.CheckIfIdExists(commentCreateDto.ArticleId)) return ResponseResult<bool>.Failure("Article not found");
+        
+        if (commentCreateDto.ReplyToCommentId.HasValue)
+        {
+            var replyTo = await commentsRepo.GetCommentById(commentCreateDto.ReplyToCommentId.Value);
+            if (replyTo is null) return ResponseResult<bool>.Failure("Comment not found");
+        }
         
         var comment = new Comment
         {

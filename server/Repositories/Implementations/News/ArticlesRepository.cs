@@ -97,4 +97,9 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
         _articles.Remove(article);
         await context.SaveChangesAsync();
     }
+
+    public async Task<bool> CheckIfIdExists(Guid id)
+    {
+        return await _articles.AnyAsync(a => a.Id == id);
+    }
 }

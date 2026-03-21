@@ -9,15 +9,15 @@ using Services.Types;
 namespace Services.Implementations;
 
 public class GrandPrixService (
-    ICircuitsRepository circuitsRepository,
-    ICircuitImagesService  circuitImagesService,
-    IGrandsPrixRepository grandsPrixRepository,
-    ISeriesRepository seriesRepository
+    ICircuitsRepository circuitsRepo,
+    IGrandsPrixRepository grandsPrixRepo,
+    ISeriesRepository seriesRepo,
+    ICircuitImagesService  circuitImagesService
 ) : IGrandPrixService 
 {
     public async Task<ResponseResult<GrandPrixDetailDto>> GetGrandPrixById(Guid id)
     {
-        var grandPrix = await grandsPrixRepository.GetWithAll(id);
+        var grandPrix = await grandsPrixRepo.GetWithAll(id);
         if (grandPrix == null) return ResponseResult<GrandPrixDetailDto>.Failure("Grand Prix not found");
         
         var circuit = grandPrix.Circuit;
@@ -56,7 +56,7 @@ public class GrandPrixService (
 
     public async Task<ResponseResult<List<CircuitListDto>>> GetAllCircuits()
     {
-        var circuits = await circuitsRepository.GetAllCircuits();
+        var circuits = await circuitsRepo.GetAllCircuits();
             
         var dtoS = circuits.Select(c => new CircuitListDto(
             c.Id,
@@ -69,7 +69,7 @@ public class GrandPrixService (
 
     public async Task<ResponseResult<List<GrandPrixListDto>>> GetSeasonGrandPrixList(Guid seriesId, int year)
     {
-        var grandsPrixList = await grandsPrixRepository.GetBySeriesAndYear(seriesId, year);
+        var grandsPrixList = await grandsPrixRepo.GetBySeriesAndYear(seriesId, year);
         var grandsPrix = grandsPrixList.Select(gp => new GrandPrixListDto(
             Id: gp.Id,
             Name: gp.Name,
@@ -83,12 +83,12 @@ public class GrandPrixService (
 
     public async Task<ResponseResult<bool>> Create(GrandPrixCreateDto grandPrixCreateDto)
     {
-        if (await circuitsRepository.GetCircuitById(grandPrixCreateDto.CircuitId) == null)
+        if (await circuitsRepo.GetCircuitById(grandPrixCreateDto.CircuitId) == null)
         {
             return ResponseResult<bool>.Failure(nameof(grandPrixCreateDto.CircuitId), "The specified circuit does not exist.");
         }
         
-        if (await seriesRepository.GetSeriesById(grandPrixCreateDto.SeriesId) == null)
+        if (await seriesRepo.GetSeriesById(grandPrixCreateDto.SeriesId) == null)
         {
             return ResponseResult<bool>.Failure(nameof(grandPrixCreateDto.CircuitId), "The specified series does not exist.");
         }
@@ -107,20 +107,20 @@ public class GrandPrixService (
             LapsCompleted = grandPrixCreateDto.LapsCompleted
         };
 
-        await grandsPrixRepository.Create(grandPrix);
+        await grandsPrixRepo.Create(grandPrix);
         return ResponseResult<bool>.Success(true);
     }
 
     public async Task<ResponseResult<bool>> Update(GrandPrixUpdateDto grandPrixUpdateDto)
     {
-        var existing = await grandsPrixRepository.GetGrandPrixById(grandPrixUpdateDto.Id);
+        var existing = await grandsPrixRepo.GetGrandPrixById(grandPrixUpdateDto.Id);
         if (existing == null) return ResponseResult<bool>.Failure("Grand Prix not found");
 
         existing.StartTime = grandPrixUpdateDto.StartTime;
         existing.EndTime = grandPrixUpdateDto.EndTime;
         existing.LapsCompleted = grandPrixUpdateDto.LapsCompleted;
 
-        await grandsPrixRepository.Update(existing);
+        await grandsPrixRepo.Update(existing);
         return ResponseResult<bool>.Success(true);
     }
 }

@@ -23,6 +23,7 @@ desktop.ini
 *.suo
 *.userosscache
 *.sln.docstates
+**/coverlet.runsettings
 
 # ==========================================
 # 3. Angular (Client) - Angular 19+
