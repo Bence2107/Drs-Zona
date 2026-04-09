@@ -98,6 +98,12 @@ public class ArticlesRepository(EfContext context) : IArticlesRepository
         await context.SaveChangesAsync();
     }
 
+    public async Task<bool> CheckIfSlugExists(string slug)
+    {
+        return await _articles.AnyAsync(a => a.Slug == slug);
+    }
+
+
     public async Task<bool> CheckIfIdExists(Guid id)
     {
         return await _articles.AnyAsync(a => a.Id == id);

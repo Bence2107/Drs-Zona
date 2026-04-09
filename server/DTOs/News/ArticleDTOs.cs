@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.DependencyInjection;
+using Repositories.Interfaces.News;
 
 namespace DTOs.News;
 
@@ -9,6 +11,7 @@ public record ArticleCreateDto(
     [Required(ErrorMessage = "A cím kitöltése kötelező")]
     [StringLength(200, MinimumLength = 5, ErrorMessage = "A cím hossza nem megfelelő (5-200 karakter)")]
     string Title,
+    [SlugExists]
     [StringLength(200, MinimumLength = 5, ErrorMessage = "A slug hossza nem megfelelő (5-200 karakter)")]
     string Slug,
     string Tag,
@@ -110,3 +113,26 @@ public record ArticleDetailDto(
     string? LastImageUrl,
     string? AuthorImageUrl
 );
+
+public class SlugExistsAttribute : ValidationAttribute
+{
+    protected override ValidationResult? IsValid(object? value, ValidationContext ctx)
+    {
+        // Ha üres, a [Required] attribútum dolga jelezni, itt engedjük tovább
+        if (value == null || string.IsNullOrWhiteSpace(value.ToString()))
+        {
+            return ValidationResult.Success;
+        }
+
+        var slug = value.ToString()!;
+        var repo = ctx.GetRequiredService<IArticlesRepository>();
+        
+        var existingArticle = repo.GetArticleBySlug(slug).GetAwaiter().GetResult();
+
+        if (existingArticle == null) return ValidationResult.Success;
+        if (ctx.ObjectInstance is not ArticleUpdateDto updateDto)
+            return new ValidationResult("Ez a slug már létezik. Kérlek módosítsd!");
+        
+        return existingArticle.Id == updateDto.Id ? ValidationResult.Success : new ValidationResult("Ez a slug már létezik. Kérlek módosítsd!");
+    }
+}

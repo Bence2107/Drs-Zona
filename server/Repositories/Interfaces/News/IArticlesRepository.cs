@@ -13,5 +13,6 @@ public interface IArticlesRepository
     Task Create(Article article);
     Task Update(Article article);
     Task Delete(Guid id);
+    Task<bool> CheckIfSlugExists(string slug);
     Task<bool> CheckIfIdExists(Guid id);
 }
