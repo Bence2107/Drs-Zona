@@ -1,7 +1,8 @@
 <div class="comments-wrapper">
-  <div class="main-comment-form">
-    <img [src]="avatarUrl" class="form-avatar" alt="avatar">
-    <div class="input-wrapper">
+  @if(isLoogedIn()) {
+    <div class="main-comment-form">
+      <img [src]="avatarUrl" class="form-avatar" alt="avatar">
+      <div class="input-wrapper">
   <textarea
     class="comment-textarea"
     [(ngModel)]="newCommentText"
@@ -9,20 +10,30 @@
     rows="1"
     (input)="autoResize($event); commentError = ''">
   </textarea>
-      @if (commentError) {
-        <span class="comment-error">{{ commentError }}</span>
-      }
-      @if (newCommentText.trim()) {
-        <div class="form-actions">
-          <button class="cancel-btn" (click)="newCommentText = ''; commentError = ''">Mégse</button>
-          <button class="submit-btn" (click)="submitComment()" [disabled]="!newCommentText.trim() || isSubmitting">
-            <mat-icon>send</mat-icon>
-            Küldés
-          </button>
-        </div>
-      }
+        @if (commentError) {
+          <span class="comment-error">{{ commentError }}</span>
+        }
+        @if (newCommentText.trim()) {
+          <div class="form-actions">
+            <button class="cancel-btn" (click)="newCommentText = ''; commentError = ''">Mégse</button>
+            <button class="submit-btn" (click)="submitComment()" [disabled]="!newCommentText.trim() || isSubmitting">
+              <mat-icon>send</mat-icon>
+              Küldés
+            </button>
+          </div>
+        }
+      </div>
     </div>
-  </div>
+  }
+  @else {
+    <div class="offline-state-container">
+      <mat-icon>lock_open</mat-icon>
+      <p>
+        A hozzászóláshoz
+        <a [routerLink]="'/auth'" class="login-link">jelentkezz be</a>!
+      </p>
+    </div>
+  }
 
   <div class="comment-list">
     @for (comment of comments; track comment) {

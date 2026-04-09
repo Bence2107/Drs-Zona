@@ -8,6 +8,7 @@ import {MatIcon} from '@angular/material/icon';
 import {AuthService} from '../../../services/api/auth.service';
 import {CommentCreateDto} from '../../../api/models/comment-create-dto';
 import {HttpValidationError} from '../../../services/error-interceptor.service';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-comment-list',
@@ -16,7 +17,8 @@ import {HttpValidationError} from '../../../services/error-interceptor.service';
     ReactiveFormsModule,
     CommentItemComponent,
     MatIcon,
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   templateUrl: './comment-list.component.html',
   styleUrl: './comment-list.component.scss'
@@ -51,6 +53,10 @@ export class CommentListComponent implements OnInit {
         this.isSubmitting = false;
       }
     });
+  }
+
+  isLoogedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
 
   autoResize(event: Event) {
