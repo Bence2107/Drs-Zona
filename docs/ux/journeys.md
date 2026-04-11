@@ -8,13 +8,13 @@
 
 **Belépési pont:** Push notification / direct link (deep link: `/article/:slug`)
 
-| # | Képernyő | Mit csinál a user | Mit lát / rendszerválasz | Lehetséges hibaág |
-| --- | ---------- | ------------------- | -------------------------- | ------------------- |
-| 1 | S01 — Home | Megnyitja az appot | Főoldal tölt, vagy azonnal az article oldalra kerül deep link esetén | Hálózati hiba → error állapot, újrapróbálkozás gomb |
-| 2 | S06 — Article detail | Olvassa a cikket, legörgeti az oldalt | Cikk szövege, képek, a kommentszekció betöltődik | Cikk nem található → 404, redirect S01-re |
-| 3 | S06 — Article detail | Rákattint a „Komment írása" inputra | Ha nincs bejelentkezve → átirányítás S07-re; ha be van → a komment form aktívvá válik | Nincs bejelentkezve: login oldal nyílik |
-| 4 | S07 — Login | Beírja az e-mail-t és a jelszót és submit | Sikeres bejelentkezés → visszanavigál S01-re | Hibás jelszó → error üzenet; elfelejtett jelszó |
-| 5 | S06 — Article detail | Beírja a komment szövegét, rákattint a „Küldés" gombra | A komment megjelenik a listában (success snackbar) | Üres komment → disabled gomb; szerver hiba → error snackbar |
+| # | Képernyő | Mit csinál a user                                      | Mit lát / rendszerválasz | Lehetséges hibaág |
+| --- | ---------- |--------------------------------------------------------| -------------------------- | ------------------- |
+| 1 | S01 — Home | Megnyitja az appot                                     | Főoldal tölt, vagy azonnal az article oldalra kerül deep link esetén | Hálózati hiba → error állapot, újrapróbálkozás gomb |
+| 2 | S06 — Article detail | Olvassa a cikket, legörgeti az oldalt                  | Cikk szövege, képek, a kommentszekció betöltődik | Cikk nem található → 404, redirect S01-re |
+| 3 | S06 — Article detail | Rákattint a "Írj hozzászólást" inputra                 | Ha nincs bejelentkezve → átirányítás S07-re; ha be van → a komment form aktívvá válik | Nincs bejelentkezve: login oldal nyílik |
+| 4 | S07 — Login | Beírja az e-mail-t és a jelszót és submit              | Sikeres bejelentkezés → visszanavigál S01-re | Hibás jelszó → error üzenet; elfelejtett jelszó |
+| 5 | S06 — Article detail | Beírja a komment szövegét, rákattint a „Küldés" gombra | A komment megjelenik a listában | Üres komment → disabled gomb; szerver hiba → error snackbar |
 
 **Sikerkritérium:** A komment megjelenik a listában, a user látja a saját nevével.
 
