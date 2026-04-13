@@ -4,16 +4,16 @@ Motorsport hírportál és eredménykövető Angular + ASP.NET alkalmazás felha
 
 ## Tartalom
 
-| Fájl | Leírás |
-|------|--------|
-| [pageflow.png](./pageflow.png) | Képernyő-térkép — az összes oldal és navigáció |
-| [pageflow.mmd](./pageflow.mmd) | Szerkeszthető Mermaid forrás a pageflow-hoz |
-| [screens.csv](./screens.csv) | Minden képernyő strukturált leírása |
-| [journeys.md](./journeys.md) | Top 3 user journey lépésről lépésre |
-| [design_system.md](./design_system.md) | Vizuális nyelv, színpaletta, tipográfia |
-| [self_assessment.md](./self_assessment.md) | Önértékelés 1–5 skálán |
-| [screenshots/](./screenshots/) | Képernyőképek (S01_*.png konvenció) |
-| [journey1.mp4](./journey1.mp4) | Screen recording — 1. user journey (opcionális) |
+| Fájl                                         | Leírás                                             |
+|----------------------------------------------|----------------------------------------------------|
+| [pageflow.png](./pageflow.png)               | Képernyő-térkép — az összes oldal és navigáció     |
+| [pageflow.mmd](./pageflow.mmd)               | Szerkeszthető Mermaid forrás a pageflow-hoz        |
+| [screens.csv](./screens.csv)                 | Minden képernyő strukturált leírása                |
+| [journeys.md](./journeys.md)                 | Top 3 user journey lépésről lépésre                |
+| [design_system.md](./design_system.md)       | Vizuális nyelv, színpaletta, tipográfia            |
+| [self_assessment.md](./self_assessment.md)   | Önértékelés 1–5 skálán                             |
+| [screenshots/](./screenshots/)               | Képernyőképek (S01_*.png konvenció)                |
+| [journey1.mp4](./journey1.mp4)               | Screen recording — 1. user journey (opcionális)    |
 
 ## Képernyők összefoglalója
 
@@ -56,13 +56,13 @@ Motorsport hírportál és eredménykövető Angular + ASP.NET alkalmazás felha
 
 ## Beadási checklist
 
-- [ ] pageflow.png + pageflow.mmd
-- [ ] Minden képernyőhöz screenshot a screenshots/ mappában, S## konvencióval
-- [ ] screens.csv minden képernyőre kitöltve
-- [ ] journeys.md — top 3 user journey
-- [ ] design_system.md
-- [ ] self_assessment.md táblázat + szövegrész
-- [ ] (Ajánlott) screen recording vagy GIF a fő journey-ről
+- [x] pageflow.png + pageflow.mmd
+- [x] Minden képernyőhöz screenshot a screenshots/ mappában, S## konvencióval
+- [x] screens.csv minden képernyőre kitöltve
+- [x] journeys.md — top 3 user journey
+- [x] design_system.md
+- [x] self_assessment.md táblázat + szövegrész
+- [x] (Ajánlott) screen recording vagy GIF a fő journey-ről
 - [ ] (Opcionális) mockup / Figma link
 - [ ] (Opcionális) inspirations
 - [ ] PR megnyitva `docs(ux): GUI/UX dokumentáció` címmel

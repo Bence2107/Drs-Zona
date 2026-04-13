@@ -1,60 +1,59 @@
+---
+config:
+  layout: dagre
+---
 flowchart TD
-    START([▶ Belépési pont]) --> S01
+  S01["🏠 S01 - Home"] -->|nav link| S02["📰 S02 - News"]
+  S01 -->|nav link| S03["⭐ S03 - Reviews"]
+  S01 -->|nav link| S04["🏆 S04 - Results / Standings"]
+  S01 -->|cikk kártya| S06["📄 S06 - Article detail"]
+  S01 -->|login gomb| S07["🔒 S07 - Login/Register"]
+  S01 -->|szavazás kártya| D09["♦ D09 - Poll vote dialog"]
+  S01 -->|poll gomb| D08["♦ D08 - Poll add dialog"]
+  S01 -->|profil ikon| S08["👤 S08 - Profile"]
+  S01 -->|serie kártya| S05
 
-    S01[S01 — Home]
-    S01 -->|nav link| S02[S02 — News]
-    S01 -->|nav link| S03[S03 — Reviews]
-    S01 -->|nav link| S04[S04 — Results / Standings]
-    S01 -->|nav link, /serie/:name| S05[S05 — Serie detail]
-    S01 -->|cikk kattintás| S06[S06 — Article detail]
+  S02 -->|cikk kártya| S06
 
-    S02 -->|cikk kattintás| S06
-    S03 -->|cikk kattintás| S06
+  S03 -->|cikk kártya| S06
 
-    S06 -.->|poll hozzáadás, szerk.| D08♦[D08 ♦ — Poll add]
-    S06 -.->|szavazás| D09♦[D09 ♦ — Poll vote]
-    S06 -.->|GP létrehozás, admin| D10♦[D10 ♦ — Grand Prix create]
-    S06 -.->|törlés megerősítés| D11♦[D11 ♦ — Confirm dialog]
+  S04 -->|menu gomb| S09["⚙️ S09 - Championships"]
+  S04 -->|menu gomb| S10["⚙️ S10 - Participations"]
+  S04 -->|menu gomb| S11["⚙️ S11 - Drivers"]
+  S04 -->|menu gomb| S12["⚙️ S12 - Constructors"]
+  S04 -->|menu gomb| S13["⚙️ S13 - Contracts"]
+  S04 -->|menu gomb| S14["⚙️ S14 - Entry list"]
 
-    S01 -->|nav, guestGuard| S07[S07 — Login / Register\nguest only 🔒]
-    S07 -->|sikeres belépés| S01
+  S05["🔎 S05 - Serie detail"]
+  S05 --->|cikk kártya| S06
+  S05 -->|szavazás kártya| D09
+  S05 -->|poll gomb| D08
 
-    S01 -->|profil ikon, authGuard| S08[S08 — Profile 🔒]
-    S08 --- TAB1[Tab: General]
-    S08 --- TAB2[Tab: Edit]
-    S08 --- TAB3[Tab: Comments]
-    S08 --- TAB4[Tab: Polls]
-    S08 --- TAB5[Tab: Delete]
+  S06 -->|szerkesztés| S18["✏️ S18 - Article update"]
+  S07 -->|success| S01["🏠 S01 - Home"]
 
-    subgraph ADMIN_EDITOR [Admin — editorGuard 🔒]
-        S09[S09 — Championships]
-        S10[S10 — Participations]
-        S11[S11 — Drivers]
-        S12[S12 — Constructors]
-        S13[S13 — Contracts]
-        S14[S14 — Entry list]
-        S14 -->|sor kattintás| S15[S15 — Entry detail]
-        S15 -->|Létrehoz gomb| S16[S16 — Entry create]
+  S09["⚙️ S09 - Championships"] -->|+ gomb| D01["♦ D01 - Championship create"]
+  S10["⚙️ S10 - Participations"] -->|+ gomb| D11["♦ D11 - Participation add"]
+  S11["⚙️ S11 - Drivers"] -->|+ gomb| D02["♦ D02 - Driver create"]
+  S11 -->|szerkesztés| D03["♦ D03 - Driver edit"]
+  S12["⚙️ S12 - Constructors"] -->|+ gomb| D04["♦ D04 - Constructor create"]
+  S12 -->|szerkesztés| D05["♦ D05 - Constructor edit"]
+  S13["⚙️ S13 - Contracts"] -->|+ gomb| D06["♦ D06 - Contract create"]
+  S13 -->|szerkesztés| D07["♦ D07 - Contract edit"]
 
-        S09 -.->|+ gomb| D01♦[D01 ♦ — Championship create]
-        S11 -.->|+ gomb| D02♦[D02 ♦ — Driver create]
-        S11 -.->|szerk. ikon| D03♦[D03 ♦ — Driver edit]
-        S12 -.->|+ gomb| D04♦[D04 ♦ — Constructor create]
-        S12 -.->|szerk. ikon| D05♦[D05 ♦ — Constructor edit]
-        S13 -.->|+ gomb| D06♦[D06 ♦ — Contract create]
-        S13 -.->|szerk. ikon| D07♦[D07 ♦ — Contract edit]
-        S10 -.->|+ gomb| D12♦[D12 ♦ — Participation add]
-    end
+  S14["⚙️ S14 - Entry list"] -->|kártya kattintás| S15["📊 S15 - Entry detail"]
+  S14["⚙️ S14 - Entry list"] -->|kártya kattintás| D10["♦ D10 - GP Manage"]
 
-    subgraph ADMIN_AUTHOR [Admin articles — authorGuard 🔒]
-        S17[S17 — Article create]
-        S18[S18 — Article update]
-    end
+  S15["📊 S15 - Entry detail"] -->|kártya kattintás| D10["♦D10 - GP Manage"]
+  S15 -->|Létrehoz| S16["🆕 S16 - Entry create"]
 
-    S01 -->|admin menü, ha editor| ADMIN_EDITOR
-    S01 -->|admin menü, ha author| ADMIN_AUTHOR
-    S17 -->|mentés| S06
-    S18 -->|mentés| S06
-    S06 -->|szerkesztés gomb| S18
+  S16 --> |mentés|S15
 
-    WILDCARD[" ** — ismeretlen útvonal"] -->|redirect| S01
+  S17["📰 S17 - Article create"] -->|mentés| S06
+
+  S18 -->|mentés| S06
+
+  EP01["▶"] --> S01["🏠 S01 - Home"]
+  EP06["▶"] --> S06["📄 S06 - Article detail"]
+  EP07["▶"] --> S07["🔒 S07 - Login/Register"]
+  EP08["▶"] --> S08["👤 S08 - Profile"]
