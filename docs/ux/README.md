@@ -65,4 +65,4 @@ Motorsport hírportál és eredménykövető Angular + ASP.NET alkalmazás felha
 - [x] (Ajánlott) screen recording vagy GIF a fő journey-ről
 - [ ] (Opcionális) mockup / Figma link
 - [ ] (Opcionális) inspirations
-- [ ] PR megnyitva `docs(ux): GUI/UX dokumentáció` címmel
+- [x] PR megnyitva `docs(ux): GUI/UX dokumentáció` címmel
