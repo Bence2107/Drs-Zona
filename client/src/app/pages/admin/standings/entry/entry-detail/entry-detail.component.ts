@@ -29,8 +29,8 @@ import {MatCheckbox} from '@angular/material/checkbox';
 import {GrandPrixDetailDto} from '../../../../../api/models/grand-prix-detail-dto';
 import {SeriesLookupDto} from '../../../../../api/models/series-lookup-dto';
 import {
-  GrandPrixManageDialogComponent
-} from '../../../../../components/dialogs/grand-prix/grand-prix-creation-dialog/grand-prix-creation-dialog.component';
+  GrandPixManageDialogComponent
+} from '../../../../../components/dialogs/grand-prix/grand-prix-creation-dialog/grand-prix-manage-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {GrandsPrixService} from '../../../../../services/api/grands-prix.service';
 
@@ -139,7 +139,7 @@ export class EntryDetailComponent implements OnInit {
     this.grandPrixService.getGrandPrixById(this.gpId()).subscribe({
       next: (gp) => {
         this.grandPrix.set(gp);
-        const ref = this.dialog.open(GrandPrixManageDialogComponent, {
+        const ref = this.dialog.open(GrandPixManageDialogComponent, {
           width: '560px',
           data: {
             seriesList: this.seriesList(),

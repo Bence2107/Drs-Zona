@@ -23,8 +23,8 @@ import {YearLookupDto} from '../../../../api/models/year-lookup-dto';
 import {GrandPrixLookupDto} from '../../../../api/models/grand-prix-lookup-dto';
 import {MatTooltip} from '@angular/material/tooltip';
 import {
-  GrandPrixManageDialogComponent
-} from '../../../../components/dialogs/grand-prix/grand-prix-creation-dialog/grand-prix-creation-dialog.component';
+  GrandPixManageDialogComponent
+} from '../../../../components/dialogs/grand-prix/grand-prix-creation-dialog/grand-prix-manage-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {ChampionshipService} from '../../../../services/api/championship.service';
 
@@ -175,7 +175,7 @@ export class EntryComponent implements OnInit {
   }
 
   openCreateDialog() {
-    const ref = this.dialog.open(GrandPrixManageDialogComponent, {
+    const ref = this.dialog.open(GrandPixManageDialogComponent, {
       width: '560px',
       data: {
         seriesList: this.seriesList(),

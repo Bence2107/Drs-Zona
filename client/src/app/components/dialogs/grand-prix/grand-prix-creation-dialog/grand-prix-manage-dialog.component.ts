@@ -34,10 +34,10 @@ export interface GrandPrixDialogData {
     MatIconModule, MatDatepickerModule, MatNativeDateModule,
     CountryFlagPipe
   ],
-  templateUrl: './grand-prix-creation-dialog.component.html',
-  styleUrl: './grand-prix-creation-dialog.component.scss',
+  templateUrl: './grand-prix-manage-dialog.component.html',
+  styleUrl: './grand-prix-manage-dialog.component.scss',
 })
-export class GrandPrixManageDialogComponent implements OnInit {
+export class GrandPixManageDialogComponent implements OnInit {
   circuits = signal<CircuitListDto[]>([]);
 
   form: FormGroup;
@@ -61,7 +61,7 @@ export class GrandPrixManageDialogComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef:MatDialogRef<GrandPrixManageDialogComponent>,
+    private dialogRef:MatDialogRef<GrandPixManageDialogComponent>,
     private formErrorService: FormErrorService,
     private grandPrixService: GrandsPrixService,
 ) {
