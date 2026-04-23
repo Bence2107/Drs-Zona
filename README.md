@@ -221,6 +221,16 @@ This project follows an **evidence-first approach**:
 
 ---
 
+
+> ### 🔐 Security Note
+
+All sensitive configuration (database credentials, JWT secrets) is handled via environment variables.
+
+No secrets are stored in the repository.
+
+
+---
+
 ## 🚀 Roadmap
 
 ### v1.0.0 — Initial Release *(Planned: Q2 2026)*
