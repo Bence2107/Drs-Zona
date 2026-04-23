@@ -2,7 +2,6 @@
 
 <img width="300" height="113" alt="Drs Zóna" src="https://github.com/user-attachments/assets/8155e5b8-abd8-4821-800c-564b758500b2" />
 
-
 # 🏁 Drs-Zóna — The Motorsport Hub
 
 *A modern, community-driven motorsport portal bringing fans, events, and data together in one place.*
@@ -25,21 +24,6 @@ The goal is to create a scalable, modern platform with a strong backend and a cl
 
 ---
 
-## 🚀 Roadmap
-
-### v1.0.0 — Initial Release *(Planned: Q2 2026)*
-
-* 📰 Public **News & Articles** listing
-* 💬 Comment system under articles
-* 🧑‍💻 Authentication & user profiles
-* ✍️ Article creation & editing (authorized users)
-* 🏆 Race results stored in internal database
-* 🗺️ Grand Prix & race track information pages
-* 📊 Interactive polls (rules, results, predictions)
-* 🗂️ Category-based browsing (Articles, Polls, etc.)
-
----
-
 ## ✨ Core Features
 
 ### 📰 News & Articles
@@ -52,11 +36,11 @@ The goal is to create a scalable, modern platform with a strong backend and a cl
 
 * User registration & login
 * Profile management
-* Role-based permissions (e.g. Admin, Author, User)
+* Role-based permissions (Admin, Author, User)
 
 ### 🏁 Results & Statistics
 
-* Race results stored and served from internal SQL database
+* Race results stored in SQL database
 * Expandable structure for multiple racing series
 
 ### 🌍 Grand Prix & Track Database
@@ -66,8 +50,8 @@ The goal is to create a scalable, modern platform with a strong backend and a cl
 
 ### 📊 Polls & Community Interaction
 
-* Fan polls about rule changes, race outcomes, and more
-* Real-time results visualization
+* Fan polls about rules, races, predictions
+* Real-time result visualization
 
 ---
 
@@ -75,23 +59,15 @@ The goal is to create a scalable, modern platform with a strong backend and a cl
 
 ### Backend
 
-![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-Web%20API-purple)
-![Entity Framework](https://img.shields.io/badge/Entity%20Framework-Core-blue)
-![SQL](https://img.shields.io/badge/Database-SQL-lightgrey)
-
 * ASP.NET Core Web API
 * Entity Framework Core (Code First)
-* SQL-based relational database (Which provides with EF Core: https://learn.microsoft.com/en-us/ef/core/providers/?tabs=dotnet-core-cli)
+* PostgreSQL
 
 ### Frontend
 
-![Angular](https://img.shields.io/badge/Angular-Framework-red)
-![TypeScript](https://img.shields.io/badge/TypeScript-Language-blue)
-![Material](https://img.shields.io/badge/UI-Angular%20Material-orange)
-
 * Angular
 * TypeScript
-* Angular Material or custom UI components
+* Angular Material
 
 ---
 
@@ -101,41 +77,102 @@ The goal is to create a scalable, modern platform with a strong backend and a cl
 Drs-Zóna/
 │
 ├── client/        # Angular frontend
-│
 ├── server/        # ASP.NET Core backend
-│
+├── docs/          # Documentation (architecture, design, etc.)
 └── README.md
 ```
 
 ---
 
-## ⚙️ Getting Started
+## ⚙️ Getting Started (Quickstart)
 
-### Prerequisites
+### 📋 Prerequisites
 
-* .NET SDK (latest LTS)
-* Node.js (LTS recommended)
+* .NET SDK (LTS)
+* Node.js (LTS)
 * npm
-* SQL Server / compatible SQL database
+* PostgreSQL
 
-### Backend Setup
+---
+
+### 🔧 1. Clone the repository
+
+```bash
+git clone https://github.com/your-repo/drs-zona.git
+cd drs-zona
+```
+
+---
+
+### ⚙️ 2. Configure environment variables
+
+Create `.env` files in server/API based should look like this:
+
+```bash
+# =========================
+# Database Configuration
+# =========================
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=drs_zona
+DB_USER=postgres
+DB_PASSWORD=your_password_here
+
+# =========================
+# JWT Configuration
+# =========================
+JWT_SECRET=your_super_secret_key_here
+JWT_ISSUER=drs-zona-api
+JWT_AUDIENCE=drs-zona-client
+JWT_EXPIRATION_MINUTES=60
+
+# =========================
+# CORS Configuration
+# =========================
+CORS_ORIGINS=http://localhost:4200
+```
+
+> ⚠️ Note: Secrets (API keys, passwords) are **not included** in the repository.
+
+---
+
+### 🗄️ 3. Database setup
+
+* Ensure PostgreSQL is running
+* Apply migrations:
+
+```bash
+cd server/Context
+dotnet ef database update
+```
+
+---
+
+### ▶️ 4. Run backend
 
 ```bash
 cd server
-dotnet run
+dotnet run --launch-profile https
 ```
 
-The API will start on the configured local port.
+Expected result:
 
-### Frontend Setup
+* API starts successfully
+* Example: `http://localhost:7221`
+* Health endpoint available: `/health`
+* The Swagger's route: *localhost*/swagger/index.html
+
+---
+
+### 💻 5. Run frontend
 
 ```bash
 cd client
 npm install
-ng serve
+npm start
 ```
 
-The Angular app will be available at:
+Application will be available at:
 
 ```
 http://localhost:4200
@@ -143,39 +180,71 @@ http://localhost:4200
 
 ---
 
+### ✅ 6. Verify system
+
+After startup:
+
+* Frontend loads without errors
+* API responds (e.g. `/api/Article`)
+* Database connection works
+
+---
+
+## 🧪 Running Tests
+
+### Backend tests
+
+```bash
+cd server
+dotnet test
+```
+
+### Frontend tests
+
+```bash
+cd client
+npm test
+```
+
+> Test results should show all tests passing.
+
+---
+
+## 📊 Evidence & Quality
+
+This project follows an **evidence-first approach**:
+
+* Automated tests (unit, integration, e2e)
+* API responses verifiable via endpoints
+* UI flows demonstrated via screenshots (see `/docs/ux`)
+* Logs and health checks available
+
+---
+
+## 🚀 Roadmap
+
+### v1.0.0 — Initial Release *(Planned: Q2 2026)*
+
+* 📰 News & Articles
+* 💬 Comment system
+* 🔐 Authentication & profiles
+* ✍️ Article management
+* 🏆 Race results
+* 🌍 Grand Prix database
+* 📊 Polls
+* 🗂️ Category filtering
+
+---
+
 ## 📄 License
 
 This project is licensed under the **MIT License**.
-
-```
-MIT License
-
-Copyright (c) 2026 Drs-Zóna
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
 
 ---
 
 ## 🤝 Contributing *(Planned)*
 
-Contribution guidelines, issue templates, and pull request workflows will be added as the project approaches its first release.
+Contribution guidelines will be added in future versions.
 
 ---
 
