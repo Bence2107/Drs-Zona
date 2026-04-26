@@ -36,24 +36,21 @@ cd <projekt-mappa>
 cd server
 dotnet restore
 
-# 3. Környezeti változók beállítása (lásd 4. fejezet)
-cp appsettings.Example.json appsettings.Development.json
-# Töltsd ki: ConnectionStrings, JwtSettings
+# 3. Környezeti változók beállítása (lásd env.example)
+cd server/API
+#Töltsd ki az env.example alapján
 
 # 4. Adatbázis migrációk futtatása
 dotnet ef database update --context Context.EfContext
 
-# 5. (Opcionális) Seed adatok betöltése
-# psql -U <user> -d <dbname> -f seed/seed_data.sql
-
-# 6. Backend indítása
+# 5. Backend indítása
 dotnet run
 
-# 7. Frontend függőségek (új terminál)
+# 6. Frontend függőségek (új terminál)
 cd ../client
 npm install
 
-# 8. Frontend indítása
+# 7. Frontend indítása
 ng serve
 ```
 
