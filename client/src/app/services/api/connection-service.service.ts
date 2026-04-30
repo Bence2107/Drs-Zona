@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class ConnectionService {
-  private apiUrl = 'https://localhost:7221/api/healthcheck/ping';
+  private apiUrl = '/api/healthcheck/ping';
 
   constructor(private http: HttpClient) {}
 
