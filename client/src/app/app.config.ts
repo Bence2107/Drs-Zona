@@ -32,7 +32,9 @@ export const appConfig: ApplicationConfig = {
       provide: ApiConfiguration,
       useFactory: () => {
         const config = new ApiConfiguration();
-        config.rootUrl = "https://localhost:7221";
+        config.rootUrl = window.location.hostname === 'localhost'
+          ? "https://localhost:7221"
+          : "";
         return config;
       }
     },

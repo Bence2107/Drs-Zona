@@ -3,5 +3,10 @@
     "target": "http://localhost:5244",
     "secure": false,
     "changeOrigin": true
+  },
+  "/api": {
+    "target": "https://localhost:7221",
+    "secure": false,
+    "changeOrigin": true
   }
 }
