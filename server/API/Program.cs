@@ -209,7 +209,12 @@ if (Directory.Exists(uploadsPath))
     });
 }
 
-var clientPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "client", "dist", "drs-zona", "browser");
+var clientPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "client", "dist", "drs-zona", "browser");
+
+if (!Directory.Exists(clientPath))
+{
+    clientPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "client", "dist", "drs-zona", "browser");
+}
 
 if (Directory.Exists(clientPath))
 {
