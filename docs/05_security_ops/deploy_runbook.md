@@ -41,7 +41,8 @@ cd server/API
 #Töltsd ki az env.example alapján
 
 # 4. Adatbázis migrációk futtatása
-dotnet ef database update --context Context.EfContext
+cd server/Context
+dotnet ef database update
 
 # 5. Backend indítása
 dotnet run
