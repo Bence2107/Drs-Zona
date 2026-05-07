@@ -1,9 +1,19 @@
 # Data Model
 
+
+
 ## Perzisztencia
 - **DB:** PostgreSQL
 - **ORM:** Entity Framework Core
 - **Séma fájl:** [schema.sql](./schema.sql)
+
+## Adatmodell döntések
+Adatbázis szinten a PostgreSQL, ORM szinten pedig az EF Core-t választottam. Az oldal szigorú integritást igényel, emiatt elengedhetetlen
+az ACID-al rendelkező adatbázis. Erre jó választás a PostgeSQL, mivel ismertebb, és kiváló teljesitményt nyújt a relációs lekérdezéseknél.
+Az EF Core használatát a .NET ökoszisztémába való zökkenőmentes integráció, a típusbiztos fejlesztés és a Migrations által biztosított verziókövetett 
+séma-menedzsment indokolta. A teljes denormalizáció helyett a kritikus pontokon (pl. versenyzői adatok vagy csapattagság a futam idején) snapshot mezőket 
+alkalmazunk, hogy megőrizzük a történeti hűséget a későbbi adatmódosításokkal szemben.
+Ez az architektúra biztosítja, hogy a rendszer skálázható maradjon, miközben az adatok közötti összefüggések végig konzisztensek maradnak.
 
 ---
 
@@ -224,13 +234,13 @@
 ---
 
 ### qualifying_results
-| Mező      | Típus    | Constraint                                |
-|-----------|----------|-------------------------------------------|
-| id        | uuid     | PK, DEFAULT gen_random_uuid()             |
+| Mező      | Típus    | Constraint                               |
+|-----------|----------|------------------------------------------|
+| id        | uuid     | PK, DEFAULT gen_random_uuid()            |
 | result_id | uuid     | FK → results.id ON DELETE CASCADE, UNIQUE |
-| q1_time   | bigint   | nullable (ms)                             |
-| q2_time   | bigint   | nullable (ms)                             |
-| q3_time   | bigint   |  nullable (ms)                            |
+| q1_time   | bigint   | nullable (ms)                            |
+| q2_time   | bigint   | nullable (ms)                            |
+| q3_time   | bigint   | nullable (ms)                            |
 
 > 1:1 kapcsolat a results táblával. Az időadatok milliszekundumban tároltak.
 
@@ -292,6 +302,8 @@
 | is_logged_in        | boolean        | NOT NULL                      |
 | current_session_id  | varchar(100)   | nullable                      |
 
+> UNIQUE index: username, email. Több felhasználó nem rendelkezhet ugyanazzal az email-el, vagy felhasználónévvel
+
 ---
 
 ## Kapcsolatok összefoglalója
@@ -321,29 +333,31 @@
 
 ## Indexek
 
-| Index                                                    | Tábla                    | Típus    |
-|----------------------------------------------------------|--------------------------|----------|
-| IX_articles_author_id                                    | articles                 | B-tree   |
-| IX_comments_user_id                                      | comments                 | B-tree   |
-| IX_comments_article_id                                   | comments                 | B-tree   |
-| IX_comments_reply_id                                     | comments                 | B-tree   |
-| IX_comment_votes_comment_id                              | comment_votes            | B-tree   |
-| IX_comment_votes_user_id_comment_id                      | comment_votes            | UNIQUE   |
-| IX_results_grand_prix_id                                 | results                  | B-tree   |
-| IX_results_driver_id                                     | results                  | B-tree   |
-| IX_results_constructor_id                                | results                  | B-tree   |
-| IX_results_drivers_championship_id                       | results                  | B-tree   |
-| IX_results_constructors_championship_id                  | results                  | B-tree   |
-| IX_qualifying_results_result_id                          | qualifying_results       | UNIQUE   |
-| IX_constructors_brand_id                                 | constructors             | B-tree   |
-| IX_contracts_driver_id                                   | contracts                | B-tree   |
-| IX_contracts_constructor_id                              | contracts                | B-tree   |
-| IX_grands_prix_circuit_id                                | grands_prix              | B-tree   |
-| IX_grands_prix_series_id                                 | grands_prix              | B-tree   |
-| IX_driver_championships_series_id                        | driver_championships     | B-tree   |
-| IX_constructor_champions_series_id                       | constructor_champions    | B-tree   |
-| IX_driver_participations_drivers_championship_id         | driver_participations    | B-tree   |
-| IX_constructor_competitions_constructors_championship_id | constructor_competitions | B-tree   |
-| IX_polls_author_id                                       | polls                    | B-tree   |
-| IX_poll_options_poll_id                                  | poll_options             | B-tree   |
-| IX_poll_votes_poll_option_id                             | poll_votes               | B-tree   |
+| Index                                                    | Tábla                    | Típus  |
+|----------------------------------------------------------|--------------------------|--------|
+| IX_articles_author_id                                    | articles                 | B-tree |
+| IX_comments_user_id                                      | comments                 | B-tree |
+| IX_comments_article_id                                   | comments                 | B-tree |
+| IX_comments_reply_id                                     | comments                 | B-tree |
+| IX_comment_votes_comment_id                              | comment_votes            | B-tree |
+| IX_comment_votes_user_id_comment_id                      | comment_votes            | UNIQUE |
+| IX_results_grand_prix_id                                 | results                  | B-tree |
+| IX_results_driver_id                                     | results                  | B-tree |
+| IX_results_constructor_id                                | results                  | B-tree |
+| IX_results_drivers_championship_id                       | results                  | B-tree |
+| IX_results_constructors_championship_id                  | results                  | B-tree |
+| IX_qualifying_results_result_id                          | qualifying_results       | UNIQUE |
+| IX_constructors_brand_id                                 | constructors             | B-tree |
+| IX_contracts_driver_id                                   | contracts                | B-tree |
+| IX_contracts_constructor_id                              | contracts                | B-tree |
+| IX_grands_prix_circuit_id                                | grands_prix              | B-tree |
+| IX_grands_prix_series_id                                 | grands_prix              | B-tree |
+| IX_driver_championships_series_id                        | driver_championships     | B-tree |
+| IX_constructor_champions_series_id                       | constructor_champions    | B-tree |
+| IX_driver_participations_drivers_championship_id         | driver_participations    | B-tree |
+| IX_constructor_competitions_constructors_championship_id | constructor_competitions | B-tree |
+| IX_polls_author_id                                       | polls                    | B-tree |
+| IX_poll_options_poll_id                                  | poll_options             | B-tree |
+| IX_poll_votes_poll_option_id                             | poll_votes               | B-tree |
+| IX_user_email                                            | users                    | UNIQUE |
+| IX_user_username                                         | users                    | UNIQUE |

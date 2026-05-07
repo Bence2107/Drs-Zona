@@ -21,16 +21,17 @@ A threat model a tervezett vagy jövőbeli deployment esetére is érvényes meg
 
 ## 2. Fenyegetések (STRIDE)
 
-| # | Kategória                   | Fenyegetés                                                        | Hatás                                     | Valószínűség                           |
-|---|-----------------------------|-------------------------------------------------------------------|-------------------------------------------|----------------------------------------|
-| T1 | **Spoofing**               | JWT token ellopása (XSS vagy insecure storage)                    | Más felhasználó nevében végzett műveletek | Közepes                                |
-| T2 | **Tampering**              | Kérés módosítása (pl. `userId` vagy `role` mező manipulálása)     | Jogosulatlan adatmódosítás                | Alacsony (JWT validálva)               |
-| T3 | **Repudiation**            | Nincs audit log – tagadható, hogy ki hajtott végre műveletet      | Felelősség nem bizonyítható               | Közepes                                |
-| T4 | **Information Disclosure** | Részletes hibaüzenet / stack trace kiszivárgása                   | Belső struktúra felfedése támadónak       | Alacsony (ErrorResponse szűr)          |
-| T5 | **Information Disclosure** | PII (email, jelszóhash) bekerül logba                             | Adatszivárgás, privacy sértés             | Alacsony (logging policy van)          |
-| T6 | **Denial of Service**      | Nincs rate limiting – API flood lehetséges                        | Szolgáltatás lelassulása / leállása       | Közepes (lokál, de kockázat)           |
-| T7 | **Elevation of Privilege** | Admin endpoint elérhető normál JWT tokennel, ha role check hibás  | Jogosulatlan admin műveletek              | Alacsony (role check implementálva)    |
-| T8 | **Tampering**              | SQL injection ORM megkerülésével (raw query)                      | Adatbázis manipuláció                     | Alacsony (EF Core parameterized query) |
+| #  | Kategória                                  | Fenyegetés                                                                    | Hatás                                                              | Valószínűség                           |
+|----|--------------------------------------------|-------------------------------------------------------------------------------|--------------------------------------------------------------------|----------------------------------------|
+| T1 | **Spoofing**                               | JWT token ellopása (XSS vagy insecure storage)                                | Más felhasználó nevében végzett műveletek                          | Közepes                                |
+| T2 | **Tampering**                              | Kérés módosítása (pl. `userId` vagy `role` mező manipulálása)                 | Jogosulatlan adatmódosítás                                         | Alacsony (JWT validálva)               |
+| T3 | **Repudiation**                            | Nincs audit log – tagadható, hogy ki hajtott végre műveletet                  | Felelősség nem bizonyítható                                        | Közepes                                |
+| T4 | **Information Disclosure**                 | Részletes hibaüzenet / stack trace kiszivárgása                               | Belső struktúra felfedése támadónak                                | Alacsony (ErrorResponse szűr)          |
+| T5 | **Information Disclosure**                 | PII (email, jelszóhash) bekerül logba                                         | Adatszivárgás, privacy sértés                                      | Alacsony (logging policy van)          |
+| T6 | **Denial of Service**                      | Nincs rate limiting – API flood lehetséges                                    | Szolgáltatás lelassulása / leállása                                | Közepes (lokál, de kockázat)           |
+| T7 | **Elevation of Privilege**                 | Admin endpoint elérhető normál JWT tokennel, ha role check hibás              | Jogosulatlan admin műveletek                                       | Alacsony (role check implementálva)    |
+| T8 | **Tampering**                              | SQL injection ORM megkerülésével (raw query)                                  | Adatbázis manipuláció                                              | Alacsony (EF Core parameterized query) |
+| T9 | **Info Disclosure / Privilege Escalation** | Swagger UI nincs auth-védve – endpointok listázhatók és hívhatók auth nélkül  | Belső API struktúra felfedése, jogosulatlan API hívások kísérlete  | Közepes (alapértelmezett beállítás)    |
 
 ---
 
@@ -69,16 +70,21 @@ A threat model a tervezett vagy jövőbeli deployment esetére is érvényes meg
 - **Mitigáció:** Kizárólag EF Core LINQ lekérdezések, raw SQL nincs használatban
 - **Kód:** Repository réteg teljes mértékben ORM alapú
 
+### T9 – Swagger UI védettség
+- **Mitigáció:** Production környezetben a Swagger UI teljes letiltása, vagy hozzáférésének korlátozása (pl. Basic Auth vagy IP szűrés).
+- **Kód**: Program.cs-ben az app.UseSwagger() és app.UseSwaggerUI() hívások csak Development környezetben fussanak le:
+
 ---
 
 ## 4. Residual risk (maradék kockázat)
 
-| Kockázat                    | Miért fogadott el                                                            |
-|-----------------------------|------------------------------------------------------------------------------|
-| Nincs rate limiting         | Lokális környezetben nem releváns; publikus deploy előtt kezelendő           |
-| Nincs audit log             | Fejlesztői időkeret korlát; nem kritikus a jelenlegi scope-ban               |
-| JWT HttpOnly cookie hiánya  | SPA architektúra korlátja; XSS védelem más szinten (CSP, input sanitization) |
-| Swagger UI nincs auth-védve | Lokális dev tool; production deployban letiltandó                            |
+| Kockázat                    | Miért fogadott el                                                                                                                            |
+|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| Nincs rate limiting         | Lokális dev környezetben nem releváns; a Production környezetbe való kihelyezés (CI/CD pipeline élesítés) előtt kötelezően implementálandó.  |
+| Nincs audit log             | Jelenlegi MVP scope-on kívül esik; a béta tesztelési fázis megkezdése előtt (vagy az első külső felhasználó regisztrációjakor) bevezetendő.  |                                                                    |
+| JWT HttpOnly cookie hiánya  | SPA architektúra korlátja; XSS védelem más szinten (CSP, input sanitization)                                                                 |
+| Swagger UI nincs auth-védve | Lokális dev tool; production deployban letiltandó                                                                                            |
+
 
 ---
 

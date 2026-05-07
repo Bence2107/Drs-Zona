@@ -41,8 +41,7 @@ cd server/API
 #Töltsd ki az env.example alapján
 
 # 4. Adatbázis migrációk futtatása
-cd server/Context
-dotnet ef database update
+dotnet ef database update --context Context.EfContext
 
 # 5. Backend indítása
 dotnet run
@@ -96,6 +95,43 @@ dotnet ef database update <PreviousMigrationName> --context Context.EfContext
 # Séma exportálása
 dotnet ef dbcontext script --context Context.EfContext -o docs/03_design/schema.sql
 ```
+
+---
+
+## 5. Konfiguráció és titkos adatok
+
+A rendszer a környezeti változókat a gyökérkönyvtárban található .env fájlból olvassa be. Ez a fájl tartalmazza az adatbázis eléréséhez, a biztonsági tokenek generálásához és a CORS házirendhez szükséges adatokat.
+
+```bash
+#.env.example tartalma:
+# =========================
+# Database Configuration
+# =========================
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=drs_zona
+DB_USER=postgres
+DB_PASSWORD=your_password_here
+
+# =========================
+# JWT Configuration
+# =========================
+JWT_SECRET=your_super_secret_key_here
+JWT_ISSUER=drs-zona-api
+JWT_AUDIENCE=drs-zona-client
+JWT_EXPIRATION_MINUTES=60
+
+# =========================
+# CORS Configuration
+# =========================
+CORS_ORIGINS=http://localhost:4200
+
+
+# Másolás a megfelelő helyre:
+cp .env.example server/API/.env
+```
+> [!WARNING]
+> A .env fájlt soha ne commitold a verziókövetőbe! Ellenőrizd, hogy a .gitignore fájl tartalmazza-e a bejegyzést.
 
 ---
 

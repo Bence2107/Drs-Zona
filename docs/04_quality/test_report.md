@@ -2,24 +2,24 @@
 
 ## Utolsó futás
 
-| Adat | Érték |
-|------|-------|
-| Dátum | 2026-04-23 |
-| Időpont | 13:34:17 → 13:34:39 (≈22 mp) |
-| Környezet | Bence-Linux (lokál) |
-| Framework | xUnit |
-| Eredmény | ✅ **396 / 396 passed** |
+| Adat      | Érték                        |
+|-----------|------------------------------|
+| Dátum     | 2026-04-23                   |
+| Időpont   | 13:34:17 → 13:34:39 (≈22 mp) |
+| Környezet | Bence-Linux (lokál)          |
+| Framework | xUnit                        |
+| Eredmény  | ✅ **396 / 396 passed**      |
 
 ---
 
 ## Suite összefoglaló
 
-| Suite | Tesztek | Passed | Failed | Futási idő |
-|-------|---------|--------|--------|------------|
-| Unit (`Tests.Services.Units`) | 184 | 184 | 0 | ~2 mp |
-| Integration (`Tests.Services.Integrations`) | 143 | 143 | 0 | ~15 mp |
-| Controller (`Tests.Controllers`) | 69 | 69 | 0 | ~5 mp |
-| **Összesen** | **396** | **396** | **0** | **~22 mp** |
+| Suite                                       | Tesztek | Passed  | Failed | Futási idő | 
+|---------------------------------------------|---------|---------|--------|------------|
+| Unit (`Tests.Services.Units`)               | 184     | 184     | 0      | ~2 mp      |
+| Integration (`Tests.Services.Integrations`) | 143     | 143     | 0      | ~15 mp     |
+| Controller (`Tests.Controllers`)            | 69      | 69      | 0      | ~5 mp      |
+| **Összesen**                                | **396** | **396** | **0**  | **~22 mp** |
 
 ---
 
@@ -172,21 +172,24 @@ Mind a 69 teszt passed. Főbb lefedett területek:
 Coverage mérés jelenleg nincs konfigurálva. Futtatható:
 ```bash
 dotnet test --collect:"XPlat Code Coverage"
+
+#Érdemleges a tesztek szempontjából: 
+ dotnet test --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[*.Entities*]*,[*Repository*]*,[*Context*]*"
+
 ```
 
-A tesztek széles service-lefedettséget biztosítanak (minden service-hez van unit + integrációs
-teszt), de pontos %-os mérés még nem készült.
+A tesztek széles service-lefedettséget biztosítanak (minden service-hez és kontrollerhez van unit + integrációs
+teszt). Az érdemleges teszt végerednye 59%-os lefedettség 
 
 ---
 
 ## Ismert hiányosságok
 
-| Hiányossá g                          | Indok                                                               |
-|--------------------------------------|---------------------------------------------------------------------|
-| Nincs e2e / frontend teszt (Angular) | Időkeret korlát; a controller tesztek a HTTP contract szintet fedik |
-| Nincs CI pipeline                    | Még nem konfigurált; lokálisan teljes mértékben futtatható          |
-| Coverage % nem mért                  | Eszköz telepítve, de riport nem generált                            |
-| Fájlfeltöltés (avatar) nem tesztelt  | Infrastruktúra-függő, mock nélkül nehéz izolálni                    |
+| Hiányosság                          | Indok                                                                                                                                                                                                                                                                                                                             |
+|-------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Nincs e2e / frontend teszt (Angular) | Időkeret korlát; a controller tesztek a HTTP contract szintet fedik                                                                                                                                                                                                                                                               |
+| Nincs CI pipeline                   | A projekt jelenlegi scope-ja és egyszerű fejlesztési workflow-ja miatt külön CI pipeline nem került kialakításra. A teljes tesztkészlet lokálisan reprodukálható a dokumentált dotnet test parancsokkal, jelenleg ~22 mp futási idővel. CI integráció (pl. GitHub Actions) egy későbbi bővítési fázisban egyszerűen hozzáadható.  |
+| Fájlfeltöltés (avatar) nem tesztelt | Infrastruktúra-függő, mock nélkül nehéz izolálni                                                                                                                                                                                                                                                                                  |
 
 ---
 
