@@ -66,7 +66,7 @@ export const routes: Routes = [
     canActivate: [guestGuard]
   },
   {
-    path: "profile/:username",
+    path: "profile",
     component: ProfileComponent,
     canActivate: [authGuard]
   },

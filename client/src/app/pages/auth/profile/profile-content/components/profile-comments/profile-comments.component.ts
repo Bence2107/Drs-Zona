@@ -32,7 +32,7 @@ export class ProfileCommentsComponent implements OnInit {
     if (!this.userData?.userId) return;
 
     this.isLoading = true;
-    this.commentService.getUsersComments(this.userData.userId).subscribe({
+    this.commentService.getUsersComments().subscribe({
       next: (data) => {
         this.comments = data.map(comment => ({
           ...comment,

@@ -148,8 +148,11 @@ public class CommentService(
         return ResponseResult<bool>.Success(true);
     }
 
-    public async Task<ResponseResult<bool>> UpdateCommentsContent(CommentContentUpdateDto dto)
+    public async Task<ResponseResult<bool>> UpdateCommentsContent(CommentContentUpdateDto dto, Guid userId)
     {
+        var existingUser = await usersRepo.GetUserById(userId);
+        if (existingUser == null) return ResponseResult<bool>.Failure("A felhasználó nem található");
+        
         var existingComment = await commentsRepo.GetCommentById(dto.Id);
         if (existingComment == null) return ResponseResult<bool>.Failure("A komment nem található");
 
@@ -164,9 +167,8 @@ public class CommentService(
         return ResponseResult<bool>.Success(true);
     }
 
-    public async Task<ResponseResult<bool>> UpdateCommentsVote(CommentUpdateVoteDto commentUpdateVoteDto)
+    public async Task<ResponseResult<bool>> UpdateCommentsVote(CommentUpdateVoteDto commentUpdateVoteDto, Guid userId)
     {
-        var userId = commentUpdateVoteDto.UserId;
         var commentId = commentUpdateVoteDto.CommentId;
         var isUpvote = commentUpdateVoteDto.IsUpvote;
         
@@ -203,10 +205,16 @@ public class CommentService(
         return ResponseResult<bool>.Success(true);
     }
 
-    public async Task<ResponseResult<bool>> DeleteComment(Guid commentId)
+    public async Task<ResponseResult<bool>> DeleteComment(Guid commentId, Guid userId)
     {
         var comment = await commentsRepo.GetCommentById(commentId);
         if (comment == null) return ResponseResult<bool>.Failure("Comment not found");
+        
+        var user = await usersRepo.GetUserById(userId);
+        if (user?.Role != "Admin" && comment.UserId != user?.Id)
+        {
+            return ResponseResult<bool>.Failure("You don't have permission to delete this comment.");   
+        }
 
         var replies = await commentsRepo.GetRepliesToAComment(commentId);
         if (replies.Count > 0)

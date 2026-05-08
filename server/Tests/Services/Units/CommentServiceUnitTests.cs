@@ -125,9 +125,10 @@ public class CommentServiceUnitTests
     public async Task DeleteComment_ShouldFail_WhenCommentNotFound()
     {
         var commentId = Guid.NewGuid();
+        var userId = Guid.NewGuid();
         _commentRepo.Setup(r => r.GetCommentById(commentId)).ReturnsAsync((Comment?)null);
 
-        var result = await _svc.DeleteComment(commentId);
+        var result = await _svc.DeleteComment(commentId, userId);
 
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("Comment not found");
@@ -137,14 +138,25 @@ public class CommentServiceUnitTests
     public async Task DeleteComment_ShouldSucceed_WhenNoReplies()
     {
         var comment = CreateComment();
+        var userId = comment.UserId;
+        
+        _userRepo
+            .Setup(r => r.GetUserById(userId))
+            .ReturnsAsync(CreateUser(userId));
 
-        _commentRepo.Setup(r => r.GetCommentById(comment.Id)).ReturnsAsync(comment);
-        _commentRepo.Setup(r => r.GetRepliesToAComment(comment.Id)).ReturnsAsync(new List<Comment>());
-        _commentRepo.Setup(r => r.Delete(comment.Id)).Returns(Task.CompletedTask);
+        _commentRepo.Setup(r => r.GetCommentById(comment.Id))
+            .ReturnsAsync(comment);
 
-        var result = await _svc.DeleteComment(comment.Id);
+        _commentRepo.Setup(r => r.GetRepliesToAComment(comment.Id))
+            .ReturnsAsync(new List<Comment>());
+
+        _commentRepo.Setup(r => r.Delete(comment.Id))
+            .Returns(Task.CompletedTask);
+
+        var result = await _svc.DeleteComment(comment.Id, userId);
 
         result.IsSuccess.Should().BeTrue();
+
         _commentRepo.Verify(r => r.Delete(comment.Id), Times.Once);
     }
 
@@ -154,13 +166,17 @@ public class CommentServiceUnitTests
         var parent = CreateComment();
         var reply1 = CreateComment(replyToId: parent.Id);
         var reply2 = CreateComment(replyToId: parent.Id);
-
+        var userId = parent.UserId;
+        
+        _userRepo
+            .Setup(r => r.GetUserById(userId))
+            .ReturnsAsync(CreateUser(userId));
         _commentRepo.Setup(r => r.GetCommentById(parent.Id)).ReturnsAsync(parent);
         _commentRepo.Setup(r => r.GetRepliesToAComment(parent.Id))
             .ReturnsAsync(new List<Comment> { reply1, reply2 });
         _commentRepo.Setup(r => r.Delete(It.IsAny<Guid>())).Returns(Task.CompletedTask);
 
-        var result = await _svc.DeleteComment(parent.Id);
+        var result = await _svc.DeleteComment(parent.Id, userId);
 
         result.IsSuccess.Should().BeTrue();
         _commentRepo.Verify(r => r.Delete(reply1.Id), Times.Once);
@@ -175,11 +191,23 @@ public class CommentServiceUnitTests
     [Fact]
     public async Task UpdateCommentsContent_ShouldFail_WhenCommentNotFound()
     {
-        _commentRepo.Setup(r => r.GetCommentById(It.IsAny<Guid>())).ReturnsAsync((Comment?)null);
+        var userId = Guid.NewGuid();
 
-        var dto = new CommentContentUpdateDto(Guid.NewGuid(), Guid.NewGuid(), "New content");
+        _userRepo
+            .Setup(r => r.GetUserById(userId))
+            .ReturnsAsync(CreateUser(userId));
 
-        var result = await _svc.UpdateCommentsContent(dto);
+        _commentRepo
+            .Setup(r => r.GetCommentById(It.IsAny<Guid>()))
+            .ReturnsAsync((Comment?)null);
+
+        var dto = new CommentContentUpdateDto(
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            "New content"
+        );
+
+        var result = await _svc.UpdateCommentsContent(dto, userId);
 
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("A komment nem található");
@@ -189,12 +217,23 @@ public class CommentServiceUnitTests
     public async Task UpdateCommentsContent_ShouldFail_WhenArticleIdMismatch()
     {
         var comment = CreateComment();
-        _commentRepo.Setup(r => r.GetCommentById(comment.Id)).ReturnsAsync(comment);
+        var userId = Guid.NewGuid();
 
-        // Más articleId-t adunk mint ami a comment-en van
-        var dto = new CommentContentUpdateDto(comment.Id, Guid.NewGuid(), "New content");
+        _userRepo
+            .Setup(r => r.GetUserById(userId))
+            .ReturnsAsync(CreateUser(userId));
 
-        var result = await _svc.UpdateCommentsContent(dto);
+        _commentRepo
+            .Setup(r => r.GetCommentById(comment.Id))
+            .ReturnsAsync(comment);
+
+        var dto = new CommentContentUpdateDto(
+            comment.Id,
+            Guid.NewGuid(),
+            "New content"
+        );
+
+        var result = await _svc.UpdateCommentsContent(dto, userId);
 
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("Nem megfelelő hír");
@@ -207,6 +246,9 @@ public class CommentServiceUnitTests
         var comment   = CreateComment(articleId: articleId);
         Comment? updated = null;
 
+        _userRepo
+            .Setup(r => r.GetUserById(comment.UserId))
+            .ReturnsAsync(CreateUser(comment.UserId));
         _commentRepo.Setup(r => r.GetCommentById(comment.Id)).ReturnsAsync(comment);
         _commentRepo
             .Setup(r => r.Update(It.IsAny<Comment>()))
@@ -215,7 +257,7 @@ public class CommentServiceUnitTests
 
         var dto = new CommentContentUpdateDto(comment.Id, articleId, "Updated content");
 
-        var result = await _svc.UpdateCommentsContent(dto);
+        var result = await _svc.UpdateCommentsContent(dto, comment.UserId);
 
         result.IsSuccess.Should().BeTrue();
         updated!.Content.Should().Be("Updated content");
@@ -232,7 +274,7 @@ public class CommentServiceUnitTests
 
         var dto = new CommentUpdateVoteDto(Guid.NewGuid(), Guid.NewGuid(), true);
 
-        var result = await _svc.UpdateCommentsVote(dto);
+        var result = await _svc.UpdateCommentsVote(dto, Guid.NewGuid());
 
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("A komment nem található.");
@@ -255,7 +297,7 @@ public class CommentServiceUnitTests
 
         var dto = new CommentUpdateVoteDto(userId, comment.Id, true);
 
-        var result = await _svc.UpdateCommentsVote(dto);
+        var result = await _svc.UpdateCommentsVote(dto, userId);
 
         result.IsSuccess.Should().BeTrue();
         saved!.UpVotes.Should().Be(1);
@@ -282,7 +324,7 @@ public class CommentServiceUnitTests
 
         var dto = new CommentUpdateVoteDto(userId, comment.Id, true);
 
-        var result = await _svc.UpdateCommentsVote(dto);
+        var result = await _svc.UpdateCommentsVote(dto, userId);
 
         result.IsSuccess.Should().BeTrue();
         saved!.UpVotes.Should().Be(0);
@@ -308,7 +350,7 @@ public class CommentServiceUnitTests
 
         var dto = new CommentUpdateVoteDto(userId, comment.Id, true);
 
-        var result = await _svc.UpdateCommentsVote(dto);
+        var result = await _svc.UpdateCommentsVote(dto, userId);
 
         result.IsSuccess.Should().BeTrue();
         saved!.UpVotes.Should().Be(1);
@@ -318,39 +360,39 @@ public class CommentServiceUnitTests
     // ─────────────────────────────────────────────
     // Helpers
     // ─────────────────────────────────────────────
-
-    private static Article CreateArticle(Guid? id = null) => new()
+    
+    private static User CreateUser(
+        Guid? id = null,
+        string role = "user") => new()
     {
-        Id           = id ?? Guid.NewGuid(),
-        Title        = "Article",
-        Slug         = "article-slug",
-        Lead         = "Lead",
-        Tag          = "F1",
-        FirstSection = "First",
-        LastSection  = "Last"
+        Id = id ?? Guid.NewGuid(),
+        Username = "testuser",
+        FullName = "Test User",
+        Email = $"{Guid.NewGuid()}@test.com",
+        PasswordHash = "pwd",
+        Role = role
     };
 
     private static Comment CreateComment(
-        Guid?  replyToId = null,
-        Guid?  articleId = null) => new()
+        Guid? replyToId = null,
+        Guid? articleId = null,
+        Guid? userId = null,
+        string role = "user")
     {
-        Id               = Guid.NewGuid(),
-        UserId           = Guid.NewGuid(),
-        ArticleId        = articleId ?? Guid.NewGuid(),
-        ReplyToCommentId = replyToId,
-        Content          = "Test comment",
-        UpVotes          = 0,
-        DownVotes        = 0,
-        DateCreated      = DateTime.UtcNow,
-        DateUpdated      = DateTime.UtcNow,
-        User             = new User
+        var user = CreateUser(userId, role);
+
+        return new Comment
         {
-            Id           = Guid.NewGuid(),
-            Username     = "testuser",
-            FullName     = "Test User",
-            Email        = $"{Guid.NewGuid()}@test.com",
-            PasswordHash = "pwd",
-            Role         = "user"
-        }
-    };
+            Id = Guid.NewGuid(),
+            UserId = user.Id,
+            ArticleId = articleId ?? Guid.NewGuid(),
+            ReplyToCommentId = replyToId,
+            Content = "Test comment",
+            UpVotes = 0,
+            DownVotes = 0,
+            DateCreated = DateTime.UtcNow,
+            DateUpdated = DateTime.UtcNow,
+            User = user
+        };
+    }
 }

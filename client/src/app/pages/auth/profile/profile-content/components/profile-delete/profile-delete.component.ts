@@ -47,7 +47,7 @@ export class ProfileDeleteComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.authService.deleteProfile(this.userData?.userId!).subscribe({
+        this.authService.deleteProfile().subscribe({
             next:() => {
               this.snackBar.openFromComponent(CustomSnackbarComponent, {
                 data: { message: 'Profil sikeresen törölve', actionLabel: 'Rendben' },

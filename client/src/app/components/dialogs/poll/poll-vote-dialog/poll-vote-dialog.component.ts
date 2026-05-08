@@ -55,7 +55,7 @@ export class PollVoteDialogComponent {
     const selectedOption = this.poll.pollOptions?.find(o => o.id === optionId);
     if (!this.userId || !selectedOption || selectedOption.isUserChoice) return;
 
-    this.pollService.vote(this.poll.id!, optionId, this.userId).subscribe({
+    this.pollService.vote(this.poll.id!, optionId).subscribe({
       next: () => this.refreshData(),
       error: () => {
         this.snackBar.openFromComponent(CustomSnackbarComponent, {

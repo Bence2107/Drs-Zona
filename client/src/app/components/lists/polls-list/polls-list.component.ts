@@ -47,12 +47,6 @@ export class PollListComponent {
           if (updatedPoll) {
             this.polls = this.polls.filter(p => p.id !== pollId);
           }
-          else if (updatedPoll) {
-            const index = this.polls.findIndex(p => p.id === updatedPoll.id);
-            if (index !== -1) {
-              this.polls[index] = updatedPoll;
-            }
-          }
         });
       }
     });

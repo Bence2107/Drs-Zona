@@ -50,10 +50,12 @@ public class CommentsController(ICommentService commentService): ControllerBase
     }
     
     [Authorize]
-    [HttpGet("getUsersComments/{userId:guid}")]
-    public async Task<ActionResult<List<CommentDetailDto>>> GetUsersComments([FromRoute] Guid userId)
+    [HttpGet("getUsersComments")]
+    public async Task<ActionResult<List<CommentDetailDto>>> GetUsersComments()
     {
-        var response = await commentService.GetUsersComments(userId);
+        var userId = GetCurrentUserId();
+        
+        var response = await commentService.GetUsersComments(userId!.Value);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -67,10 +69,15 @@ public class CommentsController(ICommentService commentService): ControllerBase
     }
     
     [Authorize]
-    [HttpPost("create/{userId:guid}")]
-    public async Task<ActionResult> Create([FromBody]CommentCreateDto dto, [FromRoute]Guid userId)
+    [HttpPost("create")]
+    public async Task<ActionResult> Create([FromBody]CommentCreateDto dto)
     {
-        var result = await commentService.Create(dto, userId);
+        var userId = GetCurrentUserId();
+
+        if (userId is null)
+            return Unauthorized();
+        
+        var result = await commentService.Create(dto, userId.Value);
 
         if (!result.IsSuccess)
         {
@@ -86,9 +93,16 @@ public class CommentsController(ICommentService commentService): ControllerBase
     
     [Authorize]
     [HttpPost("updateContent")]
-    public async Task<ActionResult> UpdateContent([FromBody]CommentContentUpdateDto commentUpdateVoteDto)
+    public async Task<ActionResult> UpdateContent([FromBody]CommentContentUpdateDto commentContentUpdateDto)
     {
-        var result = await commentService.UpdateCommentsContent(commentUpdateVoteDto);
+        var userId = GetCurrentUserId();
+
+        if (userId is null)
+        {
+            return Unauthorized();
+        }
+        
+        var result = await commentService.UpdateCommentsContent(commentContentUpdateDto, userId.Value);
         if (!result.IsSuccess)
         {
             return BadRequest(new
@@ -105,18 +119,27 @@ public class CommentsController(ICommentService commentService): ControllerBase
     [HttpPost("vote")]
     public async Task<ActionResult> Vote([FromBody] CommentUpdateVoteDto request)
     {
-        var result = await commentService.UpdateCommentsVote(request);
+        var userId = GetCurrentUserId();
+
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+        
+        var result = await commentService.UpdateCommentsVote(request, userId.Value);
     
         if (!result.IsSuccess) return BadRequest(result.Message);
         return Ok(result.Value);
     }
     
     [Authorize]
-    [HttpDelete("delete/{id:guid}")]
+    [HttpDelete("delete/{commentId:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    public async Task<ActionResult> Delete([FromRoute]Guid id)
+    public async Task<ActionResult> Delete([FromRoute]Guid commentId)
     {
-        var response = await commentService.DeleteComment(id);
+        var userId = GetCurrentUserId();
+        
+        var response = await commentService.DeleteComment(commentId, userId!.Value);
         if (!response.IsSuccess) return NotFound(response.Message);
 
         return Ok();

@@ -4,9 +4,10 @@ import {ApiConfiguration} from '../../api/api-configuration';
 import {Observable} from 'rxjs';
 import {CommentDetailDto} from '../../api/models/comment-detail-dto';
 import {
-  apiCommentsCreateUserIdPost, apiCommentsDeleteIdDelete,
+  apiCommentsCreatePost, apiCommentsDeleteCommentIdDelete,
   apiCommentsGetCommentRepliesCommentIdGet$Json,
-  apiCommentsGetCommentsWithoutRepliesArticleIdGet$Json, apiCommentsGetUsersCommentsUserIdGet$Json,
+  apiCommentsGetCommentsWithoutRepliesArticleIdGet$Json,
+  apiCommentsGetUsersCommentsGet$Json,
   apiCommentsUpdateContentPost, apiCommentsVotePost
 } from '../../api/functions';
 import {map} from 'rxjs/operators';
@@ -37,17 +38,16 @@ export class CommentService {
     );
   }
 
-  getUsersComments(userId: string): Observable<CommentDetailDto[]> {
-    return apiCommentsGetUsersCommentsUserIdGet$Json(this.http, this.apiConfig.rootUrl, {userId: userId}).pipe(
+  getUsersComments(): Observable<CommentDetailDto[]> {
+    return apiCommentsGetUsersCommentsGet$Json(this.http, this.apiConfig.rootUrl).pipe(
       map(response => {
         return response.body as CommentDetailDto[];
       })
     );
   }
 
-  createComment(dto: CommentCreateDto, userId: string): Observable<void> {
-    return apiCommentsCreateUserIdPost(this.http, this.apiConfig.rootUrl, {
-      userId,
+  createComment(dto: CommentCreateDto): Observable<void> {
+    return apiCommentsCreatePost(this.http, this.apiConfig.rootUrl, {
       body: dto
     }).pipe(map(() => void 0));
   }
@@ -65,6 +65,6 @@ export class CommentService {
   }
 
   deleteComment(id: string): Observable<void> {
-    return apiCommentsDeleteIdDelete(this.http, this.apiConfig.rootUrl, {id: id}).pipe(map(() => void 0));
+    return apiCommentsDeleteCommentIdDelete(this.http, this.apiConfig.rootUrl, {commentId: id}).pipe(map(() => void 0));
   }
 }

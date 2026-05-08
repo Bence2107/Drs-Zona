@@ -9,7 +9,7 @@
       <app-error-display (retry)="fetchAllData()"></app-error-display>
     } @else {
       <h2>Aktuális Szavazások:</h2>
-      <app-poll-list [polls]="polls"></app-poll-list>
+      <app-poll-list [polls]="polls" (pollChanged)="fetchAllData()"></app-poll-list>
 
       <h2>Friss hírek:</h2>
       <app-recent-news-list [articles]="articles"></app-recent-news-list>

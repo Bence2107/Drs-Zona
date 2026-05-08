@@ -167,9 +167,13 @@ public class AuthController(
     }
 
     [Authorize]
-    [HttpDelete("delete-profile/{userId:guid}")]
-    public async Task<IActionResult> DeleteProfile([FromRoute] Guid userId)
+    [HttpDelete("delete-profile")]
+    public async Task<IActionResult> DeleteProfile()
     {
+        var userId = Guid.Parse(
+            User.FindFirst(ClaimTypes.NameIdentifier)?.Value!
+        );
+        
         var userResponse = authService.GetUserById(userId);
         if (!userResponse.Result.IsSuccess)
         {

@@ -589,15 +589,15 @@ public class CommentsControllerTests(TestWebAppFactory factory) : ControllerTest
     public async Task GetUsersComments_ShouldReturn401_WhenNotAuthenticated()
     {
         Client.DefaultRequestHeaders.Authorization = null;
-        var resp = await Client.GetAsync($"/api/comments/getUsersComments/{Guid.NewGuid()}");
+        var resp = await Client.GetAsync($"/api/comments/getUsersComments");
         resp.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
     public async Task GetUsersComments_ShouldReturn200_WhenAuthenticated()
     {
-        var user = await AuthenticateAs();
-        var resp = await Client.GetAsync($"/api/comments/getUsersComments/{user.Id}");
+        await AuthenticateAs();
+        var resp = await Client.GetAsync("/api/comments/getUsersComments");
         resp.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
@@ -606,7 +606,7 @@ public class CommentsControllerTests(TestWebAppFactory factory) : ControllerTest
     {
         Client.DefaultRequestHeaders.Authorization = null;
         var dto = new CommentCreateDto(Guid.NewGuid(), null, "Content");
-        var resp = await Client.PostAsJsonAsync($"/api/comments/create/{Guid.NewGuid()}", dto);
+        var resp = await Client.PostAsJsonAsync($"/api/comments/create", dto);
         resp.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
@@ -765,15 +765,15 @@ public class PollsControllerTests(TestWebAppFactory factory) : ControllerTestBas
     public async Task GetByCreatorId_ShouldReturn401_WhenNotAuthenticated()
     {
         Client.DefaultRequestHeaders.Authorization = null;
-        var resp = await Client.GetAsync($"/api/poll/getByCreatorId/{Guid.NewGuid()}");
+        var resp = await Client.GetAsync($"/api/poll/getByCreator");
         resp.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
     public async Task GetByCreatorId_ShouldReturn200_WhenAuthenticated()
     {
-        var user = await AuthenticateAs();
-        var resp = await Client.GetAsync($"/api/poll/getByCreatorId/{user.Id}");
+        await AuthenticateAs();
+        var resp = await Client.GetAsync($"/api/poll/getByCreator");
         resp.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
@@ -798,7 +798,7 @@ public class PollsControllerTests(TestWebAppFactory factory) : ControllerTestBas
     {
         Client.DefaultRequestHeaders.Authorization = null;
         var resp = await Client.PostAsync(
-            $"/api/poll/vote/{Guid.NewGuid()}/{Guid.NewGuid()}/{Guid.NewGuid()}", null);
+            $"/api/poll/vote/{Guid.NewGuid()}/{Guid.NewGuid()}", null);
         resp.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
@@ -807,10 +807,9 @@ public class PollsControllerTests(TestWebAppFactory factory) : ControllerTestBas
     {
         var (_, poll, option) = await SeedPollData();
         await AuthenticateAs();
-        var voterId = Guid.NewGuid();
 
         var resp = await Client.PostAsync(
-            $"/api/poll/vote/{poll.Id}/{option.Id}/{voterId}", null);
+            $"/api/poll/vote/{poll.Id}/{option.Id}", null);
 
         resp.StatusCode.Should().Be(HttpStatusCode.OK);
     }

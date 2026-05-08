@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {apiBrandGetAllGet$Json} from '../../api/functions';
+import { apiBrandsGetAllGet$Json} from '../../api/functions';
 import {map} from 'rxjs/operators';
 import {BrandListDto} from '../../api/models/brand-list-dto';
 import {Observable} from 'rxjs';
@@ -16,7 +16,7 @@ export class BrandsService {
   ) { }
 
   getAllBrands(): Observable<BrandListDto[]> {
-    return apiBrandGetAllGet$Json(this.http, this.apiConfig.rootUrl).pipe(
+    return apiBrandsGetAllGet$Json(this.http, this.apiConfig.rootUrl).pipe(
       map(response => {
         const body = response.body as any;
         return body.value as BrandListDto[];

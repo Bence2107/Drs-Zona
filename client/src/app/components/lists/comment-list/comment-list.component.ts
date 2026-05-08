@@ -41,7 +41,7 @@ export class CommentListComponent implements OnInit {
     };
 
     this.isSubmitting = true;
-    this.commentService.createComment(dto, userId).subscribe({
+    this.commentService.createComment(dto).subscribe({
       next: () => {
         this.newCommentText = '';
         this.commentError = '';

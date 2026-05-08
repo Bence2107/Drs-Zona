@@ -184,17 +184,23 @@ public class CommentIntegrationTests
     [Fact]
     public async Task DeleteComment_ShouldSucceed_WhenNoReplies()
     {
+        var user = CreateUser();
+
+        _context.Users.Add(user);
+
         var comment = new Comment
         {
             Id = Guid.NewGuid(),
             Content = "Delete me",
-            DateCreated = DateTime.UtcNow
+            DateCreated = DateTime.UtcNow,
+            UserId = user.Id
         };
 
         _context.Comments.Add(comment);
+
         await _context.SaveChangesAsync();
 
-        var result = await _service.DeleteComment(comment.Id);
+        var result = await _service.DeleteComment(comment.Id, comment.UserId);
 
         result.IsSuccess.Should().BeTrue();
         _context.Comments.Should().BeEmpty();
@@ -204,8 +210,9 @@ public class CommentIntegrationTests
     public async Task UpdateCommentsVote_ShouldFail_WhenArticleNotFound()
     {
         var dto = new CommentUpdateVoteDto(Guid.NewGuid(), Guid.NewGuid(), true);
+        var user = CreateUser();
 
-        var result = await _service.UpdateCommentsVote(dto);
+        var result = await _service.UpdateCommentsVote(dto, user.Id);
 
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("A komment nem található.");

@@ -225,7 +225,7 @@ export class CommentItemComponent {
       replyToCommentId: this.comment.id
     };
 
-    this.commentService.createComment(dto, userId).subscribe({
+    this.commentService.createComment(dto).subscribe({
       next: () => {
         this.replyText = '';
         this.replyFormVisible = false;

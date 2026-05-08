@@ -2,12 +2,10 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ApiConfiguration} from '../../api/api-configuration';
 import {
-  apiPollCreateUserIdPost,
+  apiPollCreatePost,
   apiPollDeleteIdDelete,
-  apiPollGetAllActiveGet$Json,
-  apiPollGetByCreatorIdIdGet$Json,
-  apiPollGetIdGet$Json,
-  apiPollVotePollIdPollOptionIdUserIdPost
+  apiPollGetAllActiveGet$Json, apiPollGetByCreatorGet$Json,
+  apiPollGetIdGet$Json, apiPollVotePollIdPollOptionIdPost,
 } from '../../api/functions';
 import {map} from 'rxjs/operators';
 import {PollListDto} from '../../api/models/poll-list-dto';
@@ -28,8 +26,8 @@ export class PollService {
       })
     )
   }
-  getPollsByCreator(id: string, tag: string | undefined): Observable<PollListDto[]> {
-    return apiPollGetByCreatorIdIdGet$Json(this.http, this.apiConfig.rootUrl, {id: id, tag: tag }).pipe(
+  getPollsByCreator(tag: string | undefined): Observable<PollListDto[]> {
+    return apiPollGetByCreatorGet$Json(this.http, this.apiConfig.rootUrl, {tag: tag }).pipe(
       map(response => {
         return response.body as PollListDto[];
 
@@ -46,15 +44,15 @@ export class PollService {
     )
   }
 
-  createPoll(dto: PollCreateDto, userId: string) {
-    return apiPollCreateUserIdPost(this.http, this.apiConfig.rootUrl, {body: dto, userId: userId}).pipe(
+  createPoll(dto: PollCreateDto) {
+    return apiPollCreatePost(this.http, this.apiConfig.rootUrl, {body: dto}).pipe(
       map(() => void 0)
     );
   }
 
-  vote(pollId: string, pollOptionId: string, userId: string): Observable<any> {
-    return apiPollVotePollIdPollOptionIdUserIdPost(this.http, this.apiConfig.rootUrl, {
-      pollId, pollOptionId, userId
+  vote(pollId: string, pollOptionId: string): Observable<any> {
+    return apiPollVotePollIdPollOptionIdPost(this.http, this.apiConfig.rootUrl, {
+      pollId, pollOptionId
     });
   }
 

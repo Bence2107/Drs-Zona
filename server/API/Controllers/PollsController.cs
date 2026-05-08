@@ -33,10 +33,17 @@ public class PollController(IPollService pollService): ControllerBase
     }
     
     [Authorize]
-    [HttpGet("getByCreatorId/{id:guid}")]
-    public async Task<ActionResult<List<PollListDto>>> GetByCreatorId([FromRoute] Guid id,  [FromQuery] string? tag = null)
+    [HttpGet("getByCreator")]
+    public async Task<ActionResult<List<PollListDto>>> GetByCreatorId([FromQuery] string? tag = null)
     {
-        var response = await pollService.GetPollsByCreatorId(id, tag);
+        var userId = GetCurrentUserId();
+
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+        
+        var response = await pollService.GetPollsByCreatorId(userId.Value, tag);
         if (!response.IsSuccess)
         {
             return BadRequest(new
@@ -57,10 +64,16 @@ public class PollController(IPollService pollService): ControllerBase
     }
     
     [Authorize]
-    [HttpPost("create/{userId:guid}")]
+    [HttpPost("create")]
     public async Task<ActionResult> Create([FromBody]PollCreateDto dto)
     {
         var userId = GetCurrentUserId();
+
+        if (!userId.HasValue)
+        {
+            return Unauthorized();
+        }
+        
         var result = await pollService.Create(dto, userId);
 
         if (!result.IsSuccess)
@@ -76,10 +89,17 @@ public class PollController(IPollService pollService): ControllerBase
     }
     
     [Authorize]
-    [HttpPost("vote/{pollId:guid}/{pollOptionId:guid}/{userId:guid}")]
-    public async Task<ActionResult> Vote([FromRoute]Guid pollId, [FromRoute]Guid pollOptionId, [FromRoute] Guid userId)
+    [HttpPost("vote/{pollId:guid}/{pollOptionId:guid}")]
+    public async Task<ActionResult> Vote([FromRoute]Guid pollId, [FromRoute]Guid pollOptionId)
     {
-        var result = await pollService.Vote(pollId, pollOptionId, userId);
+        var userId = GetCurrentUserId();
+
+        if (!userId.HasValue)
+        {
+            return Unauthorized();
+        }
+
+        var result = await pollService.Vote(pollId, pollOptionId, userId.Value);
 
         if (!result.IsSuccess)
         {
@@ -98,6 +118,12 @@ public class PollController(IPollService pollService): ControllerBase
     public async Task<ActionResult> Delete([FromRoute]Guid id)
     {
         var userId = GetCurrentUserId();
+
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+        
         var response = await pollService.Delete(id, userId);
         if (!response.IsSuccess) return NotFound(response.Message);
 

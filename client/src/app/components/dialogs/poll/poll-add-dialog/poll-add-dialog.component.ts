@@ -143,7 +143,7 @@ export class PollAddDialogComponent implements OnInit {
       options: this.pollForm.value.options
     };
 
-    this.pollService.createPoll(pollDto, userId).subscribe({
+    this.pollService.createPoll(pollDto).subscribe({
       next: () => {
         this.snackBar.openFromComponent(CustomSnackbarComponent, {
           data: { message: 'Szavazás sikeresen létrehozva.', actionLabel: 'Rendben' },
