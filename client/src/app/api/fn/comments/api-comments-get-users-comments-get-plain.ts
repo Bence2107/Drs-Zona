@@ -7,16 +7,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PollListDto } from '../../models/poll-list-dto';
+import { CommentDetailDto } from '../../models/comment-detail-dto';
 
-export interface ApiPollGetAllExpiredGet$Plain$Params {
-  tag?: string;
+export interface ApiCommentsGetUsersCommentsGet$Plain$Params {
 }
 
-export function apiPollGetAllExpiredGet$Plain(http: HttpClient, rootUrl: string, params?: ApiPollGetAllExpiredGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PollListDto>>> {
-  const rb = new RequestBuilder(rootUrl, apiPollGetAllExpiredGet$Plain.PATH, 'get');
+export function apiCommentsGetUsersCommentsGet$Plain(http: HttpClient, rootUrl: string, params?: ApiCommentsGetUsersCommentsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CommentDetailDto>>> {
+  const rb = new RequestBuilder(rootUrl, apiCommentsGetUsersCommentsGet$Plain.PATH, 'get');
   if (params) {
-    rb.query('tag', params.tag, {});
   }
 
   return http.request(
@@ -24,9 +22,9 @@ export function apiPollGetAllExpiredGet$Plain(http: HttpClient, rootUrl: string,
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<PollListDto>>;
+      return r as StrictHttpResponse<Array<CommentDetailDto>>;
     })
   );
 }
 
-apiPollGetAllExpiredGet$Plain.PATH = '/api/Poll/getAllExpired';
+apiCommentsGetUsersCommentsGet$Plain.PATH = '/api/Comments/getUsersComments';

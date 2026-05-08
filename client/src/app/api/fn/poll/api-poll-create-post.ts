@@ -9,15 +9,13 @@ import { RequestBuilder } from '../../request-builder';
 
 import { PollCreateDto } from '../../models/poll-create-dto';
 
-export interface ApiPollCreateUserIdPost$Params {
-  userId: string;
+export interface ApiPollCreatePost$Params {
       body?: PollCreateDto
 }
 
-export function apiPollCreateUserIdPost(http: HttpClient, rootUrl: string, params: ApiPollCreateUserIdPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiPollCreateUserIdPost.PATH, 'post');
+export function apiPollCreatePost(http: HttpClient, rootUrl: string, params?: ApiPollCreatePost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiPollCreatePost.PATH, 'post');
   if (params) {
-    rb.path('userId', params.userId, {});
     rb.body(params.body, 'application/*+json');
   }
 
@@ -31,4 +29,4 @@ export function apiPollCreateUserIdPost(http: HttpClient, rootUrl: string, param
   );
 }
 
-apiPollCreateUserIdPost.PATH = '/api/Poll/create/{userId}';
+apiPollCreatePost.PATH = '/api/Poll/create';

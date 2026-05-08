@@ -9,20 +9,18 @@ import { RequestBuilder } from '../../request-builder';
 
 import { PollListDto } from '../../models/poll-list-dto';
 
-export interface ApiPollGetByCreatorIdIdGet$Plain$Params {
-  id: string;
+export interface ApiPollGetByCreatorGet$Json$Params {
   tag?: string;
 }
 
-export function apiPollGetByCreatorIdIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiPollGetByCreatorIdIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PollListDto>>> {
-  const rb = new RequestBuilder(rootUrl, apiPollGetByCreatorIdIdGet$Plain.PATH, 'get');
+export function apiPollGetByCreatorGet$Json(http: HttpClient, rootUrl: string, params?: ApiPollGetByCreatorGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PollListDto>>> {
+  const rb = new RequestBuilder(rootUrl, apiPollGetByCreatorGet$Json.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
     rb.query('tag', params.tag, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: 'text/plain', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -31,4 +29,4 @@ export function apiPollGetByCreatorIdIdGet$Plain(http: HttpClient, rootUrl: stri
   );
 }
 
-apiPollGetByCreatorIdIdGet$Plain.PATH = '/api/Poll/getByCreatorId/{id}';
+apiPollGetByCreatorGet$Json.PATH = '/api/Poll/getByCreator';

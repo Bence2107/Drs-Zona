@@ -7,16 +7,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PollListDto } from '../../models/poll-list-dto';
+import { BrandListDto } from '../../models/brand-list-dto';
 
-export interface ApiPollGetAllExpiredGet$Json$Params {
-  tag?: string;
+export interface ApiBrandsGetAllGet$Json$Params {
 }
 
-export function apiPollGetAllExpiredGet$Json(http: HttpClient, rootUrl: string, params?: ApiPollGetAllExpiredGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PollListDto>>> {
-  const rb = new RequestBuilder(rootUrl, apiPollGetAllExpiredGet$Json.PATH, 'get');
+export function apiBrandsGetAllGet$Json(http: HttpClient, rootUrl: string, params?: ApiBrandsGetAllGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<BrandListDto>> {
+  const rb = new RequestBuilder(rootUrl, apiBrandsGetAllGet$Json.PATH, 'get');
   if (params) {
-    rb.query('tag', params.tag, {});
   }
 
   return http.request(
@@ -24,9 +22,9 @@ export function apiPollGetAllExpiredGet$Json(http: HttpClient, rootUrl: string, 
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<PollListDto>>;
+      return r as StrictHttpResponse<BrandListDto>;
     })
   );
 }
 
-apiPollGetAllExpiredGet$Json.PATH = '/api/Poll/getAllExpired';
+apiBrandsGetAllGet$Json.PATH = '/api/Brands/getAll';

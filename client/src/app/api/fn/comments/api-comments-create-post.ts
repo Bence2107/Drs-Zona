@@ -7,15 +7,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { CommentCreateDto } from '../../models/comment-create-dto';
 
-export interface ApiAuthDeleteProfileUserIdDelete$Params {
-  userId: string;
+export interface ApiCommentsCreatePost$Params {
+      body?: CommentCreateDto
 }
 
-export function apiAuthDeleteProfileUserIdDelete(http: HttpClient, rootUrl: string, params: ApiAuthDeleteProfileUserIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiAuthDeleteProfileUserIdDelete.PATH, 'delete');
+export function apiCommentsCreatePost(http: HttpClient, rootUrl: string, params?: ApiCommentsCreatePost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiCommentsCreatePost.PATH, 'post');
   if (params) {
-    rb.path('userId', params.userId, {});
+    rb.body(params.body, 'application/*+json');
   }
 
   return http.request(
@@ -28,4 +29,4 @@ export function apiAuthDeleteProfileUserIdDelete(http: HttpClient, rootUrl: stri
   );
 }
 
-apiAuthDeleteProfileUserIdDelete.PATH = '/api/Auth/delete-profile/{userId}';
+apiCommentsCreatePost.PATH = '/api/Comments/create';

@@ -7,18 +7,17 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { CommentCreateDto } from '../../models/comment-create-dto';
 
-export interface ApiCommentsCreateUserIdPost$Params {
-  userId: string;
-      body?: CommentCreateDto
+export interface ApiPollVotePollIdPollOptionIdPost$Params {
+  pollId: string;
+  pollOptionId: string;
 }
 
-export function apiCommentsCreateUserIdPost(http: HttpClient, rootUrl: string, params: ApiCommentsCreateUserIdPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiCommentsCreateUserIdPost.PATH, 'post');
+export function apiPollVotePollIdPollOptionIdPost(http: HttpClient, rootUrl: string, params: ApiPollVotePollIdPollOptionIdPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiPollVotePollIdPollOptionIdPost.PATH, 'post');
   if (params) {
-    rb.path('userId', params.userId, {});
-    rb.body(params.body, 'application/*+json');
+    rb.path('pollId', params.pollId, {});
+    rb.path('pollOptionId', params.pollOptionId, {});
   }
 
   return http.request(
@@ -31,4 +30,4 @@ export function apiCommentsCreateUserIdPost(http: HttpClient, rootUrl: string, p
   );
 }
 
-apiCommentsCreateUserIdPost.PATH = '/api/Comments/create/{userId}';
+apiPollVotePollIdPollOptionIdPost.PATH = '/api/Poll/vote/{pollId}/{pollOptionId}';

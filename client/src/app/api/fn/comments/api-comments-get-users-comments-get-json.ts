@@ -9,18 +9,16 @@ import { RequestBuilder } from '../../request-builder';
 
 import { CommentDetailDto } from '../../models/comment-detail-dto';
 
-export interface ApiCommentsGetUsersCommentsUserIdGet$Plain$Params {
-  userId: string;
+export interface ApiCommentsGetUsersCommentsGet$Json$Params {
 }
 
-export function apiCommentsGetUsersCommentsUserIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiCommentsGetUsersCommentsUserIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CommentDetailDto>>> {
-  const rb = new RequestBuilder(rootUrl, apiCommentsGetUsersCommentsUserIdGet$Plain.PATH, 'get');
+export function apiCommentsGetUsersCommentsGet$Json(http: HttpClient, rootUrl: string, params?: ApiCommentsGetUsersCommentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CommentDetailDto>>> {
+  const rb = new RequestBuilder(rootUrl, apiCommentsGetUsersCommentsGet$Json.PATH, 'get');
   if (params) {
-    rb.path('userId', params.userId, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: 'text/plain', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -29,4 +27,4 @@ export function apiCommentsGetUsersCommentsUserIdGet$Plain(http: HttpClient, roo
   );
 }
 
-apiCommentsGetUsersCommentsUserIdGet$Plain.PATH = '/api/Comments/getUsersComments/{userId}';
+apiCommentsGetUsersCommentsGet$Json.PATH = '/api/Comments/getUsersComments';

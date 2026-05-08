@@ -8,18 +8,14 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface ApiPollVotePollIdPollOptionIdUserIdPost$Params {
-  pollId: string;
-  pollOptionId: string;
-  userId: string;
+export interface ApiCommentsDeleteCommentIdDelete$Params {
+  commentId: string;
 }
 
-export function apiPollVotePollIdPollOptionIdUserIdPost(http: HttpClient, rootUrl: string, params: ApiPollVotePollIdPollOptionIdUserIdPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiPollVotePollIdPollOptionIdUserIdPost.PATH, 'post');
+export function apiCommentsDeleteCommentIdDelete(http: HttpClient, rootUrl: string, params: ApiCommentsDeleteCommentIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiCommentsDeleteCommentIdDelete.PATH, 'delete');
   if (params) {
-    rb.path('pollId', params.pollId, {});
-    rb.path('pollOptionId', params.pollOptionId, {});
-    rb.path('userId', params.userId, {});
+    rb.path('commentId', params.commentId, {});
   }
 
   return http.request(
@@ -32,4 +28,4 @@ export function apiPollVotePollIdPollOptionIdUserIdPost(http: HttpClient, rootUr
   );
 }
 
-apiPollVotePollIdPollOptionIdUserIdPost.PATH = '/api/Poll/vote/{pollId}/{pollOptionId}/{userId}';
+apiCommentsDeleteCommentIdDelete.PATH = '/api/Comments/delete/{commentId}';

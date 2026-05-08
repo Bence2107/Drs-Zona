@@ -8,14 +8,12 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface ApiCommentsDeleteIdDelete$Params {
-  id: string;
+export interface ApiAuthDeleteProfileDelete$Params {
 }
 
-export function apiCommentsDeleteIdDelete(http: HttpClient, rootUrl: string, params: ApiCommentsDeleteIdDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiCommentsDeleteIdDelete.PATH, 'delete');
+export function apiAuthDeleteProfileDelete(http: HttpClient, rootUrl: string, params?: ApiAuthDeleteProfileDelete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, apiAuthDeleteProfileDelete.PATH, 'delete');
   if (params) {
-    rb.path('id', params.id, {});
   }
 
   return http.request(
@@ -28,4 +26,4 @@ export function apiCommentsDeleteIdDelete(http: HttpClient, rootUrl: string, par
   );
 }
 
-apiCommentsDeleteIdDelete.PATH = '/api/Comments/delete/{id}';
+apiAuthDeleteProfileDelete.PATH = '/api/Auth/delete-profile';
