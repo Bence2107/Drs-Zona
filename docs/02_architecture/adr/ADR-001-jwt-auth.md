@@ -51,7 +51,7 @@ JWT Bearer tokent alkalmazunk rövid lejárattal; a token tartalmazza a `userId`
 - Könnyen tesztelhető (token generálás tesztben)
 
 **Negatív / kockázat:**
-- Token lejárat előtt nem visszavonható (csak `is_logged_in` DB flag-gel védhető)
+- Token lejárat előtt nem visszavonható – az is_logged_in flag és a CurrentSessionId DB-ben tárolódik, de a beérkező kérések jelenleg nem validálják ezeket a flageket; a token a lejáratig technikailag érvényes marad logout után is.
 - Token localStorage-ban tárolva XSS esetén veszélyes
 - Refresh token hiánya miatt a felhasználó lejárat után kijelentkezik
 

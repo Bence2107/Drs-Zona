@@ -75,7 +75,9 @@ Lefedett területek:
 ## 3. Legkritikusabb user flow-k
 
 ### 1. Autentikáció flow
-Regisztráció → Login → JWT token → Védett endpoint elérése → Logout
+Regisztráció → Login → JWT token (sessionId claim-mel) 
+→ Védett endpoint elérése → Middleware validálja sessionId-t 
+→ Logout (session törlése) → Régi token visszautasítva
 
 Lefedő tesztek:
 - `Register_ShouldSucceed_AndPersistUser`

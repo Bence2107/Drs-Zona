@@ -7,7 +7,7 @@
 
 ## Context
 
-Az API-nak konzisztens kommunikációs kontraktust kell biztosítania a frontend felé.
+Az REST API-nak konzisztens kommunikációs kontraktust kell biztosítania a frontend felé.
 A fejlesztés során AI-asszisztált kódgenerálás is történt, ahol az inkonzisztens
 hibamodell (néha string, néha objektum visszaadása) komoly problémát okozhat.
 Az Angular frontend ng-openapi-gen-nel generálja a típusos klienst a Swagger sémából, így natívan ki lehet építeni a frontenden

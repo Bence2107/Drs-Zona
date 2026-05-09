@@ -4,12 +4,12 @@
 
 | # | Attribútum            | Elvárás                                              | Mérőszám                                                        |
 |---|-----------------------|------------------------------------------------------|-----------------------------------------------------------------|
-| 1 | **Teljesítmény**      | API válaszidő normál terhelésen elfogadható          | p95 latency < 500ms lokális környezetben                        |
+| 1 | **Teljesítmény**      | REST API válaszidő normál terhelésen elfogadható     | p95 latency < 500ms lokális környezetben                        |
 | 2 | **Biztonság**         | Jogosulatlan hozzáférés megakadályozása              | 100% védett endpoint 401-et ad vissza token nélkül              |
 | 3 | **Megbízhatóság**     | Hibás input ne okozzon szerveromlást                 | 0 unhandled exception, minden hiba ResponseResult-ba csomagolva |
 | 4 | **Karbantarthatóság** | Új feature hozzáadható a meglévő kód érintése nélkül | Réteges architektúra, service/repository szétválasztva          |
 | 5 | **Tesztelhetőség**    | Az üzleti logika izoláltan tesztelhető               | 396 automata teszt, unit tesztek DB nélkül futnak               |
-| 6 | **Konzisztencia**     | Minden API válasz egységes formátumú                 | 100% ResponseResult<T> wrapper használat                        |
+| 6 | **Konzisztencia**     | Minden REST API válasz egységes formátumú            | 100% ResponseResult<T> wrapper használat                        |
 | 7 | **Adatintegritás**    | Kapcsolódó adatok törléskor konzisztensek maradnak   | FK constraint + CASCADE/SET NULL szabályok DB szinten           |
 | 8 | **Fejlesztői élmény** | API kliens automatikusan generálható a sémából       | ng-openapi-gen futtatható, típusbiztos Angular kliens           |
 
