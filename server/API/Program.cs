@@ -28,8 +28,17 @@ Env.Load();
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     Args = args,
-    WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")
+    ContentRootPath = AppContext.BaseDirectory,
+    WebRootPath = Path.Combine(AppContext.BaseDirectory, "wwwroot")
 });
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Environment.ContentRootPath = Directory.GetCurrentDirectory();
+    builder.WebHost.UseContentRoot(Directory.GetCurrentDirectory());
+}
+
+var baseDirectory = builder.Environment.ContentRootPath;
 
 //Database connection
 var connectionString = $"Host={Environment.GetEnvironmentVariable("DB_HOST")};" +
@@ -197,7 +206,7 @@ var cacheControlHeader = new StaticFileOptions
     }
 };
 
-var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+var uploadsPath = Path.Combine(baseDirectory, "uploads");
 
 if (Directory.Exists(uploadsPath))
 {
@@ -209,12 +218,9 @@ if (Directory.Exists(uploadsPath))
     });
 }
 
-var clientPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "client", "dist", "drs-zona", "browser");
-
-if (!Directory.Exists(clientPath))
-{
-    clientPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "client", "dist", "drs-zona", "browser");
-}
+var clientPath = builder.Environment.IsDevelopment()
+    ? Path.Combine(baseDirectory, "..", "..", "..", "..", "client", "dist", "drs-zona", "browser")
+    : Path.Combine(baseDirectory, "..", "..", "..", "client", "dist", "drs-zona", "browser");
 
 if (Directory.Exists(clientPath))
 {
