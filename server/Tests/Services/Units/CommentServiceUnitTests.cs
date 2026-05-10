@@ -52,7 +52,7 @@ public class CommentServiceUnitTests
         var result = await _svc.Create(dto, userId);
 
         result.IsSuccess.Should().BeFalse();
-        result.Message.Should().Be("User not found");
+        result.Message.Should().Be("A Felhasználó nem található");
     }
 
     [Fact]
@@ -69,7 +69,7 @@ public class CommentServiceUnitTests
         var result = await _svc.Create(dto, userId);
 
         result.IsSuccess.Should().BeFalse();
-        result.Message.Should().Be("Article not found");
+        result.Message.Should().Be("A Hír nem található");
     }
 
     [Fact]
@@ -131,7 +131,7 @@ public class CommentServiceUnitTests
         var result = await _svc.DeleteComment(commentId, userId);
 
         result.IsSuccess.Should().BeFalse();
-        result.Message.Should().Be("Comment not found");
+        result.Message.Should().Be("A komment nem található");
     }
 
     [Fact]

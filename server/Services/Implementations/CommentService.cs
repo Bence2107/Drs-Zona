@@ -117,14 +117,14 @@ public class CommentService(
 
     public async Task<ResponseResult<bool>> Create(CommentCreateDto commentCreateDto, Guid userId)
     {
-        if (!await usersRepo.CheckIfIdExists(userId)) return ResponseResult<bool>.Failure("User not found");
+        if (!await usersRepo.CheckIfIdExists(userId)) return ResponseResult<bool>.Failure("A Felhasználó nem található");
         
-        if (!await articlesRepo.CheckIfIdExists(commentCreateDto.ArticleId)) return ResponseResult<bool>.Failure("Article not found");
+        if (!await articlesRepo.CheckIfIdExists(commentCreateDto.ArticleId)) return ResponseResult<bool>.Failure("A Hír nem található");
         
         if (commentCreateDto.ReplyToCommentId.HasValue)
         {
             var replyTo = await commentsRepo.GetCommentById(commentCreateDto.ReplyToCommentId.Value);
-            if (replyTo is null) return ResponseResult<bool>.Failure("Comment not found");
+            if (replyTo is null) return ResponseResult<bool>.Failure("A Komment nem található");
         }
         
         var comment = new Comment
@@ -156,8 +156,15 @@ public class CommentService(
         var existingComment = await commentsRepo.GetCommentById(dto.Id);
         if (existingComment == null) return ResponseResult<bool>.Failure("A komment nem található");
 
-        if (existingComment.ArticleId != dto.ArticleId) 
+        if (existingComment.ArticleId != dto.ArticleId)
+        {
             return ResponseResult<bool>.Failure("Nem megfelelő hír");
+        }
+        
+        if (existingUser.Role != "Admin" && existingComment.UserId != existingUser.Id)
+        {
+            return ResponseResult<bool>.Failure("Nincs engedélyed a komment szerkesztéséhez.");   
+        }
 
         existingComment.Content = dto.Content;
         existingComment.DateUpdated = DateTime.UtcNow;
@@ -208,12 +215,12 @@ public class CommentService(
     public async Task<ResponseResult<bool>> DeleteComment(Guid commentId, Guid userId)
     {
         var comment = await commentsRepo.GetCommentById(commentId);
-        if (comment == null) return ResponseResult<bool>.Failure("Comment not found");
+        if (comment == null) return ResponseResult<bool>.Failure("A komment nem található");
         
         var user = await usersRepo.GetUserById(userId);
         if (user?.Role != "Admin" && comment.UserId != user?.Id)
         {
-            return ResponseResult<bool>.Failure("You don't have permission to delete this comment.");   
+            return ResponseResult<bool>.Failure("Nincs engedélyed a komment törléséhez");   
         }
 
         var replies = await commentsRepo.GetRepliesToAComment(commentId);
