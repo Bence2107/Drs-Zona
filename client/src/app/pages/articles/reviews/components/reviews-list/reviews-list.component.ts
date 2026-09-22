@@ -17,6 +17,7 @@ import {MatSelect} from '@angular/material/select';
 import {FormsModule} from '@angular/forms';
 import {SeriesListDto} from '../../../../../api/models/series-list-dto';
 import {SeriesService} from '../../../../../services/api/series.service';
+import {ImagePreloadService} from '../../../../../services/image-preload.service';
 
 @Component({
   selector: 'app-reviews-list',
@@ -56,7 +57,8 @@ export class ReviewsListComponent implements OnInit {
   constructor(
     private articleService: ArticleService,
     private authService: AuthService,
-    private seriesService: SeriesService
+    private seriesService: SeriesService,
+    private imagePreload: ImagePreloadService
   ) {}
 
   ngOnInit() {
@@ -87,7 +89,9 @@ export class ReviewsListComponent implements OnInit {
       next: (data) => {
         this.reviews = data.items!;
         this.totalElements = data.totalCount!;
-        this.isLoading = false;
+        this.imagePreload
+          .preload(this.reviews.map(review => review.primaryImageUrl))
+          .then(() => this.isLoading = false);
       },
       error: () => {
         this.isLoading = false;

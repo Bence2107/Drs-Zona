@@ -16,6 +16,7 @@ import {MatOption, MatSelect} from '@angular/material/select';
 import {FormsModule} from '@angular/forms';
 import {SeriesListDto} from '../../../../../api/models/series-list-dto';
 import {SeriesService} from '../../../../../services/api/series.service';
+import {ImagePreloadService} from '../../../../../services/image-preload.service';
 
 @Component({
   selector: 'app-news-list',
@@ -56,6 +57,7 @@ export class NewsListComponent implements OnInit {
     private articleService: ArticleService,
     private authService: AuthService,
     private seriesService: SeriesService,
+    private imagePreload: ImagePreloadService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -86,7 +88,9 @@ export class NewsListComponent implements OnInit {
       next: (data) => {
         this.articles = data.items!;
         this.totalElements = data.totalCount!;
-        this.isLoading = false;
+        this.imagePreload
+          .preload(this.articles.map(article => article.primaryImageUrl))
+          .then(() => this.isLoading = false);
       },
       error: () => {
         this.isLoading = false;

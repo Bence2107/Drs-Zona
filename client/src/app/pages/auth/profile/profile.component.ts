@@ -3,6 +3,7 @@ import {ProfileHeaderComponent} from './profile-header/profile-header.component'
 import {ProfileContentComponent} from './profile-content/profile-content.component';
 import {UserProfileResponse} from '../../../api/models/user-profile-response';
 import {AuthService} from '../../../services/api/auth.service';
+import {ImagePreloadService} from '../../../services/image-preload.service';
 
 @Component({
   selector: 'app-profile',
@@ -15,12 +16,19 @@ import {AuthService} from '../../../services/api/auth.service';
 })
 export class ProfileComponent implements OnInit{
   userData: UserProfileResponse | null = null;
+  isLoading = true;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private imagePreload: ImagePreloadService,
+  ) {}
 
   ngOnInit() {
     this.authService.getMe()?.subscribe(data => {
       this.userData = data;
+      this.imagePreload
+        .preload([this.avatarUrl, 'img/user/profile/background.jpg'])
+        .then(() => this.isLoading = false);
     });
   }
 

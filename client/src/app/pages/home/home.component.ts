@@ -9,6 +9,7 @@ import {ArticleListDto} from '../../api/models/article-list-dto';
 import {PollListDto} from '../../api/models/poll-list-dto';
 import {ErrorDisplayComponent} from '../../components/error-display/error-display.component';
 import {MatProgressBar} from '@angular/material/progress-bar';
+import {ImagePreloadService} from '../../services/image-preload.service';
 
 @Component({
   selector: 'app-home',
@@ -34,7 +35,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private articleService: ArticleService,
-    private pollService: PollService
+    private pollService: PollService,
+    private imagePreload: ImagePreloadService
   ) {}
 
   ngOnInit() {
@@ -52,7 +54,9 @@ export class HomeComponent implements OnInit {
       next: (result) => {
         this.articles = result.news;
         this.polls = result.activePolls;
-        this.isLoading = false;
+        this.imagePreload
+          .preload(this.articles.map(article => article.primaryImageUrl))
+          .then(() => this.isLoading = false);
       },
       error: () => {
         this.isLoading = false;

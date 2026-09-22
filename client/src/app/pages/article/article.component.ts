@@ -15,6 +15,7 @@ import {MatTooltip} from '@angular/material/tooltip';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmDialogComponent} from '../../components/dialogs/confirmdialog/confirm-dialog.component';
+import {ImagePreloadService} from '../../services/image-preload.service';
 
 @Component({
   selector: 'app-article',
@@ -48,7 +49,8 @@ export class ArticleComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private imagePreload: ImagePreloadService
   )
   {}
 
@@ -65,11 +67,6 @@ export class ArticleComponent implements OnInit {
     const url = this.article.authorImageUrl;
     if (url == null) return "img/user/avatars/avatar.jpg";
     return `${url}`;
-  }
-
-  private addCacheBuster(url: string | null | undefined): string | null {
-    if (!url) return null;
-    return `${url}?cache=${new Date().getTime()}`;
   }
 
   protected isTheAuthorOrAdmin(): boolean {
@@ -94,14 +91,16 @@ export class ArticleComponent implements OnInit {
     if (slug != null) {
       this.articleService.getBySlug(slug).subscribe({
         next: (data) => {
-          this.article = {
-            ...data,
-            primaryImageUrl: this.addCacheBuster(data.primaryImageUrl),
-            secondaryImageUrl: this.addCacheBuster(data.secondaryImageUrl),
-            thirdImageUrl: this.addCacheBuster(data.thirdImageUrl),
-            lastImageUrl: this.addCacheBuster(data.lastImageUrl)
-          };
-          this.isLoading = false;
+          this.article = data;
+          this.imagePreload
+            .preload([
+              data.primaryImageUrl,
+              data.secondaryImageUrl,
+              data.thirdImageUrl,
+              data.lastImageUrl,
+              data.authorImageUrl
+            ])
+            .then(() => this.isLoading = false);
         },
         error: () => {
           console.error();

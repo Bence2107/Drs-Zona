@@ -1,7 +1,7 @@
 <div class="primary_news-container">
     @for (new_item of articles; track new_item) {
       <mat-card class="new-item" [routerLink]="['/article', new_item.slug]">
-        @if (new_item?.primaryImageUrl !== null){
+        @if (new_item?.primaryImageUrl) {
           <img mat-card-image
                [src]="new_item.primaryImageUrl"
                [alt]="new_item.title">
