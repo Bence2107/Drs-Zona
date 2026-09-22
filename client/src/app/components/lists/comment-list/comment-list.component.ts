@@ -9,6 +9,7 @@ import {AuthService} from '../../../services/api/auth.service';
 import {CommentCreateDto} from '../../../api/models/comment-create-dto';
 import {HttpValidationError} from '../../../services/error-interceptor.service';
 import {RouterLink} from '@angular/router';
+import {ImagePreloadService} from '../../../services/image-preload.service';
 
 @Component({
   selector: 'app-comment-list',
@@ -29,6 +30,7 @@ export class CommentListComponent implements OnInit {
   newCommentText = '';
   commentError = '';
   isSubmitting = false;
+  isLoading = true;
 
   submitComment() {
     const userId = this.authService.currentProfile()?.userId;
@@ -78,6 +80,7 @@ export class CommentListComponent implements OnInit {
   constructor(
     private commentService: CommentService,
     private authService: AuthService,
+    private imagePreload: ImagePreloadService,
   ) {}
 
   ngOnInit() {
@@ -85,8 +88,12 @@ export class CommentListComponent implements OnInit {
   }
 
   loadMainComments() {
+    this.isLoading = true;
     this.commentService.getCommentsWithoutReplies(this.articleId).subscribe(comments => {
       this.comments = comments as UIComment[];
+      this.imagePreload
+        .preload(this.comments.map(comment => comment.userAvatarUrl))
+        .then(() => this.isLoading = false);
     });
   }
 }

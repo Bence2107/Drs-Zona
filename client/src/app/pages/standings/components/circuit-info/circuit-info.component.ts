@@ -4,6 +4,7 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {signal} from '@angular/core';
 import {MatIcon} from '@angular/material/icon';
 import {GrandsPrixService} from '../../../../services/api/grands-prix.service';
+import {ImagePreloadService} from '../../../../services/image-preload.service';
 
 @Component({
   selector: 'app-circuit-info',
@@ -14,7 +15,10 @@ import {GrandsPrixService} from '../../../../services/api/grands-prix.service';
 export class CircuitInfoComponent implements OnChanges {
   grandPrixId = input.required<string>();
 
-  constructor(private grandPrixService: GrandsPrixService) {}
+  constructor(
+    private grandPrixService: GrandsPrixService,
+    private imagePreload: ImagePreloadService,
+  ) {}
 
   detail = signal<GrandPrixDetailDto | null>(null);
   isLoading = signal(false);
@@ -26,7 +30,9 @@ export class CircuitInfoComponent implements OnChanges {
     this.grandPrixService.getGrandPrixById(gpId).subscribe({
       next: (res) => {
         this.detail.set(res);
-        this.isLoading.set(false);
+        this.imagePreload
+          .preload([res.circuitDetail?.lightImageUrl, res.circuitDetail?.darkImageUrl])
+          .then(() => this.isLoading.set(false));
       },
       error: () => this.isLoading.set(false),
     });

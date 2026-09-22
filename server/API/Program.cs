@@ -200,9 +200,7 @@ var cacheControlHeader = new StaticFileOptions
     {
         if (!ctx.File.Name.EndsWith(".jpg") && !ctx.File.Name.EndsWith(".jpeg") &&
             !ctx.File.Name.EndsWith(".png")) return;
-        ctx.Context.Response.Headers.CacheControl = "no-cache, no-store, must-revalidate";
-        ctx.Context.Response.Headers.Pragma = "no-cache";
-        ctx.Context.Response.Headers.Expires = "0";
+        ctx.Context.Response.Headers.CacheControl = "no-cache";
     }
 };
 
