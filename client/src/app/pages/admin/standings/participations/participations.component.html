@@ -39,12 +39,12 @@
   </div>
 
 
-  @if (isLoading()) {
+  @if (isLoading() && !participations()) {
     <app-loading-state label="Részvételek betöltése..."></app-loading-state>
   }
 
-  @if (!isLoading() && participations()) {
-    <div class="participation-grid">
+  @if (participations()) {
+    <div class="participation-grid loading-host">
 
       <mat-card class="participation-card">
         <div class="card-header">
@@ -96,6 +96,9 @@
         </mat-card-content>
       </mat-card>
 
+      @if (isLoading()) {
+        <app-loading-state overlay></app-loading-state>
+      }
     </div>
   }
 

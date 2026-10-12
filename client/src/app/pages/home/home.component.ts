@@ -31,7 +31,10 @@ export class HomeComponent implements OnInit {
   articles: ArticleListDto[] = [];
   polls: PollListDto[] = [];
   isLoading = true;
+  hasLoaded = false;
   errorOccurred = false;
+
+  readonly welcomeImages = ['img/home/1.jpg', 'img/home/2.jpg', 'img/home/3.jpg', 'img/home/4.jpg'];
 
   constructor(
     private articleService: ArticleService,
@@ -55,8 +58,11 @@ export class HomeComponent implements OnInit {
         this.articles = result.news;
         this.polls = result.activePolls;
         this.imagePreload
-          .preload(this.articles.map(article => article.primaryImageUrl))
-          .then(() => this.isLoading = false);
+          .preload([...this.articles.map(article => article.primaryImageUrl), ...this.welcomeImages])
+          .then(() => {
+            this.isLoading = false;
+            this.hasLoaded = true;
+          });
       },
       error: () => {
         this.isLoading = false;

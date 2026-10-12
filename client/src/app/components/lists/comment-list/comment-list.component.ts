@@ -33,6 +33,7 @@ export class CommentListComponent implements OnInit {
   commentError = '';
   isSubmitting = false;
   isLoading = true;
+  hasLoaded = false;
 
   submitComment() {
     const userId = this.authService.currentProfile()?.userId;
@@ -91,11 +92,20 @@ export class CommentListComponent implements OnInit {
 
   loadMainComments() {
     this.isLoading = true;
-    this.commentService.getCommentsWithoutReplies(this.articleId).subscribe(comments => {
-      this.comments = comments as UIComment[];
-      this.imagePreload
-        .preload(this.comments.map(comment => comment.userAvatarUrl))
-        .then(() => this.isLoading = false);
+    this.commentService.getCommentsWithoutReplies(this.articleId).subscribe({
+      next: comments => {
+        this.imagePreload
+          .preload(comments.map(comment => comment.userAvatarUrl))
+          .then(() => {
+            this.comments = comments as UIComment[];
+            this.isLoading = false;
+            this.hasLoaded = true;
+          });
+      },
+      error: () => {
+        this.isLoading = false;
+        this.hasLoaded = true;
+      }
     });
   }
 }

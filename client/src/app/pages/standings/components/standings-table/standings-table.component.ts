@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, computed, inject} from '@angular/core';
 import {AGGREGATED_ID, ALL_GP_ID, StandingsStateService} from '../standings-state.service';
 import {
   MatCell, MatCellDef,
@@ -40,4 +40,16 @@ export class StandingsTableComponent {
   state = inject(StandingsStateService);
   protected readonly ALL_GP_ID = ALL_GP_ID;
   protected readonly AGGREGATED_ID = AGGREGATED_ID;
+
+  /** Rows of the table that is currently shown, based on the selected view and filters. */
+  readonly currentRows = computed<readonly unknown[]>(() => {
+    switch (this.state.viewMode()) {
+      case 'results':
+        return this.state.selectedGrandPrixId() === ALL_GP_ID ? this.state.seasonOverview() : this.state.raceResults();
+      case 'drivers':
+        return this.state.selectedDriverId() === AGGREGATED_ID ? this.state.driverStandings() : this.state.driverSeasonResults();
+      case 'constructors':
+        return this.state.selectedConstructorId() === AGGREGATED_ID ? this.state.constructorStandings() : this.state.constructorSeasonResults();
+    }
+  });
 }

@@ -34,6 +34,7 @@ describe('NewsListComponent', () => {
   });
 
   it('US-01 AC1: Should show progress bar when loading', () => {
+    component.hasLoaded = false;
     component.isLoading = true;
 
     fixture.detectChanges();

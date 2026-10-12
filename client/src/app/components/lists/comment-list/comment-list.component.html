@@ -35,8 +35,8 @@
     </div>
   }
 
-  @if (!isLoading) {
-    <div class="comment-list">
+  @if (hasLoaded) {
+    <div class="comment-list loading-host">
       @for (comment of comments; track comment) {
         <mat-card class="comment-card shadow-none">
           <app-comment-item
@@ -50,6 +50,10 @@
           <mat-icon>history</mat-icon>
           <p>Még nem érkezett hozzászólás.</p>
         </div>
+      }
+
+      @if (isLoading) {
+        <app-loading-state overlay [diameter]="32"></app-loading-state>
       }
     </div>
   } @else {

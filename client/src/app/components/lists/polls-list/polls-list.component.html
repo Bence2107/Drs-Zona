@@ -1,6 +1,8 @@
 <div class="list-header">
-  @if (userId) {
-    <button mat-flat-button color="primary" (click)="openCreatePollDialog()">
+  @if (isLoggedIn) {
+    <!-- Space is reserved from the token, the button shows up once the profile has arrived -->
+    <button mat-flat-button color="primary" (click)="openCreatePollDialog()"
+            [disabled]="!userId" [style.visibility]="userId ? 'visible' : 'hidden'">
       <mat-icon>add</mat-icon> ÚJ SZAVAZÁS
     </button>
   }

@@ -7,7 +7,7 @@
   </div>
 
 
-  @if (isLoading()) {
+  @if (isLoading() && constructors().length === 0) {
     <app-loading-state label="Konstruktőrök betöltése..."></app-loading-state>
   }
 
@@ -18,8 +18,8 @@
     </div>
   }
 
-  @if (!isLoading() && constructors().length > 0) {
-    <div class="constructor-grid">
+  @if (constructors().length > 0) {
+    <div class="constructor-grid loading-host">
       @for (constructor of constructors(); track constructor.id) {
         <mat-card class="constructor-card">
           <div class="card-stripe"></div>
@@ -35,6 +35,10 @@
             </button>
           </mat-card-header>
         </mat-card>
+      }
+
+      @if (isLoading()) {
+        <app-loading-state overlay></app-loading-state>
       }
     </div>
   }

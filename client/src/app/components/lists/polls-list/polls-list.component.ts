@@ -30,6 +30,10 @@ export class PollListComponent {
     return this.authService.currentProfile()?.userId ?? null;
   }
 
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
   scroll(direction: number) {
     const scrollAmount = 374 * direction;
     this.carousel.nativeElement.scrollBy({ left: scrollAmount, behavior: 'smooth' });

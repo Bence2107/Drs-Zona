@@ -58,6 +58,11 @@ app-root {
   height: 100%;
 }
 
+// Wrapper for content that refreshes in place with <app-loading-state overlay>.
+.loading-host {
+  position: relative;
+}
+
 
 @include mat.button-overrides((
   filled-container-color: #f8274f,

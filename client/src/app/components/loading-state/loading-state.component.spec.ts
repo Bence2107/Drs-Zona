@@ -30,6 +30,15 @@ describe('LoadingStateComponent', () => {
     expect(fixture.debugElement.query(By.css('mat-progress-spinner'))).toBeNull();
   });
 
+  it('should cover the parent content in overlay mode', () => {
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList).not.toContain('overlay');
+
+    fixture.componentRef.setInput('overlay', '');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList).toContain('overlay');
+  });
+
   it('should render the label only when provided', () => {
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('h3'))).toBeNull();

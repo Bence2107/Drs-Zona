@@ -62,7 +62,8 @@ export class ChampionshipsComponent implements OnInit {
   seriesList = signal<SeriesLookupDto[]>([]);
   selectedSeriesId = signal<string | null>(null);
   championships = signal<ChampionshipRowDto[]>([]);
-  isLoading = signal(false);
+  // Starts true: the list is loaded after the series lookup, the empty state must not flash before it
+  isLoading = signal(true);
 
   constructor(
     private dialog: MatDialog,
@@ -72,15 +73,20 @@ export class ChampionshipsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.standingsService.getAllSeries().subscribe(res => {
-      const filtered = res.filter(s => {
-        const name = s.name?.toLowerCase() ?? '';
-        return !name.includes('wec') && !name.includes('nascar');
-      });
-      this.seriesList.set(filtered);
-      if (res.length > 0) {
-        this.onSeriesChange(filtered[0].id!);
-      }
+    this.standingsService.getAllSeries().subscribe({
+      next: res => {
+        const filtered = res.filter(s => {
+          const name = s.name?.toLowerCase() ?? '';
+          return !name.includes('wec') && !name.includes('nascar');
+        });
+        this.seriesList.set(filtered);
+        if (filtered.length > 0) {
+          this.onSeriesChange(filtered[0].id!);
+        } else {
+          this.isLoading.set(false);
+        }
+      },
+      error: () => this.isLoading.set(false)
     });
   }
 

@@ -4,6 +4,11 @@
   grid-column: 1 / -1;
 }
 
+// Space is reserved immediately, the indicator only fades in when the request is not instant.
+.loading-state > * {
+  animation: fadeIn 0.2s ease-out 0.2s both;
+}
+
 .loading-state {
   display: flex;
   flex-direction: column;
@@ -31,4 +36,28 @@
     border-radius: 4px;
     overflow: hidden;
   }
+}
+
+:host(.overlay) {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: inherit;
+  background-color: color-mix(in srgb, var(--primary-bg) 60%, transparent);
+  animation: fadeIn 0.2s ease-out 0.2s both;
+
+  .loading-state {
+    position: sticky;
+    top: calc(50vh - 40px);
+    padding: 16px 0;
+
+    > * {
+      animation: none;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }

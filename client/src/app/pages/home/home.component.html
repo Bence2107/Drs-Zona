@@ -1,59 +1,65 @@
 <main>
   <div class="content-container">
-    @if (isLoading && !errorOccurred) {
-      <app-loading-state variant="bar" label="Tartalom betöltése..."></app-loading-state>
-    } @else if (errorOccurred) {
+    @if (errorOccurred) {
       <app-error-display (retry)="fetchAllData()"></app-error-display>
+    } @else if (!hasLoaded) {
+      <app-loading-state variant="bar" label="Tartalom betöltése..."></app-loading-state>
     } @else {
-      <h2>Aktuális Szavazások:</h2>
-      <app-poll-list [polls]="polls" (pollChanged)="fetchAllData()"></app-poll-list>
+      <div class="loading-host">
+        <h2>Aktuális Szavazások:</h2>
+        <app-poll-list [polls]="polls" (pollChanged)="fetchAllData()"></app-poll-list>
 
-      <h2>Friss hírek:</h2>
-      <app-recent-news-list [articles]="articles"></app-recent-news-list>
+        <h2>Friss hírek:</h2>
+        <app-recent-news-list [articles]="articles"></app-recent-news-list>
+
+        @if (isLoading) {
+          <app-loading-state overlay></app-loading-state>
+        }
+      </div>
+
+      <mat-card class="outer-card">
+        <mat-card-header></mat-card-header>
+        <mat-card class="inner-card">
+          <mat-card-header>
+            <mat-card-title><h1>Üdvözlünk a DRS Zónában!</h1></mat-card-title>
+          </mat-card-header>
+          <img mat-card-image [src]="welcomeImages[0]" alt="2024-es Miami Nagydíj - Rajt">
+          <mat-card-content>
+            <p>Ez az oldal az autósport világának legnagyobb gyűjtőhelye, ahol megtudhatsz mindent a WEC-től kezdve az egész F1, F2, F3 kategóriákig. Legyen szó öreg motorosról, szakértőről, vagy a sporttal most ismerkedőről, itt mindenki megtalálja, ami érdekli őt. Itt a helyed, ha Te is szeretnél egy közösség része lenni, és átéléssel követni a szezont.</p>
+          </mat-card-content>
+        </mat-card>
+  
+        <mat-card class="inner-card">
+          <img mat-card-image [src]="welcomeImages[1]" alt="2024-es Monaco Nagydíj">
+          <mat-card-header>
+            <mat-card-title><h2>Hírek és fontos információk</h2></mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>A kezdőoldalon megtalálod a legfrissebb híreket, így elsőként értesülhetsz a legújabb fejleményekről. Amennyiben csak egy kategóriát követsz, a kezdőoldalon lehetőséged van szűrni is, ezáltal megkönnyítve a keresést és az olvasás élményét. </p>
+          </mat-card-content>
+        </mat-card>
+  
+        <mat-card class="inner-card">
+          <img mat-card-image [src]="welcomeImages[2]" alt="2025-es Ferrari - Filoranoi teszt">
+          <mat-card-header>
+            <mat-card-title><h2>Összefoglalók, beszélgetések</h2></mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Rövid cikkeink mellett megtalálhatod hírösszefoglalóinkat az eseményekről így, ha lemaradnál, nincs ok aggodalomra, nálunk visszaolvashatod. Sőt, Te magad is írhatsz! Ezen az oldalon nem csak olvasó, de alkotó is lehetsz: beszélgetést kezdeményezhetsz és folytathatsz, bekapcsolódhatsz az aktuális eseményekbe, továbbá hozzászólhatsz a cikkekhez. Mindenki véleménye fontos, kíváncsiak vagyunk Rátok!</p>
+          </mat-card-content>
+        </mat-card>
+  
+        <mat-card class="inner-card">
+          <img mat-card-image [src]="welcomeImages[3]" alt="2023-as Ausztrál Nagydíj - Újraindítás">
+          <mat-card-header>
+            <mat-card-title><h2>Közösség</h2></mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Célunk egy olyan digitális közösségi tér létrehozása, amelyben minden rajongó megtalálja a számára érdekes témát, és szabadon megoszthatjuk egymással a véleményeinket kulturált keretek között.</p>
+            <h3 class="join-us">Öveket becsatolni és csatlakozz hozzánk!</h3>
+          </mat-card-content>
+        </mat-card>
+      </mat-card>
     }
-
-    <mat-card class="outer-card">
-      <mat-card-header></mat-card-header>
-      <mat-card class="inner-card">
-        <mat-card-header>
-          <mat-card-title><h1>Üdvözlünk a DRS Zónában!</h1></mat-card-title>
-        </mat-card-header>
-        <img mat-card-image [src]="'img/home/1.jpg'" alt="2024-es Miami Nagydíj - Rajt">
-        <mat-card-content>
-          <p>Ez az oldal az autósport világának legnagyobb gyűjtőhelye, ahol megtudhatsz mindent a WEC-től kezdve az egész F1, F2, F3 kategóriákig. Legyen szó öreg motorosról, szakértőről, vagy a sporttal most ismerkedőről, itt mindenki megtalálja, ami érdekli őt. Itt a helyed, ha Te is szeretnél egy közösség része lenni, és átéléssel követni a szezont.</p>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="inner-card">
-        <img mat-card-image [src]="'img/home/2.jpg'" alt="2024-es Monaco Nagydíj">
-        <mat-card-header>
-          <mat-card-title><h2>Hírek és fontos információk</h2></mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p>A kezdőoldalon megtalálod a legfrissebb híreket, így elsőként értesülhetsz a legújabb fejleményekről. Amennyiben csak egy kategóriát követsz, a kezdőoldalon lehetőséged van szűrni is, ezáltal megkönnyítve a keresést és az olvasás élményét. </p>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="inner-card">
-        <img mat-card-image [src]="'img/home/3.jpg'" alt="2025-es Ferrari - Filoranoi teszt">
-        <mat-card-header>
-          <mat-card-title><h2>Összefoglalók, beszélgetések</h2></mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p>Rövid cikkeink mellett megtalálhatod hírösszefoglalóinkat az eseményekről így, ha lemaradnál, nincs ok aggodalomra, nálunk visszaolvashatod. Sőt, Te magad is írhatsz! Ezen az oldalon nem csak olvasó, de alkotó is lehetsz: beszélgetést kezdeményezhetsz és folytathatsz, bekapcsolódhatsz az aktuális eseményekbe, továbbá hozzászólhatsz a cikkekhez. Mindenki véleménye fontos, kíváncsiak vagyunk Rátok!</p>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="inner-card">
-        <img mat-card-image [src]="'img/home/4.jpg'" alt="2023-as Ausztrál Nagydíj - Újraindítás">
-        <mat-card-header>
-          <mat-card-title><h2>Közösség</h2></mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p>Célunk egy olyan digitális közösségi tér létrehozása, amelyben minden rajongó megtalálja a számára érdekes témát, és szabadon megoszthatjuk egymással a véleményeinket kulturált keretek között.</p>
-          <h3 class="join-us">Öveket becsatolni és csatlakozz hozzánk!</h3>
-        </mat-card-content>
-      </mat-card>
-    </mat-card>
   </div>
 </main>

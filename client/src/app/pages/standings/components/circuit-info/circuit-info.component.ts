@@ -29,10 +29,13 @@ export class CircuitInfoComponent implements OnChanges {
     this.isLoading.set(true);
     this.grandPrixService.getGrandPrixById(gpId).subscribe({
       next: (res) => {
-        this.detail.set(res);
+        // Keep the previous circuit on screen until the new one is ready to render
         this.imagePreload
           .preload([res.circuitDetail?.lightImageUrl, res.circuitDetail?.darkImageUrl])
-          .then(() => this.isLoading.set(false));
+          .then(() => {
+            this.detail.set(res);
+            this.isLoading.set(false);
+          });
       },
       error: () => this.isLoading.set(false),
     });
