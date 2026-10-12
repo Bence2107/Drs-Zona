@@ -1,15 +1,13 @@
 <main>
   <div class="content-container">
-    @if (isLoading && !errorOccurred) {
-      <div class="loading-container">
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        <h3>{{ seriesDetail?.shortName || 'Széria' }} adatok betöltése...</h3>
-      </div>
+    @if (errorOccurred) {
+      <app-error-display (retry)="fetchSeriesData()"></app-error-display>
     }
-    @else if (errorOccurred) {
-      <app-error-display (retry)="ngOnInit()"></app-error-display>
+    @else if (!hasLoaded) {
+      <app-loading-state variant="bar" label="Széria adatok betöltése..."></app-loading-state>
     }
     @else {
+      <div class="loading-host">
         <h2>Aktuális {{ seriesDetail?.shortName }} szavazások:</h2>
         <app-poll-list
           [polls]="polls"
@@ -17,15 +15,20 @@
           [currentSeriesShortName]="seriesDetail?.shortName!">
         </app-poll-list>
 
-      <h2>Friss hírek ({{ seriesDetail?.shortName }}):</h2>
-      <app-recent-news-list [articles]="articles"></app-recent-news-list>
+        <h2>Friss hírek ({{ seriesDetail?.shortName }}):</h2>
+        <app-recent-news-list [articles]="articles"></app-recent-news-list>
+
+        @if (isLoading) {
+          <app-loading-state overlay></app-loading-state>
+        }
+      </div>
 
       <mat-card class="outer-card">
         <mat-card class="inner-card">
 
-          @if (seriesDetail?.shortName) {
+          @if (seriesImageUrl) {
             <img mat-card-image
-                 [src]="'img/series/' + seriesDetail?.shortName?.toLowerCase() + '.jpg'"
+                 [src]="seriesImageUrl"
                  [alt]="seriesDetail?.name">
           }
 

@@ -13,9 +13,7 @@
   </div>
 
   @if (isLoadingContext()) {
-    <div class="loading-state">
-      <mat-spinner diameter="48"></mat-spinner>
-    </div>
+    <app-loading-state label="Adatok betöltése..."></app-loading-state>
   }
 
   @if (!isLoadingContext() && context()) {

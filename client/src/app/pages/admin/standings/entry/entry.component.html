@@ -41,10 +41,8 @@
     </mat-form-field>
   </div>
 
-  @if (isLoading()) {
-    <div class="loading-state">
-      <mat-spinner diameter="48"></mat-spinner>
-    </div>
+  @if (isLoading() && grandsPrix().length === 0) {
+    <app-loading-state label="Nagydíjak betöltése..."></app-loading-state>
   }
 
   @if (!isLoading() && grandsPrix().length === 0) {
@@ -54,8 +52,8 @@
     </div>
   }
 
-  @if (!isLoading() && grandsPrix().length > 0) {
-    <div class="gp-grid">
+  @if (grandsPrix().length > 0) {
+    <div class="gp-grid loading-host">
       @for (gp of grandsPrix(); track gp.id) {
         <mat-card class="gp-card" [class.has-results]="gp.hasResults">
 
@@ -100,6 +98,10 @@
           </mat-card-actions>
 
         </mat-card>
+      }
+
+      @if (isLoading()) {
+        <app-loading-state overlay></app-loading-state>
       }
     </div>
   }

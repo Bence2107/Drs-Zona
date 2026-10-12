@@ -15,7 +15,7 @@ import {
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {LoadingStateComponent} from '../../../../../components/loading-state/loading-state.component';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {StandingsService} from '../../../../../services/api/standings.service';
@@ -39,7 +39,7 @@ import {GrandsPrixService} from '../../../../../services/api/grands-prix.service
   imports: [
     MatIconButton,
     MatIcon,
-    MatProgressSpinner,
+    LoadingStateComponent,
     MatButton,
     MatTable,
     MatHeaderCell,
@@ -83,7 +83,7 @@ export class EntryDetailComponent implements OnInit {
   sessions = signal<string[]>([]);
   selectedSession = signal<string>('');
   sessionData = signal<SessionEditDto | null>(null);
-  isLoading = signal(false);
+  isLoading = signal(true);
   isSaving = signal(false);
   context = signal<GrandPrixChampionshipContextDto | null>(null);
 
@@ -103,7 +103,6 @@ export class EntryDetailComponent implements OnInit {
 
   ngOnInit() {
     this.gpId.set(this.route.snapshot.paramMap.get('gpId') ?? '');
-    this.loadSessions();
     this.loadContext();
     this.loadSeriesList();
   }
@@ -148,7 +147,6 @@ export class EntryDetailComponent implements OnInit {
         });
         ref.afterClosed().subscribe(result => {
           if (result) {
-            this.loadSessions();
             this.loadContext();
           }
         });
@@ -345,6 +343,7 @@ export class EntryDetailComponent implements OnInit {
     this.router.navigate(['/admin/results/entry']);
   }
 
+  // Loads the sessions afterwards, so they are fetched only once per (re)load
   loadContext() {
       this.isLoading.set(true);
       this.standingsService.getGrandPrixContext(this.gpId()).subscribe({
@@ -353,7 +352,7 @@ export class EntryDetailComponent implements OnInit {
           this.loadSessions();
         },
         error: () => {
-          this.isLoading.set(false);
+          this.loadSessions();
           this.snackBar.openFromComponent(CustomSnackbarComponent, {
             data: { message: 'Hiba a kontextus betöltésekor', actionLabel: 'Rendben' },
             duration: 3000,

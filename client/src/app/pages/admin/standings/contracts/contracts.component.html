@@ -7,10 +7,8 @@
   </div>
 
 
-  @if (isLoading()) {
-    <div class="loading-state">
-      <mat-spinner diameter="48"></mat-spinner>
-    </div>
+  @if (isLoading() && contracts().length === 0) {
+    <app-loading-state label="Szerződések betöltése..."></app-loading-state>
   }
 
   @if (!isLoading() && contracts().length === 0) {
@@ -20,8 +18,8 @@
     </div>
   }
 
-  @if (!isLoading() && contracts().length > 0) {
-    <mat-card class="table-card">
+  @if (contracts().length > 0) {
+    <mat-card class="table-card loading-host">
       <table mat-table [dataSource]="contracts()" class="contracts-table">
 
         <ng-container matColumnDef="driver">
@@ -59,6 +57,10 @@
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
         <tr mat-row *matRowDef="let _; columns: columns;"></tr>
       </table>
+
+      @if (isLoading()) {
+        <app-loading-state overlay></app-loading-state>
+      }
     </mat-card>
   }
 

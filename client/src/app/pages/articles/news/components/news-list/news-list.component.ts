@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardImage} from '@angular/material/card';
 import {DatePipe, NgClass} from '@angular/common';
 import {ErrorDisplayComponent} from '../../../../../components/error-display/error-display.component';
-import {MatProgressBar} from '@angular/material/progress-bar';
+import {LoadingStateComponent} from '../../../../../components/loading-state/loading-state.component';
 import {ArticleListDto} from '../../../../../api/models/article-list-dto';
 import {ArticleService} from '../../../../../services/api/article.service';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
@@ -25,7 +25,7 @@ import {ImagePreloadService} from '../../../../../services/image-preload.service
     MatCardImage,
     MatCardContent,
     ErrorDisplayComponent,
-    MatProgressBar,
+    LoadingStateComponent,
     DatePipe,
     RouterLink,
     MatFabButton,
@@ -45,6 +45,7 @@ import {ImagePreloadService} from '../../../../../services/image-preload.service
 export class NewsListComponent implements OnInit {
   @Input() articles: ArticleListDto[] = []
   isLoading = false;
+  hasLoaded = false;
   errorOccurred = false;
 
   seriesList: SeriesListDto[] = []
@@ -86,11 +87,16 @@ export class NewsListComponent implements OnInit {
 
     this.articleService.getAllArticles(this.pageIndex, this.pageSize, this.selectedTag).subscribe({
       next: (data) => {
-        this.articles = data.items!;
-        this.totalElements = data.totalCount!;
+        // Keep the current page on screen until the new one is ready to render
+        const items = data.items ?? [];
         this.imagePreload
-          .preload(this.articles.map(article => article.primaryImageUrl))
-          .then(() => this.isLoading = false);
+          .preload(items.map(article => article.primaryImageUrl))
+          .then(() => {
+            this.articles = items;
+            this.totalElements = data.totalCount!;
+            this.isLoading = false;
+            this.hasLoaded = true;
+          });
       },
       error: () => {
         this.isLoading = false;

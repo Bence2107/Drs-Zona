@@ -16,6 +16,7 @@ import {BatchResultCreateDto} from '../../../../../api/models/batch-result-creat
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {LoadingStateComponent} from '../../../../../components/loading-state/loading-state.component';
 import {MatTooltip} from '@angular/material/tooltip';
 import {
   MatCell,
@@ -41,6 +42,7 @@ import {ChampionshipService} from '../../../../../services/api/championship.serv
     MatIconButton,
     MatIcon,
     MatProgressSpinner,
+    LoadingStateComponent,
     MatTooltip,
     MatButton,
     ReactiveFormsModule,

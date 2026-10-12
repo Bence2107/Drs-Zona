@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {DatePipe, NgClass} from "@angular/common";
 import {ErrorDisplayComponent} from "../../../../../components/error-display/error-display.component";
 import {MatCard, MatCardContent, MatCardImage} from "@angular/material/card";
-import {MatProgressBar} from "@angular/material/progress-bar";
+import {LoadingStateComponent} from "../../../../../components/loading-state/loading-state.component";
 import {RouterLink} from '@angular/router';
 import {ArticleListDto} from '../../../../../api/models/article-list-dto';
 import {ArticleService} from '../../../../../services/api/article.service';
@@ -27,7 +27,7 @@ import {ImagePreloadService} from '../../../../../services/image-preload.service
     MatCard,
     MatCardContent,
     MatCardImage,
-    MatProgressBar,
+    LoadingStateComponent,
     RouterLink,
     MatFabButton,
     MatIcon,
@@ -46,6 +46,7 @@ import {ImagePreloadService} from '../../../../../services/image-preload.service
 export class ReviewsListComponent implements OnInit {
   @Input() reviews: ArticleListDto[] = []
   isLoading = false;
+  hasLoaded = false;
   errorOccurred = false;
 
   seriesList: SeriesListDto[] = []
@@ -87,11 +88,16 @@ export class ReviewsListComponent implements OnInit {
 
     this.articleService.getAllSummary(this.pageIndex, this.pageSize, this.selectedTag).subscribe({
       next: (data) => {
-        this.reviews = data.items!;
-        this.totalElements = data.totalCount!;
+        // Keep the current page on screen until the new one is ready to render
+        const items = data.items ?? [];
         this.imagePreload
-          .preload(this.reviews.map(review => review.primaryImageUrl))
-          .then(() => this.isLoading = false);
+          .preload(items.map(review => review.primaryImageUrl))
+          .then(() => {
+            this.reviews = items;
+            this.totalElements = data.totalCount!;
+            this.isLoading = false;
+            this.hasLoaded = true;
+          });
       },
       error: () => {
         this.isLoading = false;

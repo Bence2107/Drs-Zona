@@ -1,6 +1,6 @@
 import {Component, input, OnChanges} from '@angular/core';
 import {GrandPrixDetailDto} from '../../../../api/models/grand-prix-detail-dto';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
 import {signal} from '@angular/core';
 import {MatIcon} from '@angular/material/icon';
 import {GrandsPrixService} from '../../../../services/api/grands-prix.service';
@@ -8,7 +8,7 @@ import {ImagePreloadService} from '../../../../services/image-preload.service';
 
 @Component({
   selector: 'app-circuit-info',
-  imports: [MatProgressSpinner, MatIcon],
+  imports: [LoadingStateComponent, MatIcon],
   templateUrl: './circuit-info.component.html',
   styleUrl: './circuit-info.component.scss',
 })
@@ -29,10 +29,13 @@ export class CircuitInfoComponent implements OnChanges {
     this.isLoading.set(true);
     this.grandPrixService.getGrandPrixById(gpId).subscribe({
       next: (res) => {
-        this.detail.set(res);
+        // Keep the previous circuit on screen until the new one is ready to render
         this.imagePreload
           .preload([res.circuitDetail?.lightImageUrl, res.circuitDetail?.darkImageUrl])
-          .then(() => this.isLoading.set(false));
+          .then(() => {
+            this.detail.set(res);
+            this.isLoading.set(false);
+          });
       },
       error: () => this.isLoading.set(false),
     });

@@ -1,9 +1,7 @@
-@if (isLoading()) {
-  <div class="circuit-loading">
-    <mat-spinner diameter="32" />
-  </div>
+@if (isLoading() && !detail()) {
+  <app-loading-state [compact]="true" [diameter]="32"></app-loading-state>
 } @else if (detail(); as gp) {
-  <div class="circuit-card">
+  <div class="circuit-card loading-host">
     <div class="circuit-header">
       <div class="circuit-title-block">
         <span class="round-badge">{{ gp.roundNumber }}. forduló</span>
@@ -65,5 +63,9 @@
         </div>
       </div>
     </div>
+
+    @if (isLoading()) {
+      <app-loading-state overlay [diameter]="32"></app-loading-state>
+    }
   </div>
 }

@@ -57,7 +57,8 @@ export class StandingsStateService implements OnInit{
   driverSeasonResults = signal<DriverSeasonResultDto[]>([]);
   constructorSeasonResults = signal<ConstructorSeasonResultDto[]>([]);
 
-  isLoading = signal(false);
+  // Starts true: the first data arrives after the series -> season chain, nothing should flash before it
+  isLoading = signal(true);
 
   raceColumns = computed(() => {
     const session = this.selectedSession()?.toLowerCase() || '';
@@ -115,13 +116,17 @@ export class StandingsStateService implements OnInit{
   }
 
   loadAllSeries() {
-    this.standingsService.getAllSeries().subscribe(res => {
-      const filtered = res.filter(s => {
-        const name = s.name?.toLowerCase() ?? '';
-        return !name.includes('wec') && !name.includes('nascar');
-      });
-      this.seriesList.set(filtered);
-      if (filtered.length > 0) this.onSeriesChange(filtered[0].id!);
+    this.standingsService.getAllSeries().subscribe({
+      next: res => {
+        const filtered = res.filter(s => {
+          const name = s.name?.toLowerCase() ?? '';
+          return !name.includes('wec') && !name.includes('nascar');
+        });
+        this.seriesList.set(filtered);
+        if (filtered.length > 0) this.onSeriesChange(filtered[0].id!);
+        else this.isLoading.set(false);
+      },
+      error: () => this.isLoading.set(false)
     });
   }
 
@@ -221,13 +226,18 @@ export class StandingsStateService implements OnInit{
 
   onSeriesChange(seriesId: string) {
     this.selectedSeriesId.set(seriesId);
-    this.championshipService.getSeasonsBySeries(seriesId).subscribe(res => {
-      this.seasons.set(res);
-      if (res.length > 0) {
-        const latestSeason = res[0];
-        this.selectedSeason.set(latestSeason);
-        this.onSeasonChange(latestSeason);
-      }
+    this.championshipService.getSeasonsBySeries(seriesId).subscribe({
+      next: res => {
+        this.seasons.set(res);
+        if (res.length > 0) {
+          const latestSeason = res[0];
+          this.selectedSeason.set(latestSeason);
+          this.onSeasonChange(latestSeason);
+        } else {
+          this.isLoading.set(false);
+        }
+      },
+      error: () => this.isLoading.set(false)
     });
   }
 

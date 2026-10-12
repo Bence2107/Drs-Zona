@@ -7,4 +7,6 @@
       <app-profile-content [userData]="userData" [avatarUrl] = "avatarUrl"/>
     </div>
   </main>
+} @else {
+  <app-loading-state label="Profil betöltése..."></app-loading-state>
 }

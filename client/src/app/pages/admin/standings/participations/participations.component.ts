@@ -11,7 +11,7 @@ import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-to
 import {FormsModule} from '@angular/forms';
 import {MatFormField, MatLabel} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
 import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatIcon} from '@angular/material/icon';
 import {MatDivider} from '@angular/material/list';
@@ -32,7 +32,7 @@ import {ChampionshipService} from '../../../../services/api/championship.service
     MatLabel,
     MatSelect,
     MatOption,
-    MatProgressSpinner,
+    LoadingStateComponent,
     MatCard,
     MatIcon,
     MatDivider,
@@ -53,7 +53,8 @@ export class ParticipationsComponent implements OnInit{
   selectedYear = signal<number | null>(null);
   selectedYearLookup = signal<YearLookupDto | null>(null);
   participations = signal<ParticipationListDto | null>(null);
-  isLoading = signal(false);
+  // Starts true: the list is loaded after the series lookup, the empty state must not flash before it
+  isLoading = signal(true);
 
   constructor(
     public dialog: MatDialog,
@@ -66,19 +67,25 @@ export class ParticipationsComponent implements OnInit{
   ngOnInit() {
     const champIdFromRoute = this.route.snapshot.paramMap.get('champId');
 
-    this.standingsService.getAllSeries().subscribe(res => {
-      const filtered = res.filter(s => {
-        const name = s.name?.toLowerCase() ?? '';
-        return !name.includes('wec') && !name.includes('nascar');
-      });
-      this.seriesList.set(filtered);
-      if (filtered.length > 0) this.onSeriesChange(filtered[0].id!);
+    this.standingsService.getAllSeries().subscribe({
+      next: res => {
+        const filtered = res.filter(s => {
+          const name = s.name?.toLowerCase() ?? '';
+          return !name.includes('wec') && !name.includes('nascar');
+        });
+        this.seriesList.set(filtered);
+        if (filtered.length === 0) {
+          this.isLoading.set(false);
+          return;
+        }
 
-      if (champIdFromRoute) {
-        this.preselectByChampId(champIdFromRoute, filtered);
-      } else {
-        this.onSeriesChange(filtered[0].id!);
-      }
+        if (champIdFromRoute) {
+          this.preselectByChampId(champIdFromRoute, filtered);
+        } else {
+          this.onSeriesChange(filtered[0].id!);
+        }
+      },
+      error: () => this.isLoading.set(false)
     });
   }
 
@@ -110,11 +117,15 @@ export class ParticipationsComponent implements OnInit{
 
   onSeriesChange(seriesId: string) {
     this.selectedSeriesId.set(seriesId);
-    this.championshipService.getSeasonsBySeries(seriesId).subscribe(res => {
-      this.yearLookups.set(res);
-      const years = res.map(y => parseInt(y.season!)).filter(y => !isNaN(y)).sort((a, b) => b - a);
-      this.years.set(years);
-      if (years.length > 0) this.onYearChange(years[0]);
+    this.championshipService.getSeasonsBySeries(seriesId).subscribe({
+      next: res => {
+        this.yearLookups.set(res);
+        const years = res.map(y => parseInt(y.season!)).filter(y => !isNaN(y)).sort((a, b) => b - a);
+        this.years.set(years);
+        if (years.length > 0) this.onYearChange(years[0]);
+        else this.isLoading.set(false);
+      },
+      error: () => this.isLoading.set(false)
     });
   }
 
@@ -124,11 +135,16 @@ export class ParticipationsComponent implements OnInit{
     if (match) {
       this.selectedYearLookup.set(match);
       this.loadParticipations(match);
+    } else {
+      this.isLoading.set(false);
     }
   }
 
   loadParticipations(lookup: YearLookupDto) {
-    if (!lookup.driversChampId || !lookup.constructorsChampId) return;
+    if (!lookup.driversChampId || !lookup.constructorsChampId) {
+      this.isLoading.set(false);
+      return;
+    }
     this.isLoading.set(true);
     this.championshipService.getParticipations(lookup.driversChampId, lookup.constructorsChampId).subscribe({
       next: res => {

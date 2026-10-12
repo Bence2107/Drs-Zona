@@ -10,6 +10,7 @@ import {CommentCreateDto} from '../../../api/models/comment-create-dto';
 import {HttpValidationError} from '../../../services/error-interceptor.service';
 import {RouterLink} from '@angular/router';
 import {ImagePreloadService} from '../../../services/image-preload.service';
+import {LoadingStateComponent} from '../../loading-state/loading-state.component';
 
 @Component({
   selector: 'app-comment-list',
@@ -19,7 +20,8 @@ import {ImagePreloadService} from '../../../services/image-preload.service';
     CommentItemComponent,
     MatIcon,
     FormsModule,
-    RouterLink
+    RouterLink,
+    LoadingStateComponent
   ],
   templateUrl: './comment-list.component.html',
   styleUrl: './comment-list.component.scss'
@@ -31,6 +33,7 @@ export class CommentListComponent implements OnInit {
   commentError = '';
   isSubmitting = false;
   isLoading = true;
+  hasLoaded = false;
 
   submitComment() {
     const userId = this.authService.currentProfile()?.userId;
@@ -89,11 +92,20 @@ export class CommentListComponent implements OnInit {
 
   loadMainComments() {
     this.isLoading = true;
-    this.commentService.getCommentsWithoutReplies(this.articleId).subscribe(comments => {
-      this.comments = comments as UIComment[];
-      this.imagePreload
-        .preload(this.comments.map(comment => comment.userAvatarUrl))
-        .then(() => this.isLoading = false);
+    this.commentService.getCommentsWithoutReplies(this.articleId).subscribe({
+      next: comments => {
+        this.imagePreload
+          .preload(comments.map(comment => comment.userAvatarUrl))
+          .then(() => {
+            this.comments = comments as UIComment[];
+            this.isLoading = false;
+            this.hasLoaded = true;
+          });
+      },
+      error: () => {
+        this.isLoading = false;
+        this.hasLoaded = true;
+      }
     });
   }
 }

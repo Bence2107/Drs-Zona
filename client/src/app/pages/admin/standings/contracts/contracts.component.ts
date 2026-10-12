@@ -1,7 +1,7 @@
 import {Component, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ContractListDto} from '../../../../api/models/contract-list-dto';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
 import {MatIcon} from '@angular/material/icon';
 import {MatCard} from '@angular/material/card';
 import {
@@ -28,7 +28,7 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'app-contracts',
   imports: [
-    MatProgressSpinner,
+    LoadingStateComponent,
     MatIcon,
     MatCard,
     MatTable,

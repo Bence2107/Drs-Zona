@@ -28,10 +28,8 @@
     </mat-select>
   </mat-form-field>
 
-  @if (isLoading()) {
-    <div class="loading-state">
-      <mat-spinner diameter="48"></mat-spinner>
-    </div>
+  @if (isLoading() && championships().length === 0) {
+    <app-loading-state label="Bajnokságok betöltése..."></app-loading-state>
   }
 
   @if (!isLoading() && championships().length === 0) {
@@ -41,8 +39,8 @@
     </div>
   }
 
-  @if (!isLoading() && championships().length > 0) {
-    <div class="championship-list">
+  @if (championships().length > 0) {
+    <div class="championship-list loading-host">
       @for (champ of championships(); track champ.driversChampId) {
         <mat-card class="champ-card" [class]="'status-' + champ.status!.toLowerCase()">
           <div class="card-stripe"></div>
@@ -101,6 +99,10 @@
           </mat-card-actions>
 
         </mat-card>
+      }
+
+      @if (isLoading()) {
+        <app-loading-state overlay></app-loading-state>
       }
     </div>
   }

@@ -1,12 +1,8 @@
 <div class="table-container mat-elevation-z4">
-  @if (state.isLoading()) {
-    <div class="loading-shade">
-      <mat-spinner diameter="50"></mat-spinner>
-    </div>
-  }
-
-  @if (!state.isLoading()) {
-    <div class="table-wrapper">
+  @if (state.isLoading() && currentRows().length === 0) {
+    <app-loading-state label="Eredmények betöltése..."></app-loading-state>
+  } @else {
+    <div class="table-wrapper loading-host">
       @switch (state.viewMode()) {
         @case ('results') {
           @if (state.selectedGrandPrixId() === ALL_GP_ID) {
@@ -190,16 +186,14 @@
           }
         }
       }
+
+      @if (state.isLoading()) {
+        <app-loading-state overlay></app-loading-state>
+      }
     </div>
   }
 
-  @if (!state.isLoading() &&
-  ((state.viewMode() === 'results' && state.selectedGrandPrixId() === ALL_GP_ID && state.seasonOverview().length === 0) ||
-    (state.viewMode() === 'results' && state.selectedGrandPrixId() !== ALL_GP_ID && state.raceResults().length === 0) ||
-    (state.viewMode() === 'drivers' && state.selectedDriverId() === AGGREGATED_ID && state.driverStandings().length === 0) ||
-    (state.viewMode() === 'drivers' && state.selectedDriverId() !== AGGREGATED_ID && state.driverSeasonResults().length === 0) ||
-    (state.viewMode() === 'constructors' && state.selectedConstructorId() === AGGREGATED_ID && state.constructorStandings().length === 0) ||
-    (state.viewMode() === 'constructors' && state.selectedConstructorId() !== AGGREGATED_ID && state.constructorSeasonResults().length === 0))) {
+  @if (!state.isLoading() && currentRows().length === 0) {
     <div class="no-data">Nincs megjeleníthető adat. Kérjük válasszon a szűrőkből.</div>
   }
 </div>

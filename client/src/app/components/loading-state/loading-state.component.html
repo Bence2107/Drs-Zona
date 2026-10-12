@@ -1,0 +1,11 @@
+<div class="loading-state" [class.compact]="compact" role="status" aria-live="polite">
+  @if (variant === 'bar') {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  } @else {
+    <mat-progress-spinner mode="indeterminate" [diameter]="diameter"></mat-progress-spinner>
+  }
+
+  @if (label) {
+    <h3>{{ label }}</h3>
+  }
+</div>

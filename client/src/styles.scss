@@ -24,6 +24,7 @@ body {
 
 :root,
 [data-theme='light'] {
+  color-scheme: light;
   --main-bg: radial-gradient(circle, rgba(248, 244, 244, 1) 0%, rgba(237, 235, 235, 1) 100%);
   --primary-bg: #f8f4f4;
   --secondary-bg: #eae3e3;
@@ -38,6 +39,7 @@ body {
 }
 
 [data-theme='dark'] {
+  color-scheme: dark;
   --main-bg: radial-gradient(circle, rgba(39, 39, 59, 1) 0%, rgba(33, 33, 46, 1) 100%);
   --primary-bg: #21212e;
   --secondary-bg: #181924;
@@ -56,6 +58,11 @@ app-root {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+// Wrapper for content that refreshes in place with <app-loading-state overlay>.
+.loading-host {
+  position: relative;
 }
 
 
@@ -80,9 +87,10 @@ app-root {
 ));
 
 @include mat.progress-bar-overrides((
-  active-indicator-color: #f8274f,
-  track-color: #21212e,
-  track-height: 50px,
+  active-indicator-color: var(--accent-color),
+  track-color: var(--secondary-bg),
+  track-height: 8px,
+  active-indicator-height: 8px,
 ));
 
 @include mat.slide-toggle-overrides((

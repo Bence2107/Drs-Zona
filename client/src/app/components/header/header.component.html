@@ -74,9 +74,10 @@
       }
     </div>
   }
-  <mat-slide-toggle
-    (change)="toggleTheme()"
-    [checked]="isDarkMode"
-    hideIcon>
-  </mat-slide-toggle>
+  <button mat-icon-button class="theme-toggle"
+          (click)="toggleTheme()"
+          [matTooltip]="isDarkMode ? 'Világos mód' : 'Sötét mód'"
+          [attr.aria-label]="isDarkMode ? 'Váltás világos módra' : 'Váltás sötét módra'">
+    <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
 </header>

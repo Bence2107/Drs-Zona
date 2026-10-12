@@ -3,7 +3,7 @@ import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-to
 import {FormsModule} from '@angular/forms';
 import {MatFormField, MatLabel} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
 import {MatIcon} from '@angular/material/icon';
 import {
   MatCard,
@@ -38,7 +38,7 @@ import {ChampionshipService} from '../../../../services/api/championship.service
     MatLabel,
     MatSelect,
     MatOption,
-    MatProgressSpinner,
+    LoadingStateComponent,
     MatIcon,
     MatCard,
     MatCardHeader,
@@ -65,7 +65,8 @@ export class EntryComponent implements OnInit {
   selectedYear = signal<number | null>(null);
   selectedChampionship = signal<string | null>(null);
   grandsPrix = signal<GrandPrixLookupDto[]>([]);
-  isLoading = signal(false);
+  // Starts true: the list is loaded after the series lookup, the empty state must not flash before it
+  isLoading = signal(true);
 
   constructor(
     private dialog: MatDialog,
@@ -79,21 +80,27 @@ export class EntryComponent implements OnInit {
     const champIdFromQuery = this.route.snapshot.queryParamMap.get('champId');
     const seasonFromQuery = this.route.snapshot.queryParamMap.get('season');
 
-    this.standingsService.getAllSeries().subscribe(res => {
-      const filtered = res.filter(s => {
-        const name = s.name?.toLowerCase() ?? '';
-        return !name.includes('wec') && !name.includes('nascar');
-      });
-      this.seriesList.set(filtered);
-      if (filtered.length === 0) return;
+    this.standingsService.getAllSeries().subscribe({
+      next: res => {
+        const filtered = res.filter(s => {
+          const name = s.name?.toLowerCase() ?? '';
+          return !name.includes('wec') && !name.includes('nascar');
+        });
+        this.seriesList.set(filtered);
+        if (filtered.length === 0) {
+          this.isLoading.set(false);
+          return;
+        }
 
-      if (champIdFromQuery) {
-        this.preselectByChampId(champIdFromQuery, filtered);
-      } else if (seasonFromQuery) {
-        this.loadYearsAndPreselectSeason(filtered[0].id!, parseInt(seasonFromQuery));
-      } else {
-        this.onSeriesChange(filtered[0].id!);
-      }
+        if (champIdFromQuery) {
+          this.preselectByChampId(champIdFromQuery, filtered);
+        } else if (seasonFromQuery) {
+          this.loadYearsAndPreselectSeason(filtered[0].id!, parseInt(seasonFromQuery));
+        } else {
+          this.onSeriesChange(filtered[0].id!);
+        }
+      },
+      error: () => this.isLoading.set(false)
     });
   }
 
@@ -131,6 +138,7 @@ export class EntryComponent implements OnInit {
       this.years.set(years);
       const yearToSelect = years.includes(targetYear) ? targetYear : years[0];
       if (yearToSelect) this.onYearChange(yearToSelect);
+      else this.isLoading.set(false);
     });
   }
 
@@ -147,15 +155,20 @@ export class EntryComponent implements OnInit {
 
       if (years.length > 0) {
         this.onYearChange(years[0]);
+      } else {
+        this.isLoading.set(false);
       }
     });
   }
 
   loadGrandsPrix(champId: string) {
     this.isLoading.set(true);
-    this.championshipService.getGrandPrixByChampionship(champId).subscribe(res => {
-      this.grandsPrix.set(res);
-      this.isLoading.set(false);
+    this.championshipService.getGrandPrixByChampionship(champId).subscribe({
+      next: res => {
+        this.grandsPrix.set(res);
+        this.isLoading.set(false);
+      },
+      error: () => this.isLoading.set(false)
     });
   }
 
@@ -171,6 +184,8 @@ export class EntryComponent implements OnInit {
     if (match) {
       this.selectedChampionship.set(match.driversChampId ?? null);
       this.loadGrandsPrix(match.driversChampId!);
+    } else {
+      this.isLoading.set(false);
     }
   }
 

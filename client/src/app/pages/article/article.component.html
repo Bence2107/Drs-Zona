@@ -84,10 +84,7 @@
           </div>
         }
         @if (isLoading && !errorOccurred) {
-          <div class="loading-container">
-            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-            <h3>Információ betöltése...</h3>
-          </div>
+          <app-loading-state variant="bar" label="Információ betöltése..."></app-loading-state>
         }
       }
 </main>

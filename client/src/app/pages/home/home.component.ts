@@ -8,7 +8,7 @@ import {forkJoin} from 'rxjs';
 import {ArticleListDto} from '../../api/models/article-list-dto';
 import {PollListDto} from '../../api/models/poll-list-dto';
 import {ErrorDisplayComponent} from '../../components/error-display/error-display.component';
-import {MatProgressBar} from '@angular/material/progress-bar';
+import {LoadingStateComponent} from '../../components/loading-state/loading-state.component';
 import {ImagePreloadService} from '../../services/image-preload.service';
 
 @Component({
@@ -22,7 +22,7 @@ import {ImagePreloadService} from '../../services/image-preload.service';
     RecentNewsComponent,
     PollListComponent,
     ErrorDisplayComponent,
-    MatProgressBar,
+    LoadingStateComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -31,7 +31,10 @@ export class HomeComponent implements OnInit {
   articles: ArticleListDto[] = [];
   polls: PollListDto[] = [];
   isLoading = true;
+  hasLoaded = false;
   errorOccurred = false;
+
+  readonly welcomeImages = ['img/home/1.jpg', 'img/home/2.jpg', 'img/home/3.jpg', 'img/home/4.jpg'];
 
   constructor(
     private articleService: ArticleService,
@@ -55,8 +58,11 @@ export class HomeComponent implements OnInit {
         this.articles = result.news;
         this.polls = result.activePolls;
         this.imagePreload
-          .preload(this.articles.map(article => article.primaryImageUrl))
-          .then(() => this.isLoading = false);
+          .preload([...this.articles.map(article => article.primaryImageUrl), ...this.welcomeImages])
+          .then(() => {
+            this.isLoading = false;
+            this.hasLoaded = true;
+          });
       },
       error: () => {
         this.isLoading = false;
