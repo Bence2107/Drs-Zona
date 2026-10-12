@@ -5,7 +5,6 @@ import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {MatTooltip} from '@angular/material/tooltip';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {AuthService} from '../../services/api/auth.service';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatDivider} from '@angular/material/list';
@@ -22,7 +21,6 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
     RouterLinkActive,
     MatButton,
     MatTooltip,
-    MatSlideToggle,
     MatIconButton,
     MatMenu,
     MatMenuItem,

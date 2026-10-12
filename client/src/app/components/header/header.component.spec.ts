@@ -32,12 +32,12 @@ describe('HeaderComponent - US-05: Dark/Light Mode Toggle', () => {
     expect(document.body.classList.contains('dark-mode')).toBeFalse();
   });
 
-  it('AC1: Clicking the UI element (mat-slide-toggle) triggers theme toggle', () => {
+  it('AC1: Clicking the UI element (theme toggle button) triggers theme toggle', () => {
     spyOn(component, 'toggleTheme').and.callThrough();
 
-    const toggle = fixture.debugElement.query(By.css('mat-slide-toggle'));
+    const toggle = fixture.debugElement.query(By.css('.theme-toggle'));
 
-    toggle.triggerEventHandler('change', null);
+    toggle.triggerEventHandler('click', null);
     fixture.detectChanges();
 
     expect(component.toggleTheme).toHaveBeenCalled();
