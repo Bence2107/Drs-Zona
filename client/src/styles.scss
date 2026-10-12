@@ -24,6 +24,7 @@ body {
 
 :root,
 [data-theme='light'] {
+  color-scheme: light;
   --main-bg: radial-gradient(circle, rgba(248, 244, 244, 1) 0%, rgba(237, 235, 235, 1) 100%);
   --primary-bg: #f8f4f4;
   --secondary-bg: #eae3e3;
@@ -38,6 +39,7 @@ body {
 }
 
 [data-theme='dark'] {
+  color-scheme: dark;
   --main-bg: radial-gradient(circle, rgba(39, 39, 59, 1) 0%, rgba(33, 33, 46, 1) 100%);
   --primary-bg: #21212e;
   --secondary-bg: #181924;
