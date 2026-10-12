@@ -7,7 +7,7 @@ import {PollListDto} from '../../api/models/poll-list-dto';
 import {ArticleListDto} from '../../api/models/article-list-dto';
 import {SeriesDetailDto} from '../../api/models/series-detail-dto';
 import {forkJoin} from 'rxjs';
-import {MatProgressBar} from '@angular/material/progress-bar';
+import {LoadingStateComponent} from '../../components/loading-state/loading-state.component';
 import {ErrorDisplayComponent} from '../../components/error-display/error-display.component';
 import {PollListComponent} from '../../components/lists/polls-list/polls-list.component';
 import {RecentNewsComponent} from '../../components/lists/recent-news-list/recent-news.component';
@@ -16,7 +16,7 @@ import {MatCard, MatCardContent, MatCardImage} from '@angular/material/card';
 @Component({
   selector: 'app-serie',
   imports: [
-    MatProgressBar,
+    LoadingStateComponent,
     ErrorDisplayComponent,
     PollListComponent,
     RecentNewsComponent,

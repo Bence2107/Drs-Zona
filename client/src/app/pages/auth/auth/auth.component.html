@@ -1,10 +1,5 @@
 <main class="form-main-container">
   <mat-card class="auth-card">
-
-    @if (isServerLoading) {
-      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-    }
-
     <div class="auth-split-container">
       <div class="form-side">
         <div class="form-centering-wrapper">
@@ -15,9 +10,7 @@
               (retry)="checkConnection()">
             </app-error-display>
           } @else if (isServerLoading) {
-            <div class="auth-loading-msg">
-              <h3>Kapcsolódás a szerverhez...</h3>
-            </div>
+            <app-loading-state variant="bar" label="Kapcsolódás a szerverhez..."></app-loading-state>
           } @else {
             <mat-tab-group dynamicHeight>
 

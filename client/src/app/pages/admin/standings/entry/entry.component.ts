@@ -3,7 +3,7 @@ import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-to
 import {FormsModule} from '@angular/forms';
 import {MatFormField, MatLabel} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
 import {MatIcon} from '@angular/material/icon';
 import {
   MatCard,
@@ -38,7 +38,7 @@ import {ChampionshipService} from '../../../../services/api/championship.service
     MatLabel,
     MatSelect,
     MatOption,
-    MatProgressSpinner,
+    LoadingStateComponent,
     MatIcon,
     MatCard,
     MatCardHeader,

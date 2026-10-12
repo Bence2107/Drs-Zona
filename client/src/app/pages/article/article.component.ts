@@ -3,7 +3,7 @@ import {MatCard, MatCardContent, MatCardFooter} from '@angular/material/card';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 
 import {MatButton, MatFabButton} from '@angular/material/button';
-import {MatProgressBar} from '@angular/material/progress-bar';
+import {LoadingStateComponent} from '../../components/loading-state/loading-state.component';
 import {ErrorDisplayComponent} from '../../components/error-display/error-display.component';
 import {ArticleDetailDto} from '../../api/models/article-detail-dto';
 import {ArticleService} from '../../services/api/article.service';
@@ -28,7 +28,7 @@ import {ImagePreloadService} from '../../services/image-preload.service';
     ErrorDisplayComponent,
     MatDivider,
     CommentListComponent,
-    MatProgressBar,
+    LoadingStateComponent,
     MatFabButton,
     MatIcon,
     MatTooltip,

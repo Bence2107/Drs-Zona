@@ -10,6 +10,7 @@ import {CommentCreateDto} from '../../../api/models/comment-create-dto';
 import {HttpValidationError} from '../../../services/error-interceptor.service';
 import {RouterLink} from '@angular/router';
 import {ImagePreloadService} from '../../../services/image-preload.service';
+import {LoadingStateComponent} from '../../loading-state/loading-state.component';
 
 @Component({
   selector: 'app-comment-list',
@@ -19,7 +20,8 @@ import {ImagePreloadService} from '../../../services/image-preload.service';
     CommentItemComponent,
     MatIcon,
     FormsModule,
-    RouterLink
+    RouterLink,
+    LoadingStateComponent
   ],
   templateUrl: './comment-list.component.html',
   styleUrl: './comment-list.component.scss'

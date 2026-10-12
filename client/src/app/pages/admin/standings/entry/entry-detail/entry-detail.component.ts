@@ -15,7 +15,7 @@ import {
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {LoadingStateComponent} from '../../../../../components/loading-state/loading-state.component';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {StandingsService} from '../../../../../services/api/standings.service';
@@ -39,7 +39,7 @@ import {GrandsPrixService} from '../../../../../services/api/grands-prix.service
   imports: [
     MatIconButton,
     MatIcon,
-    MatProgressSpinner,
+    LoadingStateComponent,
     MatButton,
     MatTable,
     MatHeaderCell,

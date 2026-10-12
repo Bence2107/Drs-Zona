@@ -10,7 +10,7 @@ import {
   MatRowDef,
   MatTable
 } from '@angular/material/table';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
 import {DatePipe} from '@angular/common';
 import {CountryFlagPipe} from '../../../../pipes/country-flag.pipe';
 import {CircuitInfoComponent} from '../circuit-info/circuit-info.component';
@@ -19,7 +19,7 @@ import {CircuitInfoComponent} from '../circuit-info/circuit-info.component';
   selector: 'app-results-table',
   imports: [
     MatTable,
-    MatProgressSpinner,
+    LoadingStateComponent,
     MatColumnDef,
     MatHeaderRow,
     MatRow,

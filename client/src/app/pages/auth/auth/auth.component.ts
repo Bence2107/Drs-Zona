@@ -11,7 +11,7 @@ import {RegisterRequest} from '../../../api/models/register-request';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CustomSnackbarComponent} from '../../../components/custom-snackbar/custom-snackbar.component';
 import {ConnectionService} from '../../../services/api/connection-service.service';
-import {MatProgressBar} from '@angular/material/progress-bar';
+import {LoadingStateComponent} from '../../../components/loading-state/loading-state.component';
 import {ErrorDisplayComponent} from '../../../components/error-display/error-display.component';
 import {HttpValidationError} from '../../../services/error-interceptor.service';
 
@@ -20,7 +20,7 @@ import {HttpValidationError} from '../../../services/error-interceptor.service';
   imports: [
     MatTabGroup, MatTab, ReactiveFormsModule,
     MatFormField, MatLabel, MatInput, MatError,
-    MatButton, ErrorDisplayComponent, MatCard, MatProgressBar,
+    MatButton, ErrorDisplayComponent, MatCard, LoadingStateComponent,
   ],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',

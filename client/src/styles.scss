@@ -80,9 +80,10 @@ app-root {
 ));
 
 @include mat.progress-bar-overrides((
-  active-indicator-color: #f8274f,
-  track-color: #21212e,
-  track-height: 50px,
+  active-indicator-color: var(--accent-color),
+  track-color: var(--secondary-bg),
+  track-height: 8px,
+  active-indicator-height: 8px,
 ));
 
 @include mat.slide-toggle-overrides((

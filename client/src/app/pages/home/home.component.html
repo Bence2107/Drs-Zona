@@ -1,10 +1,7 @@
 <main>
   <div class="content-container">
     @if (isLoading && !errorOccurred) {
-      <div class="loading-container">
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        <h3>Tartalom betöltése...</h3>
-      </div>
+      <app-loading-state variant="bar" label="Tartalom betöltése..."></app-loading-state>
     } @else if (errorOccurred) {
       <app-error-display (retry)="fetchAllData()"></app-error-display>
     } @else {

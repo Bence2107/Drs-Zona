@@ -2,7 +2,7 @@ import {Component, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {DriverService} from '../../../../services/api/driver.service';
 import {DriverListDto} from '../../../../api/models/driver-list-dto';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
 import {MatIcon} from '@angular/material/icon';
 import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
 import {MatFabButton, MatIconButton} from '@angular/material/button';
@@ -18,7 +18,7 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'app-drivers',
   imports: [
-    MatProgressSpinner,
+    LoadingStateComponent,
     MatIcon,
     MatCard,
     MatCardHeader,

@@ -29,9 +29,7 @@
   </mat-form-field>
 
   @if (isLoading()) {
-    <div class="loading-state">
-      <mat-spinner diameter="48"></mat-spinner>
-    </div>
+    <app-loading-state label="Bajnokságok betöltése..."></app-loading-state>
   }
 
   @if (!isLoading() && championships().length === 0) {

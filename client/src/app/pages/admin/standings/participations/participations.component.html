@@ -40,9 +40,7 @@
 
 
   @if (isLoading()) {
-    <div class="loading-state">
-      <mat-spinner diameter="48"></mat-spinner>
-    </div>
+    <app-loading-state label="Részvételek betöltése..."></app-loading-state>
   }
 
   @if (!isLoading() && participations()) {

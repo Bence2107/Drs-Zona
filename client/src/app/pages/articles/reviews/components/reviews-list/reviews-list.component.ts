@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {DatePipe, NgClass} from "@angular/common";
 import {ErrorDisplayComponent} from "../../../../../components/error-display/error-display.component";
 import {MatCard, MatCardContent, MatCardImage} from "@angular/material/card";
-import {MatProgressBar} from "@angular/material/progress-bar";
+import {LoadingStateComponent} from "../../../../../components/loading-state/loading-state.component";
 import {RouterLink} from '@angular/router';
 import {ArticleListDto} from '../../../../../api/models/article-list-dto';
 import {ArticleService} from '../../../../../services/api/article.service';
@@ -27,7 +27,7 @@ import {ImagePreloadService} from '../../../../../services/image-preload.service
     MatCard,
     MatCardContent,
     MatCardImage,
-    MatProgressBar,
+    LoadingStateComponent,
     RouterLink,
     MatFabButton,
     MatIcon,

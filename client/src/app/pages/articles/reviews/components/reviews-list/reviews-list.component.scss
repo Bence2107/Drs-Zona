@@ -99,32 +99,6 @@
   }
 }
 
-.loading-container,
-.error-container {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  gap: 25px;
-  padding: 60px 0;
-  background-color: transparent;
-
-  h3 {
-    margin: 0;
-    font-size: 1.4em;
-    color: var(--text-main);
-  }
-}
-
-mat-progress-bar {
-  width: 100%;
-  height: 8px;
-  border-radius: 10px;
-  background-color: var(--primary-bg);
-}
-
 .empty-state {
   grid-column: 1 / -1;
   display: flex;

@@ -7,7 +7,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {StandingsService} from '../../../../services/api/standings.service';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {FormsModule} from '@angular/forms';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
 import {MatIcon} from '@angular/material/icon';
 import {
   MatCard,
@@ -33,7 +33,7 @@ import {ChampionshipService} from '../../../../services/api/championship.service
     MatButtonToggleGroup,
     FormsModule,
     MatButtonToggle,
-    MatProgressSpinner,
+    LoadingStateComponent,
     MatIcon,
     MatCard,
     MatCardHeader,

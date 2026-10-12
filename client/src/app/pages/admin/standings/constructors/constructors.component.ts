@@ -2,7 +2,7 @@ import {Component, OnInit, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ConstructorsService} from '../../../../services/api/constructors.service';
 import {ConstructorListDto} from '../../../../api/models/constructor-list-dto';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
 import {MatIcon} from '@angular/material/icon';
 import {MatCard, MatCardHeader, MatCardTitle} from '@angular/material/card';
 import {MatFabButton, MatIconButton} from '@angular/material/button';
@@ -18,7 +18,7 @@ import {
 @Component({
   selector: 'app-constructors',
   imports: [
-    MatProgressSpinner,
+    LoadingStateComponent,
     MatIcon,
     MatCard,
     MatCardHeader,

@@ -4,12 +4,14 @@ import {ProfileContentComponent} from './profile-content/profile-content.compone
 import {UserProfileResponse} from '../../../api/models/user-profile-response';
 import {AuthService} from '../../../services/api/auth.service';
 import {ImagePreloadService} from '../../../services/image-preload.service';
+import {LoadingStateComponent} from '../../../components/loading-state/loading-state.component';
 
 @Component({
   selector: 'app-profile',
   imports: [
     ProfileHeaderComponent,
-    ProfileContentComponent
+    ProfileContentComponent,
+    LoadingStateComponent
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',

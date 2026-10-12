@@ -8,9 +8,7 @@
 
 
   @if (isLoading()) {
-    <div class="loading-state">
-      <mat-spinner diameter="48"></mat-spinner>
-    </div>
+    <app-loading-state label="Szerződések betöltése..."></app-loading-state>
   }
 
   @if (!isLoading() && contracts().length === 0) {

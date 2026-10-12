@@ -79,44 +79,6 @@ h2 {
   text-align: center;
 }
 
-.loading-container,
-.error-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  gap: 25px;
-  padding: 60px 0;
-  background-color: transparent !important;
-
-  h3 {
-    margin: 0;
-    font-size: 1.4em;
-    color: var(--text-main);
-  }
-
-  mat-progress-bar {
-    width: 100%;
-    max-width: 600px;
-    height: 8px;
-    border-radius: 4px;
-
-    ::ng-deep .mdc-linear-progress__buffer {
-      background-color: var(--secondary-bg) !important;
-    }
-
-    ::ng-deep .mdc-linear-progress__track {
-      background-color: var(--secondary-bg) !important;
-      opacity: 1 !important;
-    }
-
-    ::ng-deep .mdc-linear-progress__bar-inner {
-      border-color: var(--accent-color, #f8274f) !important;
-    }
-  }
-}
-
 @keyframes fadeIn {
   from { opacity: 0.3; transform: translateY(10px); }
   to   { opacity: 1;   transform: translateY(0); }

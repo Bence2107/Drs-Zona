@@ -8,9 +8,7 @@
 
 
   @if (isLoading()) {
-    <div class="loading-state">
-      <mat-spinner diameter="48"></mat-spinner>
-    </div>
+    <app-loading-state label="Konstruktőrök betöltése..."></app-loading-state>
   }
 
   @if (!isLoading() && constructors().length === 0) {

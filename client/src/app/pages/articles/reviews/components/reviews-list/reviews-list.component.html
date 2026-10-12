@@ -1,8 +1,5 @@
 @if (isLoading) {
-  <div class="loading-container">
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-    <h3>Cikkek betöltése...</h3>
-  </div>
+  <app-loading-state variant="bar" label="Cikkek betöltése..."></app-loading-state>
 } @else if (errorOccurred) {
   <app-error-display (retry)="fetchArticles()"></app-error-display>
 } @else if (reviews.length === 0) {

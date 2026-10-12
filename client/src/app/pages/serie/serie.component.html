@@ -1,10 +1,7 @@
 <main>
   <div class="content-container">
     @if (isLoading && !errorOccurred) {
-      <div class="loading-container">
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        <h3>{{ seriesDetail?.shortName || 'Széria' }} adatok betöltése...</h3>
-      </div>
+      <app-loading-state variant="bar" [label]="(seriesDetail?.shortName || 'Széria') + ' adatok betöltése...'"></app-loading-state>
     }
     @else if (errorOccurred) {
       <app-error-display (retry)="ngOnInit()"></app-error-display>

@@ -8,7 +8,7 @@ import {forkJoin} from 'rxjs';
 import {ArticleListDto} from '../../api/models/article-list-dto';
 import {PollListDto} from '../../api/models/poll-list-dto';
 import {ErrorDisplayComponent} from '../../components/error-display/error-display.component';
-import {MatProgressBar} from '@angular/material/progress-bar';
+import {LoadingStateComponent} from '../../components/loading-state/loading-state.component';
 import {ImagePreloadService} from '../../services/image-preload.service';
 
 @Component({
@@ -22,7 +22,7 @@ import {ImagePreloadService} from '../../services/image-preload.service';
     RecentNewsComponent,
     PollListComponent,
     ErrorDisplayComponent,
-    MatProgressBar,
+    LoadingStateComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'

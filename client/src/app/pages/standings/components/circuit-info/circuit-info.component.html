@@ -1,7 +1,5 @@
 @if (isLoading()) {
-  <div class="circuit-loading">
-    <mat-spinner diameter="32" />
-  </div>
+  <app-loading-state [compact]="true" [diameter]="32"></app-loading-state>
 } @else if (detail(); as gp) {
   <div class="circuit-card">
     <div class="circuit-header">

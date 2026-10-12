@@ -42,9 +42,7 @@
   </div>
 
   @if (isLoading()) {
-    <div class="loading-state">
-      <mat-spinner diameter="48"></mat-spinner>
-    </div>
+    <app-loading-state label="Nagydíjak betöltése..."></app-loading-state>
   }
 
   @if (!isLoading() && grandsPrix().length === 0) {
