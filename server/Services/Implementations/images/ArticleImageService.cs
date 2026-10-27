@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Services.Interfaces.images;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
+using SkiaSharp;
 
 namespace Services.Implementations.images;
 
@@ -36,8 +35,14 @@ public class ArticleImageService(IWebHostEnvironment env): IArticleImageService
 
         try
         {
-            using var image = await Image.LoadAsync(file.OpenReadStream());
-            await image.SaveAsync(filePath, new JpegEncoder { Quality = 85 });
+            await using var input = file.OpenReadStream();
+            using var codec = SKCodec.Create(input) ?? throw new InvalidOperationException("Unsupported image format.");
+            using var decoded = SKBitmap.Decode(codec) ?? throw new InvalidOperationException("Image could not be decoded.");
+            using var oriented = codec.EncodedOrigin == SKEncodedOrigin.TopLeft ? null : ApplyOrientation(decoded, codec.EncodedOrigin);
+            using var data = (oriented ?? decoded).Encode(SKEncodedImageFormat.Jpeg, 85);
+
+            await using var output = File.Create(filePath);
+            data.SaveTo(output);
         }
         catch (Exception ex)
         {
@@ -45,6 +50,36 @@ public class ArticleImageService(IWebHostEnvironment env): IArticleImageService
         }
 
         return GetDraftImageUrl(draftId, $"{imageName}.jpg");
+    }
+
+    // The JPEG encoder drops the EXIF orientation tag, so rotate the pixels instead (e.g. phone photos).
+    private static SKBitmap ApplyOrientation(SKBitmap source, SKEncodedOrigin origin)
+    {
+        float w = source.Width;
+        float h = source.Height;
+
+        var matrix = origin switch
+        {
+            SKEncodedOrigin.TopRight    => new SKMatrix(-1, 0, w, 0, 1, 0, 0, 0, 1),
+            SKEncodedOrigin.BottomRight => new SKMatrix(-1, 0, w, 0, -1, h, 0, 0, 1),
+            SKEncodedOrigin.BottomLeft  => new SKMatrix(1, 0, 0, 0, -1, h, 0, 0, 1),
+            SKEncodedOrigin.LeftTop     => new SKMatrix(0, 1, 0, 1, 0, 0, 0, 0, 1),
+            SKEncodedOrigin.RightTop    => new SKMatrix(0, -1, h, 1, 0, 0, 0, 0, 1),
+            SKEncodedOrigin.RightBottom => new SKMatrix(0, -1, h, -1, 0, w, 0, 0, 1),
+            SKEncodedOrigin.LeftBottom  => new SKMatrix(0, 1, 0, -1, 0, w, 0, 0, 1),
+            _ => SKMatrix.Identity
+        };
+
+        var swapsSides = origin is SKEncodedOrigin.LeftTop or SKEncodedOrigin.RightTop
+            or SKEncodedOrigin.RightBottom or SKEncodedOrigin.LeftBottom;
+        var info = swapsSides ? source.Info.WithSize(source.Height, source.Width) : source.Info;
+
+        var result = new SKBitmap(info);
+        using var canvas = new SKCanvas(result);
+        canvas.SetMatrix(matrix);
+        canvas.DrawBitmap(source, 0, 0, SKSamplingOptions.Default);
+
+        return result;
     }
 
     public async Task DeleteDraftImages(string draftId)
