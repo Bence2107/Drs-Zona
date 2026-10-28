@@ -41,6 +41,30 @@ if (builder.Environment.IsDevelopment())
 
 var baseDirectory = builder.Environment.ContentRootPath;
 
+// Prod takes its port from ASPNETCORE_URLS in the systemd unit; these variables must never rebind it
+if (builder.Environment.IsDevelopment())
+{
+    var httpPort = EnvVars.GetOptionalInt("API_PORT");
+    var httpsPort = EnvVars.GetOptionalInt("API_HTTPS_PORT");
+
+    if (httpPort != null || httpsPort != null)
+    {
+        // Only the ports of the launch profile's URLs change, so choosing the http or https profile still works
+        var urls = (builder.Configuration["urls"] ?? "http://localhost:5000")
+            .Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(url => new UriBuilder(url))
+            .ToList();
+
+        foreach (var url in urls)
+        {
+            var port = url.Scheme == Uri.UriSchemeHttps ? httpsPort : httpPort;
+            if (port != null) url.Port = port.Value;
+        }
+
+        builder.WebHost.UseUrls(urls.Select(url => $"{url.Scheme}://{url.Host}:{url.Port}").ToArray());
+    }
+}
+
 // Tests swap in an in-memory database, so they only need the JWT secret
 var isTesting = builder.Environment.IsEnvironment("Testing");
 string[] requiredVariables = isTesting ? ["JWT_SECRET"] : ["JWT_SECRET", ..DatabaseConfig.RequiredVariables];

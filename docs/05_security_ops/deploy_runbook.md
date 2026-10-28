@@ -67,6 +67,8 @@ cd server && dotnet run --launch-profile https
 cd client && pnpm start
 ```
 
+**Portok:** alapból 4200 (frontend), 5244 (API HTTP) és 7221 (API HTTPS). Más portokhoz állítsd be a `FRONTEND_PORT`, `API_PORT` és `API_HTTPS_PORT` változókat a `.env`-ben; az API, a dev proxy és a `pnpm open-api-gen` is ezeket követi. Élesben ezeket a rendszer figyelmen kívül hagyja, ott a port az `ASPNETCORE_URLS`-ből jön.
+
 ### 3.3 Production (systemd)
 
 Az éles szerveren egy systemd service futtatja a `server/API/publish/API.dll`-t `Production` környezetben. Ugyanaz a folyamat szolgálja ki az API-t és az Angular buildet (`client/dist/drs-zona/browser`).

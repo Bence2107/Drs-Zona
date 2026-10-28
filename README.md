@@ -161,6 +161,9 @@ Application will be available at:
 http://localhost:4200
 ```
 
+To use other ports, uncomment `FRONTEND_PORT`, `API_PORT` and `API_HTTPS_PORT` in `.env`.
+The API, the dev proxy and `pnpm open-api-gen` all follow them. Production ignores them.
+
 ---
 
 ### ✅ 6. Verify system

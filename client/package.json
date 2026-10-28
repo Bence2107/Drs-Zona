@@ -3,10 +3,10 @@
   "version": "1.0.2",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node scripts/serve.mjs",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "open-api-gen": "ng-openapi-gen --input=http://localhost:5244/swagger/v1/swagger.json --output=src/app/api/",
+    "open-api-gen": "node scripts/openapi-gen.mjs",
     "test": "ng test"
   },
   "private": true,
