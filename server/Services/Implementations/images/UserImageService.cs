@@ -1,14 +1,13 @@
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Services.Interfaces.images;
 using Services.Types;
 
 namespace Services.Implementations.images;
 
-public class UserImageService(IWebHostEnvironment env) : IUserImageService
+public class UserImageService(UploadSettings uploads) : IUserImageService
 {
-    private string GetUserFolderPath(Guid userId) => 
-        Path.Combine(env.ContentRootPath, "uploads", "images", "avatars", userId.ToString());
+    private string GetUserFolderPath(Guid userId) =>
+        Path.Combine(uploads.RootPath, "images", "avatars", userId.ToString());
     
     public Task<string?> GetAvatarUrl(Guid userId)
     {

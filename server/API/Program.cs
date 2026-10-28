@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using System.Text;
 using Context;
-using DotNetEnv;
+using Context.Configuration;
 using Entities.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -22,8 +22,9 @@ using Services.Implementations;
 using Services.Implementations.images;
 using Services.Interfaces;
 using Services.Interfaces.images;
+using Services.Types;
 
-Env.Load();
+EnvFile.Load();
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -40,28 +41,29 @@ if (builder.Environment.IsDevelopment())
 
 var baseDirectory = builder.Environment.ContentRootPath;
 
-//Database connection
-var connectionString = $"Host={Environment.GetEnvironmentVariable("DB_HOST")};" +
-                       $"Port={Environment.GetEnvironmentVariable("DB_PORT")};" +
-                       $"Database={Environment.GetEnvironmentVariable("DB_NAME")};" +
-                       $"Username={Environment.GetEnvironmentVariable("DB_USER")};" +
-                       $"Password={Environment.GetEnvironmentVariable("DB_PASSWORD")}";
+// Tests swap in an in-memory database, so they only need the JWT secret
+var isTesting = builder.Environment.IsEnvironment("Testing");
+string[] requiredVariables = isTesting ? ["JWT_SECRET"] : ["JWT_SECRET", ..DatabaseConfig.RequiredVariables];
+EnvVars.Require(requiredVariables);
 
 var jwtSettings = new JwtSettings
 {
-    Secret = Environment.GetEnvironmentVariable("JWT_SECRET") 
-             ?? throw new InvalidOperationException("JWT_SECRET not configured"),
-    Issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") 
-             ?? "MotorsportSocialNetwork",
-    Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") 
-               ?? "MotorsportSocialNetworkUsers",
-    ExpirationMinutes = int.Parse(Environment.GetEnvironmentVariable("JWT_EXPIRATION_MINUTES") ?? "1440")
+    Secret = EnvVars.Get("JWT_SECRET"),
+    Issuer = EnvVars.GetOptional("JWT_ISSUER") ?? "MotorsportSocialNetwork",
+    Audience = EnvVars.GetOptional("JWT_AUDIENCE") ?? "MotorsportSocialNetworkUsers",
+    ExpirationMinutes = EnvVars.GetOptionalInt("JWT_EXPIRATION_MINUTES") ?? 1440
 };
 
-if (!builder.Environment.IsEnvironment("Testing"))
+// HS256 rejects shorter keys, but only when the first token is signed; fail at startup instead
+if (Encoding.UTF8.GetByteCount(jwtSettings.Secret) < 32)
+{
+    throw new InvalidOperationException("JWT_SECRET must be at least 32 bytes long.");
+}
+
+if (!isTesting)
 {
     builder.Services.AddDbContext<EfContext>(options =>
-        options.UseNpgsql(connectionString)    
+        options.UseNpgsql(DatabaseConfig.BuildConnectionString())
     );
 }
 
@@ -131,6 +133,12 @@ builder.Services.AddScoped<IDriverService, DriverService>();
 builder.Services.AddScoped<IPollService, PollService>();
 builder.Services.AddScoped<ISeriesService, SeriesService>();
 builder.Services.AddScoped<IStandingsService, StandingsService>();
+
+// Unset keeps uploads where they always were (content root/uploads); Docker points this at a volume
+var uploadsPath = Path.GetFullPath(EnvVars.GetOptional("UPLOADS_PATH") ?? "uploads", baseDirectory);
+// A fresh Docker volume or a new prod folder starts empty, and /uploads must be served from the first request
+Directory.CreateDirectory(uploadsPath);
+builder.Services.AddSingleton(new UploadSettings(uploadsPath));
 
 builder.Services.AddScoped<IArticleImageService, ArticleImageService>();
 builder.Services.AddScoped<IUserImageService, UserImageService>();
@@ -204,17 +212,12 @@ var cacheControlHeader = new StaticFileOptions
     }
 };
 
-var uploadsPath = Path.Combine(baseDirectory, "uploads");
-
-if (Directory.Exists(uploadsPath))
+app.UseStaticFiles(new StaticFileOptions
 {
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(uploadsPath),
-        RequestPath = "/uploads",
-        OnPrepareResponse = cacheControlHeader.OnPrepareResponse
-    });
-}
+    FileProvider = new PhysicalFileProvider(uploadsPath),
+    RequestPath = "/uploads",
+    OnPrepareResponse = cacheControlHeader.OnPrepareResponse
+});
 
 var clientPath = builder.Environment.IsDevelopment()
     ? Path.Combine(baseDirectory, "..", "..", "..", "..", "client", "dist", "drs-zona", "browser")

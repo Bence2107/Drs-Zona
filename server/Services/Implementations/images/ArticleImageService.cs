@@ -1,19 +1,17 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Services.Interfaces.images;
+using Services.Types;
 using SkiaSharp;
 
 namespace Services.Implementations.images;
 
-public class ArticleImageService(IWebHostEnvironment env): IArticleImageService
+public class ArticleImageService(UploadSettings uploads): IArticleImageService
 {
     public string? GetImageUrl(string slug, string imageName)
     {
-        var relativePath = $"uploads/images/articles/{slug}/{imageName}";
-       
-        var physicalPath = Path.Combine(env.ContentRootPath, relativePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+        var physicalPath = Path.Combine(uploads.RootPath, "images", "articles", slug, imageName);
 
-        return File.Exists(physicalPath) ? $"/{relativePath}" : null;
+        return File.Exists(physicalPath) ? $"/uploads/images/articles/{slug}/{imageName}" : null;
     }
 
     private static string GetDraftImageUrl(string draftId, string imageName)
@@ -23,7 +21,7 @@ public class ArticleImageService(IWebHostEnvironment env): IArticleImageService
      
     public async Task<string> SaveDraftImage(string draftId, IFormFile file, string imageName)
     {
-        var dumpsPath = Path.Combine(env.ContentRootPath, "uploads", "dumps", "articles", draftId);
+        var dumpsPath = Path.Combine(uploads.RootPath, "dumps", "articles", draftId);
         Directory.CreateDirectory(dumpsPath);
 
         foreach (var old in Directory.GetFiles(dumpsPath, $"{imageName}.*"))
@@ -84,7 +82,7 @@ public class ArticleImageService(IWebHostEnvironment env): IArticleImageService
 
     public async Task DeleteDraftImages(string draftId)
     {
-        var folderPath = Path.Combine(env.ContentRootPath, "uploads", "dumps", "articles", draftId);
+        var folderPath = Path.Combine(uploads.RootPath, "dumps", "articles", draftId);
         if (Directory.Exists(folderPath))
         {
             await Task.Run(() => Directory.Delete(folderPath, true));
@@ -93,10 +91,10 @@ public class ArticleImageService(IWebHostEnvironment env): IArticleImageService
     
     public async Task PromoteDraftImages(string draftId, string slug)
     {
-        var draftFolder = Path.Combine(env.ContentRootPath, "uploads", "dumps", "articles", draftId);
+        var draftFolder = Path.Combine(uploads.RootPath, "dumps", "articles", draftId);
         if (!Directory.Exists(draftFolder)) return;
 
-        var publishFolder = Path.Combine(env.ContentRootPath, "uploads", "images", "articles", slug);
+        var publishFolder = Path.Combine(uploads.RootPath, "images", "articles", slug);
         Directory.CreateDirectory(publishFolder);
 
         foreach (var srcFile in Directory.GetFiles(draftFolder))

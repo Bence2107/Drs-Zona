@@ -37,18 +37,20 @@ cd <projekt-mappa>
 cd server
 dotnet restore
 
-# 3. Környezeti változók beállítása (lásd env.example)
-cd server/API
-#Töltsd ki az env.example alapján
+# 3. Környezeti változók beállítása (a repository gyökerében)
+cd ..
+cp .env.example .env
+# Töltsd ki a .env-et
 
 # 4. Adatbázis migrációk futtatása
+cd server/API
 dotnet ef database update --context Context.EfContext
 
 # 5. Backend indítása
 dotnet run
 
-# 6. Frontend függőségek (új terminál)
-cd ../client
+# 6. Frontend függőségek (új terminál, a repository gyökeréből)
+cd client
 pnpm install
 
 # 7. Frontend indítása
@@ -65,7 +67,41 @@ cd server && dotnet run --launch-profile https
 cd client && pnpm start
 ```
 
-### 3.3 API változás után
+### 3.3 Production (systemd)
+
+Az éles szerveren egy systemd service futtatja a `server/API/publish/API.dll`-t `Production` környezetben. Ugyanaz a folyamat szolgálja ki az API-t és az Angular buildet (`client/dist/drs-zona/browser`).
+
+**Egyszeri átállás** (a `.env` a repository gyökerébe kerül):
+
+```bash
+# 1. A titkos adatok áthelyezése
+mv /home/tvbox/Drs-Zona/server/API/.env /home/tvbox/Drs-Zona/.env
+
+# 2. A régi build által bemásolt példányok törlése (különben ezek töltődnének be)
+rm -f /home/tvbox/Drs-Zona/server/API/bin/Debug/net9.0/.env /home/tvbox/Drs-Zona/server/API/publish/.env
+```
+
+A unit fájlban:
+
+```ini
+WorkingDirectory=/home/tvbox/Drs-Zona/server/API/publish
+Environment=ENV_FILE=/home/tvbox/Drs-Zona/.env
+```
+
+**Deploy:**
+
+```bash
+cd /home/tvbox/Drs-Zona
+dotnet publish server/API -c Release -o server/API/publish
+cd client && pnpm install --frozen-lockfile && pnpm build
+sudo systemctl daemon-reload && sudo systemctl restart <service>
+```
+
+**Ellenőrzés:** a `journalctl -u <service>` első sora megmutatja, melyik `.env` töltődött be (`Loaded environment from …`).
+
+**Feltöltések:** alapból a `server/API/publish/uploads` mappába kerülnek. Ha a build kimenetén kívül szeretnéd tartani őket, állítsd be az `UPLOADS_PATH`-t a `.env`-ben, és másold át a meglévő fájlokat az új helyre.
+
+### 3.4 API változás után
 
 ```bash
 # 1. Backend újraindítása
@@ -101,36 +137,20 @@ dotnet ef dbcontext script --context Context.EfContext -o docs/03_design/schema.
 
 ## 5. Konfiguráció és titkos adatok
 
-A rendszer a környezeti változókat a gyökérkönyvtárban található .env fájlból olvassa be. Ez a fájl tartalmazza az adatbázis eléréséhez, a biztonsági tokenek generálásához és a CORS házirendhez szükséges adatokat.
+A rendszer a környezeti változókat a repository gyökerében található `.env` fájlból olvassa be. Az összes változót, azok kötelező voltát és alapértékét a [`.env.example`](../../.env.example) tartalmazza.
 
 ```bash
-#.env.example tartalma:
-# =========================
-# Database Configuration
-# =========================
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=drs_zona
-DB_USER=postgres
-DB_PASSWORD=your_password_here
-
-# =========================
-# JWT Configuration
-# =========================
-JWT_SECRET=your_super_secret_key_here
-JWT_ISSUER=drs-zona-api
-JWT_AUDIENCE=drs-zona-client
-JWT_EXPIRATION_MINUTES=60
-
-# =========================
-# CORS Configuration
-# =========================
-CORS_ORIGINS=http://localhost:4200
-
-
-# Másolás a megfelelő helyre:
-cp .env.example server/API/.env
+cp .env.example .env
 ```
+
+A `.env` keresési sorrendje (az API, a `dotnet ef` és a tesztek ugyanígy keresik):
+
+1. az `ENV_FILE` változóban megadott útvonal (pl. `~/.config/drs-zona/.env`)
+2. a legközelebbi `.env` az indítási mappától felfelé, a repository gyökeréig
+3. `server/API/.env` (a régi hely)
+
+A már beállított környezeti változók (systemd, docker compose, shell) felülírják a fájl értékeit. Hiányzó kötelező változó esetén az API el sem indul, és egy hibaüzenetben felsorolja az összeset.
+
 > [!WARNING]
 > A .env fájlt soha ne commitold a verziókövetőbe! Ellenőrizd, hogy a .gitignore fájl tartalmazza-e a bejegyzést.
 
@@ -221,7 +241,8 @@ curl -X POST http://localhost:5244/api/v1/auth/login \
   -d '{"email":"test@test.com","password":"test"}'
 
 # 3. JWT konfiguráció ellenőrzése
-# appsettings.Development.json – JwtSettings.Secret megvan-e?
+# .env – JWT_SECRET megvan-e, és legalább 32 karakter-e?
+# A log első sora mutatja, melyik .env töltődött be (Loaded environment from …)
 ```
 
 **Ideiglenes mitigáció:**
@@ -229,7 +250,7 @@ curl -X POST http://localhost:5244/api/v1/auth/login \
 - Backend újraindítása konfiguráció változás után
 
 **Végleges javítás iránya:**
-- Ha JWT secret hiányzik vagy megváltozott: `appsettings.Development.json` javítása
+- Ha JWT secret hiányzik vagy megváltozott: a `JWT_SECRET` javítása a `.env`-ben (élesben az `ENV_FILE` által megadott fájlban), majd újraindítás. A secret cseréje minden kiadott tokent érvénytelenít.
 - Ha DB probléma: `users` tábla elérhetőségének ellenőrzése
 - Ticket: "Auth hiba kivizsgálása – [401/400 részletek]"
 

@@ -3,14 +3,13 @@ using DTOs.News;
 using Entities.Models;
 using Entities.Models.News;
 using FluentAssertions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using Repositories.Implementations;
 using Repositories.Implementations.News;
 using Services.Implementations;
 using Services.Implementations.images;
 using Services.Interfaces;
+using Services.Types;
 using Xunit;
 
 namespace Tests.Services.Integrations;
@@ -24,9 +23,7 @@ public class CommentIntegrationTests
     {
         _context = InMemoryDbFactory.CreateContext();
     
-      var mockEnv = new Mock<IWebHostEnvironment>();
-      mockEnv.Setup(e => e.ContentRootPath).Returns("wwwroot");
-        var imageService = new UserImageService(mockEnv.Object);
+        var imageService = new UserImageService(new UploadSettings(Path.Combine("wwwroot", "uploads")));
 
         _service = new CommentService(
             new ArticlesRepository(_context),

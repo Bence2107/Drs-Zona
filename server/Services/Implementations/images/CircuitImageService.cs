@@ -1,16 +1,14 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Services.Interfaces.images;
+﻿using Services.Interfaces.images;
+using Services.Types;
 
 namespace Services.Implementations.images;
 
-public class CircuitImageService(IWebHostEnvironment env): ICircuitImagesService
+public class CircuitImageService(UploadSettings uploads): ICircuitImagesService
 {
     public string? GetImageUrl(Guid id, string imageName)
     {
-        var relativePath = $"uploads/images/circuits/{id}/{imageName}.png";
-       
-        var physicalPath = Path.Combine(env.ContentRootPath, relativePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+        var physicalPath = Path.Combine(uploads.RootPath, "images", "circuits", id.ToString(), $"{imageName}.png");
 
-        return File.Exists(physicalPath) ? $"/{relativePath}" : null;
+        return File.Exists(physicalPath) ? $"/uploads/images/circuits/{id}/{imageName}.png" : null;
     }
 }

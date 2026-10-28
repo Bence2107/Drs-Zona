@@ -106,31 +106,14 @@ cd drs-zona
 
 ### ⚙️ 2. Configure environment variables
 
-Create `.env` files in server/API based should look like this:
+Copy the example file to the repository root and fill in your values:
 
 ```bash
-# =========================
-# Database Configuration
-# =========================
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=drs_zona
-DB_USER=postgres
-DB_PASSWORD=your_password_here
-
-# =========================
-# JWT Configuration
-# =========================
-JWT_SECRET=your_super_secret_key_here
-JWT_ISSUER=drs-zona-api
-JWT_AUDIENCE=drs-zona-client
-JWT_EXPIRATION_MINUTES=60
-
-# =========================
-# CORS Configuration
-# =========================
-CORS_ORIGINS=http://localhost:4200
+cp .env.example .env
 ```
+
+[`.env.example`](.env.example) lists every variable, whether it is required, and its default.
+To keep the file outside the repository, set `ENV_FILE` to its path.
 
 > ⚠️ Note: Secrets (API keys, passwords) are **not included** in the repository.
 
