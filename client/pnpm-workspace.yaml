@@ -1,0 +1,4 @@
+# pnpm settings for the Angular client (single package, not a monorepo).
+
+overrides:
+  '@angular/build>undici': ^7.30.1

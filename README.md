@@ -90,7 +90,7 @@ Drs-Zóna/
 
 * .NET SDK (LTS)
 * Node.js (LTS)
-* npm
+* pnpm (`npm install -g pnpm`)
 * PostgreSQL
 
 ---
@@ -168,8 +168,8 @@ Expected result:
 
 ```bash
 cd client
-npm install
-npm start
+pnpm install
+pnpm start
 ```
 
 Application will be available at:
@@ -203,7 +203,7 @@ dotnet test
 
 ```bash
 cd client
-npm test
+pnpm test
 ```
 
 > Test results should show all tests passing.

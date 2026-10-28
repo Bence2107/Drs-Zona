@@ -17,7 +17,8 @@ Jelenleg csak lokális környezet létezik. Staging és production környezet ne
 | Eszköz      | Verzió | Ellenőrzés         |
 |-------------|--------|--------------------|
 | .NET SDK    | 9.x    | `dotnet --version` |
-| Node.js     | 18+    | `node --version`   |
+| Node.js     | 20.19+ | `node --version`   |
+| pnpm        | 10+    | `pnpm --version`   |
 | PostgreSQL  | 15+    | `psql --version`   |
 | Angular CLI | 17+    | `ng version`       |
 
@@ -48,7 +49,7 @@ dotnet run
 
 # 6. Frontend függőségek (új terminál)
 cd ../client
-npm install
+pnpm install
 
 # 7. Frontend indítása
 ng serve
@@ -61,7 +62,7 @@ ng serve
 cd server && dotnet run --launch-profile https
 
 # Terminal 2 – Frontend
-cd client && npm start
+cd client && pnpm start
 ```
 
 ### 3.3 API változás után
@@ -70,7 +71,7 @@ cd client && npm start
 # 1. Backend újraindítása
 # 2. API kliens újragenerálása
 cd client
-npx ng-openapi-gen --input=http://localhost:5244/swagger/v1/swagger.json --output=src/app/api/
+pnpm open-api-gen
 ng serve
 ```
 

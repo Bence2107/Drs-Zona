@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "open-api-gen": "ng-openapi-gen --input=http://localhost:5244/swagger/v1/swagger.json --output=src/app/api/",
     "test": "ng test"
   },
   "private": true,
@@ -41,10 +42,5 @@
     "karma-junit-reporter": "^2.0.1",
     "ng-openapi-gen": "^1.0.5",
     "typescript": "~5.9.3"
-  },
-  "overrides": {
-    "@angular/build": {
-      "undici": "^7.30.1"
-    }
   }
 }

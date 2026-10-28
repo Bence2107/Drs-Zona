@@ -3,7 +3,8 @@
   "version": 1,
   "newProjectRoot": "projects",
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "packageManager": "pnpm"
   },
   "projects": {
     "drs-zona": {
