@@ -1,4 +1,14 @@
 # pnpm settings for the Angular client (single package, not a monorepo).
 
+# pnpm rejects a workspace file without a packages list
+packages:
+  - '.'
+
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  lmdb: true
+  msgpackr-extract: true
+
 overrides:
   '@angular/build>undici': ^7.30.1
