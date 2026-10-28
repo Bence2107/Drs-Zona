@@ -91,7 +91,7 @@ Drs-Zóna/
 * .NET SDK (LTS)
 * Node.js (LTS)
 * pnpm (`npm install -g pnpm`)
-* PostgreSQL
+* Docker (for the local database), or your own PostgreSQL
 
 ---
 
@@ -121,8 +121,15 @@ To keep the file outside the repository, set `ENV_FILE` to its path.
 
 ### 🗄️ 3. Database setup
 
-* Ensure PostgreSQL is running
-* Apply migrations:
+Start PostgreSQL in Docker from the repository root. It uses the `DB_*` values from your `.env`, so the API connects to it without extra settings:
+
+```bash
+docker compose up -d
+```
+
+(With your own PostgreSQL instead, make sure it runs and matches the `DB_*` values.)
+
+Apply migrations:
 
 ```bash
 cd server/Context

@@ -1,0 +1,27 @@
+# Local development database only; the API runs with dotnet run, prod runs on systemd.
+# The values come from the same .env the API reads, so the API's connection settings always match this database.
+# For a .env elsewhere: docker compose --env-file <path> up -d
+
+name: drs-zona-backend
+
+services:
+  db:
+    image: postgres:17
+    container_name: drs-zona-backend-db
+    environment:
+      POSTGRES_DB: ${DB_NAME:?Set DB_NAME in .env}
+      POSTGRES_USER: ${DB_USER:?Set DB_USER in .env}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env (the Postgres image needs one)}
+    ports:
+      # Published on localhost only: dotnet run and dotnet ef reach it via DB_HOST=localhost, the network does not
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  db-data:

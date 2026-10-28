@@ -19,7 +19,7 @@ Jelenleg csak lokális környezet létezik. Staging és production környezet ne
 | .NET SDK    | 9.x    | `dotnet --version` |
 | Node.js     | 20.19+ | `node --version`   |
 | pnpm        | 10+    | `pnpm --version`   |
-| PostgreSQL  | 15+    | `psql --version`   |
+| Docker      | –      | `docker --version` (lokális adatbázishoz; helyette saját PostgreSQL 15+ is jó) |
 | Angular CLI | 17+    | `ng version`       |
 
 ---
@@ -42,11 +42,13 @@ cd ..
 cp .env.example .env
 # Töltsd ki a .env-et
 
-# 4. Adatbázis migrációk futtatása
-cd server/API
-dotnet ef database update --context Context.EfContext
+# 4. Adatbázis indítása Dockerben, majd a migrációk futtatása (részletek: 4. fejezet)
+docker compose up -d
+cd server/Context
+dotnet ef database update
 
 # 5. Backend indítása
+cd ../API
 dotnet run
 
 # 6. Frontend függőségek (új terminál, a repository gyökeréből)
@@ -60,6 +62,9 @@ ng serve
 ### 3.2 Napi indítás (már beállított környezet)
 
 ```bash
+# Adatbázis (ha még nem fut)
+docker compose up -d
+
 # Terminal 1 – Backend
 cd server && dotnet run --launch-profile https
 
@@ -113,27 +118,85 @@ pnpm open-api-gen
 ng serve
 ```
 
+### 3.5 Lokális adatbázis Dockerben
+
+Csak fejlesztéshez: a `docker-compose.yml` egy PostgreSQL 17-et indít, az API továbbra is `dotnet run`-nal fut, és `localhost`-on éri el. Az adatbázis ugyanazokból a `DB_*` változókból jön létre, amiket az API olvas, ezért a kapcsolat külön beállítás nélkül működik. Docker Desktopban `drs-zona-backend` néven jelenik meg, a konténer neve `drs-zona-backend-db`. Az adatok a `drs-zona-backend_db-data` volume-ban maradnak meg.
+
+```bash
+docker compose up -d        # indítás (a repository gyökeréből)
+docker compose ps           # fut-e, healthy-e
+docker compose logs -f db   # naplók
+docker compose down         # leállítás, az adatok megmaradnak
+docker compose down -v      # leállítás ÉS az adatbázis törlése
+```
+
+- **Foglalt 5432-es port** (ha már fut egy helyi PostgreSQL): állítsd a `DB_PORT`-ot pl. `5433`-ra a `.env`-ben. A Docker ezen a porton teszi elérhetővé az adatbázist, és az API is ezt használja.
+- **A `DB_NAME`, `DB_USER` és `DB_PASSWORD` csak az első indításkor számít.** Ha később módosítod őket, `docker compose down -v` után jön létre újra az adatbázis, ami az adatokat is törli.
+- **Más helyen lévő `.env`:** `docker compose --env-file <útvonal> up -d`
+- **Meglévő helyi adatok átmásolása** (helyi PostgreSQL az 5432-es, Docker az 5433-as porton):
+
+  ```bash
+  pg_dump -h localhost -p 5432 -U postgres -Fc drs_zona > drs_zona.dump
+  pg_restore -h localhost -p 5433 -U postgres -d drs_zona --no-owner drs_zona.dump
+  ```
+
 ---
 
 
 ## 4. Migrációk
 
+A migrációk a `server/Context/Migrations` mappában vannak, és a gépedről futnak, nem a konténerből. A `dotnet ef` ugyanazt a `.env`-et olvassa, mint az API (`DB_HOST`, `DB_PORT`…), ezért a Dockeres adatbázist is külön beállítás nélkül éri el.
+
+**Előfeltételek (egyszer):**
+
 ```bash
-# Összes migráció listázása
-dotnet ef migrations list --context Context.EfContext
+dotnet tool install --global dotnet-ef --version 9.*
+```
 
-# Új migráció létrehozása
-dotnet ef migrations add <MigrationName> --context Context.EfContext
+**Futtatás a Dockeres adatbázison:**
 
-# Migrációk futtatása
-dotnet ef database update --context Context.EfContext
+```bash
+# 1. Adatbázis indítása (a repository gyökeréből)
+docker compose up -d
+docker compose ps            # drs-zona-backend-db: "healthy"
 
-# Visszagörgetés egy lépéssel
-dotnet ef database update <PreviousMigrationName> --context Context.EfContext
+# 2. Migrációk futtatása
+cd server/Context
+dotnet ef database update    # az első sor: Loaded environment from …/.env
+
+# 3. Ellenőrzés: létrejöttek-e a táblák (a saját DB_USER / DB_NAME értékeiddel)
+docker compose exec db psql -U postgres -d drs_zona -c '\dt'
+```
+
+**Egyéb parancsok** (mind a `server/Context` mappából):
+
+```bash
+# Összes migráció listázása (melyik van már lefuttatva)
+dotnet ef migrations list
+
+# Új migráció létrehozása modellváltozás után
+dotnet ef migrations add <MigrationName>
+
+# Visszagörgetés egy korábbi migrációra
+dotnet ef database update <PreviousMigrationName>
 
 # Séma exportálása
-dotnet ef dbcontext script --context Context.EfContext -o docs/03_design/schema.sql
+dotnet ef dbcontext script -o ../../docs/03_design/schema.sql
 ```
+
+**Tiszta adatbázis** (minden adat törlődik):
+
+```bash
+docker compose down -v && docker compose up -d
+cd server/Context && dotnet ef database update
+```
+
+**Éles szerveren:** ugyanígy, a szerveren a `server/Context` mappából, a `dotnet-ef` tool telepítése után. A parancs a repository gyökerében lévő `.env`-et találja meg, vagy add meg előtte az útvonalat: `ENV_FILE=/home/tvbox/Drs-Zona/.env dotnet ef database update`. Futtatás előtt készíts mentést (`pg_dump`).
+
+**Gyakori hibák:**
+
+- `Missing environment variables: …`: a `dotnet ef` nem találta a `.env`-et. Az első kimeneti sor mutatja, melyik fájlt olvasta.
+- Kapcsolódási hiba: nem fut a konténer (`docker compose ps`), vagy a `DB_PORT` nem egyezik a `.env` és a futó konténer között. `DB_PORT` változás után: `docker compose up -d`.
 
 ---
 
