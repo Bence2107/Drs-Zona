@@ -90,6 +90,14 @@ Open `http://localhost:4200`. The API's Swagger UI is at `http://localhost:5244/
 
 See the [server README](server/README.md) and the [client README](client/README.md) for configuration, the local database and tests.
 
+## Continuous integration
+
+Every pull request and every push to `master` runs [`.github/workflows/ci.yml`](.github/workflows/ci.yml) in three stages; each stage starts only when the previous one passes:
+
+1. **Check:** formatting (Prettier, `dotnet format`) and linting (ESLint)
+2. **Test:** client (Vitest) and server (xUnit) tests
+3. **Build:** API publish and client production build
+
 ## Vision
 
 Drs-Zóna aims to become a central hub for motorsport fans, combining reliable data, quality content and an engaged community.

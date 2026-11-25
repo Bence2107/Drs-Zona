@@ -173,3 +173,13 @@ dotnet test --collect:"XPlat Code Coverage"
 ```
 
 `JWT_SECRET` must be set for the controller tests, either in the environment or in `.env`. The test host replaces the JWT settings afterwards, but startup checks the variable first.
+
+## Formatting
+
+Code style is checked with `dotnet format`, using the .NET defaults.
+
+```bash
+cd server
+dotnet format                         # fix the formatting
+dotnet format --verify-no-changes     # check only, as CI does
+```
