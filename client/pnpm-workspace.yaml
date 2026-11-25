@@ -9,6 +9,8 @@ allowBuilds:
   esbuild: true
   lmdb: true
   msgpackr-extract: true
+  # The pre-commit hook is installed by the prepare script instead, which also runs for fresh clones
+  simple-git-hooks: false
 
 overrides:
   '@angular/build>undici': ^7.30.1

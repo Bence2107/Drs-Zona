@@ -34,6 +34,17 @@ The app runs at `http://localhost:4200`. API calls go through the dev proxy to t
 
 Extra arguments are passed on to the Angular CLI and override the defaults, for example `pnpm start --open`.
 
+## Pre-commit hook
+
+`pnpm install` sets up a git pre-commit hook ([simple-git-hooks](https://github.com/toplenboren/simple-git-hooks) and [lint-staged](https://github.com/lint-staged/lint-staged)). On every commit it runs on the staged client files only:
+
+- `.ts` and `.html`: `eslint --fix`, then `prettier --write`
+- styles, JSON, Markdown and scripts: `prettier --write`
+
+Fixes are added to the commit automatically. If ESLint reports an error it cannot fix, the commit is stopped and the files are left as they were. The configuration is in the `lint-staged` and `simple-git-hooks` sections of [`package.json`](package.json).
+
+To skip the hook once, commit with `git commit --no-verify`.
+
 ## Dev server and proxy
 
 The client calls the API with relative URLs. During development [`proxy.conf.mjs`](proxy.conf.mjs) forwards them to the local API:
