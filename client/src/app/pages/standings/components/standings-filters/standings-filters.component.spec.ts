@@ -12,13 +12,8 @@ describe('ResultsFiltersComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [StandingsFiltersComponent],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        StandingsStateService,
-      ]
-    })
-    .compileComponents();
+      providers: [provideHttpClient(), provideHttpClientTesting(), StandingsStateService],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(StandingsFiltersComponent);
     component = fixture.componentInstance;

@@ -7,18 +7,29 @@
     <mat-card class="form-card">
       <mat-card-content>
         <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
-
           <section class="form-section">
             <div class="image-upload-section">
               <label class="editor-label">Fő borítókép</label>
-              <div class="upload-placeholder" [class.has-image]="imagePreviews['primary']" (click)="primaryInput.click()">
-                @if (isUploading['primary']) { <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner> }
-                @else if (imagePreviews['primary']) {
-                  <img [src]="imagePreviews['primary']" alt="Primary Image">
+              <div
+                class="upload-placeholder"
+                [class.has-image]="imagePreviews['primary']"
+                (click)="primaryInput.click()"
+              >
+                @if (isUploading['primary']) {
+                  <mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner>
+                } @else if (imagePreviews['primary']) {
+                  <img [src]="imagePreviews['primary']" alt="Primary Image" />
                   <div class="change-overlay"><mat-icon>edit</mat-icon></div>
-                } @else { <mat-icon>cloud_upload</mat-icon> <span>Fő kép feltöltése</span> }
+                } @else {
+                  <mat-icon>cloud_upload</mat-icon> <span>Fő kép feltöltése</span>
+                }
               </div>
-              <input #primaryInput type="file" (change)="onFileSelected($event, 'primary')" hidden>
+              <input
+                #primaryInput
+                type="file"
+                (change)="onFileSelected($event, 'primary')"
+                hidden
+              />
             </div>
           </section>
 
@@ -27,7 +38,7 @@
               <mat-label>Kategória / Széria</mat-label>
               <mat-select formControlName="tag">
                 @for (s of series; track s.id) {
-                  <mat-option [value]="s.shortName">{{s.shortName}}</mat-option>
+                  <mat-option [value]="s.shortName">{{ s.shortName }}</mat-option>
                 }
               </mat-select>
               @if (articleForm.get('tag')?.invalid && articleForm.get('tag')?.touched) {
@@ -41,10 +52,15 @@
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Cikk címe</mat-label>
               <input matInput formControlName="title" />
-              @if (articleForm.get('title')?.hasError('required') && articleForm.get('title')?.touched) {
+              @if (
+                articleForm.get('title')?.hasError('required') && articleForm.get('title')?.touched
+              ) {
                 <mat-error>A cím kitöltése kötelező</mat-error>
               }
-              @if (articleForm.get('title')?.hasError('minlength') || articleForm.get('title')?.hasError('maxlength')) {
+              @if (
+                articleForm.get('title')?.hasError('minlength') ||
+                articleForm.get('title')?.hasError('maxlength')
+              ) {
                 <mat-error>A cím hossza nem megfelelő (5-200 karakter)</mat-error>
               }
               @if (articleForm.get('title')?.hasError('serverError')) {
@@ -52,14 +68,18 @@
               }
             </mat-form-field>
 
-
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Lead (Bevezető)</mat-label>
               <textarea matInput formControlName="lead" rows="3"></textarea>
-              @if (articleForm.get('lead')?.hasError('required') && articleForm.get('lead')?.touched) {
+              @if (
+                articleForm.get('lead')?.hasError('required') && articleForm.get('lead')?.touched
+              ) {
                 <mat-error>A Lead mező kitöltése kötelező</mat-error>
               }
-              @if (articleForm.get('lead')?.hasError('minlength') || articleForm.get('lead')?.hasError('maxlength')) {
+              @if (
+                articleForm.get('lead')?.hasError('minlength') ||
+                articleForm.get('lead')?.hasError('maxlength')
+              ) {
                 <mat-error>A Lead hossza nem megfelelő (20-500 karakter)</mat-error>
               }
               @if (articleForm.get('lead')?.hasError('serverError')) {
@@ -67,7 +87,7 @@
               }
             </mat-form-field>
 
-            @if(!articleToEdit) {
+            @if (!articleToEdit) {
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Slug (URL azonosító)</mat-label>
                 <input matInput formControlName="slug" placeholder="pl: monaco-nagydij-2025" />
@@ -82,68 +102,112 @@
           <section class="form-section">
             <div class="editor-container full-width">
               <label class="editor-label">Első szöveges blokk</label>
-              <angular-editor formControlName="firstSection" [config]="editorConfig" (blur)="onEditorBlur('firstSection')"></angular-editor>
+              <angular-editor
+                formControlName="firstSection"
+                [config]="editorConfig"
+                (blur)="onEditorBlur('firstSection')"
+              ></angular-editor>
               @if (articleForm.get('firstSection')?.hasError('serverError')) {
-                <span class="comment-error">{{ articleForm.get('firstSection')?.getError('serverError') }}</span>
+                <span class="comment-error">{{
+                  articleForm.get('firstSection')?.getError('serverError')
+                }}</span>
               }
             </div>
           </section>
 
           <div class="toggle-row">
-            <mat-slide-toggle formControlName="isReview" color="primary">Race Review elrendezés</mat-slide-toggle>
+            <mat-slide-toggle formControlName="isReview" color="primary"
+              >Race Review elrendezés</mat-slide-toggle
+            >
           </div>
 
           @if (isReview) {
             <section class="form-section review-container" formGroupName="summary">
-
               <div class="editor-container full-width">
                 <label class="editor-label">Második szöveges blokk</label>
-                <angular-editor formControlName="secondSection" [config]="editorConfig" (blur)="onEditorBlur('summary.secondSection')"></angular-editor>
-                @if (articleForm.get('summary.secondSection')?.hasError('required') && articleForm.get('summary.secondSection')?.touched) {
+                <angular-editor
+                  formControlName="secondSection"
+                  [config]="editorConfig"
+                  (blur)="onEditorBlur('summary.secondSection')"
+                ></angular-editor>
+                @if (
+                  articleForm.get('summary.secondSection')?.hasError('required') &&
+                  articleForm.get('summary.secondSection')?.touched
+                ) {
                   <span class="comment-error">A második szekció kitöltése kötelező</span>
                 }
                 @if (articleForm.get('summary.secondSection')?.hasError('serverError')) {
-                  <span class="comment-error">{{ articleForm.get('summary.secondSection')?.getError('serverError') }}</span>
+                  <span class="comment-error">{{
+                    articleForm.get('summary.secondSection')?.getError('serverError')
+                  }}</span>
                 }
               </div>
               <div class="image-upload-section mini">
                 <label class="editor-label">Kép a második blokk után (Secondary)</label>
                 <div class="upload-placeholder" (click)="secondaryInput.click()">
-                  @if (imagePreviews['secondary']) { <img [src]="imagePreviews['secondary']" alt="Secondary Image"> }
-                  @else { <mat-icon>image</mat-icon> }
+                  @if (imagePreviews['secondary']) {
+                    <img [src]="imagePreviews['secondary']" alt="Secondary Image" />
+                  } @else {
+                    <mat-icon>image</mat-icon>
+                  }
                 </div>
-                <input #secondaryInput type="file" (change)="onFileSelected($event, 'secondary')" hidden>
+                <input
+                  #secondaryInput
+                  type="file"
+                  (change)="onFileSelected($event, 'secondary')"
+                  hidden
+                />
               </div>
 
               <div class="editor-container full-width">
                 <label class="editor-label">Harmadik szöveges blokk</label>
-                <angular-editor formControlName="thirdSection" [config]="editorConfig" (blur)="onEditorBlur('summary.thirdSection')"></angular-editor>
-                @if (articleForm.get('summary.thirdSection')?.hasError('required') && articleForm.get('summary.thirdSection')?.touched) {
+                <angular-editor
+                  formControlName="thirdSection"
+                  [config]="editorConfig"
+                  (blur)="onEditorBlur('summary.thirdSection')"
+                ></angular-editor>
+                @if (
+                  articleForm.get('summary.thirdSection')?.hasError('required') &&
+                  articleForm.get('summary.thirdSection')?.touched
+                ) {
                   <span class="comment-error">A harmadik szekció kitöltése kötelező</span>
                 }
                 @if (articleForm.get('summary.thirdSection')?.hasError('serverError')) {
-                  <span class="comment-error">{{ articleForm.get('summary.thirdSection')?.getError('serverError') }}</span>
+                  <span class="comment-error">{{
+                    articleForm.get('summary.thirdSection')?.getError('serverError')
+                  }}</span>
                 }
               </div>
 
               <div class="image-upload-section mini">
                 <label class="editor-label">Kép a harmadik blokk után (Third)</label>
                 <div class="upload-placeholder" (click)="thirdInput.click()">
-                  @if (imagePreviews['third']) { <img [src]="imagePreviews['third']" alt="Third Image"> }
-                  @else { <mat-icon>image</mat-icon> }
+                  @if (imagePreviews['third']) {
+                    <img [src]="imagePreviews['third']" alt="Third Image" />
+                  } @else {
+                    <mat-icon>image</mat-icon>
+                  }
                 </div>
-                <input #thirdInput type="file" (change)="onFileSelected($event, 'third')" hidden>
+                <input #thirdInput type="file" (change)="onFileSelected($event, 'third')" hidden />
               </div>
-
 
               <div class="editor-container full-width">
                 <label class="editor-label">Negyedik szöveges blokk</label>
-                <angular-editor formControlName="fourthSection" [config]="editorConfig" (blur)="onEditorBlur('summary.fourthSection')"></angular-editor>
-                @if (articleForm.get('summary.fourthSection')?.hasError('required') && articleForm.get('summary.fourthSection')?.touched) {
+                <angular-editor
+                  formControlName="fourthSection"
+                  [config]="editorConfig"
+                  (blur)="onEditorBlur('summary.fourthSection')"
+                ></angular-editor>
+                @if (
+                  articleForm.get('summary.fourthSection')?.hasError('required') &&
+                  articleForm.get('summary.fourthSection')?.touched
+                ) {
                   <span class="comment-error">A negyedik szekció kitöltése kötelező</span>
                 }
                 @if (articleForm.get('summary.fourthSection')?.hasError('serverError')) {
-                  <span class="comment-error">{{ articleForm.get('summary.fourthSection')?.getError('serverError') }}</span>
+                  <span class="comment-error">{{
+                    articleForm.get('summary.fourthSection')?.getError('serverError')
+                  }}</span>
                 }
               </div>
             </section>
@@ -153,26 +217,40 @@
             <div class="image-upload-section">
               <label class="editor-label">Záró kép (Az utolsó szöveg felett)</label>
               <div class="upload-placeholder" (click)="lastInput.click()">
-                @if (imagePreviews['last']) { <img [src]="imagePreviews['last']" alt="Last Image"> }
-                @else { <mat-icon>add_photo_alternate</mat-icon> }
+                @if (imagePreviews['last']) {
+                  <img [src]="imagePreviews['last']" alt="Last Image" />
+                } @else {
+                  <mat-icon>add_photo_alternate</mat-icon>
+                }
               </div>
-              <input #lastInput type="file" (change)="onFileSelected($event, 'last')" hidden>
+              <input #lastInput type="file" (change)="onFileSelected($event, 'last')" hidden />
             </div>
           </section>
 
           <section class="form-section">
             <div class="editor-container full-width">
               <label class="editor-label">Befejező szöveges blokk</label>
-              <angular-editor formControlName="lastSection" [config]="editorConfig" (blur)="onEditorBlur('lastSection')"></angular-editor>
+              <angular-editor
+                formControlName="lastSection"
+                [config]="editorConfig"
+                (blur)="onEditorBlur('lastSection')"
+              ></angular-editor>
               @if (articleForm.get('lastSection')?.hasError('serverError')) {
-                <span class="comment-error">{{ articleForm.get('lastSection')?.getError('serverError') }}</span>
+                <span class="comment-error">{{
+                  articleForm.get('lastSection')?.getError('serverError')
+                }}</span>
               }
             </div>
           </section>
 
           <div class="form-actions">
             <button mat-button type="button" (click)="onCancel()">Mégse</button>
-            <button mat-flat-button color="primary" type="submit" [disabled]="articleForm.invalid || isLoading">
+            <button
+              mat-flat-button
+              color="primary"
+              type="submit"
+              [disabled]="articleForm.invalid || isLoading"
+            >
               <mat-icon>publish</mat-icon> Mentés és közzététel
             </button>
           </div>

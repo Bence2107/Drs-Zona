@@ -1,14 +1,14 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { AuthService } from '../../../../services/api/auth.service';
 import { UserProfileResponse } from '../../../../api/models/user-profile-response';
-import {MatTooltip} from '@angular/material/tooltip';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirm-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
-import {CustomSnackbarComponent} from '../../../../components/custom-snackbar/custom-snackbar.component';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { ConfirmDialogComponent } from '../../../../components/dialogs/confirmdialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { CustomSnackbarComponent } from '../../../../components/custom-snackbar/custom-snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-profile-header',
@@ -21,17 +21,20 @@ export class ProfileHeaderComponent {
   @Input() userData: UserProfileResponse | null = null;
   @Input() avatarUrl: string | null = null;
 
-  constructor(private authService: AuthService, private dialog: MatDialog, private snackBar: MatSnackBar) {}
+  constructor(
+    private authService: AuthService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+  ) {}
 
   get hasAvatar(): boolean {
-    return this.avatarUrl !== "img/user/avatars/avatar.jpg";
+    return this.avatarUrl !== 'img/user/avatars/avatar.jpg';
   }
 
   updateAvatar(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-
 
       this.authService.updateProfilePicture(file).subscribe({
         next: () => {
@@ -41,13 +44,13 @@ export class ProfileHeaderComponent {
             horizontalPosition: 'center',
           });
         },
-        error: () =>  {
+        error: () => {
           this.snackBar.openFromComponent(CustomSnackbarComponent, {
             data: { message: 'Hiba a feltöltésnél.', actionLabel: 'Rendben' },
             duration: 3000,
             horizontalPosition: 'center',
           });
-        }
+        },
       });
     }
   }
@@ -59,11 +62,11 @@ export class ProfileHeaderComponent {
         title: 'Profilkép törlése',
         message: 'Biztosan törölni szeretnéd a jelenlegi profilképedet?',
         confirmText: 'Igen',
-        cancelText: 'Nem'
-      }
+        cancelText: 'Nem',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.authService.deleteProfilePicture().subscribe({
           next: () => {
@@ -79,9 +82,8 @@ export class ProfileHeaderComponent {
               duration: 3000,
               horizontalPosition: 'center',
             });
-          }
+          },
         });
-
       }
     });
   }

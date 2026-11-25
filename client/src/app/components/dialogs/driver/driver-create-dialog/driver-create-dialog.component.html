@@ -2,11 +2,10 @@
 
 <mat-dialog-content>
   <form [formGroup]="form" class="dialog-form">
-
     <div class="form-row">
       <mat-form-field appearance="outline">
         <mat-label>Név</mat-label>
-        <input matInput formControlName="name">
+        <input matInput formControlName="name" />
         @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
           <mat-error>A név megadása kötelező</mat-error>
         }
@@ -20,7 +19,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Nemzetiség</mat-label>
-        <input matInput formControlName="nationality" placeholder="pl. Hungarian">
+        <input matInput formControlName="nationality" placeholder="pl. Hungarian" />
         @if (form.get('nationality')?.hasError('required') && form.get('nationality')?.touched) {
           <mat-error>A nemzetiség megadása kötelező</mat-error>
         }
@@ -32,7 +31,7 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Születési dátum</mat-label>
-      <input matInput [matDatepicker]="birthPicker" formControlName="birthDate">
+      <input matInput [matDatepicker]="birthPicker" formControlName="birthDate" />
       <mat-datepicker-toggle matIconSuffix [for]="birthPicker"></mat-datepicker-toggle>
       <mat-datepicker #birthPicker></mat-datepicker>
       @if (form.get('birthDate')?.hasError('required') && form.get('birthDate')?.touched) {
@@ -48,7 +47,7 @@
     <div class="form-row">
       <mat-form-field appearance="outline">
         <mat-label>Összes verseny</mat-label>
-        <input matInput type="number" formControlName="totalRaces">
+        <input matInput type="number" formControlName="totalRaces" />
         @if (form.get('totalRaces')?.hasError('min') || form.get('totalRaces')?.hasError('max')) {
           <mat-error>Az összes verseny száma 0 és 500 között lehet</mat-error>
         }
@@ -59,7 +58,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Győzelmek</mat-label>
-        <input matInput type="number" formControlName="totalWins">
+        <input matInput type="number" formControlName="totalWins" />
         @if (form.get('totalWins')?.hasError('min') || form.get('totalWins')?.hasError('max')) {
           <mat-error>A győzelmek száma 0 és 500 között lehet</mat-error>
         }
@@ -72,8 +71,10 @@
     <div class="form-row">
       <mat-form-field appearance="outline">
         <mat-label>Dobogók</mat-label>
-        <input matInput type="number" formControlName="totalPodiums">
-        @if (form.get('totalPodiums')?.hasError('min') || form.get('totalPodiums')?.hasError('max')) {
+        <input matInput type="number" formControlName="totalPodiums" />
+        @if (
+          form.get('totalPodiums')?.hasError('min') || form.get('totalPodiums')?.hasError('max')
+        ) {
           <mat-error>A dobogók száma 0 és 1000 között lehet</mat-error>
         }
         @if (form.get('totalPodiums')?.hasError('serverError')) {
@@ -83,8 +84,10 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Bajnoki címek</mat-label>
-        <input matInput type="number" formControlName="championships">
-        @if (form.get('championships')?.hasError('min') || form.get('championships')?.hasError('max')) {
+        <input matInput type="number" formControlName="championships" />
+        @if (
+          form.get('championships')?.hasError('min') || form.get('championships')?.hasError('max')
+        ) {
           <mat-error>A bajnoki címek száma 0 és 99 között lehet</mat-error>
         }
         @if (form.get('championships')?.hasError('serverError')) {
@@ -96,8 +99,10 @@
     <div class="form-row">
       <mat-form-field appearance="outline">
         <mat-label>Pole pozíciók</mat-label>
-        <input matInput type="number" formControlName="polePositions">
-        @if (form.get('polePositions')?.hasError('min') || form.get('polePositions')?.hasError('max')) {
+        <input matInput type="number" formControlName="polePositions" />
+        @if (
+          form.get('polePositions')?.hasError('min') || form.get('polePositions')?.hasError('max')
+        ) {
           <mat-error>A pole pozíciók száma 0 és 200 között lehet</mat-error>
         }
         @if (form.get('polePositions')?.hasError('serverError')) {
@@ -107,7 +112,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Szezonok száma</mat-label>
-        <input matInput type="number" formControlName="seasons">
+        <input matInput type="number" formControlName="seasons" />
         @if (form.get('seasons')?.hasError('min') || form.get('seasons')?.hasError('max')) {
           <mat-error>A szezonok száma 1 és 30 között lehet</mat-error>
         }
@@ -116,7 +121,6 @@
         }
       </mat-form-field>
     </div>
-
   </form>
 </mat-dialog-content>
 

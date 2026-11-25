@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -9,9 +9,10 @@ html, body {
   background: var(--primary-bg);
   color: var(--text-main);
   overflow: hidden;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
-
 
 .app-container {
   position: relative;
@@ -115,7 +116,6 @@ html, body {
   }
 }
 
-
 .nav-list,
 .profile-nav-list {
   list-style: none;
@@ -196,7 +196,6 @@ html, body {
   width: 25% !important;
 }
 
-
 .activeLink {
   background-color: #d5213b !important;
   color: #f8274f !important;
@@ -206,7 +205,6 @@ html, body {
     color: var(--text-main) !important;
   }
 }
-
 
 .menu-panel {
   background-color: transparent;
@@ -243,7 +241,6 @@ html, body {
     }
   }
 }
-
 
 .nav-panel {
   background-color: transparent;
@@ -295,7 +292,6 @@ html, body {
   }
 }
 
-
 .profile-nav-list {
   background-color: var(--secondary-bg) !important;
   padding: 20px;
@@ -310,7 +306,6 @@ html, body {
   }
 }
 
-
 .logout-item a,
 .logout-item mat-icon {
   color: var(--accent-color) !important;
@@ -319,7 +314,6 @@ html, body {
 .warn-icon {
   color: var(--accent-color) !important;
 }
-
 
 @media (max-width: 1280px) {
   .toggle-anchor {

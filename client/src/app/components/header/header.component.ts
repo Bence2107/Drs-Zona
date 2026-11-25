@@ -1,17 +1,17 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {BreakpointObserver} from '@angular/cdk/layout';
-import {MatButton, MatIconButton} from '@angular/material/button';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatButton, MatIconButton } from '@angular/material/button';
 
-import {MatIcon} from '@angular/material/icon';
-import {RouterLink, RouterLinkActive} from '@angular/router';
-import {MatTooltip} from '@angular/material/tooltip';
-import {AuthService} from '../../services/api/auth.service';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {MatDivider} from '@angular/material/list';
-import {CustomSnackbarComponent} from '../custom-snackbar/custom-snackbar.component';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {ConnectionService} from '../../services/api/connection-service.service';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import { MatIcon } from '@angular/material/icon';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AuthService } from '../../services/api/auth.service';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatDivider } from '@angular/material/list';
+import { CustomSnackbarComponent } from '../custom-snackbar/custom-snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConnectionService } from '../../services/api/connection-service.service';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-header',
@@ -26,10 +26,10 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
     MatMenuItem,
     MatDivider,
     MatMenuTrigger,
-    MatProgressSpinner
+    MatProgressSpinner,
   ],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnInit {
   isDarkMode: boolean = localStorage.getItem('theme') === 'dark';
@@ -45,8 +45,9 @@ export class HeaderComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private connectionService: ConnectionService) {
-    this.breakpointObserver.observe(['(max-width: 990px)']).subscribe(result => {
+    private connectionService: ConnectionService,
+  ) {
+    this.breakpointObserver.observe(['(max-width: 990px)']).subscribe((result) => {
       this.isScreenSmall = result.matches;
     });
   }
@@ -64,7 +65,13 @@ export class HeaderComponent implements OnInit {
   }
 
   canShowUserMenu(): boolean {
-    return !this.isAuthLoading && this.isLoggedIn() && this.isServerAlive && !this.isScreenSmall && this.hasProfileData;
+    return (
+      !this.isAuthLoading &&
+      this.isLoggedIn() &&
+      this.isServerAlive &&
+      !this.isScreenSmall &&
+      this.hasProfileData
+    );
   }
 
   ngOnInit(): void {
@@ -86,7 +93,7 @@ export class HeaderComponent implements OnInit {
         this.isServerAlive = false;
         this.isAuthLoading = false;
         this.isAvatarLoading = false;
-      }
+      },
     });
   }
 
@@ -133,7 +140,7 @@ export class HeaderComponent implements OnInit {
     if (profile?.hasAvatar && profile?.avatarUrl) {
       return profile.avatarUrl;
     }
-    return "img/user/avatars/avatar.jpg";
+    return 'img/user/avatars/avatar.jpg';
   }
 
   isAuthor(): boolean {

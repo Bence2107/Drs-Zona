@@ -10,60 +10,59 @@ import { ImagePreloadService } from '../../services/image-preload.service';
 import { SeriesDetailDto } from '../../api/models/series-detail-dto';
 
 describe('CategoryComponent', () => {
-    let component: SerieComponent;
-    let fixture: ComponentFixture<SerieComponent>;
-    let params$: BehaviorSubject<Params>;
-    let detailResponses: Record<string, Subject<SeriesDetailDto>>;
+  let component: SerieComponent;
+  let fixture: ComponentFixture<SerieComponent>;
+  let params$: BehaviorSubject<Params>;
+  let detailResponses: Record<string, Subject<SeriesDetailDto>>;
 
-    // A macrotask runs only after every pending microtask, so the preload promises have settled
-    const flushMicrotasks = () => new Promise<void>((resolve) => setTimeout(resolve));
+  // A macrotask runs only after every pending microtask, so the preload promises have settled
+  const flushMicrotasks = () => new Promise<void>((resolve) => setTimeout(resolve));
 
-    const respond = (seriesName: string, detail: SeriesDetailDto) => {
-        detailResponses[seriesName].next(detail);
-        detailResponses[seriesName].complete();
-    };
+  const respond = (seriesName: string, detail: SeriesDetailDto) => {
+    detailResponses[seriesName].next(detail);
+    detailResponses[seriesName].complete();
+  };
 
-    beforeEach(async () => {
-        params$ = new BehaviorSubject<Params>({ name: 'f1' });
-        detailResponses = {};
+  beforeEach(async () => {
+    params$ = new BehaviorSubject<Params>({ name: 'f1' });
+    detailResponses = {};
 
-        await TestBed.configureTestingModule({
-            imports: [SerieComponent],
-            providers: [
-                provideRouter([]),
-                { provide: ActivatedRoute, useValue: { params: params$ } },
-                {
-                    provide: SeriesService,
-                    useValue: {
-                        getByName: (name: string) => (detailResponses[name] = new Subject<SeriesDetailDto>())
-                    }
-                },
-                { provide: ArticleService, useValue: { getRecent: () => of([]) } },
-                { provide: PollService, useValue: { getAllActive: () => of([]) } },
-                { provide: ImagePreloadService, useValue: { preload: () => Promise.resolve() } },
-            ]
-        })
-            .compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [SerieComponent],
+      providers: [
+        provideRouter([]),
+        { provide: ActivatedRoute, useValue: { params: params$ } },
+        {
+          provide: SeriesService,
+          useValue: {
+            getByName: (name: string) => (detailResponses[name] = new Subject<SeriesDetailDto>()),
+          },
+        },
+        { provide: ArticleService, useValue: { getRecent: () => of([]) } },
+        { provide: PollService, useValue: { getAllActive: () => of([]) } },
+        { provide: ImagePreloadService, useValue: { preload: () => Promise.resolve() } },
+      ],
+    }).compileComponents();
 
-        fixture = TestBed.createComponent(SerieComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-    });
+    fixture = TestBed.createComponent(SerieComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-    it('should ignore a late response of a previously selected series', async () => {
-        params$.next({ name: 'f2' });
+  it('should ignore a late response of a previously selected series', async () => {
+    params$.next({ name: 'f2' });
 
-        respond('f2', { shortName: 'F2' });
-        await flushMicrotasks();
-        respond('f1', { shortName: 'F1' });
-        await flushMicrotasks();
+    respond('f2', { shortName: 'F2' });
+    await flushMicrotasks();
+    respond('f1', { shortName: 'F1' });
+    await flushMicrotasks();
 
-        expect(component.seriesDetail?.shortName).toBe('F2');
-        expect(component.isLoading).toBe(false);
-        expect(component.hasLoaded).toBe(true);
-    });
+    expect(component.seriesDetail?.shortName).toBe('F2');
+    expect(component.isLoading).toBe(false);
+    expect(component.hasLoaded).toBe(true);
+  });
 });

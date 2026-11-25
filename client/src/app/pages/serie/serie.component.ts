@@ -1,19 +1,19 @@
-import {Component, DestroyRef, inject, OnInit} from '@angular/core';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {PollService} from '../../services/api/poll.service';
-import {ArticleService} from '../../services/api/article.service';
-import {SeriesService} from '../../services/api/series.service';
-import {ActivatedRoute} from '@angular/router';
-import {PollListDto} from '../../api/models/poll-list-dto';
-import {ArticleListDto} from '../../api/models/article-list-dto';
-import {SeriesDetailDto} from '../../api/models/series-detail-dto';
-import {catchError, forkJoin, from, map, of, Subject, switchMap} from 'rxjs';
-import {LoadingStateComponent} from '../../components/loading-state/loading-state.component';
-import {ErrorDisplayComponent} from '../../components/error-display/error-display.component';
-import {PollListComponent} from '../../components/lists/polls-list/polls-list.component';
-import {RecentNewsComponent} from '../../components/lists/recent-news-list/recent-news.component';
-import {MatCard, MatCardContent, MatCardImage} from '@angular/material/card';
-import {ImagePreloadService} from '../../services/image-preload.service';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PollService } from '../../services/api/poll.service';
+import { ArticleService } from '../../services/api/article.service';
+import { SeriesService } from '../../services/api/series.service';
+import { ActivatedRoute } from '@angular/router';
+import { PollListDto } from '../../api/models/poll-list-dto';
+import { ArticleListDto } from '../../api/models/article-list-dto';
+import { SeriesDetailDto } from '../../api/models/series-detail-dto';
+import { catchError, forkJoin, from, map, of, Subject, switchMap } from 'rxjs';
+import { LoadingStateComponent } from '../../components/loading-state/loading-state.component';
+import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
+import { PollListComponent } from '../../components/lists/polls-list/polls-list.component';
+import { RecentNewsComponent } from '../../components/lists/recent-news-list/recent-news.component';
+import { MatCard, MatCardContent, MatCardImage } from '@angular/material/card';
+import { ImagePreloadService } from '../../services/image-preload.service';
 
 @Component({
   selector: 'app-serie',
@@ -24,12 +24,12 @@ import {ImagePreloadService} from '../../services/image-preload.service';
     RecentNewsComponent,
     MatCard,
     MatCardContent,
-    MatCardImage
+    MatCardImage,
   ],
   templateUrl: './serie.component.html',
   styleUrl: './serie.component.scss',
 })
-export class SerieComponent implements OnInit{
+export class SerieComponent implements OnInit {
   seriesName!: string;
   seriesDetail?: SeriesDetailDto;
   articles: ArticleListDto[] = [];
@@ -48,28 +48,28 @@ export class SerieComponent implements OnInit{
     private seriesService: SeriesService,
     private articleService: ArticleService,
     private pollService: PollService,
-    private imagePreload: ImagePreloadService
+    private imagePreload: ImagePreloadService,
   ) {}
 
   ngOnInit() {
-    this.load$.pipe(
-      switchMap(seriesName => this.loadSeriesData(seriesName)),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(result => {
-      this.isLoading = false;
-      if (!result) {
-        this.errorOccurred = true;
-        return;
-      }
-      this.seriesDetail = result.detail;
-      this.articles = result.news;
-      this.polls = result.activePolls;
-      this.hasLoaded = true;
-    });
+    this.load$
+      .pipe(
+        switchMap((seriesName) => this.loadSeriesData(seriesName)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((result) => {
+        this.isLoading = false;
+        if (!result) {
+          this.errorOccurred = true;
+          return;
+        }
+        this.seriesDetail = result.detail;
+        this.articles = result.news;
+        this.polls = result.activePolls;
+        this.hasLoaded = true;
+      });
 
-    this.route.params.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(params => {
+    this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.seriesName = params['name'];
       this.seriesDetail = undefined;
       this.hasLoaded = false;
@@ -91,14 +91,18 @@ export class SerieComponent implements OnInit{
     return forkJoin({
       detail: this.seriesService.getByName(seriesName),
       news: this.articleService.getRecent(3, seriesName),
-      activePolls: this.pollService.getAllActive(seriesName)
+      activePolls: this.pollService.getAllActive(seriesName),
     }).pipe(
       // Data is applied only after its images are ready, so the page renders in one step
-      switchMap(result => from(this.imagePreload.preload([
-        ...result.news.map(article => article.primaryImageUrl),
-        this.imageUrlFor(result.detail)
-      ])).pipe(map(() => result))),
-      catchError(() => of(null))
+      switchMap((result) =>
+        from(
+          this.imagePreload.preload([
+            ...result.news.map((article) => article.primaryImageUrl),
+            this.imageUrlFor(result.detail),
+          ]),
+        ).pipe(map(() => result)),
+      ),
+      catchError(() => of(null)),
     );
   }
 

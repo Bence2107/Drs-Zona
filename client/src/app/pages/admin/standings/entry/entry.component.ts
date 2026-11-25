@@ -1,32 +1,30 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
-import {FormsModule} from '@angular/forms';
-import {MatFormField, MatLabel} from '@angular/material/input';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
-import {MatIcon} from '@angular/material/icon';
+import { Component, OnInit, signal } from '@angular/core';
+import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { LoadingStateComponent } from '../../../../components/loading-state/loading-state.component';
+import { MatIcon } from '@angular/material/icon';
 import {
   MatCard,
   MatCardActions,
   MatCardContent,
   MatCardHeader,
   MatCardSubtitle,
-  MatCardTitle
+  MatCardTitle,
 } from '@angular/material/card';
-import {MatButton, MatFabButton, MatIconButton} from '@angular/material/button';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {DatePipe} from '@angular/common';
-import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
-import {CountryFlagPipe} from '../../../../pipes/country-flag.pipe';
-import {StandingsService} from '../../../../services/api/standings.service';
-import {YearLookupDto} from '../../../../api/models/year-lookup-dto';
-import {GrandPrixLookupDto} from '../../../../api/models/grand-prix-lookup-dto';
-import {MatTooltip} from '@angular/material/tooltip';
-import {
-  GrandPixManageDialogComponent
-} from '../../../../components/dialogs/grand-prix/grand-prix-creation-dialog/grand-prix-manage-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
-import {ChampionshipService} from '../../../../services/api/championship.service';
+import { MatButton, MatFabButton, MatIconButton } from '@angular/material/button';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { SeriesLookupDto } from '../../../../api/models/series-lookup-dto';
+import { CountryFlagPipe } from '../../../../pipes/country-flag.pipe';
+import { StandingsService } from '../../../../services/api/standings.service';
+import { YearLookupDto } from '../../../../api/models/year-lookup-dto';
+import { GrandPrixLookupDto } from '../../../../api/models/grand-prix-lookup-dto';
+import { MatTooltip } from '@angular/material/tooltip';
+import { GrandPixManageDialogComponent } from '../../../../components/dialogs/grand-prix/grand-prix-creation-dialog/grand-prix-manage-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ChampionshipService } from '../../../../services/api/championship.service';
 
 @Component({
   selector: 'app-entry',
@@ -52,7 +50,7 @@ import {ChampionshipService} from '../../../../services/api/championship.service
     CountryFlagPipe,
     MatFabButton,
     MatTooltip,
-    MatIconButton
+    MatIconButton,
   ],
   templateUrl: './entry.component.html',
   styleUrl: './entry.component.scss',
@@ -81,8 +79,8 @@ export class EntryComponent implements OnInit {
     const seasonFromQuery = this.route.snapshot.queryParamMap.get('season');
 
     this.standingsService.getAllSeries().subscribe({
-      next: res => {
-        const filtered = res.filter(s => {
+      next: (res) => {
+        const filtered = res.filter((s) => {
           const name = s.name?.toLowerCase() ?? '';
           return !name.includes('wec') && !name.includes('nascar');
         });
@@ -100,7 +98,7 @@ export class EntryComponent implements OnInit {
           this.onSeriesChange(filtered[0].id!);
         }
       },
-      error: () => this.isLoading.set(false)
+      error: () => this.isLoading.set(false),
     });
   }
 
@@ -110,14 +108,17 @@ export class EntryComponent implements OnInit {
         this.onSeriesChange(series[0].id!);
         return;
       }
-      this.championshipService.getSeasonsBySeries(series[index].id!).subscribe(lookups => {
+      this.championshipService.getSeasonsBySeries(series[index].id!).subscribe((lookups) => {
         const match = lookups.find(
-          l => l.driversChampId === champId || l.constructorsChampId === champId
+          (l) => l.driversChampId === champId || l.constructorsChampId === champId,
         );
         if (match) {
           this.selectedSeriesId.set(series[index].id!);
           this.yearLookups.set(lookups);
-          const years = lookups.map(y => parseInt(y.season!)).filter(y => !isNaN(y)).sort((a, b) => b - a);
+          const years = lookups
+            .map((y) => parseInt(y.season!))
+            .filter((y) => !isNaN(y))
+            .sort((a, b) => b - a);
           this.years.set(years);
           this.selectedYear.set(parseInt(match.season!));
           this.selectedChampionship.set(match.driversChampId ?? null);
@@ -132,9 +133,12 @@ export class EntryComponent implements OnInit {
 
   private loadYearsAndPreselectSeason(seriesId: string, targetYear: number) {
     this.selectedSeriesId.set(seriesId);
-    this.championshipService.getSeasonsBySeries(seriesId).subscribe(res => {
+    this.championshipService.getSeasonsBySeries(seriesId).subscribe((res) => {
       this.yearLookups.set(res);
-      const years = res.map(y => parseInt(y.season!)).filter(y => !isNaN(y)).sort((a, b) => b - a);
+      const years = res
+        .map((y) => parseInt(y.season!))
+        .filter((y) => !isNaN(y))
+        .sort((a, b) => b - a);
       this.years.set(years);
       const yearToSelect = years.includes(targetYear) ? targetYear : years[0];
       if (yearToSelect) this.onYearChange(yearToSelect);
@@ -143,12 +147,12 @@ export class EntryComponent implements OnInit {
   }
 
   loadYears(seriesId: string) {
-    this.championshipService.getSeasonsBySeries(seriesId).subscribe(res => {
+    this.championshipService.getSeasonsBySeries(seriesId).subscribe((res) => {
       this.yearLookups.set(res);
 
       const years = res
-        .map(y => parseInt(y.season!))
-        .filter(y => !isNaN(y))
+        .map((y) => parseInt(y.season!))
+        .filter((y) => !isNaN(y))
         .sort((a, b) => b - a);
 
       this.years.set(years);
@@ -164,11 +168,11 @@ export class EntryComponent implements OnInit {
   loadGrandsPrix(champId: string) {
     this.isLoading.set(true);
     this.championshipService.getGrandPrixByChampionship(champId).subscribe({
-      next: res => {
+      next: (res) => {
         this.grandsPrix.set(res);
         this.isLoading.set(false);
       },
-      error: () => this.isLoading.set(false)
+      error: () => this.isLoading.set(false),
     });
   }
 
@@ -180,7 +184,7 @@ export class EntryComponent implements OnInit {
   onYearChange(year: number) {
     this.selectedYear.set(year);
 
-    const match = this.yearLookups().find(y => parseInt(y.season!) === year);
+    const match = this.yearLookups().find((y) => parseInt(y.season!) === year);
     if (match) {
       this.selectedChampionship.set(match.driversChampId ?? null);
       this.loadGrandsPrix(match.driversChampId!);
@@ -195,10 +199,10 @@ export class EntryComponent implements OnInit {
       data: {
         seriesList: this.seriesList(),
         preselectedSeriesId: this.selectedSeriesId(),
-        preselectedYear: this.selectedYear()
-      }
+        preselectedYear: this.selectedYear(),
+      },
     });
-    ref.afterClosed().subscribe(result => {
+    ref.afterClosed().subscribe((result) => {
       if (result) this.loadGrandsPrix(this.selectedChampionship()!);
     });
   }

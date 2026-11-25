@@ -6,28 +6,30 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ContractCreateDialogComponent } from './contract-create-dialog.component';
 
 describe('ContractCreateDialogComponent', () => {
-    let component: ContractCreateDialogComponent;
-    let fixture: ComponentFixture<ContractCreateDialogComponent>;
+  let component: ContractCreateDialogComponent;
+  let fixture: ComponentFixture<ContractCreateDialogComponent>;
 
-    beforeEach(async () => {
-        await TestBed.configureTestingModule({
-            imports: [ContractCreateDialogComponent],
-            providers: [
-                provideHttpClient(),
-                provideHttpClientTesting(),
-                { provide: MatDialogRef, useValue: {
-                        close: vi.fn().mockName("MatDialogRef.close")
-                    } },
-            ]
-        })
-            .compileComponents();
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ContractCreateDialogComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        {
+          provide: MatDialogRef,
+          useValue: {
+            close: vi.fn().mockName('MatDialogRef.close'),
+          },
+        },
+      ],
+    }).compileComponents();
 
-        fixture = TestBed.createComponent(ContractCreateDialogComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-    });
+    fixture = TestBed.createComponent(ContractCreateDialogComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

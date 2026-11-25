@@ -1,51 +1,70 @@
 <app-header (toggleSidenav)="sidenav.toggle()"></app-header>
 
 @if (!isSmallScreen) {
-  <button mat-icon-button
-          class="toggle-anchor"
-          [class.closed-pos]="!sidenav.opened"
-          (click)="sidenav.toggle()">
+  <button
+    mat-icon-button
+    class="toggle-anchor"
+    [class.closed-pos]="!sidenav.opened"
+    (click)="sidenav.toggle()"
+  >
     <mat-icon>{{ sidenav.opened ? 'menu_open' : 'menu' }}</mat-icon>
   </button>
 }
 
 <mat-sidenav-container class="app-container" [hasBackdrop]="isMobileOverlay">
-  <mat-sidenav #sidenav
+  <mat-sidenav
+    #sidenav
     [mode]="isMobileOverlay ? 'over' : 'side'"
     [opened]="!isMobileOverlay"
-    class="sidebar">
-
+    class="sidebar"
+  >
     <ul class="nav-list">
       @if (isMobileOverlay) {
-        <li routerLink="home" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+        <li
+          routerLink="home"
+          routerLinkActive="activeLink"
+          (click)="isMobileOverlay ? sidenav.close() : null"
+        >
           <mat-icon>home</mat-icon>
           <a>Főoldal</a>
         </li>
       }
       @if (isMobileOverlay) {
-        <li routerLink="news" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+        <li
+          routerLink="news"
+          routerLinkActive="activeLink"
+          (click)="isMobileOverlay ? sidenav.close() : null"
+        >
           <mat-icon>newspaper</mat-icon>
           <a>Hírek</a>
         </li>
       }
       @if (isMobileOverlay) {
-        <li routerLink="reviews" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+        <li
+          routerLink="reviews"
+          routerLinkActive="activeLink"
+          (click)="isMobileOverlay ? sidenav.close() : null"
+        >
           <mat-icon>rate_review</mat-icon>
           <a>Összefoglalók</a>
         </li>
       }
 
       @if (isMobileOverlay) {
-        <li routerLink="results" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+        <li
+          routerLink="results"
+          routerLinkActive="activeLink"
+          (click)="isMobileOverlay ? sidenav.close() : null"
+        >
           <mat-icon>rate_review</mat-icon>
           <a>Eredmények</a>
         </li>
       }
 
       @if (isSmallScreen) {
-        @if(isLoggedIn()) {
-          <mat-accordion multi="true" class="menu-accordion" >
-            <mat-expansion-panel expanded="false" class="nav-panel" >
+        @if (isLoggedIn()) {
+          <mat-accordion multi="true" class="menu-accordion">
+            <mat-expansion-panel expanded="false" class="nav-panel">
               <mat-expansion-panel-header>
                 <mat-panel-title class="nav-panel-title">
                   <mat-icon>person</mat-icon>
@@ -54,21 +73,32 @@
               </mat-expansion-panel-header>
 
               <ul class="profile-nav-list inner-list">
-                <li [routerLink]="['/profile', username]" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+                <li
+                  [routerLink]="['/profile', username]"
+                  routerLinkActive="activeLink"
+                  (click)="isMobileOverlay ? sidenav.close() : null"
+                >
                   <mat-icon>manage_accounts</mat-icon>
                   <a>Profilom</a>
                 </li>
 
                 @if (isAuthor()) {
-                  <li routerLink="/my-articles" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
+                  <li
+                    routerLink="/my-articles"
+                    routerLinkActive="activeLink"
+                    (click)="isMobileOverlay ? sidenav.close() : null"
+                  >
                     <mat-icon>article</mat-icon>
                     <a>Cikkeim</a>
                   </li>
                 }
 
-                <mat-divider style="margin: 5px 0;"></mat-divider>
+                <mat-divider style="margin: 5px 0"></mat-divider>
 
-                <li (click)="logout(); isMobileOverlay ? sidenav.close() : null" class="logout-item">
+                <li
+                  (click)="logout(); isMobileOverlay ? sidenav.close() : null"
+                  class="logout-item"
+                >
                   <mat-icon class="warn-icon">logout</mat-icon>
                   <a>Kijelentkezés</a>
                 </li>
@@ -81,7 +111,6 @@
             <a>Bejelentkezés</a>
           </li>
         }
-
       }
       @if (isMobileOverlay) {
         <mat-divider></mat-divider>
@@ -94,10 +123,19 @@
           </mat-expansion-panel-header>
 
           <ul class="nav-list inner-list">
-            @for(serie of seriesList; track serie) {
-              <li [routerLink]="['serie', serie.shortName]" routerLinkActive="activeLink" (click)="isMobileOverlay ? sidenav.close() : null">
-              <img [src]="'img/header/icons/' + serie.shortName?.toLowerCase() + '.png'" class="sidenav_icon" [alt]="serie.shortName?.toLowerCase()">
-              <a>{{serie.shortName}}</a>
+            @for (serie of seriesList; track serie) {
+              <li
+                [routerLink]="['serie', serie.shortName]"
+                routerLinkActive="activeLink"
+                (click)="isMobileOverlay ? sidenav.close() : null"
+              >
+                <img
+                  [src]="'img/header/icons/' + serie.shortName?.toLowerCase() + '.png'"
+                  class="sidenav_icon"
+                  [alt]="serie.shortName?.toLowerCase()"
+                />
+                <a>{{ serie.shortName }}</a>
+              </li>
             }
           </ul>
         </mat-expansion-panel>
@@ -132,5 +170,4 @@
       </main>
     </div>
   </mat-sidenav-content>
-
 </mat-sidenav-container>

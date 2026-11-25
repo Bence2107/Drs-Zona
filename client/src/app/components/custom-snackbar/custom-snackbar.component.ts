@@ -4,16 +4,14 @@ import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-custom-snackbar',
-  imports: [
-    MatButton
-  ],
+  imports: [MatButton],
   templateUrl: './custom-snackbar.component.html',
-  styleUrl: './custom-snackbar.component.scss'
+  styleUrl: './custom-snackbar.component.scss',
 })
 export class CustomSnackbarComponent {
   constructor(
     public snackBarRef: MatSnackBarRef<CustomSnackbarComponent>,
-    @Inject(MAT_SNACK_BAR_DATA) public data: { message: string, actionLabel: string }
+    @Inject(MAT_SNACK_BAR_DATA) public data: { message: string; actionLabel: string },
   ) {}
 
   dismiss() {

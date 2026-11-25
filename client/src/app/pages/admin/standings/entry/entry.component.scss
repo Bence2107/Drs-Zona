@@ -65,7 +65,9 @@
   border-radius: 12px !important;
   background: var(--secondary-bg) !important;
   border: 1px solid var(--border-color);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-3px);
@@ -82,8 +84,12 @@
     transition: background 0.2s;
   }
 
-  &.has-results .card-stripe     { background: #4caf50; }
-  &:not(.has-results) .card-stripe { background: var(--accent-color); }
+  &.has-results .card-stripe {
+    background: #4caf50;
+  }
+  &:not(.has-results) .card-stripe {
+    background: var(--accent-color);
+  }
 
   mat-card-header {
     display: flex;
@@ -110,8 +116,17 @@
   .header-content {
     flex: 1;
 
-    mat-card-title    { font-size: 15px !important; font-weight: 600; line-height: 1.3; color: var(--text-main) !important; }
-    mat-card-subtitle { font-size: 12px !important; margin-top: 2px; color: var(--text-secondary) !important; }
+    mat-card-title {
+      font-size: 15px !important;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--text-main) !important;
+    }
+    mat-card-subtitle {
+      font-size: 12px !important;
+      margin-top: 2px;
+      color: var(--text-secondary) !important;
+    }
   }
 
   .status-badge {
@@ -131,8 +146,14 @@
       height: 14px;
     }
 
-    &.done    { background: rgba(76, 175, 80, 0.15); color: #4caf50; }
-    &.pending { background: rgba(248, 39, 79, 0.12); color: var(--accent-color); }
+    &.done {
+      background: rgba(76, 175, 80, 0.15);
+      color: #4caf50;
+    }
+    &.pending {
+      background: rgba(248, 39, 79, 0.12);
+      color: var(--accent-color);
+    }
   }
 
   mat-card-content {
@@ -194,8 +215,14 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0.3; transform: translateY(10px); }
-  to   { opacity: 1;   transform: translateY(0); }
+  from {
+    opacity: 0.3;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 600px) {

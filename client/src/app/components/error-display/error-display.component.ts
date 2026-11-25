@@ -1,15 +1,12 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {MatButton} from '@angular/material/button';
-import {MatIcon} from '@angular/material/icon';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-error-display',
-  imports: [
-    MatButton,
-    MatIcon,
-  ],
+  imports: [MatButton, MatIcon],
   templateUrl: './error-display.component.html',
-  styleUrl: './error-display.component.scss'
+  styleUrl: './error-display.component.scss',
 })
 export class ErrorDisplayComponent {
   @Input() title: string = 'A szerver jelenleg nem elérhető';

@@ -8,9 +8,8 @@ describe('CircuitInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CircuitInfoComponent]
-    })
-    .compileComponents();
+      imports: [CircuitInfoComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CircuitInfoComponent);
     component = fixture.componentInstance;

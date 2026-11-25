@@ -43,8 +43,15 @@
   width: 100%;
   background: transparent !important;
 
-  th { color: var(--text-secondary) !important; font-size: 12px; font-weight: 600; text-transform: uppercase; }
-  td { color: var(--text-main) !important; }
+  th {
+    color: var(--text-secondary) !important;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  td {
+    color: var(--text-main) !important;
+  }
 }
 
 .cell-content {
@@ -82,6 +89,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0.3; transform: translateY(10px); }
-  to   { opacity: 1;   transform: translateY(0); }
+  from {
+    opacity: 0.3;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

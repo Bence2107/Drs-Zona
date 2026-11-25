@@ -98,16 +98,24 @@
   width: 180px;
   margin: 4px 0;
 
-  &--small { width: 80px; }
+  &--small {
+    width: 80px;
+  }
 
-  ::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
 }
 
-.pole-active mat-icon { color: #f59e0b !important; }
+.pole-active mat-icon {
+  color: #f59e0b !important;
+}
 
 .remove-btn {
   color: var(--text-secondary);
-  &:not([disabled]):hover { color: #ef4444; }
+  &:not([disabled]):hover {
+    color: #ef4444;
+  }
 }
 
 .table-footer {
@@ -130,13 +138,23 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0.3; transform: translateY(10px); }
-  to   { opacity: 1;   transform: translateY(0); }
+  from {
+    opacity: 0.3;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 600px) {
-  .create-container { padding: 1rem; }
-  .session-bar { display: none; }
+  .create-container {
+    padding: 1rem;
+  }
+  .session-bar {
+    display: none;
+  }
   .series-select {
     display: flex;
     margin-bottom: 1.5rem;
@@ -145,6 +163,8 @@
 
   .actions {
     flex-direction: column;
-    button { width: 100%; }
+    button {
+      width: 100%;
+    }
   }
 }

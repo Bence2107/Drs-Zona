@@ -1,21 +1,21 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MatCard, MatCardContent, MatCardFooter} from '@angular/material/card';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { MatCard, MatCardContent, MatCardFooter } from '@angular/material/card';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import {MatButton, MatFabButton} from '@angular/material/button';
-import {LoadingStateComponent} from '../../components/loading-state/loading-state.component';
-import {ErrorDisplayComponent} from '../../components/error-display/error-display.component';
-import {ArticleDetailDto} from '../../api/models/article-detail-dto';
-import {ArticleService} from '../../services/api/article.service';
-import {MatDivider} from '@angular/material/list';
-import {CommentListComponent} from '../../components/lists/comment-list/comment-list.component';
-import {AuthService} from '../../services/api/auth.service';
-import {MatIcon} from '@angular/material/icon';
-import {MatTooltip} from '@angular/material/tooltip';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {MatDialog} from '@angular/material/dialog';
-import {ConfirmDialogComponent} from '../../components/dialogs/confirmdialog/confirm-dialog.component';
-import {ImagePreloadService} from '../../services/image-preload.service';
+import { MatButton, MatFabButton } from '@angular/material/button';
+import { LoadingStateComponent } from '../../components/loading-state/loading-state.component';
+import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
+import { ArticleDetailDto } from '../../api/models/article-detail-dto';
+import { ArticleService } from '../../services/api/article.service';
+import { MatDivider } from '@angular/material/list';
+import { CommentListComponent } from '../../components/lists/comment-list/comment-list.component';
+import { AuthService } from '../../services/api/auth.service';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../components/dialogs/confirmdialog/confirm-dialog.component';
+import { ImagePreloadService } from '../../services/image-preload.service';
 
 @Component({
   selector: 'app-article',
@@ -34,10 +34,10 @@ import {ImagePreloadService} from '../../services/image-preload.service';
     MatTooltip,
     MatMenuTrigger,
     MatMenu,
-    MatMenuItem
+    MatMenuItem,
   ],
   templateUrl: './article.component.html',
-  styleUrl: './article.component.scss'
+  styleUrl: './article.component.scss',
 })
 export class ArticleComponent implements OnInit {
   @Input() article: ArticleDetailDto | any;
@@ -50,14 +50,12 @@ export class ArticleComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private dialog: MatDialog,
-    private imagePreload: ImagePreloadService
-  )
-  {}
+    private imagePreload: ImagePreloadService,
+  ) {}
 
   ngOnInit() {
     this.fetchArticle();
   }
-
 
   get userId(): string | null {
     return this.authService.currentProfile()?.userId ?? null;
@@ -65,13 +63,13 @@ export class ArticleComponent implements OnInit {
 
   get avatarUrl(): string | null {
     const url = this.article.authorImageUrl;
-    if (url == null) return "img/user/avatars/avatar.jpg";
+    if (url == null) return 'img/user/avatars/avatar.jpg';
     return `${url}`;
   }
 
   protected isTheAuthorOrAdmin(): boolean {
     const role = this.authService.currentProfile()?.role;
-    if (role === "Admin") {
+    if (role === 'Admin') {
       return true;
     }
 
@@ -81,8 +79,8 @@ export class ArticleComponent implements OnInit {
   fetchArticle() {
     const slug = this.route.snapshot.paramMap.get('slug');
 
-    if(slug === null) {
-       this.router.navigate(['/news']);
+    if (slug === null) {
+      this.router.navigate(['/news']);
     }
 
     this.isLoading = true;
@@ -98,15 +96,15 @@ export class ArticleComponent implements OnInit {
               data.secondaryImageUrl,
               data.thirdImageUrl,
               data.lastImageUrl,
-              data.authorImageUrl
+              data.authorImageUrl,
             ])
-            .then(() => this.isLoading = false);
+            .then(() => (this.isLoading = false));
         },
         error: () => {
           console.error();
           this.isLoading = false;
           this.errorOccurred = true;
-        }
+        },
       });
     }
   }
@@ -115,11 +113,11 @@ export class ArticleComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: 'Cikk törlése',
-        message: 'Biztosan törölni szeretnéd ezt a cikket? A művelet nem vonható vissza.'
-      }
+        message: 'Biztosan törölni szeretnéd ezt a cikket? A művelet nem vonható vissza.',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.articleService.delete(this.article.id!).subscribe(() => {
           this.router.navigate(['/news']);

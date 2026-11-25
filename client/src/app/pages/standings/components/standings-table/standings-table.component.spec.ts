@@ -12,13 +12,8 @@ describe('ResultsTableComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [StandingsTableComponent],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        StandingsStateService,
-      ]
-    })
-    .compileComponents();
+      providers: [provideHttpClient(), provideHttpClientTesting(), StandingsStateService],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(StandingsTableComponent);
     component = fixture.componentInstance;

@@ -5,10 +5,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PollDto } from '../../../../api/models/poll-dto';
 import { PollService } from '../../../../services/api/poll.service';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {AuthService} from '../../../../services/api/auth.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {CustomSnackbarComponent} from '../../../custom-snackbar/custom-snackbar.component';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { AuthService } from '../../../../services/api/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CustomSnackbarComponent } from '../../../custom-snackbar/custom-snackbar.component';
 
 export interface PollDialogData {
   poll: PollDto;
@@ -18,11 +18,18 @@ export interface PollDialogData {
 @Component({
   selector: 'app-poll-vote-dialog',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatMenuTrigger, MatMenu, MatMenuItem],
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem,
+  ],
   templateUrl: './poll-vote-dialog.component.html',
-  styleUrl: './poll-vote-dialog.component.scss'
+  styleUrl: './poll-vote-dialog.component.scss',
 })
-
 export class PollVoteDialogComponent {
   poll: PollDto;
   userId: string | null;
@@ -32,14 +39,14 @@ export class PollVoteDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: PollDialogData,
     private pollService: PollService,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {
     this.poll = data.poll;
     this.userId = data.userId;
   }
 
   get voted(): boolean {
-    return !!this.poll.pollOptions?.some(o => o.isUserChoice);
+    return !!this.poll.pollOptions?.some((o) => o.isUserChoice);
   }
 
   private refreshData() {
@@ -47,12 +54,12 @@ export class PollVoteDialogComponent {
       next: (updatedPoll) => {
         this.poll = updatedPoll;
       },
-      error: (err) => console.error(err)
+      error: (err) => console.error(err),
     });
   }
 
   onVote(optionId: string): void {
-    const selectedOption = this.poll.pollOptions?.find(o => o.id === optionId);
+    const selectedOption = this.poll.pollOptions?.find((o) => o.id === optionId);
     if (!this.userId || !selectedOption || selectedOption.isUserChoice) return;
 
     this.pollService.vote(this.poll.id!, optionId).subscribe({
@@ -63,7 +70,7 @@ export class PollVoteDialogComponent {
           duration: 3000,
           horizontalPosition: 'center',
         });
-      }
+      },
     });
   }
 
@@ -72,8 +79,8 @@ export class PollVoteDialogComponent {
   }
 
   removePoll() {
-     this.pollService.deletePoll(this.poll.id!).subscribe({
-       next: () => this.dialogRef.close('deleted')
-     });
+    this.pollService.deletePoll(this.poll.id!).subscribe({
+      next: () => this.dialogRef.close('deleted'),
+    });
   }
 }

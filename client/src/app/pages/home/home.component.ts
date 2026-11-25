@@ -1,15 +1,21 @@
-import {Component, OnInit} from '@angular/core';
-import {MatCard, MatCardContent, MatCardHeader, MatCardImage, MatCardTitle} from '@angular/material/card';
-import {RecentNewsComponent} from '../../components/lists/recent-news-list/recent-news.component';
-import {PollListComponent} from '../../components/lists/polls-list/polls-list.component';
-import {ArticleService} from '../../services/api/article.service';
-import {PollService} from '../../services/api/poll.service';
-import {forkJoin} from 'rxjs';
-import {ArticleListDto} from '../../api/models/article-list-dto';
-import {PollListDto} from '../../api/models/poll-list-dto';
-import {ErrorDisplayComponent} from '../../components/error-display/error-display.component';
-import {LoadingStateComponent} from '../../components/loading-state/loading-state.component';
-import {ImagePreloadService} from '../../services/image-preload.service';
+import { Component, OnInit } from '@angular/core';
+import {
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardImage,
+  MatCardTitle,
+} from '@angular/material/card';
+import { RecentNewsComponent } from '../../components/lists/recent-news-list/recent-news.component';
+import { PollListComponent } from '../../components/lists/polls-list/polls-list.component';
+import { ArticleService } from '../../services/api/article.service';
+import { PollService } from '../../services/api/poll.service';
+import { forkJoin } from 'rxjs';
+import { ArticleListDto } from '../../api/models/article-list-dto';
+import { PollListDto } from '../../api/models/poll-list-dto';
+import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
+import { LoadingStateComponent } from '../../components/loading-state/loading-state.component';
+import { ImagePreloadService } from '../../services/image-preload.service';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +31,7 @@ import {ImagePreloadService} from '../../services/image-preload.service';
     LoadingStateComponent,
   ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
   articles: ArticleListDto[] = [];
@@ -39,7 +45,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private articleService: ArticleService,
     private pollService: PollService,
-    private imagePreload: ImagePreloadService
+    private imagePreload: ImagePreloadService,
   ) {}
 
   ngOnInit() {
@@ -52,13 +58,16 @@ export class HomeComponent implements OnInit {
 
     forkJoin({
       news: this.articleService.getRecent(3, undefined),
-      activePolls: this.pollService.getAllActive(undefined)
+      activePolls: this.pollService.getAllActive(undefined),
     }).subscribe({
       next: (result) => {
         this.articles = result.news;
         this.polls = result.activePolls;
         this.imagePreload
-          .preload([...this.articles.map(article => article.primaryImageUrl), ...this.welcomeImages])
+          .preload([
+            ...this.articles.map((article) => article.primaryImageUrl),
+            ...this.welcomeImages,
+          ])
           .then(() => {
             this.isLoading = false;
             this.hasLoaded = true;
@@ -67,7 +76,7 @@ export class HomeComponent implements OnInit {
       error: () => {
         this.isLoading = false;
         this.errorOccurred = true;
-      }
+      },
     });
   }
 }

@@ -23,7 +23,7 @@ main {
   border-radius: 20px;
   overflow: hidden;
   background-color: var(--primary-bg);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border: none;
   margin-bottom: 30px;
 }
@@ -95,7 +95,10 @@ main {
   text-align: justify;
   margin-bottom: 20px;
 
-  p { margin: 0; padding: 10px 0; }
+  p {
+    margin: 0;
+    padding: 10px 0;
+  }
 }
 
 .article-figure {
@@ -106,7 +109,7 @@ main {
   img {
     border-radius: 12px;
     max-width: 80%;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -114,7 +117,7 @@ main {
   padding: 20px;
   display: flex;
   justify-content: center;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .comments-section {
@@ -133,12 +136,24 @@ main {
 }
 
 @media (max-width: 768px) {
-  .title-group { padding: 20px 5%; }
-  .mat-card-content { padding: 0 5% 30px 5% !important; }
-  .article-figure img { max-width: 100%; }
+  .title-group {
+    padding: 20px 5%;
+  }
+  .mat-card-content {
+    padding: 0 5% 30px 5% !important;
+  }
+  .article-figure img {
+    max-width: 100%;
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0.3; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0.3;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

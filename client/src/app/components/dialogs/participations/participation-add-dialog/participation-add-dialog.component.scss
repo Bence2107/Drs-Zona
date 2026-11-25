@@ -33,9 +33,13 @@
   align-items: flex-start;
   gap: 8px;
 
-  .flex-field { flex: 1; }
+  .flex-field {
+    flex: 1;
+  }
 
-  .number-field { width: 80px; }
+  .number-field {
+    width: 80px;
+  }
 }
 
 .add-row-btn {

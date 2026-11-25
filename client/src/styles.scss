@@ -1,17 +1,20 @@
 @use '@angular/material' as mat;
 
 html {
-  @include mat.theme((
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    density: 0,
-  ));
+  @include mat.theme(
+    (
+      color: (
+        theme-type: light,
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      density: 0,
+    )
+  );
 }
 
-html, body {
+html,
+body {
   height: 100%;
   background-color: var(--primary-bg);
 }
@@ -20,7 +23,6 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
-
 
 :root,
 [data-theme='light'] {
@@ -53,7 +55,6 @@ body {
   --hover-bg: #2d2d3a;
 }
 
-
 app-root {
   display: flex;
   flex-direction: column;
@@ -65,161 +66,190 @@ app-root {
   position: relative;
 }
 
+@include mat.button-overrides(
+  (
+    filled-container-color: #f8274f,
+    filled-label-text-color: white,
+    outlined-ripple-color: rgba(165, 0, 0, 0.2),
 
-@include mat.button-overrides((
-  filled-container-color: #f8274f,
-  filled-label-text-color: white,
-  outlined-ripple-color: rgba(165, 0, 0, 0.2),
+    text-label-text-color: var(--accent-color),
+    text-ripple-color: rgba(165, 0, 0, 0.2),
+    text-state-layer-color: var(--accent-color),
+    text-hover-state-layer-opacity: 0.05,
+  )
+);
 
-  text-label-text-color: var(--accent-color),
-  text-ripple-color: rgba(165, 0, 0, 0.2),
-  text-state-layer-color: var(--accent-color),
-  text-hover-state-layer-opacity: 0.05,
-));
+@include mat.fab-overrides(
+  (
+    container-color: var(--accent-color),
+    foreground-color: white,
+    state-layer-color: white,
+    container-shape: 50%,
+    small-container-color: var(--accent-color),
+    small-foreground-color: white,
+  )
+);
 
-@include mat.fab-overrides((
-  container-color: var(--accent-color),
-  foreground-color: white,
-  state-layer-color: white,
-  container-shape: 50%,
-  small-container-color: var(--accent-color),
-  small-foreground-color: white,
-));
+@include mat.progress-bar-overrides(
+  (
+    active-indicator-color: var(--accent-color),
+    track-color: var(--secondary-bg),
+    track-height: 8px,
+    active-indicator-height: 8px,
+  )
+);
 
-@include mat.progress-bar-overrides((
-  active-indicator-color: var(--accent-color),
-  track-color: var(--secondary-bg),
-  track-height: 8px,
-  active-indicator-height: 8px,
-));
+@include mat.slide-toggle-overrides(
+  (
+    selected-handle-color: #ffffff,
+    selected-track-color: #15161d,
+    selected-icon-color: #15161d,
+    selected-pressed-handle-color: #ffffff,
 
-@include mat.slide-toggle-overrides((
-  selected-handle-color: #ffffff,
-  selected-track-color: #15161d,
-  selected-icon-color: #15161d,
-  selected-pressed-handle-color: #ffffff,
+    selected-hover-track-color: #15161d,
+    selected-focus-track-color: #15161d,
+    selected-pressed-track-color: #15161d,
 
-  selected-hover-track-color: #15161d,
-  selected-focus-track-color: #15161d,
-  selected-pressed-track-color: #15161d,
+    unselected-handle-color: #15161d,
+    unselected-track-color: #e0e0e0,
+    unselected-icon-color: #ffffff,
 
-  unselected-handle-color: #15161d,
-  unselected-track-color: #e0e0e0,
-  unselected-icon-color: #ffffff,
+    unselected-hover-track-color: #e0e0e0,
+    unselected-focus-track-color: #e0e0e0,
+    unselected-pressed-track-color: #e0e0e0,
 
-  unselected-hover-track-color: #e0e0e0,
-  unselected-focus-track-color: #e0e0e0,
-  unselected-pressed-track-color: #e0e0e0,
+    selected-hover-state-layer-color: rgba(0, 0, 0, 0.05),
+    selected-focus-state-layer-color: rgba(0, 0, 0, 0.1),
+    unselected-hover-state-layer-color: rgba(0, 0, 0, 0.05),
+    unselected-focus-state-layer-color: rgba(0, 0, 0, 0.1),
+  )
+);
 
-  selected-hover-state-layer-color: rgba(0, 0, 0, 0.05),
-  selected-focus-state-layer-color: rgba(0, 0, 0, 0.1),
-  unselected-hover-state-layer-color: rgba(0, 0, 0, 0.05),
-  unselected-focus-state-layer-color: rgba(0, 0, 0, 0.1),
-));
+@include mat.form-field-overrides(
+  (
+    filled-container-color: var(--primary-bg),
 
-@include mat.form-field-overrides((
-  filled-container-color: var(--primary-bg),
+    filled-input-text-color: var(--accent-color),
+    filled-input-text-placeholder-color: var(--text-secondary),
+    filled-label-text-color: var(--text-secondary),
+    filled-focus-label-text-color: var(--accent-color),
 
-  filled-input-text-color: var(--accent-color),
-  filled-input-text-placeholder-color: var(--text-secondary),
-  filled-label-text-color: var(--text-secondary),
-  filled-focus-label-text-color: var(--accent-color),
+    filled-active-indicator-color: var(--border-color),
+    filled-focus-active-indicator-color: var(--accent-color),
+    filled-hover-active-indicator-color: var(--text-main),
 
-  filled-active-indicator-color: var(--border-color),
-  filled-focus-active-indicator-color: var(--accent-color),
-  filled-hover-active-indicator-color: var(--text-main),
+    outlined-label-text-color: var(--text-secondary),
+    outlined-focus-label-text-color: var(--accent-color),
+    outlined-input-text-color: var(--text-main),
+    outlined-outline-color: var(--border-color),
+    outlined-focus-outline-color: var(--accent-color),
+  )
+);
 
-  outlined-label-text-color: var(--text-secondary),
-  outlined-focus-label-text-color: var(--accent-color),
-  outlined-input-text-color: var(--text-main),
-  outlined-outline-color: var(--border-color),
-  outlined-focus-outline-color: var(--accent-color),
-));
+@include mat.tabs-overrides(
+  (
+    divider-color: var(--accent-color),
 
-@include mat.tabs-overrides((
-  divider-color: var(--accent-color),
+    active-focus-indicator-color: var(--accent-color),
+    active-focus-label-text-color: var(--accent-color),
+    active-hover-indicator-color: red,
+    active-hover-label-text-color: red,
+    active-indicator-color: var(--accent-color),
+    active-label-text-color: var(--accent-color),
 
-  active-focus-indicator-color: var(--accent-color),
-  active-focus-label-text-color: var(--accent-color),
-  active-hover-indicator-color: red,
-  active-hover-label-text-color: red,
-  active-indicator-color: var(--accent-color),
-  active-label-text-color: var(--accent-color),
+    inactive-focus-label-text-color: red,
+    inactive-hover-label-text-color: var(--accent-color),
+    inactive-label-text-color: var(--text-main),
+  )
+);
 
-  inactive-focus-label-text-color: red,
-  inactive-hover-label-text-color: var(--accent-color),
-  inactive-label-text-color: var(--text-main),
-));
+@include mat.menu-overrides(
+  (
+    container-shape: 12px,
+    container-color: var(--secondary-bg),
+    divider-color: var(--text-secondary),
+    item-label-text-color: var(--text-main),
+  )
+);
 
-@include mat.menu-overrides((
-  container-shape: 12px,
-  container-color: var(--secondary-bg),
-  divider-color: var(--text-secondary),
-  item-label-text-color: var(--text-main),
-));
+@include mat.button-toggle-overrides(
+  (
+    background-color: var(--secondary-bg),
+    selected-state-background-color: var(--accent-color),
+    text-color: var(--text-main),
+    selected-state-text-color: var(--text-main),
+    divider-color: var(--border-color),
+    state-layer-color: var(--text-main),
+    hover-state-layer-opacity: 0.12,
+    focus-state-layer-opacity: 0.2,
+  )
+);
 
-@include mat.button-toggle-overrides((
-  background-color: var(--secondary-bg),
-  selected-state-background-color: var(--accent-color),
-  text-color: var(--text-main),
-  selected-state-text-color: var(--text-main),
-  divider-color: var(--border-color),
-  state-layer-color: var(--text-main),
-  hover-state-layer-opacity: 0.12,
-  focus-state-layer-opacity: 0.20,
-));
+@include mat.snack-bar-overrides(
+  (
+    container-color: var(--primary-bg),
+    supporting-text-color: var(--text-main),
+    supporting-text-size: 8px,
+    container-shape: 8px,
+  )
+);
 
-@include mat.snack-bar-overrides((
-  container-color: var(--primary-bg),
-  supporting-text-color: var(--text-main),
-  supporting-text-size: 8px,
-  container-shape: 8px,
-));
+@include mat.progress-spinner-overrides(
+  (
+    active-indicator-color: var(--accent-color),
+  )
+);
 
-@include mat.progress-spinner-overrides((
-  active-indicator-color: var(--accent-color),
-));
+@include mat.dialog-overrides(
+  (
+    container-color: var(--primary-bg),
+    subhead-color: var(--text-main),
+    supporting-text-color: var(--text-secondary),
+  )
+);
 
-@include mat.dialog-overrides((
-  container-color: var(--primary-bg),
-  subhead-color: var(--text-main),
-  supporting-text-color: var(--text-secondary),
-));
+@include mat.checkbox-overrides(
+  (
+    selected-icon-color: var(--accent-color),
+    selected-hover-icon-color: darkred,
+    selected-focus-icon-color: var(--accent-color),
+    selected-pressed-icon-color: var(--accent-color),
 
-@include mat.checkbox-overrides((
-  selected-icon-color: var(--accent-color),
-  selected-hover-icon-color: darkred,
-  selected-focus-icon-color: var(--accent-color),
-  selected-pressed-icon-color: var(--accent-color),
+    selected-focus-state-layer-color: var(--accent-color),
+    selected-hover-state-layer-color: rgba(255, 0, 0, 0.04),
+    selected-pressed-state-layer-color: rgba(255, 0, 0, 0.1),
 
-  selected-focus-state-layer-color: var(--accent-color),
-  selected-hover-state-layer-color: rgba(255, 0, 0, 0.04),
-  selected-pressed-state-layer-color: rgba(255, 0, 0, 0.1),
+    selected-checkmark-color: white,
+  )
+);
 
-  selected-checkmark-color: white,
-));
+@include mat.select-overrides(
+  (
+    panel-background-color: var(--secondary-bg),
+    enabled-trigger-text-color: var(--accent-color),
+    disabled-trigger-text-color: var(--text-main),
+    placeholder-text-color: var(--accent-color),
+    focused-arrow-color: var(--accent-color),
+  )
+);
 
-@include mat.select-overrides((
-  panel-background-color: var(--secondary-bg),
-  enabled-trigger-text-color: var(--accent-color),
-  disabled-trigger-text-color: var(--text-main),
-  placeholder-text-color: var(--accent-color),
-  focused-arrow-color: var(--accent-color),
-));
+@include mat.option-overrides(
+  (
+    label-text-color: var(--text-main),
+    selected-state-layer-color: transparent,
+    selected-state-label-text-color: var(--accent-color),
+    hover-state-layer-color: var(--accent-color),
+    focus-state-layer-color: var(--selected-color),
+  )
+);
 
-@include mat.option-overrides((
-  label-text-color: var(--text-main),
-  selected-state-layer-color: transparent,
-  selected-state-label-text-color: var(--accent-color),
-  hover-state-layer-color: var(--accent-color),
-  focus-state-layer-color: var(--selected-color),
-));
-
-@include mat.table-overrides((
-  background-color: var(--primary-bg),
-  header-headline-color: var(--accent-color),
-  row-item-label-text-color: var(--text-main),
-));
+@include mat.table-overrides(
+  (
+    background-color: var(--primary-bg),
+    header-headline-color: var(--accent-color),
+    row-item-label-text-color: var(--text-main),
+  )
+);
 
 mat-option.mat-mdc-option .mat-pseudo-checkbox,
 .mat-mdc-option .mat-pseudo-checkbox {
@@ -271,7 +301,6 @@ mat-option.mat-mdc-option .mat-pseudo-checkbox,
   }
 }
 
-
 .admin-fab-menu {
   .admin-menu-section {
     padding: 4px 16px 2px;
@@ -298,7 +327,6 @@ mat-option.mat-mdc-option .mat-pseudo-checkbox,
     }
   }
 }
-
 
 inline-field--small input[type='number']::-webkit-inner-spin-button,
 .inline-field--small input[type='number']::-webkit-outer-spin-button {

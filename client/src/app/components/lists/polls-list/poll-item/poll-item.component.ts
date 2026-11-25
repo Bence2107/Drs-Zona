@@ -8,12 +8,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 @Component({
   selector: 'app-poll-item',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatRadioModule,
-    MatProgressBarModule,
-  ],
+  imports: [CommonModule, MatCardModule, MatRadioModule, MatProgressBarModule],
   templateUrl: './poll-item.component.html',
   styleUrl: './poll-item.component.scss',
 })
@@ -52,6 +47,4 @@ export class PollItemComponent implements OnInit {
     if (diffMins > 0) return `${diffMins} minute${diffMins > 1 ? 's' : ''} left`;
     return 'Expires soon';
   }
-
-
 }

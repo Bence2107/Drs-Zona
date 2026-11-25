@@ -6,7 +6,7 @@
       <mat-label>Kategória</mat-label>
       <mat-select [ngModel]="selectedTag" (ngModelChange)="onTagChange($event)">
         <mat-option [value]="undefined">Összes</mat-option>
-        @for(serie of seriesList; track serie) {
+        @for (serie of seriesList; track serie) {
           <mat-option [value]="serie.shortName">{{ serie.shortName }}</mat-option>
         }
       </mat-select>
@@ -27,17 +27,21 @@
           @for (new_item of reviews; track new_item) {
             <mat-card class="new-item" [routerLink]="['/article', new_item.slug]">
               @if (new_item?.primaryImageUrl) {
-                <img mat-card-image [src]="new_item.primaryImageUrl" [alt]="new_item.title">
+                <img mat-card-image [src]="new_item.primaryImageUrl" [alt]="new_item.title" />
               } @else {
-                <img mat-card-image [src]="'img/articles/image-not-found.png'" alt="No image">
+                <img mat-card-image [src]="'img/articles/image-not-found.png'" alt="No image" />
               }
               <mat-card-content class="text-content">
                 @if (new_item.tag) {
-                  <span class="series-tag" [ngClass]="'tag-' + new_item.tag">{{ new_item.tag }}</span>
+                  <span class="series-tag" [ngClass]="'tag-' + new_item.tag">{{
+                    new_item.tag
+                  }}</span>
                 }
                 <h2 class="news-label">{{ new_item.title }}</h2>
                 <p class="news-desc">{{ new_item.lead }}</p>
-                <p class="news-date">{{ new_item.datePublished | date:'yyyy. MMMM d. – HH:mm' }}</p>
+                <p class="news-date">
+                  {{ new_item.datePublished | date: 'yyyy. MMMM d. – HH:mm' }}
+                </p>
               </mat-card-content>
             </mat-card>
           }
@@ -49,7 +53,8 @@
           [pageSize]="pageSize"
           [pageSizeOptions]="[4, 10, 25]"
           (page)="onPageChange($event)"
-          aria-label="Oldal kiválasztása">
+          aria-label="Oldal kiválasztása"
+        >
         </mat-paginator>
       }
 
@@ -61,7 +66,13 @@
 }
 
 @if (isAuthorOrAdmin() && hasLoaded) {
-  <a mat-fab color="primary" class="fab-edit" [routerLink]="['/reviews/add']" matTooltip="Cikk hozzáadása">
+  <a
+    mat-fab
+    color="primary"
+    class="fab-edit"
+    [routerLink]="['/reviews/add']"
+    matTooltip="Cikk hozzáadása"
+  >
     <mat-icon>add</mat-icon>
   </a>
 }

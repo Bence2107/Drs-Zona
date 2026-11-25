@@ -4,15 +4,17 @@
 </div>
 
 @if (isAdmin()) {
-  <button mat-fab color="primary"
-          class="fab-edit"
-          [mat-menu-trigger-for]="adminMenu"
-          matTooltip="Szerkesztés">
+  <button
+    mat-fab
+    color="primary"
+    class="fab-edit"
+    [mat-menu-trigger-for]="adminMenu"
+    matTooltip="Szerkesztés"
+  >
     <mat-icon>edit</mat-icon>
   </button>
 
   <mat-menu #adminMenu="matMenu" yPosition="above" class="admin-fab-menu">
-
     <div class="admin-menu-section" (click)="$event.stopPropagation()">
       <span class="admin-section-label">Eredmények</span>
     </div>
@@ -46,6 +48,5 @@
     <button mat-menu-item routerLink="/admin/constructors">
       <mat-icon>directions_car</mat-icon> Konstruktőrök
     </button>
-
   </mat-menu>
 }

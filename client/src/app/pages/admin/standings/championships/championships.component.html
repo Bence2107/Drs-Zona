@@ -6,13 +6,13 @@
     <h2 class="page-title">Bajnokságok</h2>
   </div>
 
-
   <div class="series-section">
     <mat-button-toggle-group
       [ngModel]="selectedSeriesId()"
       (ngModelChange)="onSeriesChange($event)"
       hideSingleSelectionIndicator="true"
-      class="series-toggle">
+      class="series-toggle"
+    >
       @for (series of seriesList(); track series.id) {
         <mat-button-toggle [value]="series.id">{{ series.name }}</mat-button-toggle>
       }
@@ -21,7 +21,7 @@
 
   <mat-form-field appearance="outline" class="series-select">
     <mat-label>Széria</mat-label>
-    <mat-select [ngModel]="selectedSeriesId()"  (ngModelChange)="onSeriesChange($event)">
+    <mat-select [ngModel]="selectedSeriesId()" (ngModelChange)="onSeriesChange($event)">
       @for (series of seriesList(); track series.id) {
         <mat-option [value]="series.id">{{ series.name }}</mat-option>
       }
@@ -51,11 +51,13 @@
               <mat-card-title>{{ champ.seriesName }}</mat-card-title>
               <mat-card-subtitle>{{ champ.seriesName }}</mat-card-subtitle>
             </div>
-            <button mat-stroked-button
-                    class="status-chip"
-                    [class]="'status-' + champ.status!.toLowerCase()"
-                    [matMenuTriggerFor]="statusMenu"
-                    (click)="$event.stopPropagation()">
+            <button
+              mat-stroked-button
+              class="status-chip"
+              [class]="'status-' + champ.status!.toLowerCase()"
+              [matMenuTriggerFor]="statusMenu"
+              (click)="$event.stopPropagation()"
+            >
               <mat-icon>{{ statusIcon(champ.status!) }}</mat-icon>
               {{ champ.status }}
             </button>
@@ -92,12 +94,15 @@
             <button mat-button [routerLink]="['/admin/participations', champ.driversChampId]">
               <mat-icon>group</mat-icon> Résztvevők
             </button>
-            <button mat-button [routerLink]="['/admin/results/entry']" [queryParams]="{ champId: champ.driversChampId }">
+            <button
+              mat-button
+              [routerLink]="['/admin/results/entry']"
+              [queryParams]="{ champId: champ.driversChampId }"
+            >
               <mat-icon>add_circle</mat-icon> Eredmény felvitel
             </button>
             <span class="spacer"></span>
           </mat-card-actions>
-
         </mat-card>
       }
 
@@ -108,6 +113,12 @@
   }
 </div>
 
-<button mat-fab color="primary" class="fab-add" (click)="openCreateDialog()" matTooltip="Új bajnokság">
+<button
+  mat-fab
+  color="primary"
+  class="fab-add"
+  (click)="openCreateDialog()"
+  matTooltip="Új bajnokság"
+>
   <mat-icon>add</mat-icon>
 </button>

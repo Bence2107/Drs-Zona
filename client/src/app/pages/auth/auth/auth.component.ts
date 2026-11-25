@@ -1,26 +1,40 @@
-import {Component, OnInit} from '@angular/core';
-import {MatTab, MatTabGroup} from '@angular/material/tabs';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {MatButton} from '@angular/material/button';
-import {MatCard} from '@angular/material/card';
-import {AuthService} from '../../../services/api/auth.service';
-import {LoginRequest} from '../../../api/models/login-request';
-import {Router} from '@angular/router';
-import {RegisterRequest} from '../../../api/models/register-request';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {CustomSnackbarComponent} from '../../../components/custom-snackbar/custom-snackbar.component';
-import {ConnectionService} from '../../../services/api/connection-service.service';
-import {LoadingStateComponent} from '../../../components/loading-state/loading-state.component';
-import {ErrorDisplayComponent} from '../../../components/error-display/error-display.component';
-import {HttpValidationError} from '../../../services/error-interceptor.service';
+import { Component, OnInit } from '@angular/core';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatError, MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
+import { MatCard } from '@angular/material/card';
+import { AuthService } from '../../../services/api/auth.service';
+import { LoginRequest } from '../../../api/models/login-request';
+import { Router } from '@angular/router';
+import { RegisterRequest } from '../../../api/models/register-request';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CustomSnackbarComponent } from '../../../components/custom-snackbar/custom-snackbar.component';
+import { ConnectionService } from '../../../services/api/connection-service.service';
+import { LoadingStateComponent } from '../../../components/loading-state/loading-state.component';
+import { ErrorDisplayComponent } from '../../../components/error-display/error-display.component';
+import { HttpValidationError } from '../../../services/error-interceptor.service';
 
 @Component({
   selector: 'app-auth',
   imports: [
-    MatTabGroup, MatTab, ReactiveFormsModule,
-    MatFormField, MatLabel, MatInput, MatError,
-    MatButton, ErrorDisplayComponent, MatCard, LoadingStateComponent,
+    MatTabGroup,
+    MatTab,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatError,
+    MatButton,
+    ErrorDisplayComponent,
+    MatCard,
+    LoadingStateComponent,
   ],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
@@ -37,7 +51,7 @@ export class AuthComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private connectionService: ConnectionService
+    private connectionService: ConnectionService,
   ) {}
 
   ngOnInit(): void {
@@ -49,24 +63,42 @@ export class AuthComponent implements OnInit {
     this.isServerLoading = true;
     this.isServerDown = false;
     this.connectionService.checkConnection().subscribe({
-      next: () => { this.isServerLoading = false; this.isServerDown = false; },
-      error: () => { this.isServerLoading = false; this.isServerDown = true; }
+      next: () => {
+        this.isServerLoading = false;
+        this.isServerDown = false;
+      },
+      error: () => {
+        this.isServerLoading = false;
+        this.isServerDown = true;
+      },
     });
   }
 
-  get loginEmail() { return this.loginForm.get('email') as FormControl; }
-  get loginPassword() { return this.loginForm.get('password') as FormControl; }
-  get regUsername() { return this.registerForm.get('username') as FormControl; }
-  get regFullName() { return this.registerForm.get('fullName') as FormControl; }
-  get regEmail() { return this.registerForm.get('email') as FormControl; }
-  get regPassword() { return this.registerForm.get('password') as FormControl; }
+  get loginEmail() {
+    return this.loginForm.get('email') as FormControl;
+  }
+  get loginPassword() {
+    return this.loginForm.get('password') as FormControl;
+  }
+  get regUsername() {
+    return this.registerForm.get('username') as FormControl;
+  }
+  get regFullName() {
+    return this.registerForm.get('fullName') as FormControl;
+  }
+  get regEmail() {
+    return this.registerForm.get('email') as FormControl;
+  }
+  get regPassword() {
+    return this.registerForm.get('password') as FormControl;
+  }
 
   login(): void {
     if (this.loginForm.invalid) return;
 
     const request: LoginRequest = {
       email: this.loginEmail.value,
-      password: this.loginPassword.value
+      password: this.loginPassword.value,
     };
 
     this.authService.login(request).subscribe({
@@ -79,8 +111,8 @@ export class AuthComponent implements OnInit {
         });
       },
       error: (err: HttpValidationError) => {
-        this.applyServerErrors(this.loginForm, err)
-      }
+        this.applyServerErrors(this.loginForm, err);
+      },
     });
   }
 
@@ -103,7 +135,7 @@ export class AuthComponent implements OnInit {
           horizontalPosition: 'center',
         });
       },
-      error: (err: HttpValidationError) => this.applyServerErrors(this.registerForm, err)
+      error: (err: HttpValidationError) => this.applyServerErrors(this.registerForm, err),
     });
   }
 
@@ -120,7 +152,7 @@ export class AuthComponent implements OnInit {
   private initForms(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      password: ['', [Validators.required, Validators.minLength(8)]],
     });
 
     this.registerForm = this.fb.group({
@@ -130,17 +162,22 @@ export class AuthComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(8)]],
     });
 
-    [this.loginEmail, this.loginPassword,
-      this.regUsername, this.regFullName, this.regEmail, this.regPassword]
-      .forEach(c => this.clearServerErrorOnChange(c));
+    [
+      this.loginEmail,
+      this.loginPassword,
+      this.regUsername,
+      this.regFullName,
+      this.regEmail,
+      this.regPassword,
+    ].forEach((c) => this.clearServerErrorOnChange(c));
   }
 
   private applyServerErrors(form: FormGroup, error: HttpValidationError): void {
     const fieldMap: { [key: string]: string } = {
-      'email': 'email',
-      'password': 'password',
-      'username': 'username',
-      'fullname': 'fullName',
+      email: 'email',
+      password: 'password',
+      username: 'username',
+      fullname: 'fullName',
     };
 
     let hasFieldError = false;
@@ -157,6 +194,4 @@ export class AuthComponent implements OnInit {
       form.get('email')?.setErrors({ serverError: error.title });
     }
   }
-
-
 }

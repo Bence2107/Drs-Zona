@@ -1,19 +1,21 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {DriverService} from '../../../../services/api/driver.service';
-import {DriverListDto} from '../../../../api/models/driver-list-dto';
-import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
-import {MatIcon} from '@angular/material/icon';
-import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
-import {MatFabButton, MatIconButton} from '@angular/material/button';
-import {MatTooltip} from '@angular/material/tooltip';
+import { Component, OnInit, signal } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DriverService } from '../../../../services/api/driver.service';
+import { DriverListDto } from '../../../../api/models/driver-list-dto';
+import { LoadingStateComponent } from '../../../../components/loading-state/loading-state.component';
+import { MatIcon } from '@angular/material/icon';
 import {
-  DriverCreateDialogComponent
-} from '../../../../components/dialogs/driver/driver-create-dialog/driver-create-dialog.component';
-import {
-  DriverEditDialogComponent
-} from '../../../../components/dialogs/driver/driver-edit-dialog/driver-edit-dialog.component';
-import {Router} from '@angular/router';
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardSubtitle,
+  MatCardTitle,
+} from '@angular/material/card';
+import { MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { DriverCreateDialogComponent } from '../../../../components/dialogs/driver/driver-create-dialog/driver-create-dialog.component';
+import { DriverEditDialogComponent } from '../../../../components/dialogs/driver/driver-edit-dialog/driver-edit-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-drivers',
@@ -27,19 +29,19 @@ import {Router} from '@angular/router';
     MatIconButton,
     MatTooltip,
     MatFabButton,
-    MatCardContent
+    MatCardContent,
   ],
   templateUrl: './drivers.component.html',
   styleUrl: './drivers.component.scss',
 })
-export class DriversComponent implements OnInit{
+export class DriversComponent implements OnInit {
   drivers = signal<DriverListDto[]>([]);
   isLoading = signal(false);
 
   constructor(
     private dialog: MatDialog,
     private router: Router,
-    private driverService: DriverService
+    private driverService: DriverService,
   ) {}
 
   ngOnInit() {
@@ -49,34 +51,34 @@ export class DriversComponent implements OnInit{
   private loadDrivers() {
     this.isLoading.set(true);
     this.driverService.getAllDrivers().subscribe({
-      next: res => {
+      next: (res) => {
         this.drivers.set(res);
         this.isLoading.set(false);
       },
-      error: () => this.isLoading.set(false)
+      error: () => this.isLoading.set(false),
     });
   }
 
   openCreateDialog() {
     const ref = this.dialog.open(DriverCreateDialogComponent, { width: '560px' });
-    ref.afterClosed().subscribe(result => {
+    ref.afterClosed().subscribe((result) => {
       if (result) this.loadDrivers();
     });
   }
 
   openEditDialog(driver: DriverListDto) {
-    this.driverService.getDriverById(driver.id!).subscribe(detail => {
+    this.driverService.getDriverById(driver.id!).subscribe((detail) => {
       const ref = this.dialog.open(DriverEditDialogComponent, {
         width: '560px',
-        data: { driver: detail }
+        data: { driver: detail },
       });
-      ref.afterClosed().subscribe(result => {
+      ref.afterClosed().subscribe((result) => {
         if (result) this.loadDrivers();
       });
     });
   }
 
   protected goBack() {
-    this.router.navigate(["results"]);
+    this.router.navigate(['results']);
   }
 }

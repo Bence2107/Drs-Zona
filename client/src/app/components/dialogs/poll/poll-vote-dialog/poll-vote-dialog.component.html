@@ -5,18 +5,16 @@
     <mat-dialog-content>
       <p class="poll-desc">{{ poll.description }}</p>
 
-      <div class="options-list"
-           [class.already-voted]="voted"
-           [class.read-only]="!userId">
-
+      <div class="options-list" [class.already-voted]="voted" [class.read-only]="!userId">
         @for (option of poll.pollOptions; track option.id) {
-          <div class="poll-option-row"
-               [class.selected]="option.isUserChoice"
-               (click)="onVote(option.id!)">
-
+          <div
+            class="poll-option-row"
+            [class.selected]="option.isUserChoice"
+            (click)="onVote(option.id!)"
+          >
             <div class="option-header">
               <div class="radio-indicator">
-                @if(option.isUserChoice) {
+                @if (option.isUserChoice) {
                   <div class="inner-circle"></div>
                 }
               </div>
@@ -38,7 +36,7 @@
   }
 
   <mat-dialog-actions align="end">
-    @if(isMyPoll(poll.authorId)) {
+    @if (isMyPoll(poll.authorId)) {
       <button mat-icon-button [matMenuTriggerFor]="pollsMenu" class="mini-menu-btn">
         <mat-icon>more_horiz</mat-icon>
       </button>
@@ -53,4 +51,3 @@
     <mat-icon>delete_outline</mat-icon>
   </button>
 </mat-menu>
-

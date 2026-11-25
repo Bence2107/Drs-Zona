@@ -1,16 +1,21 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
-import {DriverService} from '../../../../services/api/driver.service';
-import {ConstructorsService} from '../../../../services/api/constructors.service';
-import {ConstructorListDto} from '../../../../api/models/constructor-list-dto';
-import {DriverListDto} from '../../../../api/models/driver-list-dto';
-import {MatFormField, MatLabel} from '@angular/material/input';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {MatButton} from '@angular/material/button';
-import {MatIcon} from '@angular/material/icon';
-import {ContractsService} from '../../../../services/api/contracts.service';
-import {ContractCreateDto} from '../../../../api/models/contract-create-dto';
+import { Component, OnInit, signal } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { DriverService } from '../../../../services/api/driver.service';
+import { ConstructorsService } from '../../../../services/api/constructors.service';
+import { ConstructorListDto } from '../../../../api/models/constructor-list-dto';
+import { DriverListDto } from '../../../../api/models/driver-list-dto';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { ContractsService } from '../../../../services/api/contracts.service';
+import { ContractCreateDto } from '../../../../api/models/contract-create-dto';
 
 @Component({
   selector: 'app-contract-create-dialog',
@@ -24,12 +29,12 @@ import {ContractCreateDto} from '../../../../api/models/contract-create-dto';
     MatOption,
     MatDialogActions,
     MatButton,
-    MatIcon
+    MatIcon,
   ],
   templateUrl: './contract-create-dialog.component.html',
   styleUrl: './contract-create-dialog.component.scss',
 })
-export class ContractCreateDialogComponent implements OnInit{
+export class ContractCreateDialogComponent implements OnInit {
   drivers = signal<DriverListDto[]>([]);
   constructors = signal<ConstructorListDto[]>([]);
 
@@ -41,18 +46,17 @@ export class ContractCreateDialogComponent implements OnInit{
     private dialogRef: MatDialogRef<ContractCreateDialogComponent>,
     private constructorService: ConstructorsService,
     private contractsService: ContractsService,
-    private driverService: DriverService
-  )
-  {}
+    private driverService: DriverService,
+  ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
       driverId: [null],
-      teamId:   [null],
+      teamId: [null],
     });
 
-    this.driverService.getAllDrivers().subscribe(res => this.drivers.set(res));
-    this.constructorService.getAllConstructors().subscribe(res => this.constructors.set(res));
+    this.driverService.getAllDrivers().subscribe((res) => this.drivers.set(res));
+    this.constructorService.getAllConstructors().subscribe((res) => this.constructors.set(res));
   }
 
   submit() {
@@ -62,14 +66,21 @@ export class ContractCreateDialogComponent implements OnInit{
     const v = this.form.value;
     const dto: ContractCreateDto = {
       driverId: v.driverId,
-      teamId: v.teamId
-    }
+      teamId: v.teamId,
+    };
 
     this.contractsService.createContract(dto).subscribe({
-      next: () => { this.isSubmitting = false; this.dialogRef.close(true); },
-      error: () => { this.isSubmitting = false; }
+      next: () => {
+        this.isSubmitting = false;
+        this.dialogRef.close(true);
+      },
+      error: () => {
+        this.isSubmitting = false;
+      },
     });
   }
 
-  cancel() { this.dialogRef.close(false); }
+  cancel() {
+    this.dialogRef.close(false);
+  }
 }

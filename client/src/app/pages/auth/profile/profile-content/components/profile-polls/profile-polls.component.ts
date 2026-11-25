@@ -1,14 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {PollListComponent} from '../../../../../../components/lists/polls-list/polls-list.component';
-import {PollListDto} from '../../../../../../api/models/poll-list-dto';
-import {PollService} from '../../../../../../services/api/poll.service';
-import {UserProfileResponse} from '../../../../../../api/models/user-profile-response';
+import { Component, Input, OnInit } from '@angular/core';
+import { PollListComponent } from '../../../../../../components/lists/polls-list/polls-list.component';
+import { PollListDto } from '../../../../../../api/models/poll-list-dto';
+import { PollService } from '../../../../../../services/api/poll.service';
+import { UserProfileResponse } from '../../../../../../api/models/user-profile-response';
 
 @Component({
   selector: 'app-profile-polls',
-  imports: [
-    PollListComponent
-  ],
+  imports: [PollListComponent],
   templateUrl: './profile-polls.component.html',
   styleUrl: './profile-polls.component.scss',
 })
@@ -20,11 +18,9 @@ export class ProfilePollsComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.userData?.userId) {
-      this.pollService.getPollsByCreator(undefined).subscribe(
-        (polls: PollListDto[]) => {
-          this.polls = polls;
-        }
-      )
+      this.pollService.getPollsByCreator(undefined).subscribe((polls: PollListDto[]) => {
+        this.polls = polls;
+      });
     }
   }
 }

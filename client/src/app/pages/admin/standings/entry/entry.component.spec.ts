@@ -12,13 +12,8 @@ describe('EntryComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [EntryComponent],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([]),
-      ]
-    })
-    .compileComponents();
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(EntryComponent);
     component = fixture.componentInstance;

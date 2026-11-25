@@ -91,7 +91,9 @@
   border-radius: 7px;
   background-color: var(--secondary-bg);
 
-  mat-form-field { width: 100%; }
+  mat-form-field {
+    width: 100%;
+  }
 }
 
 .submit-button {

@@ -1,5 +1,5 @@
-import {HttpErrorResponse, HttpInterceptorFn} from '@angular/common/http';
-import {catchError, throwError} from 'rxjs';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { catchError, throwError } from 'rxjs';
 
 export interface HttpValidationError {
   title: string;
@@ -16,9 +16,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else if (error.status === 500) {
         return throwError(() => ({ title: 'Internal server error', fieldErrors: {} }));
       } else {
-        return throwError(() => ({ title: `Server returned code ${error.status}`, fieldErrors: {} }));
+        return throwError(() => ({
+          title: `Server returned code ${error.status}`,
+          fieldErrors: {},
+        }));
       }
-    })
+    }),
   );
 };
 
@@ -46,7 +49,7 @@ function parseValidationErrors(errorResponse: any): HttpValidationError {
 
     return {
       title: errorObj?.title || errorObj?.message || 'Validation error occurred',
-      fieldErrors
+      fieldErrors,
     };
   } catch (e) {
     return { title: 'An error occurred', fieldErrors: {} };

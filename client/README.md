@@ -20,16 +20,16 @@ The app runs at `http://localhost:4200`. API calls go through the dev proxy to t
 
 ## Scripts
 
-| Command | Description |
-| --- | --- |
-| `pnpm start` | Starts the dev server; uses `FRONTEND_PORT` from `.env` if it is set ([`scripts/serve.mjs`](scripts/serve.mjs)) |
-| `pnpm build` | Production build to `dist/drs-zona/browser` |
-| `pnpm watch` | Development build that rebuilds on every change |
-| `pnpm test` | Runs the unit tests once with Vitest |
-| `pnpm test:watch` | Runs the unit tests in watch mode, rerunning on every change |
-| `pnpm open-api-gen` | Regenerates the API client from the running API (see [API client](#api-client)) |
-| `pnpm format` | Formats the code with Prettier |
-| `pnpm format:check` | Checks the formatting without changing files, as CI does |
+| Command             | Description                                                                                                     |
+| ------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `pnpm start`        | Starts the dev server; uses `FRONTEND_PORT` from `.env` if it is set ([`scripts/serve.mjs`](scripts/serve.mjs)) |
+| `pnpm build`        | Production build to `dist/drs-zona/browser`                                                                     |
+| `pnpm watch`        | Development build that rebuilds on every change                                                                 |
+| `pnpm test`         | Runs the unit tests once with Vitest                                                                            |
+| `pnpm test:watch`   | Runs the unit tests in watch mode, rerunning on every change                                                    |
+| `pnpm open-api-gen` | Regenerates the API client from the running API (see [API client](#api-client))                                 |
+| `pnpm format`       | Formats the code with Prettier                                                                                  |
+| `pnpm format:check` | Checks the formatting without changing files, as CI does                                                        |
 
 Extra arguments are passed on to the Angular CLI and override the defaults, for example `pnpm start --open`.
 
@@ -37,10 +37,10 @@ Extra arguments are passed on to the Angular CLI and override the defaults, for 
 
 The client calls the API with relative URLs. During development [`proxy.conf.mjs`](proxy.conf.mjs) forwards them to the local API:
 
-| Path | Target |
-| --- | --- |
-| `/api` | `https://localhost:7221` (`API_HTTPS_PORT`) |
-| `/uploads` | `http://localhost:5244` (`API_PORT`) |
+| Path       | Target                                      |
+| ---------- | ------------------------------------------- |
+| `/api`     | `https://localhost:7221` (`API_HTTPS_PORT`) |
+| `/uploads` | `http://localhost:5244` (`API_PORT`)        |
 
 The ports are read from the `.env` file in the repository root, or from the file named in `ENV_FILE` ([`scripts/load-env.mjs`](scripts/load-env.mjs)). Without a `.env` the defaults above apply. The API reads the same file, so both sides always agree on the ports.
 

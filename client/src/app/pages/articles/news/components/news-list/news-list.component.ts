@@ -1,22 +1,22 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MatCard, MatCardContent, MatCardImage} from '@angular/material/card';
-import {DatePipe, NgClass} from '@angular/common';
-import {ErrorDisplayComponent} from '../../../../../components/error-display/error-display.component';
-import {LoadingStateComponent} from '../../../../../components/loading-state/loading-state.component';
-import {ArticleListDto} from '../../../../../api/models/article-list-dto';
-import {ArticleService} from '../../../../../services/api/article.service';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {MatFabButton} from '@angular/material/button';
-import {MatIcon} from '@angular/material/icon';
-import {MatTooltip} from '@angular/material/tooltip';
-import {AuthService} from '../../../../../services/api/auth.service';
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
-import {MatFormField, MatLabel} from '@angular/material/input';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {FormsModule} from '@angular/forms';
-import {SeriesListDto} from '../../../../../api/models/series-list-dto';
-import {SeriesService} from '../../../../../services/api/series.service';
-import {ImagePreloadService} from '../../../../../services/image-preload.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { MatCard, MatCardContent, MatCardImage } from '@angular/material/card';
+import { DatePipe, NgClass } from '@angular/common';
+import { ErrorDisplayComponent } from '../../../../../components/error-display/error-display.component';
+import { LoadingStateComponent } from '../../../../../components/loading-state/loading-state.component';
+import { ArticleListDto } from '../../../../../api/models/article-list-dto';
+import { ArticleService } from '../../../../../services/api/article.service';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MatFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AuthService } from '../../../../../services/api/auth.service';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { SeriesListDto } from '../../../../../api/models/series-list-dto';
+import { SeriesService } from '../../../../../services/api/series.service';
+import { ImagePreloadService } from '../../../../../services/image-preload.service';
 
 @Component({
   selector: 'app-news-list',
@@ -37,18 +37,18 @@ import {ImagePreloadService} from '../../../../../services/image-preload.service
     MatLabel,
     MatSelect,
     MatOption,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './news-list.component.html',
-  styleUrl: './news-list.component.scss'
+  styleUrl: './news-list.component.scss',
 })
 export class NewsListComponent implements OnInit {
-  @Input() articles: ArticleListDto[] = []
+  @Input() articles: ArticleListDto[] = [];
   isLoading = false;
   hasLoaded = false;
   errorOccurred = false;
 
-  seriesList: SeriesListDto[] = []
+  seriesList: SeriesListDto[] = [];
   selectedTag: string | undefined = undefined;
   totalElements = 0;
   pageSize = 2;
@@ -60,19 +60,19 @@ export class NewsListComponent implements OnInit {
     private seriesService: SeriesService,
     private imagePreload: ImagePreloadService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.pageIndex = params['page'] ? +params['page'] : 0;
       this.pageSize = params['size'] ? +params['size'] : 2;
       this.fetchArticles();
     });
 
-    this.seriesService.getSeriesList().subscribe(seriesList => {
+    this.seriesService.getSeriesList().subscribe((seriesList) => {
       this.seriesList = seriesList;
-    })
+    });
   }
 
   onTagChange(tag: string | undefined): void {
@@ -89,19 +89,17 @@ export class NewsListComponent implements OnInit {
       next: (data) => {
         // Keep the current page on screen until the new one is ready to render
         const items = data.items ?? [];
-        this.imagePreload
-          .preload(items.map(article => article.primaryImageUrl))
-          .then(() => {
-            this.articles = items;
-            this.totalElements = data.totalCount!;
-            this.isLoading = false;
-            this.hasLoaded = true;
-          });
+        this.imagePreload.preload(items.map((article) => article.primaryImageUrl)).then(() => {
+          this.articles = items;
+          this.totalElements = data.totalCount!;
+          this.isLoading = false;
+          this.hasLoaded = true;
+        });
       },
       error: () => {
         this.isLoading = false;
         this.errorOccurred = true;
-      }
+      },
     });
   }
 
@@ -112,7 +110,7 @@ export class NewsListComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { page: this.pageIndex, size: this.pageSize },
-      queryParamsHandling: 'merge'
+      queryParamsHandling: 'merge',
     });
   }
 

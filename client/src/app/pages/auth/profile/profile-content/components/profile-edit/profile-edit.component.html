@@ -1,7 +1,6 @@
 <div class="edit-container">
   <mat-card class="edit-card">
     <mat-tab-group dynamicHeight class="inner-tabs">
-
       <!-- ADATOK MÓDOSÍTÁSA -->
       <mat-tab label="Adatok módosítása">
         <div class="tab-body">
@@ -11,10 +10,9 @@
           </div>
 
           <form class="edit-form" [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()">
-
             <mat-form-field appearance="fill">
               <mat-label>Teljes név</mat-label>
-              <input matInput formControlName="fullName">
+              <input matInput formControlName="fullName" />
               <mat-icon matSuffix>badge</mat-icon>
               @if (profFullName.hasError('required')) {
                 <mat-error>A teljes név megadása kötelező</mat-error>
@@ -29,7 +27,7 @@
 
             <mat-form-field appearance="fill">
               <mat-label>Felhasználónév</mat-label>
-              <input matInput formControlName="username">
+              <input matInput formControlName="username" />
               <mat-icon matSuffix>alternate_email</mat-icon>
               @if (profUsername.hasError('required')) {
                 <mat-error>A felhasználónév megadása kötelező</mat-error>
@@ -44,7 +42,7 @@
 
             <mat-form-field appearance="fill">
               <mat-label>Email cím</mat-label>
-              <input matInput type="email" formControlName="email">
+              <input matInput type="email" formControlName="email" />
               <mat-icon matSuffix>mail</mat-icon>
               @if (profEmail.hasError('required')) {
                 <mat-error>Az email cím megadása kötelező</mat-error>
@@ -58,8 +56,12 @@
             </mat-form-field>
 
             <div class="actions">
-              <button mat-flat-button color="primary" class="save-btn"
-                      [disabled]="profileForm.invalid || profileForm.pristine">
+              <button
+                mat-flat-button
+                color="primary"
+                class="save-btn"
+                [disabled]="profileForm.invalid || profileForm.pristine"
+              >
                 Változtatások mentése
               </button>
             </div>
@@ -76,10 +78,9 @@
           </div>
 
           <form class="edit-form" [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
-
             <mat-form-field appearance="fill">
               <mat-label>Jelenlegi jelszó</mat-label>
-              <input matInput type="password" formControlName="currentPassword">
+              <input matInput type="password" formControlName="currentPassword" />
               @if (passCurrentPassword.hasError('required')) {
                 <mat-error>A jelenlegi jelszó megadása kötelező</mat-error>
               }
@@ -91,7 +92,7 @@
             <div class="password-grid">
               <mat-form-field appearance="fill">
                 <mat-label>Új jelszó</mat-label>
-                <input matInput type="password" formControlName="newPassword">
+                <input matInput type="password" formControlName="newPassword" />
                 @if (passNewPassword.hasError('required')) {
                   <mat-error>Az új jelszó megadása kötelező</mat-error>
                 }
@@ -105,7 +106,7 @@
 
               <mat-form-field appearance="fill">
                 <mat-label>Új jelszó megerősítése</mat-label>
-                <input matInput type="password" formControlName="confirmPassword">
+                <input matInput type="password" formControlName="confirmPassword" />
                 @if (passConfirmPassword.hasError('required')) {
                   <mat-error>A jelszó megerősítése kötelező</mat-error>
                 }
@@ -119,14 +120,18 @@
             </div>
 
             <div class="actions">
-              <button mat-flat-button color="warn" class="save-btn" [disabled]="passwordForm.invalid">
+              <button
+                mat-flat-button
+                color="warn"
+                class="save-btn"
+                [disabled]="passwordForm.invalid"
+              >
                 Jelszó frissítése
               </button>
             </div>
           </form>
         </div>
       </mat-tab>
-
     </mat-tab-group>
   </mat-card>
 </div>

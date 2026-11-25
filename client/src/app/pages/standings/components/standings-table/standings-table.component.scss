@@ -41,9 +41,18 @@
   }
 
   table.is-result-table {
-    tr:nth-child(1) td { font-weight: bold; color: #d4af37; }
-    tr:nth-child(2) td { font-weight: bold; color: #aaa9ad; }
-    tr:nth-child(3) td { font-weight: bold; color: #b08d57; }
+    tr:nth-child(1) td {
+      font-weight: bold;
+      color: #d4af37;
+    }
+    tr:nth-child(2) td {
+      font-weight: bold;
+      color: #aaa9ad;
+    }
+    tr:nth-child(3) td {
+      font-weight: bold;
+      color: #b08d57;
+    }
   }
 }
 
@@ -56,6 +65,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0.3; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0.3;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

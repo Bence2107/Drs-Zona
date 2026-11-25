@@ -42,22 +42,32 @@
   border-radius: 12px !important;
   background: var(--secondary-bg) !important;
   border: 1px solid var(--border-color);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.12) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
   }
 
   .card-stripe {
     position: absolute;
-    left: 0; top: 0; bottom: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
     width: 4px;
   }
 
-  &.status-upcoming .card-stripe  { background: #ff9800; }
-  &.status-active .card-stripe    { background: #4caf50; }
-  &.status-finished .card-stripe  { background: var(--text-secondary); }
+  &.status-upcoming .card-stripe {
+    background: #ff9800;
+  }
+  &.status-active .card-stripe {
+    background: #4caf50;
+  }
+  &.status-finished .card-stripe {
+    background: var(--text-secondary);
+  }
 
   mat-card-header {
     display: flex;
@@ -65,7 +75,9 @@
     gap: 12px;
     padding: 16px 16px 8px 20px;
 
-    ::ng-deep .mat-mdc-card-header-text { display: none; }
+    ::ng-deep .mat-mdc-card-header-text {
+      display: none;
+    }
   }
 
   .season-badge {
@@ -112,11 +124,24 @@
     gap: 4px;
     flex-shrink: 0;
 
-    mat-icon { font-size: 14px; width: 14px; height: 14px; }
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
 
-    &.status-upcoming { color: #ff9800; border-color: #ff9800; }
-    &.status-active   { color: #4caf50; border-color: #4caf50; }
-    &.status-finished { color: var(--text-secondary); border-color: var(--text-secondary); }
+    &.status-upcoming {
+      color: #ff9800;
+      border-color: #ff9800;
+    }
+    &.status-active {
+      color: #4caf50;
+      border-color: #4caf50;
+    }
+    &.status-finished {
+      color: var(--text-secondary);
+      border-color: var(--text-secondary);
+    }
   }
 
   mat-card-content {
@@ -137,9 +162,22 @@
     color: var(--text-secondary);
     min-width: 0;
 
-    mat-icon { font-size: 16px; width: 16px; height: 16px; flex-shrink: 0; }
-    .meta-label { font-weight: 500; flex-shrink: 0; }
-    .meta-value { color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    .meta-label {
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    .meta-value {
+      color: var(--text-main);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   mat-card-actions {
@@ -165,19 +203,42 @@
   padding: 4rem 0;
   color: var(--text-secondary);
 
-  mat-icon { font-size: 48px; width: 48px; height: 48px; opacity: 0.4; }
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.4;
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0.3; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0.3;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 600px) {
-  .championship-container { padding: 1rem; }
-  .series-section { display: none; }
-  .series-select { display: flex; margin: 0 auto 1.5rem; width: 100% }
-  .champ-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .championship-container {
+    padding: 1rem;
+  }
+  .series-section {
+    display: none;
+  }
+  .series-select {
+    display: flex;
+    margin: 0 auto 1.5rem;
+    width: 100%;
+  }
+  .champ-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
 
   .status-chip {
     font-size: 11px;
