@@ -2,159 +2,83 @@
 
 <img width="300" height="113" alt="Drs Zóna" src="https://github.com/user-attachments/assets/8155e5b8-abd8-4821-800c-564b758500b2" />
 
-# 🏁 Drs-Zóna — The Motorsport Hub
+# Drs-Zóna
 
-*A modern, community-driven motorsport portal bringing fans, events, and data together in one place.*
+A community motorsport portal for news, results and fan interaction.
 
-![Status](https://img.shields.io/badge/status-planned-orange)
-![Version](https://img.shields.io/badge/version-v0.5.0-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
-![Tech](https://img.shields.io/badge/.NET-ASP.NET%20Core-purple)
-![Frontend](https://img.shields.io/badge/frontend-Angular-red)
+![.NET](https://img.shields.io/badge/.NET-9-512BD4)
+![Angular](https://img.shields.io/badge/Angular-21-DD0031)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-336791)
 
 </div>
 
----
+## Overview
 
-## 📌 Overview
+Drs-Zóna brings motorsport news, race results and community features into one place. Journalists write articles, editors maintain championship data, and fans read, comment and vote.
 
-**Drs-Zóna** is a web-based motorsport hub designed for fans who want everything in one place: breaking news, in-depth articles, race results, Grand Prix information, and interactive polls.
+- News and reviews with threaded comments
+- Results and standings for multiple series, with Grand Prix and circuit data
+- Polls
+- User accounts with User, Author, Editor and Admin roles
+- Article editor for authors, data management for editors
 
-The goal is to create a scalable, modern platform with a strong backend and a clean, fast frontend experience.
+## Tech stack
 
----
+| Layer | Technology |
+| --- | --- |
+| Frontend | Angular 21, Angular Material, TypeScript |
+| Backend | ASP.NET Core 9 Web API, Entity Framework Core |
+| Database | PostgreSQL |
+| Tooling | pnpm, Docker Compose (local database), xUnit, Karma |
 
-## ✨ Core Features
-
-### 📰 News & Articles
-
-* List all published motorsport news
-* Detailed article pages with comments
-* Category-based filtering
-
-### 🔐 Authentication System
-
-* User registration & login
-* Profile management
-* Role-based permissions (Admin, Author, User)
-
-### 🏁 Results & Statistics
-
-* Race results stored in SQL database
-* Expandable structure for multiple racing series
-
-### 🌍 Grand Prix & Track Database
-
-* Dedicated pages for each Grand Prix
-* Track layouts, stats, and historical data
-
-### 📊 Polls & Community Interaction
-
-* Fan polls about rules, races, predictions
-* Real-time result visualization
-
----
-
-## 🛠️ Tech Stack
-
-### Backend
-
-* ASP.NET Core Web API
-* Entity Framework Core (Code First)
-* PostgreSQL
-
-### Frontend
-
-* Angular
-* TypeScript
-* Angular Material
-
----
-
-## 📁 Project Structure
+## Repository structure
 
 ```text
-Drs-Zóna/
-│
-├── client/        # Angular frontend
-├── server/        # ASP.NET Core backend
-├── docs/          # Documentation (architecture, design, etc.)
-└── README.md
+Drs-Zona/
+├── client/                    Angular frontend
+│   ├── public/                Static images and favicon
+│   ├── scripts/               Dev server, .env loading, API client generation
+│   └── src/app/
+│       ├── api/               Generated API client (do not edit)
+│       ├── components/        Shared UI: header, dialogs, lists
+│       ├── directives/        Form directives
+│       ├── guards/            Route guards by role
+│       ├── interceptors/      Adds the JWT to requests
+│       ├── models/            UI-only models
+│       ├── pages/             Routed pages, admin pages under pages/admin
+│       ├── pipes/             Display pipes
+│       ├── services/          API services and error handling
+│       └── shared/            Shared helpers
+├── server/                    ASP.NET Core API (Drs-Zona.sln)
+│   ├── API/                   Entry point, controllers, Program.cs
+│   ├── Context/               EfContext, migrations, configuration loading
+│   ├── DTOs/                  Request and response contracts
+│   ├── Entities/              EF Core entity models
+│   ├── Repositories/          Data access, interfaces and implementations
+│   ├── Services/              Business logic, image handling, auth
+│   └── Tests/                 Unit, integration and controller tests
+├── docker-compose.yml         Local PostgreSQL for development
+└── .env.example               Template for all configuration
 ```
 
----
+Each part has its own README: [client](client/README.md) and [server](server/README.md).
 
-## ⚙️ Getting Started (Quickstart)
+## Quickstart
 
-### 📋 Prerequisites
-
-* .NET SDK (LTS)
-* Node.js (LTS)
-* pnpm (`npm install -g pnpm`)
-* Docker (for the local database), or your own PostgreSQL
-
----
-
-### 🔧 1. Clone the repository
+Requires the .NET 9 SDK, Node.js 20.19+, pnpm 12+, Docker and the `dotnet-ef` tool.
 
 ```bash
-git clone https://github.com/your-repo/drs-zona.git
-cd drs-zona
+git clone https://github.com/Bence2107/Drs-Zona.git
+cd Drs-Zona
+cp .env.example .env              # fill in DB_PASSWORD and JWT_SECRET
+
+docker compose up -d              # start PostgreSQL
+cd server/Context && dotnet ef database update && cd ../..
+
+cd server/API && dotnet run --launch-profile https
 ```
 
----
-
-### ⚙️ 2. Configure environment variables
-
-Copy the example file to the repository root and fill in your values:
-
-```bash
-cp .env.example .env
-```
-
-[`.env.example`](.env.example) lists every variable, whether it is required, and its default.
-To keep the file outside the repository, set `ENV_FILE` to its path.
-
-> ⚠️ Note: Secrets (API keys, passwords) are **not included** in the repository.
-
----
-
-### 🗄️ 3. Database setup
-
-Start PostgreSQL in Docker from the repository root. It uses the `DB_*` values from your `.env`, so the API connects to it without extra settings:
-
-```bash
-docker compose up -d
-```
-
-(With your own PostgreSQL instead, make sure it runs and matches the `DB_*` values.)
-
-Apply migrations:
-
-```bash
-cd server/Context
-dotnet ef database update
-```
-
----
-
-### ▶️ 4. Run backend
-
-```bash
-cd server
-dotnet run --launch-profile https
-```
-
-Expected result:
-
-* API starts successfully
-* Example: `http://localhost:7221`
-* Health endpoint available: `/health`
-* The Swagger's route: *localhost*/swagger/index.html
-
----
-
-### 💻 5. Run frontend
+In a second terminal:
 
 ```bash
 cd client
@@ -162,97 +86,12 @@ pnpm install
 pnpm start
 ```
 
-Application will be available at:
+Open `http://localhost:4200`. The API's Swagger UI is at `http://localhost:5244/swagger`.
 
-```
-http://localhost:4200
-```
+See the [server README](server/README.md) and the [client README](client/README.md) for configuration, the local database and tests.
 
-To use other ports, uncomment `FRONTEND_PORT`, `API_PORT` and `API_HTTPS_PORT` in `.env`.
-The API, the dev proxy and `pnpm open-api-gen` all follow them. Production ignores them.
+## Vision
 
----
+Drs-Zóna aims to become a central hub for motorsport fans, combining reliable data, quality content and an engaged community.
 
-### ✅ 6. Verify system
-
-After startup:
-
-* Frontend loads without errors
-* API responds (e.g. `/api/Article`)
-* Database connection works
-
----
-
-## 🧪 Running Tests
-
-### Backend tests
-
-```bash
-cd server
-dotnet test
-```
-
-### Frontend tests
-
-```bash
-cd client
-pnpm test
-```
-
-> Test results should show all tests passing.
-
----
-
-## 📊 Evidence & Quality
-
-This project follows an **evidence-first approach**:
-
-* Automated tests (unit, integration, e2e)
-* API responses verifiable via endpoints
-* UI flows demonstrated via screenshots (see `/docs/ux`)
-* Logs and health checks available
-
----
-
-
-> ### 🔐 Security Note
-
-All sensitive configuration (database credentials, JWT secrets) is handled via environment variables.
-
-No secrets are stored in the repository.
-
-
----
-
-## 🚀 Roadmap
-
-### v1.0.0 — Initial Release *(Planned: Q2 2026)*
-
-* 📰 News & Articles
-* 💬 Comment system
-* 🔐 Authentication & profiles
-* ✍️ Article management
-* 🏆 Race results
-* 🌍 Grand Prix database
-* 📊 Polls
-* 🗂️ Category filtering
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License**.
-
----
-
-## 🤝 Contributing *(Planned)*
-
-Contribution guidelines will be added in future versions.
-
----
-
-## 🏎️ Vision
-
-**Drs-Zóna** aims to become a central hub for motorsport enthusiasts — combining reliable data, quality content, and an engaged community.
-
-*Stay fast. Stay informed.* 🏁
+*Stay fast. Stay informed.*
