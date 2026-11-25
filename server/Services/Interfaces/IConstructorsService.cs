@@ -3,7 +3,7 @@ using Services.Types;
 
 namespace Services.Interfaces;
 
-public interface IConstructorsService 
+public interface IConstructorsService
 {
     Task<ResponseResult<ConstructorDetailDto>> GetById(Guid id);
     Task<ResponseResult<List<ConstructorListDto>>> GetAllConstructors();

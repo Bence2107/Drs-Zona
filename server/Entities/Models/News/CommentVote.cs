@@ -10,17 +10,17 @@ public class CommentVote
     [Key]
     [Column("id")]
     public Guid Id { get; set; }
-    
+
     [Column("user_id")]
     public Guid? UserId { get; set; }
     [JsonIgnore]
     public virtual User? User { get; set; }
-    
+
     [Column("comment_id")]
     public Guid CommentId { get; set; }
     [JsonIgnore]
     public virtual Comment? Comment { get; set; }
-    
+
     [Column("is_upvote")]
-    public bool IsUpvote { get; set; } 
+    public bool IsUpvote { get; set; }
 }

@@ -18,7 +18,7 @@ public class ChampionshipIntegrationTests
     {
         var ctx = InMemoryDbFactory.CreateContext();
 
-     
+
         var svc = new ChampionshipService(
             new ConstructorsRepository(ctx),
             new ConstructorsChampionshipsRepository(ctx),
@@ -172,15 +172,15 @@ public class ChampionshipIntegrationTests
     {
         var (ctx, svc) = BuildSut();
 
-        var series  = CreateSeries();
-        var brand   = CreateBrand();
+        var series = CreateSeries();
+        var brand = CreateBrand();
         await ctx.Series.AddAsync(series);
         await ctx.Brands.AddAsync(brand);
 
         var constructor = CreateConstructor(brand.Id);
-        var driver      = CreateDriver();
-        var dc          = CreateDriversChamp(series.Id, "2024");
-        var cc          = CreateConstructorsChamp(series.Id, "2024");
+        var driver = CreateDriver();
+        var dc = CreateDriversChamp(series.Id, "2024");
+        var cc = CreateConstructorsChamp(series.Id, "2024");
 
         await ctx.Constructors.AddAsync(constructor);
         await ctx.Drivers.AddAsync(driver);
@@ -209,14 +209,14 @@ public class ChampionshipIntegrationTests
     {
         var (ctx, svc) = BuildSut();
 
-        var series  = CreateSeries();
-        var brand   = CreateBrand();
+        var series = CreateSeries();
+        var brand = CreateBrand();
         await ctx.Series.AddAsync(series);
         await ctx.Brands.AddAsync(brand);
 
         var constructor = CreateConstructor(brand.Id);
-        var dc          = CreateDriversChamp(series.Id, "2024");
-        var cc          = CreateConstructorsChamp(series.Id, "2024");
+        var dc = CreateDriversChamp(series.Id, "2024");
+        var cc = CreateConstructorsChamp(series.Id, "2024");
 
         await ctx.Constructors.AddAsync(constructor);
         await ctx.DriversChampionships.AddAsync(dc);
@@ -225,9 +225,9 @@ public class ChampionshipIntegrationTests
         // Előre hozzáadva
         var existingComp = new ConstructorCompetition
         {
-            ConstructorId               = constructor.Id,
-            ConstChampId                = cc.Id,
-            ConstructorNameSnapshot     = constructor.Name,
+            ConstructorId = constructor.Id,
+            ConstChampId = cc.Id,
+            ConstructorNameSnapshot = constructor.Name,
             ConstructorNicknameSnapshot = constructor.Nickname
         };
         await ctx.ConstructorCompetitions.AddAsync(existingComp);
@@ -252,8 +252,8 @@ public class ChampionshipIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var series = CreateSeries();
-        var dc     = CreateDriversChamp(series.Id, "2024");
-        var cc     = CreateConstructorsChamp(series.Id, "2024");
+        var dc = CreateDriversChamp(series.Id, "2024");
+        var cc = CreateConstructorsChamp(series.Id, "2024");
         await ctx.Series.AddAsync(series);
         await ctx.DriversChampionships.AddAsync(dc);
         await ctx.ConstructorsChampionships.AddAsync(cc);
@@ -282,17 +282,17 @@ public class ChampionshipIntegrationTests
 
         var series = CreateSeries();
         var driver = CreateDriver();
-        var dc     = CreateDriversChamp(series.Id, "2024");
+        var dc = CreateDriversChamp(series.Id, "2024");
         await ctx.Series.AddAsync(series);
         await ctx.Drivers.AddAsync(driver);
         await ctx.DriversChampionships.AddAsync(dc);
 
         var participation = new DriverParticipation
         {
-            DriverId            = driver.Id,
-            DriverChampId       = dc.Id,
-            DriverNumber        = 44,
-            DriverNameSnapshot  = driver.Name
+            DriverId = driver.Id,
+            DriverChampId = dc.Id,
+            DriverNumber = 44,
+            DriverNameSnapshot = driver.Name
         };
         await ctx.DriverParticipates.AddAsync(participation);
         await ctx.SaveChangesAsync();
@@ -313,21 +313,21 @@ public class ChampionshipIntegrationTests
     {
         var (ctx, svc) = BuildSut();
 
-        var series  = CreateSeries();
-        var brand   = CreateBrand();
+        var series = CreateSeries();
+        var brand = CreateBrand();
         await ctx.Series.AddAsync(series);
         await ctx.Brands.AddAsync(brand);
 
         var constructor = CreateConstructor(brand.Id);
-        var cc          = CreateConstructorsChamp(series.Id, "2024");
+        var cc = CreateConstructorsChamp(series.Id, "2024");
         await ctx.Constructors.AddAsync(constructor);
         await ctx.ConstructorsChampionships.AddAsync(cc);
 
         var competition = new ConstructorCompetition
         {
-            ConstructorId               = constructor.Id,
-            ConstChampId                = cc.Id,
-            ConstructorNameSnapshot     = constructor.Name,
+            ConstructorId = constructor.Id,
+            ConstChampId = cc.Id,
+            ConstructorNameSnapshot = constructor.Name,
             ConstructorNicknameSnapshot = constructor.Nickname
         };
         await ctx.ConstructorCompetitions.AddAsync(competition);
@@ -360,7 +360,7 @@ public class ChampionshipIntegrationTests
     {
         var (ctx, svc) = BuildSut();
 
-        var series  = CreateSeries();
+        var series = CreateSeries();
         var circuit = CreateCircuit();
         await ctx.Series.AddAsync(series);
         await ctx.Circuits.AddAsync(circuit);
@@ -418,52 +418,52 @@ public class ChampionshipIntegrationTests
 
     private static Driver CreateDriver() => new()
     {
-        Id          = Guid.NewGuid(),
-        Name        = "Max Verstappen",
+        Id = Guid.NewGuid(),
+        Name = "Max Verstappen",
         Nationality = "Dutch",
-        BirthDate   = new DateTime(1997, 9, 30)
+        BirthDate = new DateTime(1997, 9, 30)
     };
 
     private static DriversChampionship CreateDriversChamp(Guid seriesId, string season, string name = "WDC", Guid? id = null) => new()
     {
-        Id       = id ?? Guid.NewGuid(),
+        Id = id ?? Guid.NewGuid(),
         SeriesId = seriesId,
-        Season   = season,
-        Name     = name,
-        Status   = "Upcoming"
+        Season = season,
+        Name = name,
+        Status = "Upcoming"
     };
 
     private static ConstructorsChampionship CreateConstructorsChamp(Guid seriesId, string season, string name = "WCC", Guid? id = null) => new()
     {
-        Id       = id ?? Guid.NewGuid(),
+        Id = id ?? Guid.NewGuid(),
         SeriesId = seriesId,
-        Season   = season,
-        Name     = name,
-        Status   = "Upcoming"
+        Season = season,
+        Name = name,
+        Status = "Upcoming"
     };
 
     private static Circuit CreateCircuit() => new()
     {
-        Id          = Guid.NewGuid(),
-        Name        = "Monza",
-        Location    = "Italy",
-        Length      = 5.793,
-        Type        = "Street",
-        FastestLap  = "1:21.046"
+        Id = Guid.NewGuid(),
+        Name = "Monza",
+        Location = "Italy",
+        Length = 5.793,
+        Type = "Street",
+        FastestLap = "1:21.046"
     };
 
     private static GrandPrix CreateGrandPrix(Guid seriesId, int year, int round, Guid circuitId) => new()
     {
-        Id            = Guid.NewGuid(),
-        SeriesId      = seriesId,
-        SeasonYear    = year,
-        RoundNumber   = round,
-        Name          = $"GP Round {round}",
-        ShortName     = $"R{round}",
-        CircuitId     = circuitId,
-        StartTime     = DateTime.UtcNow,
-        EndTime       = DateTime.UtcNow.AddHours(2),
-        RaceDistance  = 305,
+        Id = Guid.NewGuid(),
+        SeriesId = seriesId,
+        SeasonYear = year,
+        RoundNumber = round,
+        Name = $"GP Round {round}",
+        ShortName = $"R{round}",
+        CircuitId = circuitId,
+        StartTime = DateTime.UtcNow,
+        EndTime = DateTime.UtcNow.AddHours(2),
+        RaceDistance = 305,
         LapsCompleted = 58
     };
 

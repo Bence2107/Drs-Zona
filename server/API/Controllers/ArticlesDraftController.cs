@@ -6,13 +6,13 @@ using Services.Interfaces.images;
 
 [ApiController]
 [Route("api/article-image")]
-[Authorize] 
-public class ArticleImageController(IArticleImageService articleImageService) : ControllerBase 
+[Authorize]
+public class ArticleImageController(IArticleImageService articleImageService) : ControllerBase
 {
     private static readonly string[] AllowedSlots = ["primary", "secondary", "third", "last"];
     private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png", ".webp"];
-    private const long MaxFileSizeBytes = 5 * 1024 * 1024; 
-    
+    private const long MaxFileSizeBytes = 5 * 1024 * 1024;
+
     [Authorize(Policy = "AuthorOrAdmin")]
     [HttpPost("{draftId}/images/{slot}")]
     public async Task<IActionResult> UploadDraftImage(string draftId, string slot, IFormFile? file)
@@ -36,7 +36,7 @@ public class ArticleImageController(IArticleImageService articleImageService) : 
         var url = await articleImageService.SaveDraftImage(draftId, file, slot);
         return Ok(new { url });
     }
-    
+
     [Authorize(Policy = "AuthorOrAdmin")]
     [HttpDelete("{draftId}")]
     public async Task<IActionResult> DeleteDraft(string draftId)
@@ -47,7 +47,7 @@ public class ArticleImageController(IArticleImageService articleImageService) : 
         await articleImageService.DeleteDraftImages(draftId);
         return NoContent();
     }
-    
+
     [Authorize(Policy = "AuthorOrAdmin")]
     [HttpPost("{draftId}/promote/{slug}")]
     public async Task<IActionResult> PromoteDraft(string draftId, string slug)

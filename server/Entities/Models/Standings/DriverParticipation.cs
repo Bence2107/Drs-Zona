@@ -10,15 +10,15 @@ public class DriverParticipation
     public Guid DriverId { get; set; }
     [JsonIgnore]
     public virtual Driver? Driver { get; set; }
-    
+
     [Column("drivers_championship_id")]
     public Guid DriverChampId { get; set; }
     [JsonIgnore]
     public virtual DriversChampionship? DriversChampionship { get; set; }
-    
+
     [Column("driver_number")]
     public int DriverNumber { get; set; }
-    
+
     [Column("driver_name_snapshot")]
     public required string DriverNameSnapshot { get; set; }
 }

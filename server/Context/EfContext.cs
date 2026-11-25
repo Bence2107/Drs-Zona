@@ -14,7 +14,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
     public DbSet<Article> Articles { get; set; }
 
     public DbSet<Comment> Comments { get; set; }
-    
+
     public DbSet<CommentVote> CommentVotes { get; set; }
 
     public DbSet<Poll> Polls { get; set; }
@@ -28,11 +28,11 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
     public DbSet<Brand> Brands { get; set; }
 
     public DbSet<Constructor> Constructors { get; set; }
-    
+
     public DbSet<ConstructorCompetition> ConstructorCompetitions { get; set; }
-    
+
     public DbSet<ConstructorsChampionship> ConstructorsChampionships { get; set; }
-    
+
     public DbSet<Contract> Contracts { get; set; }
 
     public DbSet<Driver> Drivers { get; set; }
@@ -42,13 +42,13 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
     public DbSet<DriversChampionship> DriversChampionships { get; set; }
 
     public DbSet<QualifyingResult> QualifyingResults { get; set; }
-    
+
     public DbSet<Result> Results { get; set; }
 
     public DbSet<Series> Series { get; set; }
-    
+
     public DbSet<PollVote> PollVotes { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         //------------NEWS------------
@@ -61,7 +61,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                     .WithMany()
                     .HasForeignKey(a => a.AuthorId)
                     .OnDelete(DeleteBehavior.SetNull);
-                
+
                 options.Property(a => a.IsSummary).HasDefaultValue(false);
                 options.Property(a => a.SecondSection).HasDefaultValue(null);
                 options.Property(a => a.ThirdSection).HasDefaultValue(null);
@@ -94,13 +94,13 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .WithMany()
                 .HasForeignKey(c => c.ReplyToCommentId)
                 .OnDelete(DeleteBehavior.Cascade);
-            
+
             options.Property(c => c.ReplyToCommentId).HasDefaultValue(null);
             options.Property(c => c.UpVotes).HasDefaultValue(0);
             options.Property(c => c.DownVotes).HasDefaultValue(0);
             options.Property(c => c.DateUpdated).HasDefaultValue(null);
         });
-        
+
         modelBuilder.Entity<CommentVote>(options =>
         {
             // Composite primary key
@@ -118,7 +118,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .HasForeignKey(v => v.CommentId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
-        
+
         //------------POLL------------
         // Poll -> User (Many-to-One)
         modelBuilder.Entity<Poll>(options =>
@@ -168,8 +168,8 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .HasForeignKey(gp => gp.CircuitId)
                 .OnDelete(DeleteBehavior.NoAction);
         });
-            
-        
+
+
         //------------STANDINGS------------
         // Contract relationships
         modelBuilder.Entity<Contract>(options =>
@@ -192,7 +192,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
         {
             options.HasKey(dp => new { dp.DriverId, dp.DriverChampId });
             options.Property(dp => dp.DriverNumber).HasDefaultValue(-1);
-            
+
             options
                 .HasOne(dp => dp.Driver)
                 .WithMany()
@@ -211,7 +211,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
             options.Property(r => r.DriverNameSnapshot).HasDefaultValue("");
             options.Property(r => r.ConstructorNameSnapshot).HasDefaultValue("");
             options.Property(r => r.ConstructorNicknameSnapshot).HasDefaultValue("");
-            
+
             options
                 .HasOne(r => r.GrandPrix)
                 .WithMany()
@@ -256,7 +256,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
         modelBuilder.Entity<ConstructorCompetition>(options =>
         {
             options.HasKey(tc => new { TeamId = tc.ConstructorId, tc.ConstChampId });
-            
+
             options
                 .HasOne(tc => tc.Constructor)
                 .WithMany()
@@ -275,7 +275,7 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
             options.Property(u => u.Role).HasDefaultValue("user");
             options.Property(u => u.HasAvatar).HasDefaultValue(false);
         });
-        
+
         modelBuilder.Entity<QualifyingResult>(options =>
         {
             // One-to-One kapcsolat: Egy Result-hoz tartozhat egy QualifyingResult
@@ -285,8 +285,8 @@ public class EfContext(DbContextOptions<EfContext> options) : DbContext(options)
                 .HasForeignKey<QualifyingResult>(qr => qr.ResultId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
-        
-        
+
+
         foreach (var entity in modelBuilder.Model.GetEntityTypes())
         {
             var idProperty = entity.FindProperty("Id");

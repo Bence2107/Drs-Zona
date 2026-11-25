@@ -9,9 +9,9 @@ namespace Tests.Services.Units;
 
 public class SeriesServiceUnitTests
 {
-    private readonly Mock<ISeriesRepository>                     _seriesRepo       = new();
-    private readonly Mock<IDriversChampionshipsRepository>       _driverChampRepo  = new();
-    private readonly Mock<IConstructorsChampionshipsRepository>  _constChampRepo   = new();
+    private readonly Mock<ISeriesRepository> _seriesRepo = new();
+    private readonly Mock<IDriversChampionshipsRepository> _driverChampRepo = new();
+    private readonly Mock<IConstructorsChampionshipsRepository> _constChampRepo = new();
 
     private readonly SeriesService _svc;
 
@@ -173,19 +173,19 @@ public class SeriesServiceUnitTests
 
     private static DriversChampionship CreateDriversChamp(Guid seriesId, string season) => new()
     {
-        Id       = Guid.NewGuid(),
+        Id = Guid.NewGuid(),
         SeriesId = seriesId,
-        Season   = season,
-        Name     = $"WDC {season}",
-        Status   = "Finished"
+        Season = season,
+        Name = $"WDC {season}",
+        Status = "Finished"
     };
 
     private static ConstructorsChampionship CreateConstructorsChamp(Guid seriesId, string season) => new()
     {
-        Id       = Guid.NewGuid(),
+        Id = Guid.NewGuid(),
         SeriesId = seriesId,
-        Season   = season,
-        Name     = $"WCC {season}",
-        Status   = "Finished"
+        Season = season,
+        Name = $"WCC {season}",
+        Status = "Finished"
     };
 }

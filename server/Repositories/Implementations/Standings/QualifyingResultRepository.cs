@@ -5,7 +5,7 @@ using Repositories.Interfaces.Standings;
 
 namespace Repositories.Implementations.Standings;
 
-public class QualifyingResultRepository(EfContext context) : IQualifyingResultRepository 
+public class QualifyingResultRepository(EfContext context) : IQualifyingResultRepository
 {
     public async Task<QualifyingResult?> GetByResultId(Guid resultId)
     {

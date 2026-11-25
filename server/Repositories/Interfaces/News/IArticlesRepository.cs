@@ -2,7 +2,7 @@ using Entities.Models.News;
 
 namespace Repositories.Interfaces.News;
 
-public interface IArticlesRepository 
+public interface IArticlesRepository
 {
     Task<Article?> GetById(Guid id);
     Task<Article?> GetByIdWithAll(Guid id);

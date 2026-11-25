@@ -7,9 +7,9 @@ using Services.Types;
 namespace Services.Implementations;
 
 public class DriverService(
-    IDriversRepository driverRepo, 
+    IDriversRepository driverRepo,
     IContractsRepository contractsDepo
-) : IDriverService 
+) : IDriverService
 {
     public async Task<ResponseResult<DriverDetailDto>> GetDriverById(Guid id)
     {
@@ -33,17 +33,17 @@ public class DriverService(
             driver.Seasons
         ));
     }
-    
+
     public async Task<ResponseResult<List<DriverListDto>>> GetAllDrivers()
     {
         var drivers = await driverRepo.GetAllDrivers();
-    
+
         var dto = new List<DriverListDto>();
         foreach (var d in drivers)
         {
             var contracts = await contractsDepo.GetByDriverId(d.Id);
             var currentTeamName = contracts.LastOrDefault()?.Constructor?.Name;
-        
+
             dto.Add(new DriverListDto(
                 d.Id,
                 d.Name,
@@ -58,19 +58,19 @@ public class DriverService(
             .ToList();
         return ResponseResult<List<DriverListDto>>.Success(orderedDto);
     }
-    
+
     public async Task<ResponseResult<bool>> Create(DriverCreateDto dto)
     {
         if (dto.BirthDate > DateTime.Now)
         {
             return ResponseResult<bool>.Failure("Birth date cannot be in the future.");
         }
-        
+
         if (dto.BirthDate > DateTime.Today.AddYears(-15))
         {
             return ResponseResult<bool>.Failure(nameof(dto.BirthDate), "Driver cannot be younger than 15 year");
         }
-        
+
         var driver = new Driver
         {
             Name = dto.Name,
@@ -92,17 +92,17 @@ public class DriverService(
     {
         var driver = await driverRepo.GetDriverById(dto.Id);
         if (driver == null) return ResponseResult<bool>.Failure("Driver not found.");
-        
+
         if (dto.BirthDate > DateTime.Now)
         {
             return ResponseResult<bool>.Failure(nameof(driver.BirthDate), "Birth date cannot be in the future.");
         }
-        
+
         if (dto.BirthDate > DateTime.Today.AddYears(-15))
         {
             return ResponseResult<bool>.Failure(nameof(driver.BirthDate), "Driver cannot be younger than 15 year");
         }
-        
+
         driver.Id = dto.Id;
         driver.Name = dto.Name;
         driver.Nationality = dto.Nationality;
@@ -117,7 +117,7 @@ public class DriverService(
         await driverRepo.Update(driver);
         return ResponseResult<bool>.Success(true);
     }
-    
+
     private static int GetDriversAge(DateTime birthDate)
     {
         var years = DateTime.Now.Year - birthDate.Year;

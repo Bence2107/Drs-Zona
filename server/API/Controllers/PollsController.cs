@@ -7,14 +7,14 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PollController(IPollService pollService): ControllerBase 
+public class PollController(IPollService pollService) : ControllerBase
 {
     private Guid? GetCurrentUserId()
     {
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         return Guid.TryParse(userIdClaim, out var guid) ? guid : null;
     }
-    
+
     [HttpGet("get/{id:guid}")]
     public async Task<ActionResult<PollDto>> GetById([FromRoute] Guid id)
     {
@@ -24,14 +24,14 @@ public class PollController(IPollService pollService): ControllerBase
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
-    
+
     [Authorize]
     [HttpGet("getByCreator")]
     public async Task<ActionResult<List<PollListDto>>> GetByCreatorId([FromQuery] string? tag = null)
@@ -42,30 +42,30 @@ public class PollController(IPollService pollService): ControllerBase
         {
             return Unauthorized();
         }
-        
+
         var response = await pollService.GetPollsByCreatorId(userId.Value, tag);
         if (!response.IsSuccess)
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
-    
+
     [HttpGet("getAllActive")]
     public async Task<ActionResult<List<PollListDto>>> GetAllActive([FromQuery] string? tag = null)
     {
         var response = await pollService.GetActivePolls(tag);
         return Ok(response);
     }
-    
+
     [Authorize]
     [HttpPost("create")]
-    public async Task<ActionResult> Create([FromBody]PollCreateDto dto)
+    public async Task<ActionResult> Create([FromBody] PollCreateDto dto)
     {
         var userId = GetCurrentUserId();
 
@@ -73,24 +73,24 @@ public class PollController(IPollService pollService): ControllerBase
         {
             return Unauthorized();
         }
-        
+
         var result = await pollService.Create(dto, userId);
 
         if (!result.IsSuccess)
         {
             return BadRequest(new
             {
-                result.ErrorField, 
+                result.ErrorField,
                 result.Message
             });
         }
 
         return Ok(result.Value);
     }
-    
+
     [Authorize]
     [HttpPost("vote/{pollId:guid}/{pollOptionId:guid}")]
-    public async Task<ActionResult> Vote([FromRoute]Guid pollId, [FromRoute]Guid pollOptionId)
+    public async Task<ActionResult> Vote([FromRoute] Guid pollId, [FromRoute] Guid pollOptionId)
     {
         var userId = GetCurrentUserId();
 
@@ -105,7 +105,7 @@ public class PollController(IPollService pollService): ControllerBase
         {
             return BadRequest(new
             {
-                result.ErrorField, 
+                result.ErrorField,
                 result.Message
             });
         }
@@ -115,7 +115,7 @@ public class PollController(IPollService pollService): ControllerBase
 
     [Authorize]
     [HttpDelete("delete/{id:guid}")]
-    public async Task<ActionResult> Delete([FromRoute]Guid id)
+    public async Task<ActionResult> Delete([FromRoute] Guid id)
     {
         var userId = GetCurrentUserId();
 
@@ -123,7 +123,7 @@ public class PollController(IPollService pollService): ControllerBase
         {
             return Unauthorized();
         }
-        
+
         var response = await pollService.Delete(id, userId);
         if (!response.IsSuccess) return NotFound(response.Message);
 

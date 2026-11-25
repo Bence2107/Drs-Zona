@@ -32,7 +32,7 @@ public record ArticleCreateDto(
         if (Summary == null) yield break;
         if (string.IsNullOrEmpty(Summary.SecondSection) && !string.IsNullOrEmpty(Summary.ThirdSection))
             yield return new ValidationResult("Nem töltheted ki a harmadik szekciót, amíg a második üres.", [nameof(Summary.SecondSection)]);
-                
+
         if (string.IsNullOrEmpty(Summary.ThirdSection) && !string.IsNullOrEmpty(Summary.FourthSection))
             yield return new ValidationResult("Nem töltheted ki a negyedik szekciót, amíg a harmadik üres.", [nameof(Summary.ThirdSection)]);
     }
@@ -64,7 +64,7 @@ public record ArticleUpdateDto(
         if (Summary == null) yield break;
         if (string.IsNullOrEmpty(Summary.SecondSection) && !string.IsNullOrEmpty(Summary.ThirdSection))
             yield return new ValidationResult("Nem töltheted ki a harmadik szekciót, amíg a második üres.", [nameof(Summary.SecondSection)]);
-                
+
         if (string.IsNullOrEmpty(Summary.ThirdSection) && !string.IsNullOrEmpty(Summary.FourthSection))
             yield return new ValidationResult("Nem töltheted ki a negyedik szekciót, amíg a harmadik üres.", [nameof(Summary.ThirdSection)]);
     }
@@ -82,14 +82,14 @@ public record ArticleListDto(
 );
 
 public record SummaryDto(
-    [MinLength(100, ErrorMessage = "A szekció hossza minimum 100 karakter")] 
-    [MaxLength(5000,  ErrorMessage = "A szekció hossza maximum 5000 karakter")] 
+    [MinLength(100, ErrorMessage = "A szekció hossza minimum 100 karakter")]
+    [MaxLength(5000,  ErrorMessage = "A szekció hossza maximum 5000 karakter")]
     string SecondSection,
-    [MinLength(100, ErrorMessage = "A szekció hossza minimum 100 karakter")] 
-    [MaxLength(5000,  ErrorMessage = "A szekció hossza maximum 5000 karakter")] 
+    [MinLength(100, ErrorMessage = "A szekció hossza minimum 100 karakter")]
+    [MaxLength(5000,  ErrorMessage = "A szekció hossza maximum 5000 karakter")]
     string ThirdSection,
-    [MinLength(100, ErrorMessage = "A szekció hossza minimum 100 karakter")] 
-    [MaxLength(5000,  ErrorMessage = "A szekció hossza maximum 5000 karakter")] 
+    [MinLength(100, ErrorMessage = "A szekció hossza minimum 100 karakter")]
+    [MaxLength(5000,  ErrorMessage = "A szekció hossza maximum 5000 karakter")]
     string FourthSection
 );
 
@@ -126,13 +126,13 @@ public class SlugExistsAttribute : ValidationAttribute
 
         var slug = value.ToString()!;
         var repo = ctx.GetRequiredService<IArticlesRepository>();
-        
+
         var existingArticle = repo.GetArticleBySlug(slug).GetAwaiter().GetResult();
 
         if (existingArticle == null) return ValidationResult.Success;
         if (ctx.ObjectInstance is not ArticleUpdateDto updateDto)
             return new ValidationResult("Ez a slug már létezik. Kérlek módosítsd!");
-        
+
         return existingArticle.Id == updateDto.Id ? ValidationResult.Success : new ValidationResult("Ez a slug már létezik. Kérlek módosítsd!");
     }
 }

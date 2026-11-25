@@ -5,7 +5,7 @@ using SkiaSharp;
 
 namespace Services.Implementations.images;
 
-public class ArticleImageService(UploadSettings uploads): IArticleImageService
+public class ArticleImageService(UploadSettings uploads) : IArticleImageService
 {
     public string? GetImageUrl(string slug, string imageName)
     {
@@ -18,7 +18,7 @@ public class ArticleImageService(UploadSettings uploads): IArticleImageService
     {
         return $"/uploads/dumps/articles/{draftId}/{imageName}";
     }
-     
+
     public async Task<string> SaveDraftImage(string draftId, IFormFile file, string imageName)
     {
         var dumpsPath = Path.Combine(uploads.RootPath, "dumps", "articles", draftId);
@@ -58,13 +58,13 @@ public class ArticleImageService(UploadSettings uploads): IArticleImageService
 
         var matrix = origin switch
         {
-            SKEncodedOrigin.TopRight    => new SKMatrix(-1, 0, w, 0, 1, 0, 0, 0, 1),
+            SKEncodedOrigin.TopRight => new SKMatrix(-1, 0, w, 0, 1, 0, 0, 0, 1),
             SKEncodedOrigin.BottomRight => new SKMatrix(-1, 0, w, 0, -1, h, 0, 0, 1),
-            SKEncodedOrigin.BottomLeft  => new SKMatrix(1, 0, 0, 0, -1, h, 0, 0, 1),
-            SKEncodedOrigin.LeftTop     => new SKMatrix(0, 1, 0, 1, 0, 0, 0, 0, 1),
-            SKEncodedOrigin.RightTop    => new SKMatrix(0, -1, h, 1, 0, 0, 0, 0, 1),
+            SKEncodedOrigin.BottomLeft => new SKMatrix(1, 0, 0, 0, -1, h, 0, 0, 1),
+            SKEncodedOrigin.LeftTop => new SKMatrix(0, 1, 0, 1, 0, 0, 0, 0, 1),
+            SKEncodedOrigin.RightTop => new SKMatrix(0, -1, h, 1, 0, 0, 0, 0, 1),
             SKEncodedOrigin.RightBottom => new SKMatrix(0, -1, h, -1, 0, w, 0, 0, 1),
-            SKEncodedOrigin.LeftBottom  => new SKMatrix(0, 1, 0, -1, 0, w, 0, 0, 1),
+            SKEncodedOrigin.LeftBottom => new SKMatrix(0, 1, 0, -1, 0, w, 0, 0, 1),
             _ => SKMatrix.Identity
         };
 
@@ -88,7 +88,7 @@ public class ArticleImageService(UploadSettings uploads): IArticleImageService
             await Task.Run(() => Directory.Delete(folderPath, true));
         }
     }
-    
+
     public async Task PromoteDraftImages(string draftId, string slug)
     {
         var draftFolder = Path.Combine(uploads.RootPath, "dumps", "articles", draftId);
@@ -106,8 +106,8 @@ public class ArticleImageService(UploadSettings uploads): IArticleImageService
             {
                 File.Delete(destFile);
             }
-        
-            File.Move(srcFile, destFile); 
+
+            File.Move(srcFile, destFile);
         }
 
         await DeleteDraftImages(draftId);

@@ -11,8 +11,8 @@ namespace Tests.Services.Units;
 public class DriverServiceUnitTests
 {
 
-    private readonly Mock<IDriversRepository>    _driverRepo    = new();
-    private readonly Mock<IContractsRepository>  _contractsRepo = new();
+    private readonly Mock<IDriversRepository> _driverRepo = new();
+    private readonly Mock<IContractsRepository> _contractsRepo = new();
 
     private readonly DriverService _svc;
 
@@ -80,7 +80,7 @@ public class DriverServiceUnitTests
     public async Task GetDriverById_ShouldCalculateAge_Correctly()
     {
         var birthDate = DateTime.Today.AddYears(-25);
-        var driver    = CreateDriver(birthDate: birthDate);
+        var driver = CreateDriver(birthDate: birthDate);
 
         _driverRepo.Setup(r => r.GetDriverById(driver.Id)).ReturnsAsync(driver);
         _contractsRepo.Setup(r => r.GetByDriverId(driver.Id)).ReturnsAsync(new List<Contract>());
@@ -131,7 +131,7 @@ public class DriverServiceUnitTests
     [Fact]
     public async Task GetAllDrivers_ShouldReturnCurrentTeamName_FromLastContract()
     {
-        var driver     = CreateDriver();
+        var driver = CreateDriver();
         var constructor = new Constructor
         {
             Id = Guid.NewGuid(),
@@ -141,7 +141,7 @@ public class DriverServiceUnitTests
             TeamChief = "null",
             TechnicalChief = "null"
         };
-        var contracts  = new List<Contract>
+        var contracts = new List<Contract>
         {
             new() { Id = Guid.NewGuid(), DriverId = driver.Id, Constructor = new Constructor
                 {
@@ -215,7 +215,7 @@ public class DriverServiceUnitTests
 
         result.IsSuccess.Should().BeTrue();
         _driverRepo.Verify(r => r.Create(It.Is<Driver>(d =>
-            d.Name        == dto.Name        &&
+            d.Name == dto.Name &&
             d.Nationality == dto.Nationality
         )), Times.Once);
     }
@@ -317,15 +317,15 @@ public class DriverServiceUnitTests
             .Returns(Task.CompletedTask);
 
         var dto = CreateDriverUpdateDto(
-            id:          driver.Id,
-            name:        "New Name",
+            id: driver.Id,
+            name: "New Name",
             nationality: "Dutch",
-            totalRaces:  300,
-            totalWins:   50,
-            podiums:     100,
-            champs:      4,
-            poles:       40,
-            seasons:     15
+            totalRaces: 300,
+            totalWins: 50,
+            podiums: 100,
+            champs: 4,
+            poles: 40,
+            seasons: 15
         );
 
         await _svc.Update(dto);
@@ -345,46 +345,46 @@ public class DriverServiceUnitTests
     // ─────────────────────────────────────────────
 
     private static Driver CreateDriver(
-        string?   name      = null,
+        string? name = null,
         DateTime? birthDate = null) => new()
-    {
-        Id            = Guid.NewGuid(),
-        Name          = name      ?? "Max Verstappen",
-        Nationality   = "Dutch",
-        BirthDate     = birthDate ?? new DateTime(1997, 9, 30),
-        TotalRaces    = 180,
-        Wins          = 55,
-        Podiums       = 95,
-        Championships = 3,
-        PolePositions = 30,
-        Seasons       = 10
-    };
+        {
+            Id = Guid.NewGuid(),
+            Name = name ?? "Max Verstappen",
+            Nationality = "Dutch",
+            BirthDate = birthDate ?? new DateTime(1997, 9, 30),
+            TotalRaces = 180,
+            Wins = 55,
+            Podiums = 95,
+            Championships = 3,
+            PolePositions = 30,
+            Seasons = 10
+        };
 
     private static DriverCreateDto CreateDriverCreateDto(
-        string?   name        = null,
-        string?   nationality = null,
-        DateTime? birthDate   = null) => new(
-        name        ?? "Max Verstappen",
+        string? name = null,
+        string? nationality = null,
+        DateTime? birthDate = null) => new(
+        name ?? "Max Verstappen",
         nationality ?? "Dutch",
-        birthDate   ?? new DateTime(1997, 9, 30),
+        birthDate ?? new DateTime(1997, 9, 30),
         180, 55, 95, 3, 30, 10
     );
 
     private static DriverUpdateDto CreateDriverUpdateDto(
-        Guid?     id          = null,
-        string?   name        = null,
-        string?   nationality = null,
-        DateTime? birthDate   = null,
-        int       totalRaces  = 180,
-        int       totalWins   = 55,
-        int       podiums     = 95,
-        int       champs      = 3,
-        int       poles       = 30,
-        int       seasons     = 10) => new(
-        id          ?? Guid.NewGuid(),
-        name        ?? "Max Verstappen",
+        Guid? id = null,
+        string? name = null,
+        string? nationality = null,
+        DateTime? birthDate = null,
+        int totalRaces = 180,
+        int totalWins = 55,
+        int podiums = 95,
+        int champs = 3,
+        int poles = 30,
+        int seasons = 10) => new(
+        id ?? Guid.NewGuid(),
+        name ?? "Max Verstappen",
         nationality ?? "Dutch",
-        birthDate   ?? new DateTime(1997, 9, 30),
+        birthDate ?? new DateTime(1997, 9, 30),
         totalRaces, totalWins, podiums, champs, poles, seasons
     );
 }

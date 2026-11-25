@@ -6,17 +6,17 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SeriesController(ISeriesService seriesService) : ControllerBase 
+public class SeriesController(ISeriesService seriesService) : ControllerBase
 {
     [HttpGet("name/{name}")]
-    public async Task<ActionResult<SeriesDetailDto>> GetSeriesByName([FromRoute]string name)
+    public async Task<ActionResult<SeriesDetailDto>> GetSeriesByName([FromRoute] string name)
     {
         var response = await seriesService.GetSeriesByName(name);
         if (!response.IsSuccess)
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }

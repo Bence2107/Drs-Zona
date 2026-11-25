@@ -16,7 +16,7 @@ public class StandingsService(
     IQualifyingResultRepository qualifyingRepo,
     IResultsRepository resultsRepo,
     ISeriesRepository seriesRepo
-) : IStandingsService 
+) : IStandingsService
 {
     public async Task<ResponseResult<List<SeriesLookupDto>>> GetAllSeries()
     {
@@ -24,15 +24,15 @@ public class StandingsService(
         var dtoS = series.Select(s => new SeriesLookupDto(s.Id, s.ShortName)).ToList();
         return ResponseResult<List<SeriesLookupDto>>.Success(dtoS);
     }
-    
+
     public async Task<ResponseResult<ConstructorStandingsDto>> GetConstructorStandings(Guid constructorsChampionId)
     {
         var constructorChampionship = await constructorChampRepo.GetByIdWithSeries(constructorsChampionId);
-        if (constructorChampionship == null) 
+        if (constructorChampionship == null)
             return ResponseResult<ConstructorStandingsDto>.Failure("A konstruktőri bajnokság nem található");
 
         var results = await resultsRepo.GetByConstructorsChampionshipId(constructorsChampionId);
-    
+
         if (results.Count == 0)
             return ResponseResult<ConstructorStandingsDto>.Success(new ConstructorStandingsDto(constructorsChampionId, []));
 
@@ -40,21 +40,21 @@ public class StandingsService(
             .GroupBy(r => r.ConstructorId)
             .Select(group =>
             {
-                var latestResult = group.Last(); 
-        
+                var latestResult = group.Last();
+
                 return new
                 {
                     ConstructorId = group.Key,
                     Name = latestResult.ConstructorNameSnapshot,
                     ShortName = latestResult.ConstructorNicknameSnapshot,
                     Points = group.Sum(r => r.ConstructorPoints),
-                    BestFinish = group.Min(r => r.FinishPosition) 
+                    BestFinish = group.Min(r => r.FinishPosition)
                 };
             })
             .OrderByDescending(x => x.Points)
             .ThenBy(x => x.BestFinish)
             .Select((x, index) => new ConstructorStandingsResultDto(
-                index + 1, 
+                index + 1,
                 x.ConstructorId,
                 x.Name,
                 x.ShortName,
@@ -66,30 +66,30 @@ public class StandingsService(
             new ConstructorStandingsDto(constructorsChampionId, standingsResult)
         );
     }
-    
+
     public async Task<ResponseResult<List<ConstructorSeasonResultDto>>> GetConstructorResultsBySeason(Guid constructorId, Guid constructorChampId)
     {
         var rawResults = await resultsRepo.GetByConstructorsChampionshipId(constructorChampId);
         var results = rawResults
-            .Where(r => r.ConstructorId == constructorId &&  string.Equals(r.Session, "Futam", StringComparison.OrdinalIgnoreCase))
-            .GroupBy(r => new { r.GrandPrixId, r.GrandPrix?.Name, r.GrandPrix?.ShortName,r.GrandPrix?.EndTime, r.GrandPrix?.RoundNumber })
+            .Where(r => r.ConstructorId == constructorId && string.Equals(r.Session, "Futam", StringComparison.OrdinalIgnoreCase))
+            .GroupBy(r => new { r.GrandPrixId, r.GrandPrix?.Name, r.GrandPrix?.ShortName, r.GrandPrix?.EndTime, r.GrandPrix?.RoundNumber })
             .OrderBy(g => g.Key.RoundNumber)
             .Select(group => new ConstructorSeasonResultDto(
                 group.Key.Name ?? "N/A Grand Prix",
                 group.Key.ShortName ?? "N/A GP",
                 group.Key.EndTime ?? DateTime.MinValue,
-                group.Sum(r => r.ConstructorPoints) 
+                group.Sum(r => r.ConstructorPoints)
             ))
             .ToList();
 
         return ResponseResult<List<ConstructorSeasonResultDto>>.Success(results);
     }
-    
+
     public async Task<ResponseResult<List<DriverSeasonResultDto>>> GetDriverResultsBySeason(Guid driverId, Guid driverChampId)
     {
         var rawResults = await resultsRepo.GetByDriversChampionshipId(driverChampId);
         var results = rawResults
-            .Where(r => r.DriverId == driverId &&  string.Equals(r.Session, "Futam", StringComparison.OrdinalIgnoreCase))
+            .Where(r => r.DriverId == driverId && string.Equals(r.Session, "Futam", StringComparison.OrdinalIgnoreCase))
             .OrderBy(r => r.GrandPrix?.RoundNumber)
             .Select(r => new DriverSeasonResultDto(
                 r.GrandPrix?.Name ?? "N/A Grand Prix",
@@ -103,25 +103,25 @@ public class StandingsService(
 
         return ResponseResult<List<DriverSeasonResultDto>>.Success(results);
     }
-    
+
     public async Task<ResponseResult<DriverStandingsDto>> GetDriverStandings(Guid driverChampId)
     {
         var driverChampionship = await driverChampRepo.GetByIdWithSeries(driverChampId);
-        if (driverChampionship == null ) return ResponseResult<DriverStandingsDto>.Failure("Az egyéni bajnokság nem található");
-        
+        if (driverChampionship == null) return ResponseResult<DriverStandingsDto>.Failure("Az egyéni bajnokság nem található");
+
         var series = await seriesRepo.GetSeriesById(driverChampionship.SeriesId);
-        if (series == null ) return ResponseResult<DriverStandingsDto>.Failure("A széria nem található");
+        if (series == null) return ResponseResult<DriverStandingsDto>.Failure("A széria nem található");
 
         var results = await resultsRepo.GetByDriversChampionshipId(driverChampId);
         if (results.Count == 0)
             return ResponseResult<DriverStandingsDto>.Success(new DriverStandingsDto(driverChampId, []));
-        
+
         var standingsResult = results
             .GroupBy(r => r.DriverId)
             .Select(group =>
             {
                 var latestResult = group.OrderBy(r => r.GrandPrix!.RoundNumber).Last();
-            
+
                 return new
                 {
                     DriverId = group.Key,
@@ -170,13 +170,13 @@ public class StandingsService(
 
         var allPossibleSessions = series.PointSystem switch
         {
-            "F1"     => new List<string> { "Sprint Időmérő", "Időmérő" ,"Sprint", "Futam" },
-            "F2"     => new List<string> { "Időmérő", "Sprint", "Futam" },
-            _        => new List<string> { "Futam" }
+            "F1" => new List<string> { "Sprint Időmérő", "Időmérő", "Sprint", "Futam" },
+            "F2" => new List<string> { "Időmérő", "Sprint", "Futam" },
+            _ => new List<string> { "Futam" }
         };
-        
+
         var existingResults = await resultsRepo.GetByGrandPrixId(grandPrixId);
-    
+
         var completedSessionNames = existingResults
             .Select(r => r.Session)
             .Distinct()
@@ -196,22 +196,22 @@ public class StandingsService(
     {
         var gp = await grandsPrixRepo.GetGrandPrixById(grandPrixId);
         if (gp == null) return ResponseResult<GrandPrixResultsDto>.Failure("A nagydíj nem létezik");
-    
+
         var series = await seriesRepo.GetSeriesById(gp.SeriesId);
         if (series == null) return ResponseResult<GrandPrixResultsDto>.Failure("Széria nem található");
 
         var rawResults = await resultsRepo.GetBySession(grandPrixId, session);
         var results = rawResults
-            .OrderBy(r => r.FinishPosition) 
+            .OrderBy(r => r.FinishPosition)
             .ToList();
-        
+
         if (results.Count == 0)
         {
             return ResponseResult<GrandPrixResultsDto>.Success(new GrandPrixResultsDto(grandPrixId, session, []));
         }
 
         var isF1Qualy = series.PointSystem == "F1" && (session.Contains("Időmérő") || session.Contains("Qualifying"));
-    
+
         Dictionary<Guid, QualifyingResult>? qualyData = null;
         if (isF1Qualy)
         {
@@ -219,12 +219,12 @@ public class StandingsService(
             var qualyList = await qualifyingRepo.GetByResultIds(resultIds);
             qualyData = qualyList.ToDictionary(q => q.ResultId);
         }
-    
+
         var leader = results.First();
         var leaderTime = leader.RaceTime;
         var leaderLaps = leader.LapsCompleted;
 
-        var resultsDto = results.Select(r => 
+        var resultsDto = results.Select(r =>
         {
             // Megkeressük az időmérő adatokat, ha ez egy időmérő session
             string? q1 = null;
@@ -245,14 +245,14 @@ public class StandingsService(
                 r.DriverNameSnapshot,
                 r.ConstructorId,
                 r.ConstructorNicknameSnapshot,
-                FormatTimeOrStatus(r, leaderTime, leaderLaps, session), 
+                FormatTimeOrStatus(r, leaderTime, leaderLaps, session),
                 r.DriverPoints,
-                q1, 
-                q2, 
+                q1,
+                q2,
                 q3,
                 r.LapsCompleted,
-                r.IsFastestLap,   
-                r.IsPolePosition 
+                r.IsFastestLap,
+                r.IsPolePosition
             );
         }).ToArray();
 
@@ -260,12 +260,12 @@ public class StandingsService(
             new GrandPrixResultsDto(grandPrixId, session, resultsDto)
         );
     }
-    
+
     public async Task<ResponseResult<List<SeasonOverviewDto>>> GetSeasonOverview(Guid driverChampId)
     {
         var rawResults = await resultsRepo.GetByDriversChampionshipId(driverChampId);
         var results = rawResults
-            .Where(r => r.FinishPosition == 1 && 
+            .Where(r => r.FinishPosition == 1 &&
                         string.Equals(r.Session, "Futam", StringComparison.OrdinalIgnoreCase))
             .OrderBy(r => r.GrandPrix?.RoundNumber)
             .ToList();
@@ -277,12 +277,12 @@ public class StandingsService(
             r.DriverNameSnapshot,
             r.ConstructorNicknameSnapshot,
             r.LapsCompleted,
-            FormatTimeOrStatus(r, r.RaceTime, r.LapsCompleted, r.Session) 
+            FormatTimeOrStatus(r, r.RaceTime, r.LapsCompleted, r.Session)
         )).ToList();
 
         return ResponseResult<List<SeasonOverviewDto>>.Success(overview);
     }
-    
+
     public async Task<ResponseResult<List<string>>> GetSessionsByGrandPrix(Guid grandPrixId)
     {
         var sessions = await resultsRepo.GetAvailableSessionsByGrandPrixId(grandPrixId);
@@ -297,7 +297,7 @@ public class StandingsService(
 
         var rawResults = await resultsRepo.GetBySession(grandPrixId, session);
         var ordered = rawResults.OrderBy(r => r.FinishPosition).ToList();
-    
+
         if (ordered.Count == 0)
             return ResponseResult<SessionEditDto>.Success(new SessionEditDto(grandPrixId, session, []));
 
@@ -321,28 +321,29 @@ public class StandingsService(
             }
 
             resultsDto.Add(new ResultEditDto(
-                ResultId:          r.Id,
-                DriverId:          r.DriverId,
-                CarNumber:         r.CarNumber,
-                DriverName:        r.DriverNameSnapshot,
-                ConstructorId:     r.ConstructorId,
-                ConstructorName:   r.ConstructorNicknameSnapshot,
-                FinishPosition:    r.FinishPosition,
-                RaceTime:          FormatRaceTimeForEdit(r.RaceTime, leader.RaceTime, r.LapsCompleted, leader.LapsCompleted, r.Status, r.FinishPosition, session),
-                LapsCompleted:     r.LapsCompleted,
-                Status:            r.Status,
-                IsPole:            r.IsPolePosition,
-                IsFastestLap:      r.IsFastestLap,
-                Q1:                q1,
-                Q2:                q2,
-                Q3:                q3
+                ResultId: r.Id,
+                DriverId: r.DriverId,
+                CarNumber: r.CarNumber,
+                DriverName: r.DriverNameSnapshot,
+                ConstructorId: r.ConstructorId,
+                ConstructorName: r.ConstructorNicknameSnapshot,
+                FinishPosition: r.FinishPosition,
+                RaceTime: FormatRaceTimeForEdit(r.RaceTime, leader.RaceTime, r.LapsCompleted, leader.LapsCompleted, r.Status, r.FinishPosition, session),
+                LapsCompleted: r.LapsCompleted,
+                Status: r.Status,
+                IsPole: r.IsPolePosition,
+                IsFastestLap: r.IsFastestLap,
+                Q1: q1,
+                Q2: q2,
+                Q3: q3
             ));
         }
 
         return ResponseResult<SessionEditDto>.Success(new SessionEditDto(grandPrixId, session, resultsDto));
     }
-    
-    public async Task<ResponseResult<bool>> InsertResults(BatchResultCreateDto dto) {
+
+    public async Task<ResponseResult<bool>> InsertResults(BatchResultCreateDto dto)
+    {
         var gp = await grandsPrixRepo.GetGrandPrixById(dto.GrandPrixId);
         if (gp == null) return ResponseResult<bool>.Failure("Nagydíj nem található");
 
@@ -365,8 +366,8 @@ public class StandingsService(
             var existingResult = await resultsRepo.GetByGpDriverSession(dto.GrandPrixId, r.DriverId, dto.Session);
 
             // Kiszámoljuk az időt
-            var calculatedRaceTime = r.Status.Equals("Finished", StringComparison.OrdinalIgnoreCase) 
-                ? ResolveRaceTime(r.RaceTime, leaderTimeMs) 
+            var calculatedRaceTime = r.Status.Equals("Finished", StringComparison.OrdinalIgnoreCase)
+                ? ResolveRaceTime(r.RaceTime, leaderTimeMs)
                 : 0;
 
             if (existingResult == null)
@@ -379,7 +380,7 @@ public class StandingsService(
                     ConstructorNicknameSnapshot = consComp.ConstructorNicknameSnapshot,
                     Session = dto.Session,
                     Status = r.Status,
-                
+
                     // Többi mező
                     GrandPrixId = dto.GrandPrixId,
                     DriverId = r.DriverId,
@@ -397,13 +398,15 @@ public class StandingsService(
                     IsFastestLap = r.IsFastestLap
                 };
                 await resultsRepo.Create(newResult);
-                
-                if (isF1Qualy) {
-                    await qualifyingRepo.Create(new QualifyingResult { 
-                        ResultId = newResult.Id, 
-                        Q1 = string.IsNullOrWhiteSpace(r.Q1) ? null : ParseAbsoluteTime(r.Q1), 
-                        Q2 = string.IsNullOrWhiteSpace(r.Q2) ? null : ParseAbsoluteTime(r.Q2), 
-                        Q3 = string.IsNullOrWhiteSpace(r.Q3) ? null : ParseAbsoluteTime(r.Q3) 
+
+                if (isF1Qualy)
+                {
+                    await qualifyingRepo.Create(new QualifyingResult
+                    {
+                        ResultId = newResult.Id,
+                        Q1 = string.IsNullOrWhiteSpace(r.Q1) ? null : ParseAbsoluteTime(r.Q1),
+                        Q2 = string.IsNullOrWhiteSpace(r.Q2) ? null : ParseAbsoluteTime(r.Q2),
+                        Q3 = string.IsNullOrWhiteSpace(r.Q3) ? null : ParseAbsoluteTime(r.Q3)
                     });
                 }
             }
@@ -421,21 +424,29 @@ public class StandingsService(
 
                 await resultsRepo.Update(existingResult);
 
-                if (isF1Qualy) {
+                if (isF1Qualy)
+                {
                     var q = await qualifyingRepo.GetByResultId(existingResult.Id);
-    
+
                     long? parsedQ1 = string.IsNullOrWhiteSpace(r.Q1) ? null : ParseAbsoluteTime(r.Q1);
                     long? parsedQ2 = string.IsNullOrWhiteSpace(r.Q2) ? null : ParseAbsoluteTime(r.Q2);
                     long? parsedQ3 = string.IsNullOrWhiteSpace(r.Q3) ? null : ParseAbsoluteTime(r.Q3);
 
-                    if (q != null) {
-                        q.Q1 = parsedQ1; 
-                        q.Q2 = parsedQ2; 
+                    if (q != null)
+                    {
+                        q.Q1 = parsedQ1;
+                        q.Q2 = parsedQ2;
                         q.Q3 = parsedQ3;
                         await qualifyingRepo.Update(q);
-                    } else {
-                        await qualifyingRepo.Create(new QualifyingResult { 
-                            ResultId = existingResult.Id, Q1 = parsedQ1, Q2 = parsedQ2, Q3 = parsedQ3 
+                    }
+                    else
+                    {
+                        await qualifyingRepo.Create(new QualifyingResult
+                        {
+                            ResultId = existingResult.Id,
+                            Q1 = parsedQ1,
+                            Q2 = parsedQ2,
+                            Q3 = parsedQ3
                         });
                     }
                 }
@@ -449,11 +460,11 @@ public class StandingsService(
         var existingResults = await resultsRepo.GetBySession(dto.GrandPrixId, dto.Session);
         foreach (var res in existingResults)
         {
-            await resultsRepo.Delete(res.Id); 
+            await resultsRepo.Delete(res.Id);
         }
         return await InsertResults(dto);
     }
-    
+
     public async Task<ResponseResult<bool>> UpdateSingleResult(SingleResultUpdateDto dto)
     {
         var result = await resultsRepo.GetResultById(dto.ResultId);
@@ -470,26 +481,26 @@ public class StandingsService(
             series.PointSystem,
             result.Session,
             dto.FinishPosition,
-            dto.IsPole,         
-            dto.IsFastestLap    
+            dto.IsPole,
+            dto.IsFastestLap
         );
 
         // 2. Idő számítása az adatbázis számára (ms)
         var allSessionResults = await resultsRepo.GetBySession(result.GrandPrixId, result.Session);
         var leader = allSessionResults.FirstOrDefault(r => r.FinishPosition == 1);
-    
+
         // Ha az aktuálisan frissített versenyző az első, akkor az ő új idejét vesszük alapul a többieknek
-        var leaderTimeMs = (dto.FinishPosition == 1) 
-            ? ParseAbsoluteTime(dto.RaceTime) 
+        var leaderTimeMs = (dto.FinishPosition == 1)
+            ? ParseAbsoluteTime(dto.RaceTime)
             : (leader?.RaceTime ?? 0);
 
         // 3. Entitás frissítése
-        result.FinishPosition    = dto.FinishPosition;
-        result.IsPolePosition    = dto.IsPole;          
-        result.IsFastestLap      = dto.IsFastestLap;
-        result.LapsCompleted     = dto.LapsCompleted;
-        result.Status            = dto.Status;
-        result.DriverPoints      = driverPoints;
+        result.FinishPosition = dto.FinishPosition;
+        result.IsPolePosition = dto.IsPole;
+        result.IsFastestLap = dto.IsFastestLap;
+        result.LapsCompleted = dto.LapsCompleted;
+        result.Status = dto.Status;
+        result.DriverPoints = driverPoints;
         result.ConstructorPoints = constructorPoints;
 
         // Itt a kulcs: a ResolveRaceTime long-ot ad vissza, ami mehet a RaceTime-ba
@@ -511,7 +522,7 @@ public class StandingsService(
         var isF1Qualy = series.PointSystem == "F1" && result.Session.Contains("Időmérő");
         if (!isF1Qualy) return ResponseResult<bool>.Success(true);
         var qualy = await qualifyingRepo.GetByResultId(result.Id);
-        
+
         long? parsedQ1 = string.IsNullOrWhiteSpace(dto.Q1) ? null : ParseAbsoluteTime(dto.Q1);
         long? parsedQ2 = string.IsNullOrWhiteSpace(dto.Q2) ? null : ParseAbsoluteTime(dto.Q2);
         long? parsedQ3 = string.IsNullOrWhiteSpace(dto.Q3) ? null : ParseAbsoluteTime(dto.Q3);
@@ -537,7 +548,7 @@ public class StandingsService(
 
         return ResponseResult<bool>.Success(true);
     }
-    
+
     public async Task<ResponseResult<bool>> RecalculateSession(Guid grandPrixId, string session)
     {
         var gp = await grandsPrixRepo.GetGrandPrixById(grandPrixId);
@@ -548,7 +559,7 @@ public class StandingsService(
 
         var sessionResults = await resultsRepo.GetBySession(grandPrixId, session);
         if (sessionResults.Count == 0) return ResponseResult<bool>.Failure("Nincs eredmény ebben a sessionben");
-        
+
 
         foreach (var result in sessionResults)
         {
@@ -556,13 +567,13 @@ public class StandingsService(
                 series.PointSystem,
                 session,
                 result.FinishPosition,
-                result.IsPolePosition, 
-                result.IsFastestLap    
+                result.IsPolePosition,
+                result.IsFastestLap
             );
 
-            result.DriverPoints      = driverPoints;
+            result.DriverPoints = driverPoints;
             result.ConstructorPoints = constructorPoints;
-            result.StartPosition     = await GetStartPosition(
+            result.StartPosition = await GetStartPosition(
                 series.PointSystem,
                 session,
                 grandPrixId,
@@ -575,32 +586,47 @@ public class StandingsService(
 
         return ResponseResult<bool>.Success(true);
     }
-    
+
     private static (double driverPoints, double constructorPoints) CalculatePoints(
         string scoringSystem, string session, int finishPosition, bool isPole = false, bool isFastestLap = false)
     {
         return scoringSystem switch
         {
-            "F1"     => CalculateF1Points(session, finishPosition), // F1-nél nem adjuk át a pole-t és a leggyorsabb kört
-            "F2"     => CalculateF2Points(session, finishPosition, isPole, isFastestLap),
-            _        => (0, 0)
+            "F1" => CalculateF1Points(session, finishPosition), // F1-nél nem adjuk át a pole-t és a leggyorsabb kört
+            "F2" => CalculateF2Points(session, finishPosition, isPole, isFastestLap),
+            _ => (0, 0)
         };
     }
-    
+
     private static (double, double) CalculateF1Points(string session, int position)
     {
         var points = session switch
         {
             "Futam" => position switch
             {
-                1 => 25, 2 => 18, 3 => 15, 4 => 12, 5 => 10,
-                6 => 8,  7 => 6,  8 => 4,  9 => 2,  10 => 1,
+                1 => 25,
+                2 => 18,
+                3 => 15,
+                4 => 12,
+                5 => 10,
+                6 => 8,
+                7 => 6,
+                8 => 4,
+                9 => 2,
+                10 => 1,
                 _ => 0
             },
             "Sprint" => position switch
             {
-                1 => 8, 2 => 7, 3 => 6, 4 => 5, 5 => 4,
-                6 => 3, 7 => 2, 8 => 1, _ => 0
+                1 => 8,
+                2 => 7,
+                3 => 6,
+                4 => 5,
+                5 => 4,
+                6 => 3,
+                7 => 2,
+                8 => 1,
+                _ => 0
             },
             _ => 0
         };
@@ -614,14 +640,29 @@ public class StandingsService(
         {
             "Futam" => position switch
             {
-                1 => 25, 2 => 18, 3 => 15, 4 => 12, 5 => 10,
-                6 => 8,  7 => 6,  8 => 4,  9 => 2,  10 => 1,
+                1 => 25,
+                2 => 18,
+                3 => 15,
+                4 => 12,
+                5 => 10,
+                6 => 8,
+                7 => 6,
+                8 => 4,
+                9 => 2,
+                10 => 1,
                 _ => 0
             },
             "Sprint" => position switch
             {
-                1 => 10, 2 => 8, 3 => 6, 4 => 5, 5 => 4,
-                6 => 3,  7 => 2, 8 => 1, _ => 0
+                1 => 10,
+                2 => 8,
+                3 => 6,
+                4 => 5,
+                5 => 4,
+                6 => 3,
+                7 => 2,
+                8 => 1,
+                _ => 0
             },
             _ => 0
         };
@@ -629,22 +670,22 @@ public class StandingsService(
         // F2 Bónuszpontok:
         // Pole: Csak Feature (Verseny) sessionben ér 2 pontot
         if (isPole && session == "Futam") driverPoints += 2;
-        
+
         // Leggyorsabb kör: 1 pont, de csak ha a top 10-ben végzett
         if (isFastestLap && position <= 10) driverPoints += 1;
 
         return (driverPoints, driverPoints); // Konstruktőrök is megkapják
     }
-    
+
     private async Task<int> GetStartPosition(
         string pointSystem, string session, Guid grandPrixId, Guid driverId, int fallback)
     {
-        var noStartPositionSessions = new[] 
-        { 
-            "Practice", "Időmérő", "Időmérő", 
-            "Sprint Időmérő", 
+        var noStartPositionSessions = new[]
+        {
+            "Practice", "Időmérő", "Időmérő",
+            "Sprint Időmérő",
         };
-    
+
         if (noStartPositionSessions.Contains(session)) return 0;
 
         var existingSessions = await resultsRepo.GetAvailableSessionsByGrandPrixId(grandPrixId);
@@ -653,15 +694,15 @@ public class StandingsService(
         {
             "F1" => session switch
             {
-                "Sprint"  => "Sprint Időmérő",
-                "Futam" => existingSessions.Contains("Sprint Időmérő") 
-                    ? "Sprint Időmérő" 
+                "Sprint" => "Sprint Időmérő",
+                "Futam" => existingSessions.Contains("Sprint Időmérő")
+                    ? "Sprint Időmérő"
                     : "Időmérő",
                 _ => null
             },
             "F2" => session switch
             {
-                "Sprint"  => "Időmérő",
+                "Sprint" => "Időmérő",
                 "Futam" => "Időmérő",
                 _ => null
             },
@@ -697,7 +738,7 @@ public class StandingsService(
         }
 
     }
-    
+
     private static long ParseAbsoluteTime(string input)
     {
         if (string.IsNullOrWhiteSpace(input) || input == "-") return 0;
@@ -741,7 +782,7 @@ public class StandingsService(
             return leaderTimeMs + ParseDeltaTime(trimmed);
         return ParseAbsoluteTime(trimmed);
     }
-    
+
     private static string? FormatAbsoluteTime(long? ms)
     {
         if (ms is null or <= 0) return null;
@@ -764,10 +805,10 @@ public class StandingsService(
                 : $"{t.Minutes:D2}:{t.Seconds:D2}.{t.Milliseconds:D3}";
         }
 
-        var isRace = session.Equals("Futam", StringComparison.OrdinalIgnoreCase) || 
+        var isRace = session.Equals("Futam", StringComparison.OrdinalIgnoreCase) ||
                      session.Equals("Sprint", StringComparison.OrdinalIgnoreCase);
 
-        if (isRace && myLaps < leaderLaps) return "-"; 
+        if (isRace && myLaps < leaderLaps) return "-";
 
         var diff = TimeSpan.FromMilliseconds(ms - leaderMs);
         return diff.TotalMinutes >= 1
@@ -788,7 +829,7 @@ public class StandingsService(
                 : $"{t.Minutes:D2}:{t.Seconds:D2}.{t.Milliseconds:D3}";
         }
 
-        var isRace = session.Equals("Futam", StringComparison.OrdinalIgnoreCase) || 
+        var isRace = session.Equals("Futam", StringComparison.OrdinalIgnoreCase) ||
                      session.Equals("Sprint", StringComparison.OrdinalIgnoreCase);
 
         if (isRace && result.LapsCompleted < leaderLaps)

@@ -57,8 +57,8 @@ public class GrandPrixServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var circuit = CreateCircuit();
-        var series  = CreateSeries();
-        var gp      = CreateGrandPrix(circuit.Id, series.Id);
+        var series = CreateSeries();
+        var gp = CreateGrandPrix(circuit.Id, series.Id);
 
         await ctx.Circuits.AddAsync(circuit);
         await ctx.Series.AddAsync(series);
@@ -82,8 +82,8 @@ public class GrandPrixServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var circuit = CreateCircuit();
-        var series  = CreateSeries();
-        var gp      = CreateGrandPrix(circuit.Id, series.Id);
+        var series = CreateSeries();
+        var gp = CreateGrandPrix(circuit.Id, series.Id);
 
         await ctx.Circuits.AddAsync(circuit);
         await ctx.Series.AddAsync(series);
@@ -111,7 +111,7 @@ public class GrandPrixServiceIntegrationTests
         await ctx.Circuits.AddRangeAsync(
             CreateCircuit(),
             CreateCircuit("Silverstone", "UK"),
-            CreateCircuit("Spa",         "Belgium")
+            CreateCircuit("Spa", "Belgium")
         );
         await ctx.SaveChangesAsync();
 
@@ -157,17 +157,17 @@ public class GrandPrixServiceIntegrationTests
     {
         var (ctx, svc) = BuildSut();
 
-        var circuit  = CreateCircuit();
-        var series   = CreateSeries();
+        var circuit = CreateCircuit();
+        var series = CreateSeries();
         var otherSeries = CreateSeries("MotoGP", "MOTOGP");
 
         await ctx.Circuits.AddAsync(circuit);
         await ctx.Series.AddRangeAsync(series, otherSeries);
 
         await ctx.GrandsPrix.AddRangeAsync(
-            CreateGrandPrix(circuit.Id, series.Id,      seasonYear: 2024, round: 1),
-            CreateGrandPrix(circuit.Id, series.Id,      seasonYear: 2024, round: 2),
-            CreateGrandPrix(circuit.Id, series.Id,      seasonYear: 2023, round: 1),
+            CreateGrandPrix(circuit.Id, series.Id, seasonYear: 2024, round: 1),
+            CreateGrandPrix(circuit.Id, series.Id, seasonYear: 2024, round: 2),
+            CreateGrandPrix(circuit.Id, series.Id, seasonYear: 2023, round: 1),
             CreateGrandPrix(circuit.Id, otherSeries.Id, seasonYear: 2024, round: 1)
         );
         await ctx.SaveChangesAsync();
@@ -200,7 +200,7 @@ public class GrandPrixServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var circuit = CreateCircuit();
-        var series  = CreateSeries();
+        var series = CreateSeries();
         await ctx.Circuits.AddAsync(circuit);
         await ctx.Series.AddAsync(series);
         await ctx.SaveChangesAsync();
@@ -278,8 +278,8 @@ public class GrandPrixServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var circuit = CreateCircuit();
-        var series  = CreateSeries();
-        var gp      = CreateGrandPrix(circuit.Id, series.Id);
+        var series = CreateSeries();
+        var gp = CreateGrandPrix(circuit.Id, series.Id);
 
         await ctx.Circuits.AddAsync(circuit);
         await ctx.Series.AddAsync(series);
@@ -287,8 +287,8 @@ public class GrandPrixServiceIntegrationTests
         await ctx.SaveChangesAsync();
 
         var newStart = DateTime.UtcNow.AddHours(1);
-        var newEnd   = DateTime.UtcNow.AddHours(3);
-        var dto      = new GrandPrixUpdateDto(gp.Id, newStart, newEnd, 60);
+        var newEnd = DateTime.UtcNow.AddHours(3);
+        var dto = new GrandPrixUpdateDto(gp.Id, newStart, newEnd, 60);
 
         var result = await svc.Update(dto);
 
@@ -319,8 +319,8 @@ public class GrandPrixServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var circuit = CreateCircuit();
-        var series  = CreateSeries();
-        var gp      = CreateGrandPrix(circuit.Id, series.Id, round: 5, seasonYear: 2024);
+        var series = CreateSeries();
+        var gp = CreateGrandPrix(circuit.Id, series.Id, round: 5, seasonYear: 2024);
         gp.Name = "Original Name";
 
         await ctx.Circuits.AddAsync(circuit);
@@ -345,11 +345,11 @@ public class GrandPrixServiceIntegrationTests
 
     private static Circuit CreateCircuit(string name = "Monza", string location = "Italy") => new()
     {
-        Id         = Guid.NewGuid(),
-        Name       = name,
-        Location   = location,
-        Length     = 5.793,
-        Type       = "Permanent",
+        Id = Guid.NewGuid(),
+        Name = name,
+        Location = location,
+        Length = 5.793,
+        Type = "Permanent",
         FastestLap = "1:21.046"
     };
 
@@ -368,19 +368,19 @@ public class GrandPrixServiceIntegrationTests
     private static GrandPrix CreateGrandPrix(
         Guid circuitId,
         Guid seriesId,
-        int  round      = 1,
-        int  seasonYear = 2024) => new()
-    {
-        Id            = Guid.NewGuid(),
-        CircuitId     = circuitId,
-        SeriesId      = seriesId,
-        Name          = "Italian Grand Prix",
-        ShortName     = "ITA",
-        RoundNumber   = round,
-        SeasonYear    = seasonYear,
-        StartTime     = DateTime.UtcNow,
-        EndTime       = DateTime.UtcNow.AddHours(2),
-        RaceDistance  = 306,
-        LapsCompleted = 53
-    };
+        int round = 1,
+        int seasonYear = 2024) => new()
+        {
+            Id = Guid.NewGuid(),
+            CircuitId = circuitId,
+            SeriesId = seriesId,
+            Name = "Italian Grand Prix",
+            ShortName = "ITA",
+            RoundNumber = round,
+            SeasonYear = seasonYear,
+            StartTime = DateTime.UtcNow,
+            EndTime = DateTime.UtcNow.AddHours(2),
+            RaceDistance = 306,
+            LapsCompleted = 53
+        };
 }

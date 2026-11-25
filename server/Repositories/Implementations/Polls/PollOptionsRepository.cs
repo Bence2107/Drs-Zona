@@ -5,17 +5,17 @@ using Repositories.Interfaces.Polls;
 
 namespace Repositories.Implementations.Polls;
 
-public class PollOptionsRepository(EfContext context) : IPollOptionsRepository 
+public class PollOptionsRepository(EfContext context) : IPollOptionsRepository
 {
     private readonly DbSet<PollOption> _pollOptions = context.PollOptions;
-    
+
     public async Task<PollOption?> GetPollOptionById(Guid id) => await _pollOptions
         .FirstOrDefaultAsync(x => x.Id == id);
 
     public async Task<List<PollOption>> GetByPollId(Guid pollId) => await _pollOptions
         .Where(poll => poll.PollId == pollId)
         .ToListAsync();
-    
+
     public async Task Create(PollOption pollOption)
     {
         await _pollOptions.AddAsync(pollOption);

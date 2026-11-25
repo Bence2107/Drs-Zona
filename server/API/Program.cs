@@ -67,7 +67,7 @@ if (builder.Environment.IsDevelopment())
 
 // Tests swap in an in-memory database, so they only need the JWT secret
 var isTesting = builder.Environment.IsEnvironment("Testing");
-string[] requiredVariables = isTesting ? ["JWT_SECRET"] : ["JWT_SECRET", ..DatabaseConfig.RequiredVariables];
+string[] requiredVariables = isTesting ? ["JWT_SECRET"] : ["JWT_SECRET", .. DatabaseConfig.RequiredVariables];
 EnvVars.Require(requiredVariables);
 
 var jwtSettings = new JwtSettings
@@ -108,7 +108,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(jwtSettings.Secret)),
             RoleClaimType = ClaimTypes.Role
         };
-        
+
     });
 
 builder.Services.AddAuthorizationBuilder()
@@ -201,7 +201,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-    
+
 builder.Services.AddOpenApi();
 
 var corsOriginsEnv = Environment.GetEnvironmentVariable("CORS_ORIGINS");
@@ -209,9 +209,11 @@ var corsOrigins = !string.IsNullOrEmpty(corsOriginsEnv)
     ? corsOriginsEnv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
     : ["http://localhost:4200"];
 
-builder.Services.AddCors(options => {
-    options.AddPolicy("AngularPolicy", policy => {
-        policy.WithOrigins(corsOrigins) 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AngularPolicy", policy =>
+    {
+        policy.WithOrigins(corsOrigins)
             .AllowAnyHeader()
             .AllowAnyMethod();
     });

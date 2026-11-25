@@ -3,7 +3,7 @@ using Services.Types;
 
 namespace Services.Interfaces;
 
-public interface IDriverService 
+public interface IDriverService
 {
     Task<ResponseResult<DriverDetailDto>> GetDriverById(Guid id);
     Task<ResponseResult<List<DriverListDto>>> GetAllDrivers();

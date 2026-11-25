@@ -2,7 +2,7 @@ using Entities.Models.Standings;
 
 namespace Repositories.Interfaces.Standings;
 
-public interface IConstructorsRepository 
+public interface IConstructorsRepository
 {
     Task<Constructor?> GetConstructorById(Guid id);
     Task<List<Constructor>> GetAllConstructor();

@@ -7,12 +7,12 @@ public class ResponseResult<T>
     public string? ErrorField { get; private init; }
     public string? Message { get; private init; }
 
-    public static ResponseResult<T> Success(T value) => 
+    public static ResponseResult<T> Success(T value) =>
         new() { IsSuccess = true, Value = value };
 
-    public static ResponseResult<T> Failure(string message) => 
+    public static ResponseResult<T> Failure(string message) =>
         new() { IsSuccess = false, Message = message };
 
-    public static ResponseResult<T> Failure(string field, string message) => 
+    public static ResponseResult<T> Failure(string field, string message) =>
         new() { IsSuccess = false, ErrorField = field, Message = message };
 }

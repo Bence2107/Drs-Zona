@@ -28,9 +28,9 @@ public class AuthServiceIntegrationTests(ITestOutputHelper output)
 
         var jwtSettings = Options.Create(new JwtSettings
         {
-            Secret            = "test-secret-key-minimum-16-chars!",
-            Issuer            = "test-issuer",
-            Audience          = "test-audience",
+            Secret = "test-secret-key-minimum-16-chars!",
+            Issuer = "test-issuer",
+            Audience = "test-audience",
             ExpirationMinutes = 60
         });
 
@@ -94,7 +94,7 @@ public class AuthServiceIntegrationTests(ITestOutputHelper output)
         await ctx.SaveChangesAsync();
 
         var exists = await ctx.Users.AnyAsync(u => u.Email == "taken@test.com");
-        exists.Should().BeTrue(); 
+        exists.Should().BeTrue();
 
         var result = await svc.Register(new RegisterRequest("newuser", "taken@test.com", "Someone", "Password1!"));
         output.WriteLine($"IsSuccess: {result.IsSuccess}, Field: {result.ErrorField}, Message: {result.Message}");
@@ -175,7 +175,7 @@ public class AuthServiceIntegrationTests(ITestOutputHelper output)
         await ctx.Users.AddAsync(user);
         await ctx.SaveChangesAsync();
 
-        var result = await svc.UpdateUserInfo(user.Id, new UpdateUserRequest("updateduser", "Updated Name","updated@test.com"));
+        var result = await svc.UpdateUserInfo(user.Id, new UpdateUserRequest("updateduser", "Updated Name", "updated@test.com"));
 
         result.IsSuccess.Should().BeTrue();
         ctx.ChangeTracker.Clear();
@@ -206,7 +206,7 @@ public class AuthServiceIntegrationTests(ITestOutputHelper output)
         await ctx.Users.AddRangeAsync(user1, user2);
         await ctx.SaveChangesAsync();
 
-        var result = await svc.UpdateUserInfo(user1.Id, new UpdateUserRequest("user1", "User One","user2@test.com"));
+        var result = await svc.UpdateUserInfo(user1.Id, new UpdateUserRequest("user1", "User One", "user2@test.com"));
 
         result.IsSuccess.Should().BeFalse();
         result.ErrorField.Should().Be("email");
@@ -308,7 +308,7 @@ public class AuthServiceIntegrationTests(ITestOutputHelper output)
         var (ctx, svc) = BuildSut();
 
         var user = CreateUser();
-        user.IsLoggedIn       = true;
+        user.IsLoggedIn = true;
         user.CurrentSessionId = "active-session";
         await ctx.Users.AddAsync(user);
         await ctx.SaveChangesAsync();
@@ -370,17 +370,17 @@ public class AuthServiceIntegrationTests(ITestOutputHelper output)
 
     private static User CreateUser(
         string username = "testuser",
-        string email    = "test@test.com",
+        string email = "test@test.com",
         string password = "DefaultPass1!") => new()
-    {
-        Id           = Guid.NewGuid(),
-        Username     = username,
-        FullName     = "Teszt Elek",
-        Email        = email,
-        PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
-        Role         = "user",
-        Created      = DateTime.UtcNow,
-        HasAvatar    = false,
-        IsLoggedIn   = false
-    };
+        {
+            Id = Guid.NewGuid(),
+            Username = username,
+            FullName = "Teszt Elek",
+            Email = email,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
+            Role = "user",
+            Created = DateTime.UtcNow,
+            HasAvatar = false,
+            IsLoggedIn = false
+        };
 }

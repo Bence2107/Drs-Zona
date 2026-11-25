@@ -612,8 +612,8 @@ public class StandingsServiceUnitTests
             SeriesId = seriesId,
             Name = "Random"
         };
-        
-        
+
+
         var series = CreateSeries(pointSystem: "F1");
 
         var r1 = new Result
@@ -706,16 +706,16 @@ public class StandingsServiceUnitTests
         string shortName = "F1",
         string pointSystem = "F1",
         int lastYear = 2024) => new()
-    {
-        Id = Guid.NewGuid(),
-        Name = name,
-        ShortName = shortName,
-        PointSystem = pointSystem,
-        GoverningBody = "FIA",
-        Description = "Top motorsport",
-        FirstYear = 1950,
-        LastYear = lastYear
-    };
+        {
+            Id = Guid.NewGuid(),
+            Name = name,
+            ShortName = shortName,
+            PointSystem = pointSystem,
+            GoverningBody = "FIA",
+            Description = "Top motorsport",
+            FirstYear = 1950,
+            LastYear = lastYear
+        };
 
     private static GrandPrix CreateGrandPrix(int round = 1, string name = "Test GP") => new()
     {
@@ -756,37 +756,37 @@ public class StandingsServiceUnitTests
     };
 
     private static Result CreateResult(
-        Guid? driverId          = null,
-        Guid? constructorId     = null,
-        Guid? driverChampId     = null,   // ← ez volt a kulcs
-        Guid? consChampId       = null,   // ← ez is
-        double driverPoints     = 0,
+        Guid? driverId = null,
+        Guid? constructorId = null,
+        Guid? driverChampId = null,   // ← ez volt a kulcs
+        Guid? consChampId = null,   // ← ez is
+        double driverPoints = 0,
         double constructorPoints = 0,
-        int finishPosition      = 1,
-        string driverName       = "Driver",
-        string consName         = "Team",
-        string consNick         = "TM",
-        string session          = "Futam",
-        long raceTime           = 5000000,
-        GrandPrix? gp           = null) => new()
-    {
-        Id                          = Guid.NewGuid(),
-        GrandPrixId                 = gp?.Id ?? Guid.NewGuid(),
-        GrandPrix                   = gp,
-        DriverId                    = driverId      ?? Guid.NewGuid(),
-        ConstructorId               = constructorId ?? Guid.NewGuid(),
-        DriversChampId              = driverChampId ?? Guid.NewGuid(),
-        ConsChampId                 = consChampId   ?? Guid.NewGuid(),
-        DriverNameSnapshot          = driverName,
-        ConstructorNameSnapshot     = consName,
-        ConstructorNicknameSnapshot = consNick,
-        Session                     = session,
-        FinishPosition              = finishPosition,
-        DriverPoints                = driverPoints,
-        ConstructorPoints           = constructorPoints,
-        RaceTime                    = raceTime,
-        LapsCompleted               = 53,
-        Status                      = "Finished",
-        CarNumber                   = 1
-    };
+        int finishPosition = 1,
+        string driverName = "Driver",
+        string consName = "Team",
+        string consNick = "TM",
+        string session = "Futam",
+        long raceTime = 5000000,
+        GrandPrix? gp = null) => new()
+        {
+            Id = Guid.NewGuid(),
+            GrandPrixId = gp?.Id ?? Guid.NewGuid(),
+            GrandPrix = gp,
+            DriverId = driverId ?? Guid.NewGuid(),
+            ConstructorId = constructorId ?? Guid.NewGuid(),
+            DriversChampId = driverChampId ?? Guid.NewGuid(),
+            ConsChampId = consChampId ?? Guid.NewGuid(),
+            DriverNameSnapshot = driverName,
+            ConstructorNameSnapshot = consName,
+            ConstructorNicknameSnapshot = consNick,
+            Session = session,
+            FinishPosition = finishPosition,
+            DriverPoints = driverPoints,
+            ConstructorPoints = constructorPoints,
+            RaceTime = raceTime,
+            LapsCompleted = 53,
+            Status = "Finished",
+            CarNumber = 1
+        };
 }

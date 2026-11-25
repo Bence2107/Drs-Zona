@@ -48,9 +48,9 @@ public class PollServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var author = CreateUser();
-        var poll   = CreatePoll(author.Id);
-        var opt1   = CreateOption(poll.Id, "Option A");
-        var opt2   = CreateOption(poll.Id, "Option B");
+        var poll = CreatePoll(author.Id);
+        var opt1 = CreateOption(poll.Id, "Option A");
+        var opt2 = CreateOption(poll.Id, "Option B");
 
         await ctx.Users.AddAsync(author);
         await ctx.Polls.AddAsync(poll);
@@ -81,8 +81,8 @@ public class PollServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var author = CreateUser();
-        var voter  = CreateUser();
-        var poll   = CreatePoll(author.Id);
+        var voter = CreateUser();
+        var poll = CreatePoll(author.Id);
         var option = CreateOption(poll.Id, "My Choice");
 
         await ctx.Users.AddRangeAsync(author, voter);
@@ -113,9 +113,9 @@ public class PollServiceIntegrationTests
         await ctx.Users.AddAsync(author);
 
         await ctx.Polls.AddRangeAsync(
-            CreatePoll(author.Id, isActive: true,  expiresAt: DateTime.Now.AddDays(2),  title: "Active Future"),
-            CreatePoll(author.Id, isActive: true,  expiresAt: DateTime.Now.AddDays(-1), title: "Active Expired"),
-            CreatePoll(author.Id, isActive: false, expiresAt: DateTime.Now.AddDays(2),  title: "Inactive Future")
+            CreatePoll(author.Id, isActive: true, expiresAt: DateTime.Now.AddDays(2), title: "Active Future"),
+            CreatePoll(author.Id, isActive: true, expiresAt: DateTime.Now.AddDays(-1), title: "Active Expired"),
+            CreatePoll(author.Id, isActive: false, expiresAt: DateTime.Now.AddDays(2), title: "Inactive Future")
         );
         await ctx.SaveChangesAsync();
 
@@ -175,7 +175,7 @@ public class PollServiceIntegrationTests
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("Felhasználó nem található");
     }
-    
+
 
     // ─────────────────────────────────────────────
     // Delete
@@ -187,7 +187,7 @@ public class PollServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var author = CreateUser();
-        var poll   = CreatePoll(author.Id);
+        var poll = CreatePoll(author.Id);
         await ctx.Users.AddAsync(author);
         await ctx.Polls.AddAsync(poll);
         await ctx.SaveChangesAsync();
@@ -205,7 +205,7 @@ public class PollServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var author = CreateUser();
-        var poll   = CreatePoll(author.Id);
+        var poll = CreatePoll(author.Id);
         await ctx.Users.AddAsync(author);
         await ctx.Polls.AddAsync(poll);
         await ctx.SaveChangesAsync();
@@ -237,8 +237,8 @@ public class PollServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var author = CreateUser();
-        var voter  = CreateUser();
-        var poll   = CreatePoll(author.Id);
+        var voter = CreateUser();
+        var poll = CreatePoll(author.Id);
         var option = CreateOption(poll.Id, "My Choice");
 
         await ctx.Users.AddRangeAsync(author, voter);
@@ -260,8 +260,8 @@ public class PollServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var author = CreateUser();
-        var voter  = CreateUser();
-        var poll   = CreatePoll(author.Id);
+        var voter = CreateUser();
+        var poll = CreatePoll(author.Id);
         var option = CreateOption(poll.Id, "Option A");
 
         await ctx.Users.AddRangeAsync(author, voter);
@@ -282,7 +282,7 @@ public class PollServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var author = CreateUser();
-        var poll   = CreatePoll(author.Id, expiresAt: DateTime.Now.AddDays(-1));
+        var poll = CreatePoll(author.Id, expiresAt: DateTime.Now.AddDays(-1));
         var option = CreateOption(poll.Id, "Option A");
 
         await ctx.Users.AddAsync(author);
@@ -302,7 +302,7 @@ public class PollServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var author = CreateUser();
-        var poll   = CreatePoll(author.Id, isActive: false);
+        var poll = CreatePoll(author.Id, isActive: false);
         var option = CreateOption(poll.Id, "Option A");
 
         await ctx.Users.AddAsync(author);
@@ -322,34 +322,34 @@ public class PollServiceIntegrationTests
 
     private static User CreateUser() => new()
     {
-        Id           = Guid.NewGuid(),
-        Username     = $"user_{Guid.NewGuid():N}",
-        FullName     = "Test User",
-        Email        = $"{Guid.NewGuid()}@test.com",
+        Id = Guid.NewGuid(),
+        Username = $"user_{Guid.NewGuid():N}",
+        FullName = "Test User",
+        Email = $"{Guid.NewGuid()}@test.com",
         PasswordHash = "pwd",
-        Role         = "user"
+        Role = "user"
     };
 
     private static Poll CreatePoll(
-        Guid      authorId  = default,
-        bool      isActive  = true,
+        Guid authorId = default,
+        bool isActive = true,
         DateTime? expiresAt = null,
-        string    title     = "Test Poll") => new()
-    {
-        Id          = Guid.NewGuid(),
-        AuthorId    = authorId == default ? Guid.NewGuid() : authorId,
-        Title       = title,
-        Tag         = "F1",
-        Description = "Test description",
-        CreatedAt   = DateTime.UtcNow,
-        ExpiresAt   = expiresAt ?? DateTime.Now.AddDays(7),
-        IsActive    = isActive
-    };
+        string title = "Test Poll") => new()
+        {
+            Id = Guid.NewGuid(),
+            AuthorId = authorId == default ? Guid.NewGuid() : authorId,
+            Title = title,
+            Tag = "F1",
+            Description = "Test description",
+            CreatedAt = DateTime.UtcNow,
+            ExpiresAt = expiresAt ?? DateTime.Now.AddDays(7),
+            IsActive = isActive
+        };
 
     private static PollOption CreateOption(Guid pollId, string text = "Option") => new()
     {
-        Id     = Guid.NewGuid(),
+        Id = Guid.NewGuid(),
         PollId = pollId,
-        Text   = text
+        Text = text
     };
 }

@@ -14,11 +14,11 @@ namespace Tests.Services.Units;
 public class CommentServiceUnitTests
 {
 
-    private readonly Mock<IArticlesRepository>    _articleRepo      = new();
-    private readonly Mock<ICommentsRepository>    _commentRepo      = new();
-    private readonly Mock<IAuthRepository>        _userRepo         = new();
-    private readonly Mock<IUserImageService>      _userImageService = new();
-    private readonly Mock<ICommentVotesRepository> _voteRepo        = new();
+    private readonly Mock<IArticlesRepository> _articleRepo = new();
+    private readonly Mock<ICommentsRepository> _commentRepo = new();
+    private readonly Mock<IAuthRepository> _userRepo = new();
+    private readonly Mock<IUserImageService> _userImageService = new();
+    private readonly Mock<ICommentVotesRepository> _voteRepo = new();
 
     private readonly CommentService _svc;
 
@@ -58,7 +58,7 @@ public class CommentServiceUnitTests
     [Fact]
     public async Task Create_ShouldFail_WhenArticleNotFound()
     {
-        var userId    = Guid.NewGuid();
+        var userId = Guid.NewGuid();
         var articleId = Guid.NewGuid();
 
         _userRepo.Setup(r => r.CheckIfIdExists(userId)).ReturnsAsync(true);
@@ -75,7 +75,7 @@ public class CommentServiceUnitTests
     [Fact]
     public async Task Create_ShouldSucceed_AndCallCommentRepoCreate()
     {
-        var userId    = Guid.NewGuid();
+        var userId = Guid.NewGuid();
         var articleId = Guid.NewGuid();
 
         _userRepo.Setup(r => r.CheckIfIdExists(userId)).ReturnsAsync(true);
@@ -88,16 +88,16 @@ public class CommentServiceUnitTests
 
         result.IsSuccess.Should().BeTrue();
         _commentRepo.Verify(r => r.Create(It.Is<Comment>(c =>
-            c.UserId    == userId    &&
+            c.UserId == userId &&
             c.ArticleId == articleId &&
-            c.Content   == "Hello!"
+            c.Content == "Hello!"
         )), Times.Once);
     }
 
     [Fact]
     public async Task Create_ShouldSetReplyToCommentId_WhenProvided()
     {
-        var userId    = Guid.NewGuid();
+        var userId = Guid.NewGuid();
         var articleId = Guid.NewGuid();
         var replyToId = Guid.NewGuid();
         Comment? saved = null;
@@ -139,7 +139,7 @@ public class CommentServiceUnitTests
     {
         var comment = CreateComment();
         var userId = comment.UserId;
-        
+
         _userRepo
             .Setup(r => r.GetUserById(userId))
             .ReturnsAsync(CreateUser(userId));
@@ -167,7 +167,7 @@ public class CommentServiceUnitTests
         var reply1 = CreateComment(replyToId: parent.Id);
         var reply2 = CreateComment(replyToId: parent.Id);
         var userId = parent.UserId;
-        
+
         _userRepo
             .Setup(r => r.GetUserById(userId))
             .ReturnsAsync(CreateUser(userId));
@@ -243,7 +243,7 @@ public class CommentServiceUnitTests
     public async Task UpdateCommentsContent_ShouldSucceed_AndUpdateContent()
     {
         var articleId = Guid.NewGuid();
-        var comment   = CreateComment(articleId: articleId);
+        var comment = CreateComment(articleId: articleId);
         Comment? updated = null;
 
         _userRepo
@@ -283,8 +283,8 @@ public class CommentServiceUnitTests
     [Fact]
     public async Task UpdateCommentsVote_ShouldAddUpvote_WhenNoExistingVote()
     {
-        var userId    = Guid.NewGuid();
-        var comment   = CreateComment();
+        var userId = Guid.NewGuid();
+        var comment = CreateComment();
         Comment? saved = null;
 
         _commentRepo.Setup(r => r.GetCommentById(comment.Id)).ReturnsAsync(comment);
@@ -307,7 +307,7 @@ public class CommentServiceUnitTests
     [Fact]
     public async Task UpdateCommentsVote_ShouldRemoveVote_WhenSameVoteExists()
     {
-        var userId  = Guid.NewGuid();
+        var userId = Guid.NewGuid();
         var comment = CreateComment();
         comment.UpVotes = 1;
         Comment? saved = null;
@@ -333,7 +333,7 @@ public class CommentServiceUnitTests
     [Fact]
     public async Task UpdateCommentsVote_ShouldSwitchVote_WhenOppositeVoteExists()
     {
-        var userId  = Guid.NewGuid();
+        var userId = Guid.NewGuid();
         var comment = CreateComment();
         comment.DownVotes = 1;
         Comment? saved = null;
@@ -360,18 +360,18 @@ public class CommentServiceUnitTests
     // ─────────────────────────────────────────────
     // Helpers
     // ─────────────────────────────────────────────
-    
+
     private static User CreateUser(
         Guid? id = null,
         string role = "user") => new()
-    {
-        Id = id ?? Guid.NewGuid(),
-        Username = "testuser",
-        FullName = "Test User",
-        Email = $"{Guid.NewGuid()}@test.com",
-        PasswordHash = "pwd",
-        Role = role
-    };
+        {
+            Id = id ?? Guid.NewGuid(),
+            Username = "testuser",
+            FullName = "Test User",
+            Email = $"{Guid.NewGuid()}@test.com",
+            PasswordHash = "pwd",
+            Role = role
+        };
 
     private static Comment CreateComment(
         Guid? replyToId = null,

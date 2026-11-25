@@ -10,11 +10,11 @@ namespace Services.Implementations;
 
 public class CommentService(
     IArticlesRepository articlesRepo,
-    ICommentsRepository commentsRepo, 
-    IAuthRepository usersRepo, 
+    ICommentsRepository commentsRepo,
+    IAuthRepository usersRepo,
     IUserImageService userImageService,
     ICommentVotesRepository commentVotesRepo
-) : ICommentService 
+) : ICommentService
 {
     public async Task<ResponseResult<List<CommentDetailDto>>> GetArticleCommentsWithoutReplies(Guid articleId, Guid? currentUserId = null)
     {
@@ -42,10 +42,10 @@ public class CommentService(
                 ReplyCount: replyCount,
                 DateCreated: c.DateCreated,
                 DateUpdated: c.DateUpdated,
-                CurrentUserVote: voteStatus 
+                CurrentUserVote: voteStatus
             ));
         }
-    
+
         return ResponseResult<List<CommentDetailDto>>.Success(comments);
     }
 
@@ -60,7 +60,7 @@ public class CommentService(
             var voteStatus = vote == null ? 0 : (vote.IsUpvote ? 1 : -1);
             var replyCount = await commentsRepo.GetNumberOfReplies(c.Id);
             var avatarUrl = await userImageService.GetAvatarUrl(c.UserId);
-            
+
             comments.Add(new CommentDetailDto(
                 Id: c.Id,
                 UserId: c.UserId,
@@ -118,15 +118,15 @@ public class CommentService(
     public async Task<ResponseResult<bool>> Create(CommentCreateDto commentCreateDto, Guid userId)
     {
         if (!await usersRepo.CheckIfIdExists(userId)) return ResponseResult<bool>.Failure("A Felhasználó nem található");
-        
+
         if (!await articlesRepo.CheckIfIdExists(commentCreateDto.ArticleId)) return ResponseResult<bool>.Failure("A Hír nem található");
-        
+
         if (commentCreateDto.ReplyToCommentId.HasValue)
         {
             var replyTo = await commentsRepo.GetCommentById(commentCreateDto.ReplyToCommentId.Value);
             if (replyTo is null) return ResponseResult<bool>.Failure("A Komment nem található");
         }
-        
+
         var comment = new Comment
         {
             UserId = userId,
@@ -138,12 +138,12 @@ public class CommentService(
             DateCreated = DateTime.UtcNow,
             DateUpdated = DateTime.UtcNow
         };
-        
+
         if (commentCreateDto.ReplyToCommentId.HasValue)
         {
             comment.ReplyToCommentId = commentCreateDto.ReplyToCommentId.Value;
         }
-        
+
         await commentsRepo.Create(comment);
         return ResponseResult<bool>.Success(true);
     }
@@ -152,7 +152,7 @@ public class CommentService(
     {
         var existingUser = await usersRepo.GetUserById(userId);
         if (existingUser == null) return ResponseResult<bool>.Failure("A felhasználó nem található");
-        
+
         var existingComment = await commentsRepo.GetCommentById(dto.Id);
         if (existingComment == null) return ResponseResult<bool>.Failure("A komment nem található");
 
@@ -160,17 +160,17 @@ public class CommentService(
         {
             return ResponseResult<bool>.Failure("Nem megfelelő hír");
         }
-        
+
         if (existingUser.Role != "Admin" && existingComment.UserId != existingUser.Id)
         {
-            return ResponseResult<bool>.Failure("Nincs engedélyed a komment szerkesztéséhez.");   
+            return ResponseResult<bool>.Failure("Nincs engedélyed a komment szerkesztéséhez.");
         }
 
         existingComment.Content = dto.Content;
         existingComment.DateUpdated = DateTime.UtcNow;
 
         await commentsRepo.Update(existingComment);
-    
+
         return ResponseResult<bool>.Success(true);
     }
 
@@ -178,7 +178,7 @@ public class CommentService(
     {
         var commentId = commentUpdateVoteDto.CommentId;
         var isUpvote = commentUpdateVoteDto.IsUpvote;
-        
+
         var comment = await commentsRepo.GetCommentById(commentId);
         if (comment == null) return ResponseResult<bool>.Failure("A komment nem található.");
 
@@ -199,16 +199,19 @@ public class CommentService(
             existingVote.IsUpvote = isUpvote;
             await commentVotesRepo.Update(existingVote);
 
-            if (isUpvote) {
+            if (isUpvote)
+            {
                 comment.UpVotes++;
                 comment.DownVotes--;
-            } else {
+            }
+            else
+            {
                 comment.UpVotes--;
                 comment.DownVotes++;
             }
         }
 
-        await commentsRepo.Update(comment); 
+        await commentsRepo.Update(comment);
         return ResponseResult<bool>.Success(true);
     }
 
@@ -216,11 +219,11 @@ public class CommentService(
     {
         var comment = await commentsRepo.GetCommentById(commentId);
         if (comment == null) return ResponseResult<bool>.Failure("A komment nem található");
-        
+
         var user = await usersRepo.GetUserById(userId);
         if (user?.Role != "Admin" && comment.UserId != user?.Id)
         {
-            return ResponseResult<bool>.Failure("Nincs engedélyed a komment törléséhez");   
+            return ResponseResult<bool>.Failure("Nincs engedélyed a komment törléséhez");
         }
 
         var replies = await commentsRepo.GetRepliesToAComment(commentId);
@@ -231,7 +234,7 @@ public class CommentService(
                 await commentsRepo.Delete(reply.Id);
             }
         }
-        
+
         await commentsRepo.Delete(commentId);
         return ResponseResult<bool>.Success(true);
     }

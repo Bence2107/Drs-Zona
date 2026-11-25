@@ -10,12 +10,12 @@ public class Contract
     [Key]
     [Column("id")]
     public Guid Id { get; set; }
-    
+
     [Column("driver_id")]
     public Guid DriverId { get; set; }
     [JsonIgnore]
     public virtual Driver? Driver { get; set; }
-    
+
     [Column("constructor_id")]
     public Guid ConstructorId { get; set; }
     [JsonIgnore]

@@ -5,7 +5,7 @@ using Repositories.Interfaces;
 
 namespace Repositories.Implementations;
 
-public class AuthRepository(EfContext context) : IAuthRepository 
+public class AuthRepository(EfContext context) : IAuthRepository
 {
     private readonly DbSet<User> _users = context.Users;
 
@@ -29,7 +29,7 @@ public class AuthRepository(EfContext context) : IAuthRepository
     {
         return await _users.AnyAsync(u => u.Username == username);
     }
-    
+
     public async Task<User> Create(User user)
     {
         _users.Add(user);
@@ -47,7 +47,7 @@ public class AuthRepository(EfContext context) : IAuthRepository
     {
         try
         {
-            _users.Remove(user); 
+            _users.Remove(user);
             var rowsAffected = await context.SaveChangesAsync();
             return rowsAffected > 0;
         }

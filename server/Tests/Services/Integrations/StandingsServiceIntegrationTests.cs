@@ -71,7 +71,7 @@ public class StandingsServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var series = CreateSeries();
-        var champ  = CreateConstructorsChamp(series.Id);
+        var champ = CreateConstructorsChamp(series.Id);
         await ctx.Series.AddAsync(series);
         await ctx.ConstructorsChampionships.AddAsync(champ);
         await ctx.SaveChangesAsync();
@@ -87,12 +87,12 @@ public class StandingsServiceIntegrationTests
     {
         var (ctx, svc) = BuildSut();
 
-        var series   = CreateSeries();
+        var series = CreateSeries();
         var driversChamp = CreateDriversChamp(series.Id);
-        var constructorsChamp    = CreateConstructorsChamp(series.Id);
-        var cons1    = CreateConstructor("Red Bull");
-        var cons2    = CreateConstructor("Alpine");
-        var gp       = CreateGrandPrix(series.Id, 2024, 1);
+        var constructorsChamp = CreateConstructorsChamp(series.Id);
+        var cons1 = CreateConstructor("Red Bull");
+        var cons2 = CreateConstructor("Alpine");
+        var gp = CreateGrandPrix(series.Id, 2024, 1);
 
         await ctx.Series.AddAsync(series);
         await ctx.DriversChampionships.AddAsync(driversChamp);
@@ -105,12 +105,12 @@ public class StandingsServiceIntegrationTests
         await ctx.Results.AddRangeAsync(
             CreateResult(gpId: gp.Id, constructorId: cons1.Id, constructorPoints: 25, finishPosition: 1, consChampId: constructorsChamp.Id, consName: "Red Bull", consNick: "RBR"),
             CreateResult(gpId: gp.Id, constructorId: cons1.Id, constructorPoints: 18, finishPosition: 2, consChampId: constructorsChamp.Id, consName: "Red Bull", consNick: "RBR"),
-            CreateResult(gpId: gp.Id, constructorId: cons2.Id, constructorPoints: 15, finishPosition: 3, consChampId: constructorsChamp.Id, consName: "Alpine",   consNick: "ALP")
+            CreateResult(gpId: gp.Id, constructorId: cons2.Id, constructorPoints: 15, finishPosition: 3, consChampId: constructorsChamp.Id, consName: "Alpine", consNick: "ALP")
         );
         await ctx.SaveChangesAsync();
-        
+
         var count = await ctx.Results.CountAsync(r => r.ConsChampId == constructorsChamp.Id);
-        count.Should().BeGreaterThan(0); 
+        count.Should().BeGreaterThan(0);
 
         var result = await svc.GetConstructorStandings(constructorsChamp.Id);
 
@@ -142,7 +142,7 @@ public class StandingsServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var series = CreateSeries();
-        var champ  = CreateDriversChamp(series.Id);
+        var champ = CreateDriversChamp(series.Id);
         await ctx.Series.AddAsync(series);
         await ctx.DriversChampionships.AddAsync(champ);
         await ctx.SaveChangesAsync();
@@ -152,7 +152,7 @@ public class StandingsServiceIntegrationTests
         result.IsSuccess.Should().BeTrue();
         result.Value!.Results.Should().BeEmpty();
     }
-    
+
 
     // ─────────────────────────────────────────────
     // GetGrandPrixResults
@@ -175,7 +175,7 @@ public class StandingsServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var series = CreateSeries();
-        var gp     = CreateGrandPrix(series.Id, 2024, 1);
+        var gp = CreateGrandPrix(series.Id, 2024, 1);
         await ctx.Series.AddAsync(series);
         await ctx.GrandsPrix.AddAsync(gp);
         await ctx.SaveChangesAsync();
@@ -192,13 +192,13 @@ public class StandingsServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var series = CreateSeries();
-        var gp     = CreateGrandPrix(series.Id, 2024, 1);
+        var gp = CreateGrandPrix(series.Id, 2024, 1);
         await ctx.Series.AddAsync(series);
         await ctx.GrandsPrix.AddAsync(gp);
         await ctx.SaveChangesAsync();
 
         await ctx.Results.AddRangeAsync(
-            CreateResult(gp.Id, driverName: "Hamilton",   finishPosition: 2, session: "Futam", raceTime: 5100000),
+            CreateResult(gp.Id, driverName: "Hamilton", finishPosition: 2, session: "Futam", raceTime: 5100000),
             CreateResult(gp.Id, driverName: "Verstappen", finishPosition: 1, session: "Futam", raceTime: 4900000)
         );
         await ctx.SaveChangesAsync();
@@ -221,14 +221,14 @@ public class StandingsServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var series = CreateSeries();
-        var gp     = CreateGrandPrix(series.Id, 2024, 1);
+        var gp = CreateGrandPrix(series.Id, 2024, 1);
         await ctx.Series.AddAsync(series);
         await ctx.GrandsPrix.AddAsync(gp);
         await ctx.SaveChangesAsync();
 
         await ctx.Results.AddRangeAsync(
-            CreateResult(gp.Id, session: "Futam",   finishPosition: 1),
-            CreateResult(gp.Id, session: "Futam",   finishPosition: 2),
+            CreateResult(gp.Id, session: "Futam", finishPosition: 1),
+            CreateResult(gp.Id, session: "Futam", finishPosition: 2),
             CreateResult(gp.Id, session: "Időmérő", finishPosition: 1)
         );
         await ctx.SaveChangesAsync();
@@ -240,7 +240,7 @@ public class StandingsServiceIntegrationTests
         result.Value.Should().Contain("Futam");
         result.Value.Should().Contain("Időmérő");
     }
-    
+
     // ─────────────────────────────────────────────
     // RecalculateSession
     // ─────────────────────────────────────────────
@@ -262,7 +262,7 @@ public class StandingsServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var series = CreateSeries(pointSystem: "F1");
-        var gp     = CreateGrandPrix(series.Id, 2024, 1);
+        var gp = CreateGrandPrix(series.Id, 2024, 1);
         await ctx.Series.AddAsync(series);
         await ctx.GrandsPrix.AddAsync(gp);
         await ctx.SaveChangesAsync();
@@ -306,7 +306,7 @@ public class StandingsServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var series = CreateSeries(pointSystem: "F1");
-        var gp     = CreateGrandPrix(series.Id, 2024, 1);
+        var gp = CreateGrandPrix(series.Id, 2024, 1);
         await ctx.Series.AddAsync(series);
         await ctx.GrandsPrix.AddAsync(gp);
         await ctx.SaveChangesAsync();
@@ -334,37 +334,37 @@ public class StandingsServiceIntegrationTests
     // ─────────────────────────────────────────────
 
     private static Series CreateSeries(
-        string name        = "Formula 1",
-        string shortName   = "F1",
+        string name = "Formula 1",
+        string shortName = "F1",
         string pointSystem = "F1",
-        int    lastYear    = 2024) => new()
-    {
-        Id            = Guid.NewGuid(),
-        Name          = name,
-        ShortName     = shortName,
-        PointSystem   = pointSystem,
-        GoverningBody = "FIA",
-        Description   = "Top motorsport",
-        FirstYear     = 1950,
-        LastYear      = lastYear
-    };
+        int lastYear = 2024) => new()
+        {
+            Id = Guid.NewGuid(),
+            Name = name,
+            ShortName = shortName,
+            PointSystem = pointSystem,
+            GoverningBody = "FIA",
+            Description = "Top motorsport",
+            FirstYear = 1950,
+            LastYear = lastYear
+        };
 
     private static ConstructorsChampionship CreateConstructorsChamp(Guid seriesId) => new()
     {
-        Id       = Guid.NewGuid(),
+        Id = Guid.NewGuid(),
         SeriesId = seriesId,
-        Season   = "2024",
-        Name     = "WCC",
-        Status   = "Active"
+        Season = "2024",
+        Name = "WCC",
+        Status = "Active"
     };
 
     private static DriversChampionship CreateDriversChamp(Guid seriesId) => new()
     {
-        Id       = Guid.NewGuid(),
+        Id = Guid.NewGuid(),
         SeriesId = seriesId,
-        Season   = "2024",
-        Name     = "WDC",
-        Status   = "Active"
+        Season = "2024",
+        Name = "WDC",
+        Status = "Active"
     };
 
     private static Constructor CreateConstructor(string name) => new()
@@ -380,51 +380,51 @@ public class StandingsServiceIntegrationTests
 
     private static GrandPrix CreateGrandPrix(Guid seriesId, int year, int round, string name = "Test GP") => new()
     {
-        Id            = Guid.NewGuid(),
-        SeriesId      = seriesId,
-        Name          = name,
-        ShortName     = name.Length >= 3 ? name[..3].ToUpper() : "TST",
-        RoundNumber   = round,
-        SeasonYear    = year,
-        StartTime     = DateTime.UtcNow,
-        EndTime       = DateTime.UtcNow.AddHours(2),
-        RaceDistance  = 306,
+        Id = Guid.NewGuid(),
+        SeriesId = seriesId,
+        Name = name,
+        ShortName = name.Length >= 3 ? name[..3].ToUpper() : "TST",
+        RoundNumber = round,
+        SeasonYear = year,
+        StartTime = DateTime.UtcNow,
+        EndTime = DateTime.UtcNow.AddHours(2),
+        RaceDistance = 306,
         LapsCompleted = 53
     };
 
     private static Result CreateResult(
-        Guid? gpId           = null,
-        Guid? driverId       = null,
-        Guid? constructorId  = null,
-        Guid? driverChampId  = null,
-        Guid? consChampId    = null,
-        string driverName    = "Driver",
-        string consName      = "Team",
-        string consNick      = "TM",
-        int finishPosition   = 1,
-        double driverPoints  = 0,
+        Guid? gpId = null,
+        Guid? driverId = null,
+        Guid? constructorId = null,
+        Guid? driverChampId = null,
+        Guid? consChampId = null,
+        string driverName = "Driver",
+        string consName = "Team",
+        string consNick = "TM",
+        int finishPosition = 1,
+        double driverPoints = 0,
         double constructorPoints = 0,
-        string session       = "Futam",
-        long raceTime        = 5000000,
-        GrandPrix? gp        = null) => new()   // ← gp navigáció külön
-    {
-        Id                          = Guid.NewGuid(),
-        GrandPrixId                 = gp?.Id ?? gpId ?? Guid.NewGuid(),
-        GrandPrix                   = gp,
-        DriverId                    = driverId      ?? Guid.NewGuid(),
-        ConstructorId               = constructorId ?? Guid.NewGuid(),
-        DriversChampId              = driverChampId ?? Guid.NewGuid(),
-        ConsChampId                 = consChampId   ?? Guid.NewGuid(),
-        DriverNameSnapshot          = driverName,
-        ConstructorNameSnapshot     = consName,
-        ConstructorNicknameSnapshot = consNick,
-        Session                     = session,
-        FinishPosition              = finishPosition,
-        DriverPoints                = driverPoints,
-        ConstructorPoints           = constructorPoints,
-        RaceTime                    = raceTime,
-        LapsCompleted               = 53,
-        Status                      = "Finished",
-        CarNumber                   = 1
-    };
+        string session = "Futam",
+        long raceTime = 5000000,
+        GrandPrix? gp = null) => new()   // ← gp navigáció külön
+        {
+            Id = Guid.NewGuid(),
+            GrandPrixId = gp?.Id ?? gpId ?? Guid.NewGuid(),
+            GrandPrix = gp,
+            DriverId = driverId ?? Guid.NewGuid(),
+            ConstructorId = constructorId ?? Guid.NewGuid(),
+            DriversChampId = driverChampId ?? Guid.NewGuid(),
+            ConsChampId = consChampId ?? Guid.NewGuid(),
+            DriverNameSnapshot = driverName,
+            ConstructorNameSnapshot = consName,
+            ConstructorNicknameSnapshot = consNick,
+            Session = session,
+            FinishPosition = finishPosition,
+            DriverPoints = driverPoints,
+            ConstructorPoints = constructorPoints,
+            RaceTime = raceTime,
+            LapsCompleted = 53,
+            Status = "Finished",
+            CarNumber = 1
+        };
 }

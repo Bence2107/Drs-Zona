@@ -10,80 +10,80 @@ public class Result
 {
     [Key]
     [Column("id")]
-    public Guid Id {get; set;}
-    
+    public Guid Id { get; set; }
+
     [Required]
     [Column("grand_prix_id")]
-    public Guid GrandPrixId {get; set;}
+    public Guid GrandPrixId { get; set; }
     [JsonIgnore]
-    public virtual GrandPrix? GrandPrix {get; set;}
-    
+    public virtual GrandPrix? GrandPrix { get; set; }
+
     [Required]
     [Column("driver_id")]
-    public Guid DriverId {get; set;}
+    public Guid DriverId { get; set; }
     [JsonIgnore]
-    public virtual Driver? Driver {get; set;}
-    
+    public virtual Driver? Driver { get; set; }
+
     [Column("driver_name_snapshot")]
     public required string DriverNameSnapshot { get; set; }
-    
+
     [Column("constructor_id")]
-    public Guid ConstructorId {get; set;}
+    public Guid ConstructorId { get; set; }
     [JsonIgnore]
-    public virtual Constructor? Constructor {get; set;}
-    
-    [Column("constructor_name_snapshot")]  
+    public virtual Constructor? Constructor { get; set; }
+
+    [Column("constructor_name_snapshot")]
     public required string ConstructorNameSnapshot { get; set; }
-    
-    [Column("constructor_nickname_snapshot")]  
+
+    [Column("constructor_nickname_snapshot")]
     public required string ConstructorNicknameSnapshot { get; set; }
-    
+
     [Column("drivers_championship_id")]
-    public Guid DriversChampId {get; set;}
+    public Guid DriversChampId { get; set; }
     [JsonIgnore]
-    public virtual DriversChampionship? DriversChampionship {get; set;}
-    
+    public virtual DriversChampionship? DriversChampionship { get; set; }
+
     [Column("constructors_championship_id")]
-    public Guid ConsChampId {get; set;}
+    public Guid ConsChampId { get; set; }
     [JsonIgnore]
     public virtual ConstructorsChampionship? ConsChampionship { get; set; }
-    
+
     [Required]
     [Column("start_position")]
-    public int StartPosition {get; set;}
-    
+    public int StartPosition { get; set; }
+
     [Required]
     [Column("finish_position")]
-    public int FinishPosition {get; set;}
+    public int FinishPosition { get; set; }
 
     [Required]
     [Column("session")]
-    public required string Session {get; set;}
-    
+    public required string Session { get; set; }
+
     [Required]
     [Column("car_number")]
-    public int CarNumber {get; set;}
-    
+    public int CarNumber { get; set; }
+
     [Required]
     [Column("race_time")]
-    public long RaceTime {get; set;}
-    
+    public long RaceTime { get; set; }
+
     [Required]
     [Column("status")]
-    public required string Status {get; set;}
-    
+    public required string Status { get; set; }
+
     [Required]
     [Column("laps_completed")]
-    public int LapsCompleted {get; set;}
-    
+    public int LapsCompleted { get; set; }
+
     [Required]
     [Column("driver_points")]
-    public double DriverPoints {get; set;}
-    
+    public double DriverPoints { get; set; }
+
     [Required]
     [Column("constructor_points")]
-    public double ConstructorPoints {get; set;}
-    
+    public double ConstructorPoints { get; set; }
+
     [Required]
     [Column("is_pole_position")]
     public bool IsPolePosition { get; set; }

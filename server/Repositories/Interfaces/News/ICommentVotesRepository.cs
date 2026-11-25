@@ -2,7 +2,7 @@ using Entities.Models.News;
 
 namespace Repositories.Interfaces.News;
 
-public interface ICommentVotesRepository 
+public interface ICommentVotesRepository
 {
     Task<CommentVote?> GetVoteForACommment(Guid? userId, Guid commentId);
     Task Create(CommentVote vote);

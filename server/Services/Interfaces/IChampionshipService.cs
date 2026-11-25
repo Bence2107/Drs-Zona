@@ -3,7 +3,7 @@ using Services.Types;
 
 namespace Services.Interfaces;
 
-public interface IChampionshipService 
+public interface IChampionshipService
 {
     Task<ResponseResult<List<ChampionshipRowDto>>> GetAllChampionshipsBySeries(Guid seriesId);
     Task<ResponseResult<List<ConstructorLookUpDto>>> GetConstructorsBySeason(Guid driversChampId);

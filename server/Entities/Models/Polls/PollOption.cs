@@ -10,12 +10,12 @@ public class PollOption
     [Key]
     [Column("id")]
     public Guid Id { get; set; }
-    
+
     [Column("poll_id")]
     public Guid PollId { get; set; }
     [JsonIgnore]
     public virtual Poll? Poll { get; set; }
-    
+
     [Required]
     [Column("text")]
     public required string Text { get; set; }

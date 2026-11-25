@@ -3,7 +3,7 @@ using Services.Types;
 
 namespace Services.Implementations.images;
 
-public class CircuitImageService(UploadSettings uploads): ICircuitImagesService
+public class CircuitImageService(UploadSettings uploads) : ICircuitImagesService
 {
     public string? GetImageUrl(Guid id, string imageName)
     {

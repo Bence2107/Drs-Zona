@@ -15,11 +15,11 @@ namespace Tests.Services.Units;
 public class ArticleServiceUnitTests
 {
 
-    private readonly Mock<IArticlesRepository>   _articleRepo  = new();
-    private readonly Mock<IAuthRepository>        _userRepo     = new();
-    private readonly Mock<IGrandsPrixRepository>  _gpRepo       = new();
-    private readonly Mock<IArticleImageService>   _imageService = new();
-    private readonly Mock<IUserImageService>      _userImage    = new();
+    private readonly Mock<IArticlesRepository> _articleRepo = new();
+    private readonly Mock<IAuthRepository> _userRepo = new();
+    private readonly Mock<IGrandsPrixRepository> _gpRepo = new();
+    private readonly Mock<IArticleImageService> _imageService = new();
+    private readonly Mock<IUserImageService> _userImage = new();
 
     private readonly ArticleService _svc;
 
@@ -62,7 +62,7 @@ public class ArticleServiceUnitTests
     [Fact]
     public async Task GetArticleBySlug_ShouldReturnArticle_WithCorrectFields()
     {
-        var author  = CreateAuthor();
+        var author = CreateAuthor();
         var article = CreateArticle(author);
 
         _articleRepo
@@ -81,10 +81,10 @@ public class ArticleServiceUnitTests
     [Fact]
     public async Task GetArticleBySlug_ShouldReturnMiddleSections_WhenSummary()
     {
-        var author  = CreateAuthor();
+        var author = CreateAuthor();
         var article = CreateArticle(author, isSummary: true);
         article.SecondSection = "Second";
-        article.ThirdSection  = "Third";
+        article.ThirdSection = "Third";
         article.FourthSection = "Fourth";
 
         _articleRepo
@@ -166,7 +166,7 @@ public class ArticleServiceUnitTests
     [Fact]
     public async Task GetArticleById_ShouldReturnArticle_WhenExists()
     {
-        var author  = CreateAuthor();
+        var author = CreateAuthor();
         var article = CreateArticle(author);
 
         _articleRepo
@@ -246,7 +246,7 @@ public class ArticleServiceUnitTests
     public async Task Create_ShouldFail_WhenGrandPrixNotFound()
     {
         var authorId = Guid.NewGuid();
-        var gpId     = Guid.NewGuid();
+        var gpId = Guid.NewGuid();
 
         _userRepo.Setup(r => r.CheckIfIdExists(authorId)).ReturnsAsync(true);
         _gpRepo.Setup(r => r.CheckIfIdExists(gpId)).ReturnsAsync(false);
@@ -332,7 +332,7 @@ public class ArticleServiceUnitTests
     public async Task Update_ShouldFail_WhenGrandPrixNotFound()
     {
         var article = CreateArticle();
-        var gpId    = Guid.NewGuid();
+        var gpId = Guid.NewGuid();
 
         _articleRepo.Setup(r => r.GetById(article.Id)).ReturnsAsync(article);
         _gpRepo.Setup(r => r.CheckIfIdExists(gpId)).ReturnsAsync(false);
@@ -365,7 +365,7 @@ public class ArticleServiceUnitTests
         result.IsSuccess.Should().BeTrue();
         _articleRepo.Verify(r => r.Update(It.Is<Article>(a =>
             a.Title == "New Title" &&
-            a.Slug  == "new-slug"  &&
+            a.Slug == "new-slug" &&
             a.IsSummary == true
         )), Times.Once);
     }
@@ -431,32 +431,32 @@ public class ArticleServiceUnitTests
 
     private static User CreateAuthor() => new()
     {
-        Id           = Guid.NewGuid(),
-        Username     = "author_user",
-        FullName     = "Test Elek",
-        Email        = $"{Guid.NewGuid()}@test.com",
+        Id = Guid.NewGuid(),
+        Username = "author_user",
+        FullName = "Test Elek",
+        Email = $"{Guid.NewGuid()}@test.com",
         PasswordHash = "pwd",
-        Role         = "author"
+        Role = "author"
     };
 
     private static Article CreateArticle(
-        User?     author    = null,
-        string?   slug      = null,
-        string?   title     = null,
-        bool      isSummary = false,
+        User? author = null,
+        string? slug = null,
+        string? title = null,
+        bool isSummary = false,
         DateTime? published = null) => new()
-    {
-        Id            = Guid.NewGuid(),
-        Title         = title     ?? "Test Article",
-        Slug          = slug      ?? Guid.NewGuid().ToString(),
-        Lead          = "Test lead",
-        Tag           = "F1",
-        IsSummary     = isSummary,
-        FirstSection  = "First",
-        LastSection   = "Last",
-        Author        = author,
-        AuthorId      = author?.Id ?? Guid.NewGuid(),
-        DatePublished = published  ?? DateTime.UtcNow,
-        DateUpdated   = DateTime.UtcNow
-    };
+        {
+            Id = Guid.NewGuid(),
+            Title = title ?? "Test Article",
+            Slug = slug ?? Guid.NewGuid().ToString(),
+            Lead = "Test lead",
+            Tag = "F1",
+            IsSummary = isSummary,
+            FirstSection = "First",
+            LastSection = "Last",
+            Author = author,
+            AuthorId = author?.Id ?? Guid.NewGuid(),
+            DatePublished = published ?? DateTime.UtcNow,
+            DateUpdated = DateTime.UtcNow
+        };
 }

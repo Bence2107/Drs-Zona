@@ -172,20 +172,20 @@ public class ContractsServiceUnitTests
     private static Contract CreateContract(
         string driverName = "Test Driver",
         string constructorName = "Test Team") => new()
-    {
-        Id = Guid.NewGuid(),
-        DriverId = Guid.NewGuid(),
-        ConstructorId = Guid.NewGuid(),
-        Driver = new Driver
-            { Id = Guid.NewGuid(), Name = driverName, Nationality = "HU", BirthDate = new DateTime(1990, 1, 1) },
-        Constructor = new Constructor
         {
             Id = Guid.NewGuid(),
-            Name = constructorName,
-            Nickname = "TT",
-            HeadQuarters = "null",
-            TeamChief = "null",
-            TechnicalChief = "null",
-        }
-    };
+            DriverId = Guid.NewGuid(),
+            ConstructorId = Guid.NewGuid(),
+            Driver = new Driver
+            { Id = Guid.NewGuid(), Name = driverName, Nationality = "HU", BirthDate = new DateTime(1990, 1, 1) },
+            Constructor = new Constructor
+            {
+                Id = Guid.NewGuid(),
+                Name = constructorName,
+                Nickname = "TT",
+                HeadQuarters = "null",
+                TeamChief = "null",
+                TechnicalChief = "null",
+            }
+        };
 }

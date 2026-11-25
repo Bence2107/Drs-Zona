@@ -7,7 +7,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ContractsController(IContractsService contractsService) : ControllerBase 
+public class ContractsController(IContractsService contractsService) : ControllerBase
 {
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpGet("getAll")]
@@ -28,7 +28,7 @@ public class ContractsController(IContractsService contractsService) : Controlle
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
     }
-    
+
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("update/{id:guid}/{driverId:guid}/{teamId:guid}")]
     public async Task<ActionResult> Update(Guid id, Guid driverId, Guid teamId)
@@ -38,7 +38,7 @@ public class ContractsController(IContractsService contractsService) : Controlle
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
     }
-    
+
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpDelete("delete/{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)

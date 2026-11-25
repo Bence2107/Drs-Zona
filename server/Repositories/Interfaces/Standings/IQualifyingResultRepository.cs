@@ -2,7 +2,7 @@
 
 namespace Repositories.Interfaces.Standings;
 
-public interface IQualifyingResultRepository 
+public interface IQualifyingResultRepository
 {
     Task<QualifyingResult?> GetByResultId(Guid resultId);
     Task<List<QualifyingResult>> GetByResultIds(List<Guid> resultId);

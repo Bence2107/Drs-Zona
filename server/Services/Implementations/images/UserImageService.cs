@@ -8,16 +8,16 @@ public class UserImageService(UploadSettings uploads) : IUserImageService
 {
     private string GetUserFolderPath(Guid userId) =>
         Path.Combine(uploads.RootPath, "images", "avatars", userId.ToString());
-    
+
     public Task<string?> GetAvatarUrl(Guid userId)
     {
         var userFolder = GetUserFolderPath(userId);
 
         if (!Directory.Exists(userFolder)) return Task.FromResult<string?>(null);
-        
+
         var existing = Directory.GetFiles(userFolder, "avatar.jpg").FirstOrDefault();
         return Task.FromResult(existing == null ? null : $"/uploads/images/avatars/{userId}/avatar.jpg");
-    } 
+    }
 
     public async Task<ResponseResult<bool>> SaveAvatar(Guid userId, IFormFile? file)
     {
@@ -25,7 +25,7 @@ public class UserImageService(UploadSettings uploads) : IUserImageService
         {
             return ResponseResult<bool>.Failure("File", "Üres fájl.");
         }
-        
+
         const int maxFileSize = 2 * 1024 * 1024;
         if (file.Length > maxFileSize)
         {
@@ -45,7 +45,7 @@ public class UserImageService(UploadSettings uploads) : IUserImageService
         {
             return ResponseResult<bool>.Failure("File", "Érvénytelen képformátum.");
         }
-        
+
         try
         {
             var userFolder = GetUserFolderPath(userId);

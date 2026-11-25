@@ -17,7 +17,7 @@ public class ChampionshipService(
     IDriverParticipationRepository driverParticipationRepo,
     IGrandsPrixRepository grandsPrixRepo,
     IResultsRepository resultsRepo
-) : IChampionshipService 
+) : IChampionshipService
 {
     public async Task<ResponseResult<List<ChampionshipRowDto>>> GetAllChampionshipsBySeries(Guid seriesId)
     {
@@ -60,7 +60,7 @@ public class ChampionshipService(
 
         return ResponseResult<List<ConstructorLookUpDto>>.Success(dto);
     }
-    
+
     public async Task<ResponseResult<List<DriverLookUpDto>>> GetDriversBySeason(Guid driversChampId)
     {
         var driverParticipations = await driverParticipationRepo.GetByChampionshipId(driversChampId);
@@ -82,12 +82,12 @@ public class ChampionshipService(
             resultList.OrderBy(d => d.Name).ToList()
         );
     }
-    
+
     public async Task<ResponseResult<List<GrandPrixLookupDto>>> GetGrandsPrixByChampionship(Guid driverChampId)
     {
         var champ = await driverChampRepo.GetById(driverChampId);
         if (champ == null) return ResponseResult<List<GrandPrixLookupDto>>.Failure("Bajnokság nem található");
-        
+
         var gps = await grandsPrixRepo.GetBySeriesAndYear(champ.SeriesId, int.Parse(champ.Season));
         var dtoS = gps.Select(gp =>
             {
@@ -109,10 +109,10 @@ public class ChampionshipService(
             })
             .OrderBy(gp => gp.RoundNumber)
             .ToList();
-       
+
         return ResponseResult<List<GrandPrixLookupDto>>.Success(dtoS);
     }
-    
+
     public async Task<ResponseResult<ParticipationListDto>> GetParticipations(Guid driversChampId, Guid constructorsChampId)
     {
         var driverParticipations = await driverParticipationRepo.GetByChampionshipId(driversChampId);
@@ -123,7 +123,7 @@ public class ChampionshipService(
         {
             var contracts = await contractsRepo.GetByDriverId(dp.DriverId);
             var currentConstructorId = contracts.LastOrDefault()?.ConstructorId;
-        
+
             var teamSnapshot = constructorCompetitions
                 .FirstOrDefault(cc => cc.ConstructorId == currentConstructorId)
                 ?.ConstructorNameSnapshot;
@@ -152,7 +152,7 @@ public class ChampionshipService(
             constructors
         ));
     }
-    
+
     public async Task<ResponseResult<List<YearLookupDto>>> GetSeasonsBySeries(Guid seriesId)
     {
         var driversChamps = await driverChampRepo.GetBySeriesId(seriesId);
@@ -174,7 +174,7 @@ public class ChampionshipService(
 
         return ResponseResult<List<YearLookupDto>>.Success(dtoS);
     }
-    
+
     public async Task<ResponseResult<bool>> CreateChampionship(ChampionshipCreateDto dto)
     {
         var driversChamp = new DriversChampionship
@@ -200,17 +200,17 @@ public class ChampionshipService(
 
         return ResponseResult<bool>.Success(true);
     }
-    
+
     public async Task<ResponseResult<bool>> CreateParticipations(ParticipationAddDto dto)
     {
         foreach (var constructorId in dto.ConstructorIds)
         {
             var alreadyExists = await constructorCompetitionRepo.CheckIfExists(constructorId, dto.ConstructorsChampId);
             if (alreadyExists) continue;
-            
+
             var constructor = await constructorsRepo.GetByIdWithBrand(constructorId);
             if (constructor == null) return ResponseResult<bool>.Failure("Constructor dosen't exist");
-                
+
             await constructorCompetitionRepo.Create(new ConstructorCompetition
             {
                 ConstructorId = constructorId,
@@ -226,7 +226,7 @@ public class ChampionshipService(
             if (alreadyExists) continue;
             var driverEntity = await driversRepo.GetDriverById(driver.DriverId);
             if (driverEntity == null) return ResponseResult<bool>.Failure("Driver dosen't exist");
-                
+
             await driverParticipationRepo.Create(new DriverParticipation
             {
                 DriverId = driver.DriverId,
@@ -238,7 +238,7 @@ public class ChampionshipService(
 
         return ResponseResult<bool>.Success(true);
     }
-    
+
     public async Task<ResponseResult<bool>> UpdateChampionshipStatus(Guid driversChampId, Guid constructorsChampId, string status)
     {
         var driversChamp = await driverChampRepo.GetById(driversChampId);
@@ -255,7 +255,7 @@ public class ChampionshipService(
 
         return ResponseResult<bool>.Success(true);
     }
-    
+
     public async Task<ResponseResult<bool>> DeleteDriverParticipation(Guid driverId, Guid driversChampId)
     {
         await driverParticipationRepo.Delete(driverId, driversChampId);
@@ -267,7 +267,7 @@ public class ChampionshipService(
         await constructorCompetitionRepo.Delete(constructorId, constructorsChampId);
         return ResponseResult<bool>.Success(true);
     }
-    
+
     private static int GetAge(DateTime birthDate)
     {
         var years = DateTime.Now.Year - birthDate.Year;

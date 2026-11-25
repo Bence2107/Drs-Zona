@@ -13,9 +13,9 @@ public class ArticleService(
     IArticlesRepository articleRepo,
     IAuthRepository userRepo,
     IGrandsPrixRepository gpRepo,
-    IArticleImageService articleImageService, 
+    IArticleImageService articleImageService,
     IUserImageService userImageService
-) : IArticleService 
+) : IArticleService
 {
     public async Task<ResponseResult<ArticleDetailDto>> GetArticleById(Guid id)
     {
@@ -25,13 +25,13 @@ public class ArticleService(
         var s2 = article.SecondSection;
         var s3 = article.ThirdSection;
         var s4 = article.FourthSection;
-        
+
         var middleSections = new List<string?> { s2, s3, s4 }
             .Where(s => !string.IsNullOrWhiteSpace(s))
             .Cast<string>()
             .ToList();
-        
-        return ResponseResult<ArticleDetailDto>.Success( new ArticleDetailDto(
+
+        return ResponseResult<ArticleDetailDto>.Success(new ArticleDetailDto(
             Id: article.Id,
             Title: article.Title,
             Lead: article.Lead,
@@ -52,7 +52,7 @@ public class ArticleService(
             AuthorImageUrl: await userImageService.GetAvatarUrl(article.AuthorId)
         ));
     }
-    
+
     public async Task<ResponseResult<ArticleDetailDto>> GetArticleBySlug(string slug)
     {
         var article = await articleRepo.GetArticleBySlug(slug);
@@ -61,13 +61,13 @@ public class ArticleService(
         var s2 = article.SecondSection;
         var s3 = article.ThirdSection;
         var s4 = article.FourthSection;
-        
+
         var middleSections = new List<string?> { s2, s3, s4 }
             .Where(s => !string.IsNullOrWhiteSpace(s))
             .Cast<string>()
             .ToList();
-        
-        return ResponseResult<ArticleDetailDto>.Success( new ArticleDetailDto(
+
+        return ResponseResult<ArticleDetailDto>.Success(new ArticleDetailDto(
             Id: article.Id,
             Title: article.Title,
             Lead: article.Lead,
@@ -92,7 +92,7 @@ public class ArticleService(
     public async Task<ResponseResult<List<ArticleListDto>>> GetRecentArticles(int count, string? tag = null)
     {
         var articles = await articleRepo.GetRecentNews(count, tag);
-        
+
         var dtoS = articles.Select(a => new ArticleListDto(
                 Id: a.Id,
                 Title: a.Title,
@@ -105,14 +105,14 @@ public class ArticleService(
             ))
             .OrderByDescending(a => a.DatePublished)
             .ToList();
-        
+
         return ResponseResult<List<ArticleListDto>>.Success(dtoS);
     }
 
     public async Task<ResponseResult<PagedResult<ArticleListDto>>> ListArticles(int page, int pageSize, string? tag = null)
     {
-        var (articles, totalCount) = await articleRepo.GetPagedArticles(page, pageSize, tag);      
-        
+        var (articles, totalCount) = await articleRepo.GetPagedArticles(page, pageSize, tag);
+
         var dtoS = articles.Select(a => new ArticleListDto(
                 Id: a.Id,
                 Title: a.Title,
@@ -125,7 +125,7 @@ public class ArticleService(
             ))
             .OrderByDescending(a => a.DatePublished)
             .ToList();
-        
+
         var result = new PagedResult<ArticleListDto>
         {
             Items = dtoS,
@@ -133,14 +133,14 @@ public class ArticleService(
             PageSize = pageSize,
             CurrentPage = page
         };
-        
+
         return ResponseResult<PagedResult<ArticleListDto>>.Success(result);
     }
 
     public async Task<ResponseResult<PagedResult<ArticleListDto>>> ListAllSummary(int page, int pageSize, string? tag = null)
     {
-        var (articles, totalCount) = await articleRepo.GetPagedReviews(page, pageSize, tag);      
-        
+        var (articles, totalCount) = await articleRepo.GetPagedReviews(page, pageSize, tag);
+
         var dtoS = articles.Select(a => new ArticleListDto(
                 Id: a.Id,
                 Title: a.Title,
@@ -153,7 +153,7 @@ public class ArticleService(
             ))
             .OrderByDescending(a => a.DatePublished)
             .ToList();
-        
+
         var result = new PagedResult<ArticleListDto>
         {
             Items = dtoS,
@@ -161,7 +161,7 @@ public class ArticleService(
             PageSize = pageSize,
             CurrentPage = page
         };
-        
+
         return ResponseResult<PagedResult<ArticleListDto>>.Success(result);
     }
 
@@ -172,7 +172,7 @@ public class ArticleService(
 
         if (dto.GrandPrixId != null && !await gpRepo.CheckIfIdExists(dto.GrandPrixId.Value))
             return ResponseResult<bool>.Failure("GrandPrixId", "Grand Prix not found");
-        
+
         var article = new Article
         {
             Title = dto.Title,
