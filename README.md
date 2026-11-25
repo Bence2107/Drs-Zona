@@ -29,7 +29,7 @@ Drs-Zóna brings motorsport news, race results and community features into one p
 | Frontend | Angular 21, Angular Material, TypeScript |
 | Backend | ASP.NET Core 9 Web API, Entity Framework Core |
 | Database | PostgreSQL |
-| Tooling | pnpm, Docker Compose (local database), xUnit, Karma |
+| Tooling | pnpm, Docker Compose (local database), xUnit, Vitest |
 
 ## Repository structure
 

@@ -3,61 +3,64 @@ import { HeaderComponent } from './header.component';
 import { provideRouter } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('HeaderComponent - US-05: Dark/Light Mode Toggle', () => {
-  let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
+    let component: HeaderComponent;
+    let fixture: ComponentFixture<HeaderComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [HeaderComponent, BrowserAnimationsModule],
-      providers: [provideRouter([])]
-    }).compileComponents();
+    const currentTheme = () => document.documentElement.getAttribute('data-theme');
 
-    fixture = TestBed.createComponent(HeaderComponent);
-    component = fixture.componentInstance;
+    beforeEach(async () => {
+        localStorage.clear();
 
-    localStorage.clear();
-    fixture.detectChanges();
-  });
+        await TestBed.configureTestingModule({
+            imports: [HeaderComponent, BrowserAnimationsModule],
+            providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()]
+        }).compileComponents();
 
-  it('AC1: Should immediately change CSS class on body when toggle is switched', () => {
-    expect(document.body.classList.contains('dark-mode')).toBeTrue();
+        fixture = TestBed.createComponent(HeaderComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-    component.toggleTheme();
-    fixture.detectChanges();
+    it('AC1: Should immediately switch the theme attribute when toggle is switched', () => {
+        expect(component.isDarkMode).toBe(false);
+        expect(currentTheme()).toBe('light');
 
-    expect(component.isDarkMode).toBeFalse();
-    expect(document.body.classList.contains('light-mode')).toBeTrue();
-    expect(document.body.classList.contains('dark-mode')).toBeFalse();
-  });
+        component.toggleTheme();
+        fixture.detectChanges();
 
-  it('AC1: Clicking the UI element (theme toggle button) triggers theme toggle', () => {
-    spyOn(component, 'toggleTheme').and.callThrough();
+        expect(component.isDarkMode).toBe(true);
+        expect(currentTheme()).toBe('dark');
+    });
 
-    const toggle = fixture.debugElement.query(By.css('.theme-toggle'));
+    it('AC1: Clicking the UI element (theme toggle button) triggers theme toggle', () => {
+        vi.spyOn(component, 'toggleTheme');
 
-    toggle.triggerEventHandler('click', null);
-    fixture.detectChanges();
+        const toggle = fixture.debugElement.query(By.css('.theme-toggle'));
 
-    expect(component.toggleTheme).toHaveBeenCalled();
-  });
+        toggle.triggerEventHandler('click', null);
+        fixture.detectChanges();
 
-  it('AC2: Selected theme should be saved to localStorage', () => {
-    component.toggleTheme();
-    fixture.detectChanges();
+        expect(component.toggleTheme).toHaveBeenCalled();
+    });
 
-    const savedTheme = localStorage.getItem('theme');
-    expect(savedTheme).toBe('light');
-  });
+    it('AC2: Selected theme should be saved to localStorage', () => {
+        component.toggleTheme();
+        fixture.detectChanges();
 
-  it('AC2: Should load saved theme from localStorage on initialization (ngOnInit)', () => {
-    localStorage.setItem('theme', 'light');
+        expect(localStorage.getItem('theme')).toBe('dark');
+    });
 
-    component.ngOnInit();
-    fixture.detectChanges();
+    it('AC2: Should load saved theme from localStorage on initialization (ngOnInit)', () => {
+        localStorage.setItem('theme', 'dark');
 
-    expect(component.isDarkMode).toBeFalse();
-    expect(document.body.classList.contains('light-mode')).toBeTrue();
-  });
+        component.ngOnInit();
+        fixture.detectChanges();
+
+        expect(component.isDarkMode).toBe(true);
+        expect(currentTheme()).toBe('dark');
+    });
 });

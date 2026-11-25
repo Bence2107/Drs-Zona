@@ -14,7 +14,8 @@ describe('ArticleComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        // The component falls back to the news list when the article cannot be loaded
+        provideRouter([{ path: 'news', children: [] }])
       ]
     })
     .compileComponents();

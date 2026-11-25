@@ -25,7 +25,8 @@ The app runs at `http://localhost:4200`. API calls go through the dev proxy to t
 | `pnpm start` | Starts the dev server; uses `FRONTEND_PORT` from `.env` if it is set ([`scripts/serve.mjs`](scripts/serve.mjs)) |
 | `pnpm build` | Production build to `dist/drs-zona/browser` |
 | `pnpm watch` | Development build that rebuilds on every change |
-| `pnpm test` | Runs the unit tests with Karma in watch mode |
+| `pnpm test` | Runs the unit tests once with Vitest |
+| `pnpm test:watch` | Runs the unit tests in watch mode, rerunning on every change |
 | `pnpm open-api-gen` | Regenerates the API client from the running API (see [API client](#api-client)) |
 
 Extra arguments are passed on to the Angular CLI and override the defaults, for example `pnpm start --open`.
@@ -81,20 +82,18 @@ The script reads `http://localhost:5244/swagger/v1/swagger.json` (`API_PORT`). C
 
 ## Testing
 
-Unit tests use Jasmine and run in Karma.
+Unit tests run with [Vitest](https://vitest.dev) through the Angular CLI, in Node with jsdom, so no browser is needed.
 
 ```bash
 cd client
-pnpm test
+pnpm test               # single run
+pnpm test:watch         # watch mode, reruns on every change
+pnpm test --coverage    # single run with a coverage report
 ```
 
-`pnpm test` opens Chrome and reruns the tests on every change. For a single headless run, for example in CI:
+A JUnit report is written to `reports/junit.xml` and coverage to `coverage/`. Both folders are gitignored.
 
-```bash
-pnpm test --watch=false --browsers=ChromeHeadless
-```
-
-JUnit and coverage reports are written to `reports/`
+Write specs with the Vitest API (`vi.fn()`, `vi.spyOn()`). `fakeAsync` does not work with Vitest; use `async` tests and `await fixture.whenStable()` instead.
 
 ## Build
 
