@@ -113,51 +113,6 @@ Variables already set in the environment take precedence over the file. If a req
 
 `.env` is gitignored. Never commit it.
 
-## Authentication and roles
-
-The API uses JWT bearer tokens signed with HS256. `POST /api/auth/login` returns a token, and the client sends it in the `Authorization: Bearer <token>` header. Passwords are hashed with BCrypt.
-
-| Role | Can do |
-| --- | --- |
-| `User` | Comment, vote in polls, manage own profile |
-| `Author` | Everything a user can, plus create, edit and delete articles |
-| `Editor` | Everything a user can, plus manage championships, drivers, constructors, contracts, Grands Prix and results |
-| `Admin` | Everything |
-
-Endpoints are protected with `[Authorize]` (any signed-in user) or with one of two policies: `AuthorOrAdmin` and `EditorOrAdmin`. Registration always creates a `User`, so other roles must be assigned in the database.
-
-## API overview
-
-Routes follow `api/<controller>/<action>`. Swagger lists every endpoint with its request and response types.
-
-| Route prefix | Area | Access |
-| --- | --- | --- |
-| `api/auth` | Registration, login, profile, password, profile picture | Register and login public, everything else signed in |
-| `api/article` | Articles | Read public, write `AuthorOrAdmin` |
-| `api/article-image` | Article image upload, draft images | `AuthorOrAdmin` |
-| `api/comments` | Comments and comment votes | Read public, write signed in |
-| `api/poll` | Polls and votes | Read public, write signed in |
-| `api/series` | Racing series | Public |
-| `api/standings` | Results and standings | Read public, write `EditorOrAdmin` |
-| `api/championship` | Championships and participations | Read public, write `EditorOrAdmin` |
-| `api/grandprix` | Grands Prix and circuits | Mostly public; circuits list and writes `EditorOrAdmin` |
-| `api/drivers` | Drivers | `EditorOrAdmin` |
-| `api/constructors` | Constructors | `EditorOrAdmin` |
-| `api/contracts` | Driver contracts | `EditorOrAdmin` |
-| `api/brands` | Constructor brands | `EditorOrAdmin` |
-| `api/healthcheck` | Health check | Public |
-
-## File uploads
-
-Uploaded images are stored under `uploads/` in the content root (`server/API/uploads` with `dotnet run`) and served at `/uploads`. Set `UPLOADS_PATH` to keep them elsewhere. The folder is created at startup if it does not exist.
-
-| Subfolder | Content |
-| --- | --- |
-| `images/avatars/<userId>/` | Profile pictures |
-| `images/articles/<slug>/` | Images of published articles |
-| `dumps/articles/<draftId>/` | Images of unsaved drafts; moved to `images/articles/` when the article is published |
-| `images/circuits/<id>/` | Circuit layouts |
-
 ## Database and migrations
 
 Migrations live in [`Context/Migrations`](Context/Migrations). Run `dotnet ef` from `server/Context`. It reads the same `.env` as the API, so no connection string is needed.
@@ -188,12 +143,6 @@ docker compose down -v        # stop and delete the database
 - If port 5432 is already in use, set `DB_PORT` to another port, for example `5433`. The container and the API both follow it.
 - `DB_NAME`, `DB_USER` and `DB_PASSWORD` only take effect when the data volume is first created. After changing them, recreate the database with `docker compose down -v`, which deletes all data.
 - With the `.env` somewhere else, pass it explicitly: `docker compose --env-file <path> up -d`.
-- To copy data from an existing local PostgreSQL (here on 5432, with the container on 5433):
-
-  ```bash
-  pg_dump -h localhost -p 5432 -U postgres -Fc drs_zona > drs_zona.dump
-  pg_restore -h localhost -p 5433 -U postgres -d drs_zona --no-owner drs_zona.dump
-  ```
 
 ## Tests
 
