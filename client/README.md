@@ -30,6 +30,7 @@ The app runs at `http://localhost:4200`. API calls go through the dev proxy to t
 | `pnpm open-api-gen` | Regenerates the API client from the running API (see [API client](#api-client))                                 |
 | `pnpm format`       | Formats the code with Prettier                                                                                  |
 | `pnpm format:check` | Checks the formatting without changing files, as CI does                                                        |
+| `pnpm lint`         | Lints TypeScript and templates with ESLint                                                                      |
 
 Extra arguments are passed on to the Angular CLI and override the defaults, for example `pnpm start --open`.
 

@@ -40,10 +40,10 @@ export class CommentItemComponent {
   @Input() comment!: UIComment;
   @Input() articleId: string | null = null;
 
-  @Input() isReply: boolean = false;
-  @Input() isOnProfileSite: boolean = false;
+  @Input() isReply = false;
+  @Input() isOnProfileSite = false;
 
-  @Input() depth: number = 0;
+  @Input() depth = 0;
 
   @Output() commentDeleted = new EventEmitter<void>();
 

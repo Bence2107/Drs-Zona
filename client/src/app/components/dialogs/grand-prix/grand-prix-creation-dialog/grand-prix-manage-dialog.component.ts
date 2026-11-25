@@ -57,7 +57,7 @@ export class GrandPixManageDialogComponent implements OnInit {
   isSubmitting = false;
   isEditMode = false;
 
-  private readonly fieldMap: { [key: string]: string } = {
+  private readonly fieldMap: Record<string, string> = {
     seriesid: 'seriesId',
     circuitid: 'circuitId',
     name: 'name',

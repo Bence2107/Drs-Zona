@@ -67,7 +67,7 @@ export class PollAddDialogComponent implements OnInit {
   optionsError = '';
   minDate = new Date();
 
-  private readonly pollFieldMap: { [key: string]: string } = {
+  private readonly pollFieldMap: Record<string, string> = {
     title: 'title',
     tag: 'tag',
     description: 'description',

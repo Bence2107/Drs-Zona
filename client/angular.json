@@ -4,7 +4,8 @@
   "newProjectRoot": "projects",
   "cli": {
     "analytics": false,
-    "packageManager": "pnpm"
+    "packageManager": "pnpm",
+    "schematicCollections": ["angular-eslint"]
   },
   "projects": {
     "drs-zona": {
@@ -102,8 +103,22 @@
             "buildTarget": "::development",
             "watch": false,
             "tsConfig": "tsconfig.spec.json",
-            "reporters": ["default", ["junit", { "outputFile": "reports/junit.xml" }]],
+            "reporters": [
+              "default",
+              [
+                "junit",
+                {
+                  "outputFile": "reports/junit.xml"
+                }
+              ]
+            ],
             "coverageReporters": ["html", "cobertura", "text-summary"]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }

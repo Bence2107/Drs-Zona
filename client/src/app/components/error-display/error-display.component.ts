@@ -9,8 +9,8 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './error-display.component.scss',
 })
 export class ErrorDisplayComponent {
-  @Input() title: string = 'A szerver jelenleg nem elérhető';
-  @Input() message: string = 'Kérjük, próbálkozzon később vagy ellenőrizze a kapcsolatot.';
+  @Input() title = 'A szerver jelenleg nem elérhető';
+  @Input() message = 'Kérjük, próbálkozzon később vagy ellenőrizze a kapcsolatot.';
   @Output() retry = new EventEmitter<void>();
 
   onRetry() {

@@ -323,7 +323,7 @@ export class StandingsStateService implements OnInit {
         this.standingsService.getSessionsByGrandPrix(latestGP.id!).subscribe((sessions) => {
           this.sessions.set(sessions);
           if (sessions.length > 0) {
-            let defaultSession =
+            const defaultSession =
               sessions.find((s) => s === 'Futam') ||
               sessions.find((s) => s === 'Sprint') ||
               sessions[sessions.length - 1];

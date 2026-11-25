@@ -9,7 +9,7 @@ export class FormErrorService {
   applyServerErrors(
     form: FormGroup,
     error: HttpValidationError,
-    fieldMap: { [key: string]: string },
+    fieldMap: Record<string, string>,
   ): void {
     if (!error?.fieldErrors) {
       form.get('email')?.setErrors({ serverError: error?.title ?? 'Ismeretlen hiba' });

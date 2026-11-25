@@ -3,7 +3,7 @@ import { catchError, throwError } from 'rxjs';
 
 export interface HttpValidationError {
   title: string;
-  fieldErrors: { [key: string]: string[] };
+  fieldErrors: Record<string, string[]>;
 }
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -32,7 +32,7 @@ function parseValidationErrors(errorResponse: any): HttpValidationError {
       errorObj = JSON.parse(errorResponse);
     }
 
-    const fieldErrors: { [key: string]: string[] } = {};
+    const fieldErrors: Record<string, string[]> = {};
 
     if (errorObj?.field && errorObj?.message) {
       fieldErrors[errorObj.field.toLowerCase()] = [errorObj.message];

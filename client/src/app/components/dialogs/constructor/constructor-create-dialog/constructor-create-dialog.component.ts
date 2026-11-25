@@ -39,7 +39,7 @@ export class ConstructorCreateDialogComponent implements OnInit {
   isSubmitting = false;
   form!: FormGroup;
 
-  private readonly fieldMap: { [key: string]: string } = {
+  private readonly fieldMap: Record<string, string> = {
     brandid: 'brandId',
     name: 'name',
     nickname: 'nickname',

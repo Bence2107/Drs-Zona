@@ -173,7 +173,7 @@ export class AuthComponent implements OnInit {
   }
 
   private applyServerErrors(form: FormGroup, error: HttpValidationError): void {
-    const fieldMap: { [key: string]: string } = {
+    const fieldMap: Record<string, string> = {
       email: 'email',
       password: 'password',
       username: 'username',

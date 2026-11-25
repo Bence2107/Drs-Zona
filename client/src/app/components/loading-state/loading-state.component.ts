@@ -14,8 +14,8 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 export class LoadingStateComponent {
   @Input() variant: 'spinner' | 'bar' = 'spinner';
   @Input() label?: string;
-  @Input() diameter: number = 48;
-  @Input({ transform: booleanAttribute }) compact: boolean = false;
+  @Input() diameter = 48;
+  @Input({ transform: booleanAttribute }) compact = false;
   /** Covers already rendered content (parent needs the global `.loading-host` class) instead of replacing it. */
-  @Input({ transform: booleanAttribute }) overlay: boolean = false;
+  @Input({ transform: booleanAttribute }) overlay = false;
 }

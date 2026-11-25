@@ -173,7 +173,7 @@ export class ProfileEditComponent implements OnInit {
       return;
     }
 
-    const fieldMap: { [key: string]: string } = {
+    const fieldMap: Record<string, string> = {
       email: 'email',
       username: 'username',
       fullname: 'fullName',

@@ -98,10 +98,10 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
     toolbarHiddenButtons: [['insertImage', 'insertVideo']],
   };
 
-  imagePreviews: { [key: string]: string } = {};
+  imagePreviews: Record<string, string> = {};
   isLoading = false;
   private isSubmitted = false;
-  isUploading: { [key: string]: boolean } = {};
+  isUploading: Record<string, boolean> = {};
   series: SeriesListDto[] = [];
 
   constructor(
@@ -117,7 +117,7 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
     private formErrorService: FormErrorService,
   ) {}
 
-  private readonly articleFieldMap: { [key: string]: string } = {
+  private readonly articleFieldMap: Record<string, string> = {
     title: 'title',
     lead: 'lead',
     slug: 'slug',
@@ -126,7 +126,7 @@ export class ArticleManageComponent implements OnInit, OnDestroy {
     lastsection: 'lastSection',
   };
 
-  private readonly summaryFieldMap: { [key: string]: string } = {
+  private readonly summaryFieldMap: Record<string, string> = {
     secondsection: 'secondSection',
     thirdsection: 'thirdSection',
     fourthsection: 'fourthSection',

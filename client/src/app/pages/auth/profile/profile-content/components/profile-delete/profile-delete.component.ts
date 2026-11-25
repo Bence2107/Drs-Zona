@@ -22,7 +22,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ProfileDeleteComponent {
   @Input() userData: UserProfileResponse | null = null;
-  isConfirmed: boolean = false;
+  isConfirmed = false;
 
   constructor(
     private dialog: MatDialog,

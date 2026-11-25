@@ -35,11 +35,11 @@ export class HeaderComponent implements OnInit {
   isDarkMode: boolean = localStorage.getItem('theme') === 'dark';
 
   @Output() toggleSidenav = new EventEmitter<void>();
-  isScreenSmall: boolean = false;
+  isScreenSmall = false;
 
-  isAuthLoading: boolean = true;
-  isServerAlive: boolean = false;
-  isAvatarLoading: boolean = true;
+  isAuthLoading = true;
+  isServerAlive = false;
+  isAvatarLoading = true;
 
   constructor(
     private breakpointObserver: BreakpointObserver,

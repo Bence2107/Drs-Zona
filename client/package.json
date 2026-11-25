@@ -10,7 +10,8 @@
     "test": "ng test",
     "test:watch": "ng test --watch",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "lint": "ng lint"
   },
   "private": true,
   "engines": {
@@ -34,15 +35,20 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
+    "@angular-eslint/builder": "21.4.0",
     "@angular/build": "^21.2.28",
     "@angular/cli": "^21.2.28",
     "@angular/compiler-cli": "^21.2.25",
+    "@eslint/js": "^10.0.1",
     "@types/uuid": "^10.0.0",
     "@vitest/coverage-v8": "^4.1.12",
+    "angular-eslint": "21.4.0",
+    "eslint": "^10.3.0",
     "jsdom": "^31.0.1",
     "ng-openapi-gen": "^1.0.5",
     "prettier": "^3.10.1",
     "typescript": "~5.9.3",
+    "typescript-eslint": "8.59.2",
     "vitest": "^4.1.12"
   }
 }
