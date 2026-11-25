@@ -98,6 +98,8 @@ Every pull request and every push to `master` runs [`.github/workflows/ci.yml`](
 2. **Test:** client (Vitest) and server (xUnit) tests
 3. **Build:** API publish and client production build
 
+A separate **PR policy** workflow checks the branch name and the pull request title. See [CONTRIBUTING.md](CONTRIBUTING.md) for the conventions.
+
 ## Vision
 
 Drs-Zóna aims to become a central hub for motorsport fans, combining reliable data, quality content and an engaged community.
