@@ -1,21 +1,31 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import { Component, inject, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogContent,
   MatDialogRef,
-  MatDialogTitle
-} from "@angular/material/dialog";
-import {DriverService} from '../../../../services/api/driver.service';
-import {DriverDetailDto} from '../../../../api/models/driver-detail-dto';
-import {DriverUpdateDto} from '../../../../api/models/driver-update-dto';
-import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
-import {MatButton} from '@angular/material/button';
-import {MatIcon} from '@angular/material/icon';
-import {FormErrorService} from '../../../../services/form-error.service';
-import {HttpValidationError} from '../../../../services/error-interceptor.service';
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { DriverService } from '../../../../services/api/driver.service';
+import { DriverDetailDto } from '../../../../api/models/driver-detail-dto';
+import { DriverUpdateDto } from '../../../../api/models/driver-update-dto';
+import { MatError, MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { FormErrorService } from '../../../../services/form-error.service';
+import { HttpValidationError } from '../../../../services/error-interceptor.service';
 
 @Component({
   selector: 'app-driver-edit-dialog',
@@ -32,48 +42,47 @@ import {HttpValidationError} from '../../../../services/error-interceptor.servic
     MatDatepicker,
     MatDialogActions,
     MatButton,
-    MatIcon
+    MatIcon,
   ],
   templateUrl: './driver-edit-dialog.component.html',
   styleUrl: './driver-edit-dialog.component.scss',
 })
-export class DriverEditDialogComponent implements OnInit{
+export class DriverEditDialogComponent implements OnInit {
   data = inject(MAT_DIALOG_DATA) as { driver: DriverDetailDto };
   isSubmitting = false;
   form!: FormGroup;
 
-  private readonly fieldMap: { [key: string]: string } = {
-    'name': 'name',
-    'nationality': 'nationality',
-    'birthdate': 'birthDate',
-    'totalraces': 'totalRaces',
-    'totalwins': 'totalWins',
-    'totalpodiums': 'totalPodiums',
-    'championships': 'championships',
-    'polepositions': 'polePositions',
-    'seasons': 'seasons',
+  private readonly fieldMap: Record<string, string> = {
+    name: 'name',
+    nationality: 'nationality',
+    birthdate: 'birthDate',
+    totalraces: 'totalRaces',
+    totalwins: 'totalWins',
+    totalpodiums: 'totalPodiums',
+    championships: 'championships',
+    polepositions: 'polePositions',
+    seasons: 'seasons',
   };
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<DriverEditDialogComponent>,
     private driverService: DriverService,
-    private formErrorService: FormErrorService
+    private formErrorService: FormErrorService,
   ) {}
-
 
   ngOnInit() {
     const d = this.data.driver;
     this.form = this.fb.group({
-      name:          [d.name, [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
-      nationality:   [d.nationality, [Validators.required, Validators.maxLength(50)]],
-      birthDate:     [d.birthDate ? new Date(d.birthDate) : null, Validators.required],
-      totalRaces:    [d.totalRaces, [Validators.required, Validators.min(0)]],
-      totalWins:     [d.totalWins, [Validators.required, Validators.min(0)]],
-      totalPodiums:  [d.totalPodiums, [Validators.required, Validators.min(0)]],
+      name: [d.name, [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      nationality: [d.nationality, [Validators.required, Validators.maxLength(50)]],
+      birthDate: [d.birthDate ? new Date(d.birthDate) : null, Validators.required],
+      totalRaces: [d.totalRaces, [Validators.required, Validators.min(0)]],
+      totalWins: [d.totalWins, [Validators.required, Validators.min(0)]],
+      totalPodiums: [d.totalPodiums, [Validators.required, Validators.min(0)]],
       championships: [d.championships, [Validators.required, Validators.min(0)]],
       polePositions: [d.polePositions, [Validators.required, Validators.min(0)]],
-      seasons:       [d.seasons, [Validators.required, Validators.min(0)]],
+      seasons: [d.seasons, [Validators.required, Validators.min(0)]],
     });
 
     this.formErrorService.clearServerErrorOnChange([
@@ -95,26 +104,31 @@ export class DriverEditDialogComponent implements OnInit{
 
     const v = this.form.value;
     const dto: DriverUpdateDto = {
-      id:            this.data.driver.id,
-      name:          v.name,
-      nationality:   v.nationality,
-      birthDate:     v.birthDate instanceof Date ? v.birthDate.toISOString() : v.birthDate,
-      totalRaces:    v.totalRaces,
-      totalWins:     v.totalWins,
-      totalPodiums:  v.totalPodiums,
+      id: this.data.driver.id,
+      name: v.name,
+      nationality: v.nationality,
+      birthDate: v.birthDate instanceof Date ? v.birthDate.toISOString() : v.birthDate,
+      totalRaces: v.totalRaces,
+      totalWins: v.totalWins,
+      totalPodiums: v.totalPodiums,
       championships: v.championships,
       polePositions: v.polePositions,
-      seasons:       v.seasons,
+      seasons: v.seasons,
     };
 
     this.driverService.updateDriver(dto).subscribe({
-      next: () => { this.isSubmitting = false; this.dialogRef.close(true); },
+      next: () => {
+        this.isSubmitting = false;
+        this.dialogRef.close(true);
+      },
       error: (err: HttpValidationError) => {
         this.isSubmitting = false;
         this.formErrorService.applyServerErrors(this.form, err, this.fieldMap);
-      }
+      },
     });
   }
 
-  cancel() { this.dialogRef.close(false); }
+  cancel() {
+    this.dialogRef.close(false);
+  }
 }

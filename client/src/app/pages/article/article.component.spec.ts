@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ArticleComponent } from './article.component';
-import {provideHttpClient} from '@angular/common/http';
-import {provideHttpClientTesting} from '@angular/common/http/testing';
-import {provideRouter} from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 describe('ArticleComponent', () => {
   let component: ArticleComponent;
@@ -14,10 +14,10 @@ describe('ArticleComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
-      ]
-    })
-    .compileComponents();
+        // The component falls back to the news list when the article cannot be loaded
+        provideRouter([{ path: 'news', children: [] }]),
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ArticleComponent);
     component = fixture.componentInstance;

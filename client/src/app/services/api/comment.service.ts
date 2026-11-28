@@ -1,70 +1,82 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {ApiConfiguration} from '../../api/api-configuration';
-import {Observable} from 'rxjs';
-import {CommentDetailDto} from '../../api/models/comment-detail-dto';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ApiConfiguration } from '../../api/api-configuration';
+import { Observable } from 'rxjs';
+import { CommentDetailDto } from '../../api/models/comment-detail-dto';
 import {
-  apiCommentsCreatePost, apiCommentsDeleteCommentIdDelete,
+  apiCommentsCreatePost,
+  apiCommentsDeleteCommentIdDelete,
   apiCommentsGetCommentRepliesCommentIdGet$Json,
   apiCommentsGetCommentsWithoutRepliesArticleIdGet$Json,
   apiCommentsGetUsersCommentsGet$Json,
-  apiCommentsUpdateContentPost, apiCommentsVotePost
+  apiCommentsUpdateContentPost,
+  apiCommentsVotePost,
 } from '../../api/functions';
-import {map} from 'rxjs/operators';
-import {CommentCreateDto} from '../../api/models/comment-create-dto';
-import {CommentContentUpdateDto} from '../../api/models/comment-content-update-dto';
-import {CommentUpdateVoteDto} from '../../api/models/comment-update-vote-dto';
+import { map } from 'rxjs/operators';
+import { CommentCreateDto } from '../../api/models/comment-create-dto';
+import { CommentContentUpdateDto } from '../../api/models/comment-content-update-dto';
+import { CommentUpdateVoteDto } from '../../api/models/comment-update-vote-dto';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommentService {
-
-  constructor(private http: HttpClient, private apiConfig: ApiConfiguration) {}
+  constructor(
+    private http: HttpClient,
+    private apiConfig: ApiConfiguration,
+  ) {}
 
   getCommentsWithoutReplies(id: string): Observable<CommentDetailDto[]> {
-    return apiCommentsGetCommentsWithoutRepliesArticleIdGet$Json(this.http, this.apiConfig.rootUrl, {articleId: id}).pipe(
-      map(response => {
+    return apiCommentsGetCommentsWithoutRepliesArticleIdGet$Json(
+      this.http,
+      this.apiConfig.rootUrl,
+      { articleId: id },
+    ).pipe(
+      map((response) => {
         return response.body as CommentDetailDto[];
-      })
+      }),
     );
   }
 
   getCommentsReplies(id: string): Observable<CommentDetailDto[]> {
-    return apiCommentsGetCommentRepliesCommentIdGet$Json(this.http, this.apiConfig.rootUrl, {commentId: id}).pipe(
-      map(response => {
+    return apiCommentsGetCommentRepliesCommentIdGet$Json(this.http, this.apiConfig.rootUrl, {
+      commentId: id,
+    }).pipe(
+      map((response) => {
         return response.body as CommentDetailDto[];
-      })
+      }),
     );
   }
 
   getUsersComments(): Observable<CommentDetailDto[]> {
     return apiCommentsGetUsersCommentsGet$Json(this.http, this.apiConfig.rootUrl).pipe(
-      map(response => {
+      map((response) => {
         return response.body as CommentDetailDto[];
-      })
+      }),
     );
   }
 
   createComment(dto: CommentCreateDto): Observable<void> {
     return apiCommentsCreatePost(this.http, this.apiConfig.rootUrl, {
-      body: dto
+      body: dto,
     }).pipe(map(() => void 0));
   }
 
   updateComment(dto: CommentContentUpdateDto): Observable<void> {
     return apiCommentsUpdateContentPost(this.http, this.apiConfig.rootUrl, {
-      body: dto
+      body: dto,
     }).pipe(map(() => void 0));
   }
 
   updateVote(dto: CommentUpdateVoteDto): Observable<void> {
     return apiCommentsVotePost(this.http, this.apiConfig.rootUrl, {
-      body: dto
+      body: dto,
     }).pipe(map(() => void 0));
   }
 
   deleteComment(id: string): Observable<void> {
-    return apiCommentsDeleteCommentIdDelete(this.http, this.apiConfig.rootUrl, {commentId: id}).pipe(map(() => void 0));
+    return apiCommentsDeleteCommentIdDelete(this.http, this.apiConfig.rootUrl, {
+      commentId: id,
+    }).pipe(map(() => void 0));
   }
 }

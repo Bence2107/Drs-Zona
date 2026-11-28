@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, flushMicrotasks, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Params, provideRouter } from '@angular/router';
 import { BehaviorSubject, of, Subject } from 'rxjs';
 
@@ -14,6 +14,9 @@ describe('CategoryComponent', () => {
   let fixture: ComponentFixture<SerieComponent>;
   let params$: BehaviorSubject<Params>;
   let detailResponses: Record<string, Subject<SeriesDetailDto>>;
+
+  // A macrotask runs only after every pending microtask, so the preload promises have settled
+  const flushMicrotasks = () => new Promise<void>((resolve) => setTimeout(resolve));
 
   const respond = (seriesName: string, detail: SeriesDetailDto) => {
     detailResponses[seriesName].next(detail);
@@ -32,15 +35,14 @@ describe('CategoryComponent', () => {
         {
           provide: SeriesService,
           useValue: {
-            getByName: (name: string) => (detailResponses[name] = new Subject<SeriesDetailDto>())
-          }
+            getByName: (name: string) => (detailResponses[name] = new Subject<SeriesDetailDto>()),
+          },
         },
         { provide: ArticleService, useValue: { getRecent: () => of([]) } },
         { provide: PollService, useValue: { getAllActive: () => of([]) } },
         { provide: ImagePreloadService, useValue: { preload: () => Promise.resolve() } },
-      ]
-    })
-    .compileComponents();
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SerieComponent);
     component = fixture.componentInstance;
@@ -51,16 +53,16 @@ describe('CategoryComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should ignore a late response of a previously selected series', fakeAsync(() => {
+  it('should ignore a late response of a previously selected series', async () => {
     params$.next({ name: 'f2' });
 
     respond('f2', { shortName: 'F2' });
-    flushMicrotasks();
+    await flushMicrotasks();
     respond('f1', { shortName: 'F1' });
-    flushMicrotasks();
+    await flushMicrotasks();
 
     expect(component.seriesDetail?.shortName).toBe('F2');
-    expect(component.isLoading).toBeFalse();
-    expect(component.hasLoaded).toBeTrue();
-  }));
+    expect(component.isLoading).toBe(false);
+    expect(component.hasLoaded).toBe(true);
+  });
 });

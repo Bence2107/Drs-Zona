@@ -3,7 +3,7 @@ using Services.Types;
 
 namespace Services.Interfaces;
 
-public interface ICommentService 
+public interface ICommentService
 {
     Task<ResponseResult<List<CommentDetailDto>>> GetArticleCommentsWithoutReplies(Guid articleId, Guid? currentUserId = null);
     Task<ResponseResult<List<CommentDetailDto>>> GetCommentReplies(Guid commentId, Guid? currentUserId = null);

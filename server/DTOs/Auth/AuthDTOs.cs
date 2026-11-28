@@ -3,46 +3,46 @@ using Microsoft.AspNetCore.Http;
 
 namespace DTOs.Auth;
 
-public record LoginRequest (
-    [Required(ErrorMessage = "Email cím kitöltése kötelező")] 
-    [EmailAddress(ErrorMessage = "Hibás Email formátum")] 
+public record LoginRequest(
+    [Required(ErrorMessage = "Email cím kitöltése kötelező")]
+    [EmailAddress(ErrorMessage = "Hibás Email formátum")]
     string Email,
     [Required(ErrorMessage = "Jelszó megadása kötelező")]
     [MinLength(8, ErrorMessage = "A jelszónak legalább 8 karakternek kell lennie")]
-    string Password 
+    string Password
 );
 
 public record RegisterRequest
 (
-    [Required(ErrorMessage = "Felhasználónév megadása kötelező")] 
-    [MaxLength(50, ErrorMessage = "A felhasználónév hossza maximum 50 karakter lehet")] 
+    [Required(ErrorMessage = "Felhasználónév megadása kötelező")]
+    [MaxLength(50, ErrorMessage = "A felhasználónév hossza maximum 50 karakter lehet")]
     string Username,
-    [Required(ErrorMessage = "Teljes név megadása kötelező")] 
-    [MaxLength(100,  ErrorMessage = "A teljes név hossza maximum 100 karakter lehet")] 
+    [Required(ErrorMessage = "Teljes név megadása kötelező")]
+    [MaxLength(100,  ErrorMessage = "A teljes név hossza maximum 100 karakter lehet")]
     string FullName,
-    [Required(ErrorMessage = "Email cím kitöltése kötelező")] 
-    [EmailAddress(ErrorMessage = "Hibás Email formátum")] 
+    [Required(ErrorMessage = "Email cím kitöltése kötelező")]
+    [EmailAddress(ErrorMessage = "Hibás Email formátum")]
     string Email,
     [Required(ErrorMessage = "Jelszó megadása kötelező")]
     [MinLength(8, ErrorMessage = "A jelszónak legalább 8 karakternek kell lennie")]
-    string Password 
+    string Password
 );
 
 
 public record UpdateUserRequest(
-    [Required(ErrorMessage = "Felhasználónév megadása kötelező")] 
-    [MaxLength(50, ErrorMessage = "A felhasználónév hossza maximum 50 karakter lehet")] 
+    [Required(ErrorMessage = "Felhasználónév megadása kötelező")]
+    [MaxLength(50, ErrorMessage = "A felhasználónév hossza maximum 50 karakter lehet")]
     string Username,
-    [Required(ErrorMessage = "Teljes név megadása kötelező")] 
-    [MaxLength(100,  ErrorMessage = "A teljes név hossza maximum 100 karakter lehet")] 
+    [Required(ErrorMessage = "Teljes név megadása kötelező")]
+    [MaxLength(100,  ErrorMessage = "A teljes név hossza maximum 100 karakter lehet")]
     string FullName,
-    [Required(ErrorMessage = "Email cím kitöltése kötelező")] 
-    [EmailAddress(ErrorMessage = "Hibás Email formátum")] 
+    [Required(ErrorMessage = "Email cím kitöltése kötelező")]
+    [EmailAddress(ErrorMessage = "Hibás Email formátum")]
     string Email
 );
 
 public record ChangePasswordRequest(
-    [Required(ErrorMessage = "A jelenlegi jelszó megadása kötelező")] 
+    [Required(ErrorMessage = "A jelenlegi jelszó megadása kötelező")]
     string CurrentPassword,
     [Required(ErrorMessage = "Jelszó megadása kötelező")]
     [MinLength(8, ErrorMessage = "A jelszónak legalább 8 karakternek kell lennie")]
@@ -50,7 +50,7 @@ public record ChangePasswordRequest(
     [Required(ErrorMessage = "Jelszó újbéli megadása kötelező")]
     [MinLength(8, ErrorMessage = "A jelszónak legalább 8 karakternek kell lennie")]
     string NewPasswordAgain
-): IValidatableObject
+) : IValidatableObject
 {
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

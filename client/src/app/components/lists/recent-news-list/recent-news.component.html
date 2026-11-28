@@ -1,32 +1,28 @@
 <div class="primary_news-container">
-    @for (new_item of articles; track new_item) {
-      <mat-card class="new-item" [routerLink]="['/article', new_item.slug]">
-        @if (new_item?.primaryImageUrl) {
-          <img mat-card-image
-               [src]="new_item.primaryImageUrl"
-               [alt]="new_item.title">
-        } @else {
-          <img mat-card-image [src]="'img/articles/image-not-found.png'" alt="No image">
+  @for (new_item of articles; track new_item) {
+    <mat-card class="new-item" [routerLink]="['/article', new_item.slug]">
+      @if (new_item?.primaryImageUrl) {
+        <img mat-card-image [src]="new_item.primaryImageUrl" [alt]="new_item.title" />
+      } @else {
+        <img mat-card-image [src]="'img/articles/image-not-found.png'" alt="No image" />
+      }
+
+      <mat-card-content class="text-content">
+        @if (new_item.tag) {
+          <span class="series-tag" [ngClass]="'tag-' + new_item!.tag!.toLowerCase().trim()">
+            {{ new_item!.tag }}
+          </span>
         }
 
-          <mat-card-content class="text-content">
-            @if (new_item.tag) {
-              <span class="series-tag" [ngClass]="'tag-' + new_item!.tag!.toLowerCase().trim()">
-                 {{ new_item!.tag }}
-              </span>
-            }
-
-            <h2 class="news-label">{{ new_item.title }}</h2>
-            <p class="news-desc">{{ new_item.lead }}</p>
-            <p class="news-date">
-              {{ new_item.datePublished | date:'yyyy. MMMM d. – HH:mm' }}
-            </p>
-          </mat-card-content>
-        </mat-card>
-      }
-    @if (articles.length === 0) {
-        <p class="empty-msg">
-          Nem találtunk híreket.
+        <h2 class="news-label">{{ new_item.title }}</h2>
+        <p class="news-desc">{{ new_item.lead }}</p>
+        <p class="news-date">
+          {{ new_item.datePublished | date: 'yyyy. MMMM d. – HH:mm' }}
         </p>
-      }
+      </mat-card-content>
+    </mat-card>
+  }
+  @if (articles.length === 0) {
+    <p class="empty-msg">Nem találtunk híreket.</p>
+  }
 </div>

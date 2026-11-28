@@ -1,16 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatCard } from '@angular/material/card';
-import {CommentService} from '../../../services/api/comment.service';
-import {UIComment} from '../../../models/ui-comment';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {CommentItemComponent} from './comment-item/comment-item.component';
-import {MatIcon} from '@angular/material/icon';
-import {AuthService} from '../../../services/api/auth.service';
-import {CommentCreateDto} from '../../../api/models/comment-create-dto';
-import {HttpValidationError} from '../../../services/error-interceptor.service';
-import {RouterLink} from '@angular/router';
-import {ImagePreloadService} from '../../../services/image-preload.service';
-import {LoadingStateComponent} from '../../loading-state/loading-state.component';
+import { CommentService } from '../../../services/api/comment.service';
+import { UIComment } from '../../../models/ui-comment';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommentItemComponent } from './comment-item/comment-item.component';
+import { MatIcon } from '@angular/material/icon';
+import { AuthService } from '../../../services/api/auth.service';
+import { CommentCreateDto } from '../../../api/models/comment-create-dto';
+import { HttpValidationError } from '../../../services/error-interceptor.service';
+import { RouterLink } from '@angular/router';
+import { ImagePreloadService } from '../../../services/image-preload.service';
+import { LoadingStateComponent } from '../../loading-state/loading-state.component';
 
 @Component({
   selector: 'app-comment-list',
@@ -21,10 +21,10 @@ import {LoadingStateComponent} from '../../loading-state/loading-state.component
     MatIcon,
     FormsModule,
     RouterLink,
-    LoadingStateComponent
+    LoadingStateComponent,
   ],
   templateUrl: './comment-list.component.html',
-  styleUrl: './comment-list.component.scss'
+  styleUrl: './comment-list.component.scss',
 })
 export class CommentListComponent implements OnInit {
   @Input() articleId!: string;
@@ -42,7 +42,7 @@ export class CommentListComponent implements OnInit {
     const dto: CommentCreateDto = {
       articleId: this.articleId,
       content: this.newCommentText.trim(),
-      replyToCommentId: undefined
+      replyToCommentId: undefined,
     };
 
     this.isSubmitting = true;
@@ -54,9 +54,10 @@ export class CommentListComponent implements OnInit {
         this.loadMainComments();
       },
       error: (err: HttpValidationError) => {
-        this.commentError = err?.fieldErrors?.['content']?.[0] ?? err?.title ?? 'Hiba történt a küldés során';
+        this.commentError =
+          err?.fieldErrors?.['content']?.[0] ?? err?.title ?? 'Hiba történt a küldés során';
         this.isSubmitting = false;
-      }
+      },
     });
   }
 
@@ -77,7 +78,7 @@ export class CommentListComponent implements OnInit {
     if (profile?.hasAvatar && profile?.avatarUrl) {
       return profile.avatarUrl;
     }
-    return "img/user/avatars/avatar.jpg";
+    return 'img/user/avatars/avatar.jpg';
   }
 
   constructor(
@@ -93,19 +94,17 @@ export class CommentListComponent implements OnInit {
   loadMainComments() {
     this.isLoading = true;
     this.commentService.getCommentsWithoutReplies(this.articleId).subscribe({
-      next: comments => {
-        this.imagePreload
-          .preload(comments.map(comment => comment.userAvatarUrl))
-          .then(() => {
-            this.comments = comments as UIComment[];
-            this.isLoading = false;
-            this.hasLoaded = true;
-          });
+      next: (comments) => {
+        this.imagePreload.preload(comments.map((comment) => comment.userAvatarUrl)).then(() => {
+          this.comments = comments as UIComment[];
+          this.isLoading = false;
+          this.hasLoaded = true;
+        });
       },
       error: () => {
         this.isLoading = false;
         this.hasLoaded = true;
-      }
+      },
     });
   }
 }

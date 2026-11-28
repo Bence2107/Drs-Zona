@@ -8,7 +8,7 @@ describe('LoadingStateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LoadingStateComponent]
+      imports: [LoadingStateComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoadingStateComponent);
@@ -45,6 +45,8 @@ describe('LoadingStateComponent', () => {
 
     fixture.componentRef.setInput('label', 'Cikkek betöltése...');
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('h3')).nativeElement.textContent).toContain('Cikkek betöltése...');
+    expect(fixture.debugElement.query(By.css('h3')).nativeElement.textContent).toContain(
+      'Cikkek betöltése...',
+    );
   });
 });

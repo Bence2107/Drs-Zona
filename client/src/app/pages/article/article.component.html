@@ -3,97 +3,93 @@
     <div class="container">
       <mat-card class="article-card">
         <header class="article-header">
-          @if (article?.primaryImageUrl !== null){
-            <img [src]="article?.primaryImageUrl"
-                 [alt]="article?.title"
-                 class="img-fluid primary-img">
+          @if (article?.primaryImageUrl !== null) {
+            <img
+              [src]="article?.primaryImageUrl"
+              [alt]="article?.title"
+              class="img-fluid primary-img"
+            />
           }
-            <div class="title-group">
-              <h1 class="mat-headline-3">{{ article?.title }}</h1>
-              <h2 class="mat-headline-6">{{ article?.lead }}</h2>
-              <div class="author-group">
-                <img [src]="avatarUrl"
-                     alt="avatar"
-                     class="account-icon">
-                <p>{{article?.authorName}}</p>
-              </div>
-
+          <div class="title-group">
+            <h1 class="mat-headline-3">{{ article?.title }}</h1>
+            <h2 class="mat-headline-6">{{ article?.lead }}</h2>
+            <div class="author-group">
+              <img [src]="avatarUrl" alt="avatar" class="account-icon" />
+              <p>{{ article?.authorName }}</p>
             </div>
-          </header>
-          <mat-card-content>
-            @if (article?.firstSection) {
-              <div class="content-block" [innerHTML]="article.firstSection"></div>
-            }
-            @if (article?.isReview) {
-              @for (section of article?.middleSections; track section; let i = $index) {
-                <div class="section-wrapper">
-                  <div class="content-block" [innerHTML]="section"></div>
-                  @if (i === 0) {
-                    <figure class="article-figure">
-                      @if (article?.secondaryImageUrl !== null){
-                        <img [src]="article?.secondaryImageUrl" class="img-fluid" alt="">
-                      }
-                    </figure>
-                  }
-                  @if (i === 1) {
-                    <figure class="article-figure">
-                      @if (article?.thirdImageUrl !== null){
-                        <img [src]="article?.thirdImageUrl" class="img-fluid" alt="">
-                      }
-                    </figure>
-                  }
-                </div>
-              }
-            }
-            @if (article.id) {
-              <figure class="article-figure">
-                @if (article.lastImageUrl !== null){
-                  <img [src]="article?.lastImageUrl"
-                       [alt]="article.title"
-                       class="img-fluid">
-                }
-                </figure>
-              }
-              @if (article?.lastSection) {
-                <div class="content-block" [innerHTML]="article.lastSection"></div>
-              }
-              <mat-divider class="section-divider"></mat-divider>
-              @if (article?.id) {
-                <section class="comments-section">
-                  <h3>Hozzászólások</h3>
-                  <app-comment-list
-                    [articleId]="article.id"
-                    [articleUrl]="article.url || ''">
-                  </app-comment-list>
-                </section>
-              }
-            </mat-card-content>
-            <mat-card-footer class="card-footer">
-              <button mat-flat-button color="primary" routerLink="/news">Vissza a hírekhez</button>
-            </mat-card-footer>
-          </mat-card>
-        </div>
-      } @else {
-        @if (errorOccurred) {
-          <div class="error-container">
-            @if (errorOccurred) {
-              <app-error-display
-                (retry)="fetchArticle()">
-              </app-error-display>
-            }
           </div>
+        </header>
+        <mat-card-content>
+          @if (article?.firstSection) {
+            <div class="content-block" [innerHTML]="article.firstSection"></div>
+          }
+          @if (article?.isReview) {
+            @for (section of article?.middleSections; track section; let i = $index) {
+              <div class="section-wrapper">
+                <div class="content-block" [innerHTML]="section"></div>
+                @if (i === 0) {
+                  <figure class="article-figure">
+                    @if (article?.secondaryImageUrl !== null) {
+                      <img [src]="article?.secondaryImageUrl" class="img-fluid" alt="" />
+                    }
+                  </figure>
+                }
+                @if (i === 1) {
+                  <figure class="article-figure">
+                    @if (article?.thirdImageUrl !== null) {
+                      <img [src]="article?.thirdImageUrl" class="img-fluid" alt="" />
+                    }
+                  </figure>
+                }
+              </div>
+            }
+          }
+          @if (article.id) {
+            <figure class="article-figure">
+              @if (article.lastImageUrl !== null) {
+                <img [src]="article?.lastImageUrl" [alt]="article.title" class="img-fluid" />
+              }
+            </figure>
+          }
+          @if (article?.lastSection) {
+            <div class="content-block" [innerHTML]="article.lastSection"></div>
+          }
+          <mat-divider class="section-divider"></mat-divider>
+          @if (article?.id) {
+            <section class="comments-section">
+              <h3>Hozzászólások</h3>
+              <app-comment-list [articleId]="article.id" [articleUrl]="article.url || ''">
+              </app-comment-list>
+            </section>
+          }
+        </mat-card-content>
+        <mat-card-footer class="card-footer">
+          <button mat-flat-button color="primary" routerLink="/news">Vissza a hírekhez</button>
+        </mat-card-footer>
+      </mat-card>
+    </div>
+  } @else {
+    @if (errorOccurred) {
+      <div class="error-container">
+        @if (errorOccurred) {
+          <app-error-display (retry)="fetchArticle()"> </app-error-display>
         }
-        @if (isLoading && !errorOccurred) {
-          <app-loading-state variant="bar" label="Információ betöltése..."></app-loading-state>
-        }
-      }
+      </div>
+    }
+    @if (isLoading && !errorOccurred) {
+      <app-loading-state variant="bar" label="Információ betöltése..."></app-loading-state>
+    }
+  }
 </main>
 
 @if (isTheAuthorOrAdmin() && !isLoading && article?.slug) {
-  <button mat-fab color="primary"
-          class="fab-edit"
-          [mat-menu-trigger-for]="adminMenu"
-          matTooltip="Adminisztráció">
+  <button
+    mat-fab
+    color="primary"
+    class="fab-edit"
+    [mat-menu-trigger-for]="adminMenu"
+    matTooltip="Adminisztráció"
+  >
     <mat-icon>edit</mat-icon>
   </button>
 

@@ -7,7 +7,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BrandsController(IBrandService brandService) : ControllerBase 
+public class BrandsController(IBrandService brandService) : ControllerBase
 {
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpGet("getAll")]

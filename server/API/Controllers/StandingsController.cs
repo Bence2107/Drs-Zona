@@ -7,7 +7,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class StandingsController(IStandingsService standingsService): ControllerBase 
+public class StandingsController(IStandingsService standingsService) : ControllerBase
 {
     [HttpGet("getAllSeries")]
     public async Task<ActionResult<List<SeriesLookupDto>>> GetAllSeries()
@@ -17,12 +17,12 @@ public class StandingsController(IStandingsService standingsService): Controller
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
-        return Ok(response.Value);   
+
+        return Ok(response.Value);
     }
 
     [HttpGet("getByConstructorChampionshipId/{constructsChampId:guid}")]
@@ -33,11 +33,11 @@ public class StandingsController(IStandingsService standingsService): Controller
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
 
@@ -49,11 +49,11 @@ public class StandingsController(IStandingsService standingsService): Controller
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
 
@@ -65,11 +65,11 @@ public class StandingsController(IStandingsService standingsService): Controller
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
 
@@ -81,14 +81,14 @@ public class StandingsController(IStandingsService standingsService): Controller
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
-    
+
     [HttpGet("getGrandPrixContext/{grandPrixId:guid}")]
     public async Task<ActionResult<GrandPrixChampionshipContextDto>> GetGrandPrixContext(Guid grandPrixId)
     {
@@ -97,7 +97,7 @@ public class StandingsController(IStandingsService standingsService): Controller
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok(response.Value);
     }
-    
+
     [HttpGet("getGrandPrixResults/{grandPrixId:guid}/{session}")]
     public async Task<ActionResult<GrandPrixResultsDto>> GetGrandPrixResults(Guid grandPrixId, string session)
     {
@@ -106,14 +106,14 @@ public class StandingsController(IStandingsService standingsService): Controller
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
-    
+
     [HttpGet("getSeasonOverview/{driverChampId:guid}")]
     public async Task<ActionResult<List<SeasonOverviewDto>>> GetSeasonOverview(Guid driverChampId)
     {
@@ -122,14 +122,14 @@ public class StandingsController(IStandingsService standingsService): Controller
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
-    
+
     [HttpGet("getSessionForEdit/{grandPrixId:guid}/{session}")]
     public async Task<ActionResult<SessionEditDto>> GetSessionForEdit(Guid grandPrixId, string session)
     {
@@ -138,7 +138,7 @@ public class StandingsController(IStandingsService standingsService): Controller
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok(response.Value);
     }
-    
+
     [HttpGet("getSessionsByGrandPrix/{grandPrixId:guid}")]
     public async Task<ActionResult<List<string>>> GetSessionsByGrandPrix(Guid grandPrixId)
     {
@@ -147,34 +147,34 @@ public class StandingsController(IStandingsService standingsService): Controller
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
 
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("insertResults")]
-    public async Task<ActionResult> InsertResults([FromBody]BatchResultCreateDto dto)
+    public async Task<ActionResult> InsertResults([FromBody] BatchResultCreateDto dto)
     {
         var response = await standingsService.InsertResults(dto);
         if (!response.IsSuccess)
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
     }
-    
+
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("saveSessionResults")]
-    public async Task<ActionResult> SaveSessionResults([FromBody]BatchResultCreateDto dto)
+    public async Task<ActionResult> SaveSessionResults([FromBody] BatchResultCreateDto dto)
     {
         var response = await standingsService.SaveSessionResults(dto);
         if (!response.IsSuccess)
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
     }
-    
+
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("updateSingleResult")]
     public async Task<ActionResult> UpdateSingleResult([FromBody] SingleResultUpdateDto dto)
@@ -184,7 +184,7 @@ public class StandingsController(IStandingsService standingsService): Controller
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
     }
-    
+
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("recalculateSession/{grandPrixId:guid}/{session}")]
     public async Task<ActionResult> RecalculateSession(Guid grandPrixId, string session)

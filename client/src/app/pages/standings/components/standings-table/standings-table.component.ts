@@ -1,19 +1,21 @@
-import {Component, computed, inject} from '@angular/core';
-import {AGGREGATED_ID, ALL_GP_ID, StandingsStateService} from '../standings-state.service';
+import { Component, computed, inject } from '@angular/core';
+import { AGGREGATED_ID, ALL_GP_ID, StandingsStateService } from '../standings-state.service';
 import {
-  MatCell, MatCellDef,
+  MatCell,
+  MatCellDef,
   MatColumnDef,
-  MatHeaderCell, MatHeaderCellDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
   MatRow,
   MatRowDef,
-  MatTable
+  MatTable,
 } from '@angular/material/table';
-import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
-import {DatePipe} from '@angular/common';
-import {CountryFlagPipe} from '../../../../pipes/country-flag.pipe';
-import {CircuitInfoComponent} from '../circuit-info/circuit-info.component';
+import { LoadingStateComponent } from '../../../../components/loading-state/loading-state.component';
+import { DatePipe } from '@angular/common';
+import { CountryFlagPipe } from '../../../../pipes/country-flag.pipe';
+import { CircuitInfoComponent } from '../circuit-info/circuit-info.component';
 
 @Component({
   selector: 'app-results-table',
@@ -31,7 +33,7 @@ import {CircuitInfoComponent} from '../circuit-info/circuit-info.component';
     MatCellDef,
     MatHeaderCellDef,
     CountryFlagPipe,
-    CircuitInfoComponent
+    CircuitInfoComponent,
   ],
   templateUrl: './standings-table.component.html',
   styleUrl: './standings-table.component.scss',
@@ -45,11 +47,17 @@ export class StandingsTableComponent {
   readonly currentRows = computed<readonly unknown[]>(() => {
     switch (this.state.viewMode()) {
       case 'results':
-        return this.state.selectedGrandPrixId() === ALL_GP_ID ? this.state.seasonOverview() : this.state.raceResults();
+        return this.state.selectedGrandPrixId() === ALL_GP_ID
+          ? this.state.seasonOverview()
+          : this.state.raceResults();
       case 'drivers':
-        return this.state.selectedDriverId() === AGGREGATED_ID ? this.state.driverStandings() : this.state.driverSeasonResults();
+        return this.state.selectedDriverId() === AGGREGATED_ID
+          ? this.state.driverStandings()
+          : this.state.driverSeasonResults();
       case 'constructors':
-        return this.state.selectedConstructorId() === AGGREGATED_ID ? this.state.constructorStandings() : this.state.constructorSeasonResults();
+        return this.state.selectedConstructorId() === AGGREGATED_ID
+          ? this.state.constructorStandings()
+          : this.state.constructorSeasonResults();
     }
   });
 }

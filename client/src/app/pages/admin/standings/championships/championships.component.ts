@@ -1,31 +1,29 @@
-import {ChampionshipRowDto, SeriesLookupDto} from "../../../../api/models";
-import {
-  ChampionshipCreateDialogComponent
-} from '../../../../components/dialogs/championship/championshipcreatedialog/championship-create-dialog.component';
-import {Component, OnInit, signal} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {StandingsService} from '../../../../services/api/standings.service';
-import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
-import {FormsModule} from '@angular/forms';
-import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
-import {MatIcon} from '@angular/material/icon';
+import { ChampionshipRowDto, SeriesLookupDto } from '../../../../api/models';
+import { ChampionshipCreateDialogComponent } from '../../../../components/dialogs/championship/championshipcreatedialog/championship-create-dialog.component';
+import { Component, OnInit, signal } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { StandingsService } from '../../../../services/api/standings.service';
+import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { FormsModule } from '@angular/forms';
+import { LoadingStateComponent } from '../../../../components/loading-state/loading-state.component';
+import { MatIcon } from '@angular/material/icon';
 import {
   MatCard,
   MatCardActions,
   MatCardContent,
   MatCardHeader,
   MatCardSubtitle,
-  MatCardTitle
+  MatCardTitle,
 } from '@angular/material/card';
-import {MatButton, MatFabButton, MatIconButton} from '@angular/material/button';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {MatDivider} from '@angular/material/list';
-import {Router, RouterLink} from '@angular/router';
-import {MatTooltip} from '@angular/material/tooltip';
-import {MatFormField, MatLabel} from '@angular/material/input';
-import {MatOption} from '@angular/material/core';
-import {MatSelect} from '@angular/material/select';
-import {ChampionshipService} from '../../../../services/api/championship.service';
+import { MatButton, MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatDivider } from '@angular/material/list';
+import { Router, RouterLink } from '@angular/router';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatFormField, MatLabel } from '@angular/material/input';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { ChampionshipService } from '../../../../services/api/championship.service';
 
 @Component({
   selector: 'app-championships',
@@ -53,7 +51,7 @@ import {ChampionshipService} from '../../../../services/api/championship.service
     MatFormField,
     MatLabel,
     MatOption,
-    MatSelect
+    MatSelect,
   ],
   templateUrl: './championships.component.html',
   styleUrl: './championships.component.scss',
@@ -69,13 +67,13 @@ export class ChampionshipsComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private championshipService: ChampionshipService,
-    private standingsService: StandingsService
+    private standingsService: StandingsService,
   ) {}
 
   ngOnInit() {
     this.standingsService.getAllSeries().subscribe({
-      next: res => {
-        const filtered = res.filter(s => {
+      next: (res) => {
+        const filtered = res.filter((s) => {
           const name = s.name?.toLowerCase() ?? '';
           return !name.includes('wec') && !name.includes('nascar');
         });
@@ -86,7 +84,7 @@ export class ChampionshipsComponent implements OnInit {
           this.isLoading.set(false);
         }
       },
-      error: () => this.isLoading.set(false)
+      error: () => this.isLoading.set(false),
     });
   }
 
@@ -100,41 +98,41 @@ export class ChampionshipsComponent implements OnInit {
     if (!seriesId) return;
     this.isLoading.set(true);
     this.championshipService.getAllChampionshipsBySeries(seriesId).subscribe({
-      next: res => {
+      next: (res) => {
         this.championships.set(res);
         this.isLoading.set(false);
       },
-      error: () => this.isLoading.set(false)
+      error: () => this.isLoading.set(false),
     });
   }
 
   statusIcon(status: string): string {
-    return { Upcoming: 'schedule', Active: 'play_circle', Finished: 'check_circle' }[status] ?? 'help';
+    return (
+      { Upcoming: 'schedule', Active: 'play_circle', Finished: 'check_circle' }[status] ?? 'help'
+    );
   }
 
   updateStatus(champ: ChampionshipRowDto, status: string) {
-    this.championshipService.updateChampionship(
-      champ.driversChampId!,
-      champ.constructorsChampId!,
-      status
-    ).subscribe({
-      next: () => {
-        champ.status = status;
-      }
-    });
+    this.championshipService
+      .updateChampionship(champ.driversChampId!, champ.constructorsChampId!, status)
+      .subscribe({
+        next: () => {
+          champ.status = status;
+        },
+      });
   }
 
   openCreateDialog() {
     const ref = this.dialog.open(ChampionshipCreateDialogComponent, {
       width: '480px',
-      data: { seriesList: this.seriesList() }
+      data: { seriesList: this.seriesList() },
     });
-    ref.afterClosed().subscribe(result => {
+    ref.afterClosed().subscribe((result) => {
       if (result) this.loadChampionships();
     });
   }
 
   protected goBack() {
-    this.router.navigate(["results"]);
+    this.router.navigate(['results']);
   }
 }

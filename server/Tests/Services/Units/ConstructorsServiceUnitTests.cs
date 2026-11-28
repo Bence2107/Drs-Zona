@@ -12,8 +12,8 @@ public class ConstructorsServiceUnitTests
 {
 
     private readonly Mock<IConstructorsRepository> _constructorRepo = new();
-    private readonly Mock<IBrandsRepository>       _brandsRepo      = new();
-    private readonly Mock<IContractsRepository>    _contractsRepo   = new();
+    private readonly Mock<IBrandsRepository> _brandsRepo = new();
+    private readonly Mock<IContractsRepository> _contractsRepo = new();
 
     private readonly ConstructorsService _svc;
 
@@ -45,7 +45,7 @@ public class ConstructorsServiceUnitTests
     [Fact]
     public async Task GetById_ShouldFail_WhenBrandIsNull()
     {
-        var id          = Guid.NewGuid();
+        var id = Guid.NewGuid();
         var constructor = CreateConstructor(id, brandId: Guid.NewGuid());
         constructor.Brand = null;
 
@@ -61,9 +61,9 @@ public class ConstructorsServiceUnitTests
     [Fact]
     public async Task GetById_ShouldFail_WhenBrandIdNotFoundInRepo()
     {
-        var brandId     = Guid.NewGuid();
-        var id          = Guid.NewGuid();
-        var brand       = CreateBrand(brandId);
+        var brandId = Guid.NewGuid();
+        var id = Guid.NewGuid();
+        var brand = CreateBrand(brandId);
         var constructor = CreateConstructor(id, brandId, brand);
 
         _constructorRepo.Setup(r => r.CheckIfIdExists(id)).ReturnsAsync(true);
@@ -79,9 +79,9 @@ public class ConstructorsServiceUnitTests
     [Fact]
     public async Task GetById_ShouldSucceed_AndReturnCorrectDto()
     {
-        var brandId     = Guid.NewGuid();
-        var id          = Guid.NewGuid();
-        var brand       = CreateBrand(brandId);
+        var brandId = Guid.NewGuid();
+        var id = Guid.NewGuid();
+        var brand = CreateBrand(brandId);
         var constructor = CreateConstructor(id, brandId, brand);
 
         _constructorRepo.Setup(r => r.CheckIfIdExists(id)).ReturnsAsync(true);
@@ -100,11 +100,11 @@ public class ConstructorsServiceUnitTests
     [Fact]
     public async Task GetById_ShouldIncludeDriverNames_WhenContractsExist()
     {
-        var brandId     = Guid.NewGuid();
-        var id          = Guid.NewGuid();
-        var brand       = CreateBrand(brandId);
+        var brandId = Guid.NewGuid();
+        var id = Guid.NewGuid();
+        var brand = CreateBrand(brandId);
         var constructor = CreateConstructor(id, brandId, brand);
-        var driverId    = Guid.NewGuid();
+        var driverId = Guid.NewGuid();
 
         var contracts = new List<Contract>
         {
@@ -259,8 +259,8 @@ public class ConstructorsServiceUnitTests
     [Fact]
     public async Task Update_ShouldFail_WhenNewBrandNotFound()
     {
-        var oldBrandId  = Guid.NewGuid();
-        var newBrandId  = Guid.NewGuid();
+        var oldBrandId = Guid.NewGuid();
+        var newBrandId = Guid.NewGuid();
         var constructor = CreateConstructor(brandId: oldBrandId);
 
         _constructorRepo.Setup(r => r.GetConstructorById(constructor.Id)).ReturnsAsync(constructor);
@@ -277,7 +277,7 @@ public class ConstructorsServiceUnitTests
     [Fact]
     public async Task Update_ShouldSucceed_AndCallRepoUpdate()
     {
-        var brandId     = Guid.NewGuid();
+        var brandId = Guid.NewGuid();
         var constructor = CreateConstructor(brandId: brandId);
 
         _constructorRepo.Setup(r => r.GetConstructorById(constructor.Id)).ReturnsAsync(constructor);
@@ -295,7 +295,7 @@ public class ConstructorsServiceUnitTests
     [Fact]
     public async Task Update_ShouldNotCheckBrand_WhenBrandIdUnchanged()
     {
-        var brandId     = Guid.NewGuid();
+        var brandId = Guid.NewGuid();
         var constructor = CreateConstructor(brandId: brandId);
 
         _constructorRepo.Setup(r => r.GetConstructorById(constructor.Id)).ReturnsAsync(constructor);
@@ -322,25 +322,25 @@ public class ConstructorsServiceUnitTests
     };
 
     private static Constructor CreateConstructor(
-        Guid?   id      = null,
-        Guid?   brandId = null,
-        Brand?  brand   = null,
-        string  name    = "Red Bull Racing") => new()
-    {
-        Id             = id      ?? Guid.NewGuid(),
-        BrandId        = brandId ?? Guid.NewGuid(),
-        Brand          = brand,
-        Name           = name,
-        Nickname       = "RBR",
-        FoundedYear    = 2005,
-        HeadQuarters   = "Milton Keynes",
-        TeamChief      = "Christian Horner",
-        TechnicalChief = "Adrian Newey",
-        Championships  = 6,
-        Wins           = 112,
-        Podiums        = 240,
-        Seasons        = 19
-    };
+        Guid? id = null,
+        Guid? brandId = null,
+        Brand? brand = null,
+        string name = "Red Bull Racing") => new()
+        {
+            Id = id ?? Guid.NewGuid(),
+            BrandId = brandId ?? Guid.NewGuid(),
+            Brand = brand,
+            Name = name,
+            Nickname = "RBR",
+            FoundedYear = 2005,
+            HeadQuarters = "Milton Keynes",
+            TeamChief = "Christian Horner",
+            TechnicalChief = "Adrian Newey",
+            Championships = 6,
+            Wins = 112,
+            Podiums = 240,
+            Seasons = 19
+        };
 
     private static ConstructorCreateDto CreateConstructorCreateDto(string name, Guid? brandId = null) =>
         new(brandId ?? Guid.NewGuid(), name, "RBR", 2005, "Milton Keynes",

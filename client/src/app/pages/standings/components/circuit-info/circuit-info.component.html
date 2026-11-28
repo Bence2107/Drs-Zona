@@ -13,9 +13,7 @@
       </div>
 
       @if (circuitImageUrl) {
-        <img [src]="circuitImageUrl"
-             [alt]="gp.circuitDetail!.name"
-             class="circuit-image" />
+        <img [src]="circuitImageUrl" [alt]="gp.circuitDetail!.name" class="circuit-image" />
       }
     </div>
 
@@ -59,7 +57,9 @@
         <mat-icon>calendar_today</mat-icon>
         <div class="stat-body">
           <span class="stat-label">Időszak</span>
-          <span class="stat-value">{{ formatDate(gp.startTime!) }} – {{ formatDate(gp.endTime!) }}</span>
+          <span class="stat-value"
+            >{{ formatDate(gp.startTime!) }} – {{ formatDate(gp.endTime!) }}</span
+          >
         </div>
       </div>
     </div>

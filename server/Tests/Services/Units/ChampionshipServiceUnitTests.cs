@@ -15,15 +15,15 @@ public class ChampionshipServiceUnitTests
 {
     private readonly ITestOutputHelper _output;
 
-    private readonly Mock<IConstructorsRepository>              _constructorsRepo            = new();
-    private readonly Mock<IConstructorsChampionshipsRepository> _constructorChampRepo        = new();
-    private readonly Mock<IConstructorCompetitionRepository>    _constructorCompetitionRepo  = new();
-    private readonly Mock<IContractsRepository>                 _contractsRepo               = new();
-    private readonly Mock<IDriversRepository>                   _driversRepo                 = new();
-    private readonly Mock<IDriversChampionshipsRepository>      _driverChampRepo             = new();
-    private readonly Mock<IDriverParticipationRepository>       _driverParticipationRepo     = new();
-    private readonly Mock<IGrandsPrixRepository>                _grandsPrixRepo              = new();
-    private readonly Mock<IResultsRepository>                   _resultsRepo                 = new();
+    private readonly Mock<IConstructorsRepository> _constructorsRepo = new();
+    private readonly Mock<IConstructorsChampionshipsRepository> _constructorChampRepo = new();
+    private readonly Mock<IConstructorCompetitionRepository> _constructorCompetitionRepo = new();
+    private readonly Mock<IContractsRepository> _contractsRepo = new();
+    private readonly Mock<IDriversRepository> _driversRepo = new();
+    private readonly Mock<IDriversChampionshipsRepository> _driverChampRepo = new();
+    private readonly Mock<IDriverParticipationRepository> _driverParticipationRepo = new();
+    private readonly Mock<IGrandsPrixRepository> _grandsPrixRepo = new();
+    private readonly Mock<IResultsRepository> _resultsRepo = new();
 
     private readonly ChampionshipService _svc;
 
@@ -51,7 +51,7 @@ public class ChampionshipServiceUnitTests
     public async Task GetAllChampionshipsBySeries_ShouldReturnJoinedRows_OrderedBySeasonDescending()
     {
         var seriesId = Guid.NewGuid();
-        var series   = CreateSeries(seriesId);
+        var series = CreateSeries(seriesId);
 
         var driverChamps = new List<DriversChampionship>
         {
@@ -139,8 +139,8 @@ public class ChampionshipServiceUnitTests
     public async Task GetGrandsPrixByChampionship_ShouldReturnGrandsPrix_OrderedByRoundNumber()
     {
         var seriesId = Guid.NewGuid();
-        var champId  = Guid.NewGuid();
-        var champ    = CreateDriversChamp(seriesId, "2024", id: champId);
+        var champId = Guid.NewGuid();
+        var champ = CreateDriversChamp(seriesId, "2024", id: champId);
 
         var circuit = new Circuit
         {
@@ -224,7 +224,7 @@ public class ChampionshipServiceUnitTests
     [Fact]
     public async Task UpdateChampionshipStatus_ShouldSucceed_AndUpdateBothStatuses()
     {
-        var driverChamp     = CreateDriversChamp(Guid.NewGuid(), "2024");
+        var driverChamp = CreateDriversChamp(Guid.NewGuid(), "2024");
         var constructorChamp = CreateConstructorsChamp(Guid.NewGuid(), "2024");
 
         _driverChampRepo.Setup(r => r.GetById(driverChamp.Id)).ReturnsAsync(driverChamp);
@@ -246,9 +246,9 @@ public class ChampionshipServiceUnitTests
     [Fact]
     public async Task CreateParticipations_ShouldFail_WhenConstructorNotFound()
     {
-        var constructorId    = Guid.NewGuid();
-        var constChampId     = Guid.NewGuid();
-        var driversChampId   = Guid.NewGuid();
+        var constructorId = Guid.NewGuid();
+        var constChampId = Guid.NewGuid();
+        var driversChampId = Guid.NewGuid();
 
         _constructorCompetitionRepo.Setup(r => r.CheckIfExists(constructorId, constChampId)).ReturnsAsync(false);
         _constructorsRepo.Setup(r => r.GetByIdWithBrand(constructorId)).ReturnsAsync((Constructor?)null);
@@ -264,15 +264,15 @@ public class ChampionshipServiceUnitTests
     [Fact]
     public async Task CreateParticipations_ShouldFail_WhenDriverNotFound()
     {
-        var driverId       = Guid.NewGuid();
+        var driverId = Guid.NewGuid();
         var driversChampId = Guid.NewGuid();
-        var constChampId   = Guid.NewGuid();
+        var constChampId = Guid.NewGuid();
 
         _driverParticipationRepo.Setup(r => r.CheckIfExists(driverId, driversChampId)).ReturnsAsync(false);
         _driversRepo.Setup(r => r.GetDriverById(driverId)).ReturnsAsync((Driver?)null);
 
         var driver = new TestDriverParticipationRowDto(driverId, 44);
-        var dto    = new ParticipationAddDto(driversChampId, constChampId, new List<DriverParticipationRowDto> { driver }, new List<Guid>());
+        var dto = new ParticipationAddDto(driversChampId, constChampId, new List<DriverParticipationRowDto> { driver }, new List<Guid>());
 
         var result = await _svc.CreateParticipations(dto);
 
@@ -283,8 +283,8 @@ public class ChampionshipServiceUnitTests
     [Fact]
     public async Task CreateParticipations_ShouldSkip_WhenAlreadyExists()
     {
-        var constructorId  = Guid.NewGuid();
-        var constChampId   = Guid.NewGuid();
+        var constructorId = Guid.NewGuid();
+        var constChampId = Guid.NewGuid();
         var driversChampId = Guid.NewGuid();
 
         // Már létezik — skip
@@ -305,8 +305,8 @@ public class ChampionshipServiceUnitTests
     [Fact]
     public async Task DeleteDriverParticipation_ShouldSucceed_AndCallDelete()
     {
-        var driverId   = Guid.NewGuid();
-        var champId    = Guid.NewGuid();
+        var driverId = Guid.NewGuid();
+        var champId = Guid.NewGuid();
 
         _driverParticipationRepo.Setup(r => r.Delete(driverId, champId)).Returns(Task.CompletedTask);
 
@@ -320,7 +320,7 @@ public class ChampionshipServiceUnitTests
     public async Task DeleteConstructorCompetition_ShouldSucceed_AndCallDelete()
     {
         var constructorId = Guid.NewGuid();
-        var champId       = Guid.NewGuid();
+        var champId = Guid.NewGuid();
 
         _constructorCompetitionRepo.Setup(r => r.Delete(constructorId, champId)).Returns(Task.CompletedTask);
 
@@ -401,24 +401,24 @@ public class ChampionshipServiceUnitTests
 
     private static DriversChampionship CreateDriversChamp(
         Guid seriesId, string season, string name = "WDC", Series? series = null, Guid? id = null) => new()
-    {
-        Id       = id ?? Guid.NewGuid(),
-        SeriesId = seriesId,
-        Season   = season,
-        Name     = name,
-        Status   = "Upcoming",
-        Series   = series
-    };
+        {
+            Id = id ?? Guid.NewGuid(),
+            SeriesId = seriesId,
+            Season = season,
+            Name = name,
+            Status = "Upcoming",
+            Series = series
+        };
 
     private static ConstructorsChampionship CreateConstructorsChamp(
         Guid seriesId, string season, string name = "WCC", Guid? id = null) => new()
-    {
-        Id       = id ?? Guid.NewGuid(),
-        SeriesId = seriesId,
-        Season   = season,
-        Name     = name,
-        Status   = "Upcoming"
-    };
+        {
+            Id = id ?? Guid.NewGuid(),
+            SeriesId = seriesId,
+            Season = season,
+            Name = name,
+            Status = "Upcoming"
+        };
 
     private static Constructor CreateConstructor(string name) => new()
     {
@@ -433,16 +433,16 @@ public class ChampionshipServiceUnitTests
 
     private static GrandPrix CreateGrandPrix(Guid seriesId, int year, int round, Circuit circuit) => new()
     {
-        Id           = Guid.NewGuid(),
-        SeriesId     = seriesId,
-        SeasonYear   = year,
-        RoundNumber  = round,
-        Name         = $"GP Round {round}",
-        ShortName    = $"R{round}",
-        Circuit      = circuit,
-        CircuitId    = circuit.Id,
-        StartTime    = DateTime.UtcNow,
-        EndTime      = DateTime.UtcNow.AddHours(2),
+        Id = Guid.NewGuid(),
+        SeriesId = seriesId,
+        SeasonYear = year,
+        RoundNumber = round,
+        Name = $"GP Round {round}",
+        ShortName = $"R{round}",
+        Circuit = circuit,
+        CircuitId = circuit.Id,
+        StartTime = DateTime.UtcNow,
+        EndTime = DateTime.UtcNow.AddHours(2),
         RaceDistance = 305,
         LapsCompleted = 58
     };

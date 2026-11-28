@@ -1,17 +1,17 @@
-import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
-import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
-import {UserProfileResponse} from '../../../../api/models/user-profile-response';
-import {MatIcon} from '@angular/material/icon';
-import {ProfileGeneralComponent} from './components/profile-general/profile-general.component';
-import {ProfileEditComponent} from './components/profile-edit/profile-edit.component';
-import {ProfileCommentsComponent} from './components/profile-comments/profile-comments.component';
-import {map} from 'rxjs/operators';
-import {toSignal} from '@angular/core/rxjs-interop';
-import {BreakpointObserver} from '@angular/cdk/layout';
-import {MatFormField} from '@angular/material/input';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {ProfileDeleteComponent} from './components/profile-delete/profile-delete.component';
-import {ProfilePollsComponent} from './components/profile-polls/profile-polls.component';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { UserProfileResponse } from '../../../../api/models/user-profile-response';
+import { MatIcon } from '@angular/material/icon';
+import { ProfileGeneralComponent } from './components/profile-general/profile-general.component';
+import { ProfileEditComponent } from './components/profile-edit/profile-edit.component';
+import { ProfileCommentsComponent } from './components/profile-comments/profile-comments.component';
+import { map } from 'rxjs/operators';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatFormField } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { ProfileDeleteComponent } from './components/profile-delete/profile-delete.component';
+import { ProfilePollsComponent } from './components/profile-polls/profile-polls.component';
 
 @Component({
   selector: 'app-profile-content',
@@ -26,7 +26,7 @@ import {ProfilePollsComponent} from './components/profile-polls/profile-polls.co
     MatSelect,
     MatOption,
     ProfileDeleteComponent,
-    ProfilePollsComponent
+    ProfilePollsComponent,
   ],
   templateUrl: './profile-content.component.html',
   styleUrl: './profile-content.component.scss',
@@ -36,16 +36,12 @@ export class ProfileContentComponent implements OnInit, OnDestroy {
   @Input() avatarUrl: string | null = null;
   activeTab = 'general';
 
-
   private breakpointObserver = inject(BreakpointObserver);
   private readonly TAB_KEY = 'profile_active_tab';
 
   isMobile = toSignal(
-    this.breakpointObserver.observe('(max-width: 768px)').pipe(
-      map(result => result.matches)
-    )
+    this.breakpointObserver.observe('(max-width: 768px)').pipe(map((result) => result.matches)),
   );
-
 
   ngOnInit(): void {
     const savedTab = sessionStorage.getItem(this.TAB_KEY);

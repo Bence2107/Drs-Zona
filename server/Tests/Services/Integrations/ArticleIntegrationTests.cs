@@ -41,7 +41,7 @@ public class ArticleServiceIntegrationTests
 
         return (context, service);
     }
-    
+
     private static async Task<(User author, Article article)> SeedArticleWithAuthor(
         EfContext ctx,
         bool isSummary = false,
@@ -50,7 +50,7 @@ public class ArticleServiceIntegrationTests
         string? lead = null,
         DateTime? published = null)
     {
-        var author  = CreateAuthor();
+        var author = CreateAuthor();
         var article = CreateArticle(author: author, isSummary: isSummary,
             slug: slug, title: title, lead: lead, published: published);
 
@@ -110,11 +110,11 @@ public class ArticleServiceIntegrationTests
         var (ctx, svc) = BuildSut();
         const string testSlug = "hungaroring-news-2024";
 
-        var author  = CreateAuthor(username: "Author Alex", fullName: "Csiger Alex");
+        var author = CreateAuthor(username: "Author Alex", fullName: "Csiger Alex");
         var article = CreateArticle(
             author: author, slug: testSlug,
-            title:  "F1 at Hungaroring",
-            lead:   "The traveling circus arrives at Hungaroring in June"
+            title: "F1 at Hungaroring",
+            lead: "The traveling circus arrives at Hungaroring in June"
         );
 
         await ctx.Users.AddAsync(author);
@@ -149,10 +149,10 @@ public class ArticleServiceIntegrationTests
     {
         var (ctx, svc) = BuildSut();
 
-        var author  = CreateAuthor();
+        var author = CreateAuthor();
         var article = CreateArticle(author: author, isSummary: true);
         article.SecondSection = "Second section content here";
-        article.ThirdSection  = "Third section content here";
+        article.ThirdSection = "Third section content here";
         article.FourthSection = "Fourth section content here";
 
         await ctx.Users.AddAsync(author);
@@ -385,13 +385,13 @@ public class ArticleServiceIntegrationTests
         updated.FirstSection.Should().Be(new string('U', 100));
         updated.LastSection.Should().Be(new string('V', 100));
     }
-    
+
     // ─────────────────────────────────────────────
     // US-06 | Cikk törlése
     // Delete → ArticlesRepository.GetById → Include(Author),
     // ezért Delete teszteknél is kell mentett User.
     // ─────────────────────────────────────────────
-    
+
     [Fact]
     public async Task DeleteArticle_ShouldFail_WhenArticleNotFound()
     {
@@ -402,7 +402,7 @@ public class ArticleServiceIntegrationTests
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("Article not found");
     }
-    
+
 
     // ─────────────────────────────────────────────
     // US-07 | Összefoglaló (summary/review) lista
@@ -476,7 +476,7 @@ public class ArticleServiceIntegrationTests
     {
         var (ctx, svc) = BuildSut();
 
-        var author  = CreateAuthor(username: "testuser", fullName: "Test User");
+        var author = CreateAuthor(username: "testuser", fullName: "Test User");
         var article = CreateArticle(author: author);
         await ctx.Users.AddAsync(author);
         await ctx.Articles.AddAsync(article);
@@ -507,35 +507,35 @@ public class ArticleServiceIntegrationTests
     private static User CreateAuthor(
         string username = "author_user",
         string fullName = "Petofi Sandor") => new()
-    {
-        Id           = Guid.NewGuid(),
-        Username     = username,
-        FullName     = fullName,
-        Email        = $"{Guid.NewGuid()}@test.com",
-        PasswordHash = "pwd",
-        Role         = "author"
-    };
+        {
+            Id = Guid.NewGuid(),
+            Username = username,
+            FullName = fullName,
+            Email = $"{Guid.NewGuid()}@test.com",
+            PasswordHash = "pwd",
+            Role = "author"
+        };
 
     private static Article CreateArticle(
-        User?     author    = null,
-        string?   title     = null,
-        string?   slug      = null,
-        string?   lead      = null,
-        string?   tag       = null,
-        bool      isSummary = false,
+        User? author = null,
+        string? title = null,
+        string? slug = null,
+        string? lead = null,
+        string? tag = null,
+        bool isSummary = false,
         DateTime? published = null) => new()
-    {
-        Id            = Guid.NewGuid(),
-        Title         = title     ?? "Article",
-        Slug          = slug      ?? Guid.NewGuid().ToString(),
-        Lead          = lead      ?? "Lead",
-        Tag           = tag       ?? "F1",
-        IsSummary     = isSummary,
-        FirstSection  = "First section content",
-        LastSection   = "Last section content",
-        Author        = author,
-        AuthorId      = author?.Id ?? Guid.Empty,
-        DatePublished = published  ?? DateTime.UtcNow,
-        DateUpdated   = DateTime.UtcNow
-    };
+        {
+            Id = Guid.NewGuid(),
+            Title = title ?? "Article",
+            Slug = slug ?? Guid.NewGuid().ToString(),
+            Lead = lead ?? "Lead",
+            Tag = tag ?? "F1",
+            IsSummary = isSummary,
+            FirstSection = "First section content",
+            LastSection = "Last section content",
+            Author = author,
+            AuthorId = author?.Id ?? Guid.Empty,
+            DatePublished = published ?? DateTime.UtcNow,
+            DateUpdated = DateTime.UtcNow
+        };
 }

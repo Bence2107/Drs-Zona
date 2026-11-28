@@ -11,11 +11,11 @@ public class BrandServiceUnitTests
 {
 
     private readonly Mock<IBrandsRepository> _brandsRepo = new();
-    private readonly BrandService            _svc;
+    private readonly BrandService _svc;
 
     public BrandServiceUnitTests()
     {
-        _svc    = new BrandService(_brandsRepo.Object);
+        _svc = new BrandService(_brandsRepo.Object);
     }
 
     // ─────────────────────────────────────────────

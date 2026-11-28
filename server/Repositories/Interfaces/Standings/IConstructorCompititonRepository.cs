@@ -2,7 +2,7 @@ using Entities.Models.Standings;
 
 namespace Repositories.Interfaces.Standings;
 
-public interface IConstructorCompetitionRepository 
+public interface IConstructorCompetitionRepository
 {
     Task<ConstructorCompetition?> GetByConstructorAndChampionship(Guid constructorId, Guid championshipId);
     Task<List<ConstructorCompetition>> GetByChampionshipId(Guid champId);

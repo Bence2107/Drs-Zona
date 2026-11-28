@@ -22,12 +22,12 @@ import { SerieComponent } from './pages/serie/serie.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: "home", component: HomeComponent },
-  { path: "news", component: NewsComponent },
-  { path: "reviews", component: ReviewsComponent },
-  { path: "article/:slug", component: ArticleComponent },
-  { path: "results", component: StandingsComponent },
-  { path: "serie/:name", component: SerieComponent },
+  { path: 'home', component: HomeComponent },
+  { path: 'news', component: NewsComponent },
+  { path: 'reviews', component: ReviewsComponent },
+  { path: 'article/:slug', component: ArticleComponent },
+  { path: 'results', component: StandingsComponent },
+  { path: 'serie/:name', component: SerieComponent },
 
   {
     path: 'admin',
@@ -46,9 +46,9 @@ export const routes: Routes = [
           { path: ':gpId', component: EntryDetailComponent },
           { path: ':champId', component: EntryDetailComponent },
           { path: ':gpId/create', component: EntryCreateComponent },
-        ]
+        ],
       },
-    ]
+    ],
   },
 
   {
@@ -57,19 +57,19 @@ export const routes: Routes = [
     children: [
       { path: 'create', component: ArticleManageComponent },
       { path: 'update/:slug', component: ArticleManageComponent },
-    ]
+    ],
   },
 
   {
-    path: "auth",
+    path: 'auth',
     component: AuthComponent,
-    canActivate: [guestGuard]
+    canActivate: [guestGuard],
   },
   {
-    path: "profile",
+    path: 'profile',
     component: ProfileComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
 
-  { path: '**', redirectTo: '/home' }
+  { path: '**', redirectTo: '/home' },
 ];

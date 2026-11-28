@@ -8,7 +8,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ChampionshipController(IChampionshipService championshipService): ControllerBase 
+public class ChampionshipController(IChampionshipService championshipService) : ControllerBase
 {
     [HttpGet("getAllChampionshipsBySeries/{seriesId:guid}")]
     public async Task<ActionResult<List<ChampionshipRowDto>>> GetAllChampionshipsBySeries(Guid seriesId)
@@ -18,14 +18,14 @@ public class ChampionshipController(IChampionshipService championshipService): C
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
-        return Ok(response.Value);   
+
+        return Ok(response.Value);
     }
-    
+
     [HttpGet("getConstructorsByConstructorsChampionship/{constChampId:guid}")]
     public async Task<ActionResult<List<ConstructorLookUpDto>>> GetConstructorsByConstructorsChamp(Guid constChampId)
     {
@@ -34,14 +34,14 @@ public class ChampionshipController(IChampionshipService championshipService): C
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
-    
+
     [HttpGet("getDriversByDriversChampionship/{driverChampId:guid}")]
     public async Task<ActionResult<List<DriverLookUpDto>>> GetDriversByDriversChamp(Guid driverChampId)
     {
@@ -50,11 +50,11 @@ public class ChampionshipController(IChampionshipService championshipService): C
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
 
@@ -66,14 +66,14 @@ public class ChampionshipController(IChampionshipService championshipService): C
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
-    
+
     [HttpGet("getParticipations/{driversChampId:guid}/{constructorsChampId:guid}")]
     public async Task<ActionResult<ParticipationListDto>> GetParticipations(Guid driversChampId, Guid constructorsChampId)
     {
@@ -82,7 +82,7 @@ public class ChampionshipController(IChampionshipService championshipService): C
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok(response.Value);
     }
-    
+
     [HttpGet("getSeasonsBySeries/{seriesId:guid}")]
     public async Task<ActionResult<List<YearLookupDto>>> GetSeasonsBySeries(Guid seriesId)
     {
@@ -91,14 +91,14 @@ public class ChampionshipController(IChampionshipService championshipService): C
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
-    
+
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("createChampionship")]
     public async Task<ActionResult> CreateChampionship([FromBody] ChampionshipCreateDto dto)
@@ -108,7 +108,7 @@ public class ChampionshipController(IChampionshipService championshipService): C
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
     }
-    
+
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("updateChampionshipStatus/{driversChampId:guid}/{constructorsChampId:guid}/{status}")]
     public async Task<ActionResult> UpdateChampionshipStatus(Guid driversChampId, Guid constructorsChampId, string status)
@@ -118,7 +118,7 @@ public class ChampionshipController(IChampionshipService championshipService): C
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
     }
-    
+
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("addParticipations")]
     public async Task<ActionResult> AddParticipations([FromBody] ParticipationAddDto dto)
@@ -138,7 +138,7 @@ public class ChampionshipController(IChampionshipService championshipService): C
             return BadRequest(new { response.ErrorField, response.Message });
         return Ok();
     }
-    
+
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpDelete("removeConstructorCompetition/{constructorId:guid}/{constructorsChampId:guid}")]
     public async Task<ActionResult> RemoveConstructorCompetition(Guid constructorId, Guid constructorsChampId)

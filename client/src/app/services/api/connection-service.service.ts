@@ -10,8 +10,8 @@ export class ConnectionService {
   constructor(private http: HttpClient) {}
 
   checkConnection(): Observable<any> {
-    return this.http.get(this.apiUrl).pipe(
-      catchError(err => throwError(() => new Error('Server unreachable:' + err)))
-    );
+    return this.http
+      .get(this.apiUrl)
+      .pipe(catchError((err) => throwError(() => new Error('Server unreachable:' + err))));
   }
 }

@@ -2,7 +2,7 @@ using Entities.Models.Polls;
 
 namespace Repositories.Interfaces.Polls;
 
-public interface IPollVotesRepository 
+public interface IPollVotesRepository
 {
     Task<List<PollVote>> GetByUserId(Guid userId);
     Task<PollVote?> GetUserVoteForPoll(Guid userId, Guid pollId);

@@ -1,13 +1,16 @@
-import {Injectable} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
-import {HttpValidationError} from './error-interceptor.service';
+import { Injectable } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { HttpValidationError } from './error-interceptor.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FormErrorService {
-
-  applyServerErrors(form: FormGroup, error: HttpValidationError, fieldMap: { [key: string]: string }): void {
+  applyServerErrors(
+    form: FormGroup,
+    error: HttpValidationError,
+    fieldMap: Record<string, string>,
+  ): void {
     if (!error?.fieldErrors) {
       form.get('email')?.setErrors({ serverError: error?.title ?? 'Ismeretlen hiba' });
       return;
@@ -29,7 +32,7 @@ export class FormErrorService {
   }
 
   clearServerErrorOnChange(controls: FormControl[]): void {
-    controls.forEach(control => {
+    controls.forEach((control) => {
       control.valueChanges.subscribe(() => {
         if (control.hasError('serverError')) {
           const errors = { ...control.errors };

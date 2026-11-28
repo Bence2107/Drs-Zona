@@ -3,9 +3,12 @@
   width: 100%;
 }
 
-.desktop-only { display: block; }
-.mobile-only  { display: none; }
-
+.desktop-only {
+  display: block;
+}
+.mobile-only {
+  display: none;
+}
 
 .comment-layout {
   display: flex;
@@ -33,14 +36,19 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .mini-avatar  { width: 32px; height: 32px; }
-  .reply-avatar { width: 24px; height: 24px; }
+  .mini-avatar {
+    width: 32px;
+    height: 32px;
+  }
+  .reply-avatar {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .content-column {
   flex-grow: 1;
 }
-
 
 .comment-header {
   display: flex;
@@ -69,7 +77,6 @@
   color: var(--text-main);
 }
 
-
 .comment-footer {
   display: flex;
   align-items: center;
@@ -88,8 +95,12 @@
       color: #818384;
       transition: all 0.2s ease;
 
-      &.upvote.active   { color: #4caf50 !important; }
-      &.downvote.active { color: #f44336 !important; }
+      &.upvote.active {
+        color: #4caf50 !important;
+      }
+      &.downvote.active {
+        color: #f44336 !important;
+      }
 
       &:hover {
         background-color: rgba(255, 255, 255, 0.1);
@@ -101,9 +112,15 @@
       text-align: center;
       transition: color 0.2s;
 
-      &.none     { color: var(--text-main); }
-      &.positive { color: #4caf50; }
-      &.negative { color: #f44336; }
+      &.none {
+        color: var(--text-main);
+      }
+      &.positive {
+        color: #4caf50;
+      }
+      &.negative {
+        color: #f44336;
+      }
     }
   }
 
@@ -134,7 +151,6 @@
   }
 }
 
-
 ::ng-deep .comment-menu-panel {
   background-color: var(--header-bg) !important;
   border: 1px solid var(--border-color);
@@ -150,11 +166,12 @@
 
     &:hover {
       color: #f8274f;
-      mat-icon { color: #f8274f; }
+      mat-icon {
+        color: #f8274f;
+      }
     }
   }
 }
-
 
 .replies-panel {
   margin: 12px 0;
@@ -178,7 +195,6 @@
     }
   }
 }
-
 
 .main-comment-form,
 .reply-form-container {
@@ -229,8 +245,12 @@
   overflow: hidden;
   transition: border-color 0.2s;
 
-  &:focus       { border-color: var(--accent-color); }
-  &::placeholder { color: #818384; }
+  &:focus {
+    border-color: var(--accent-color);
+  }
+  &::placeholder {
+    color: #818384;
+  }
 }
 
 .form-actions,
@@ -277,10 +297,14 @@
     height: 16px;
   }
 
-  &:disabled { opacity: 0.4; cursor: not-allowed; }
-  &:hover:not(:disabled) { filter: brightness(1.1); }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  &:hover:not(:disabled) {
+    filter: brightness(1.1);
+  }
 }
-
 
 .edit-container {
   display: flex;
@@ -362,7 +386,6 @@
   color: var(--mat-sys-error);
 }
 
-
 @media (max-width: 600px) {
   .comment-layout {
     gap: 8px;
@@ -383,8 +406,12 @@
     flex-wrap: wrap;
     row-gap: 2px;
 
-    .author-name  { font-size: 13px; }
-    .dot-separator { display: none; }
+    .author-name {
+      font-size: 13px;
+    }
+    .dot-separator {
+      display: none;
+    }
 
     .timestamp {
       width: 100%;
@@ -405,9 +432,13 @@
     gap: 4px;
     margin-left: 0;
 
-    .vote-group { padding: 0; }
+    .vote-group {
+      padding: 0;
+    }
 
-    .footer-action span { font-size: 12px; }
+    .footer-action span {
+      font-size: 12px;
+    }
 
     .comment-more-btn {
       flex-shrink: 0;
@@ -416,7 +447,9 @@
       line-height: 32px !important;
       color: #818384;
 
-      mat-icon { font-size: 18px; }
+      mat-icon {
+        font-size: 18px;
+      }
     }
   }
 
@@ -429,8 +462,12 @@
 }
 
 @media (max-width: 478px) {
-  .desktop-only { display: none !important; }
-  .mobile-only  { display: block; }
+  .desktop-only {
+    display: none !important;
+  }
+  .mobile-only {
+    display: block;
+  }
 
   :host {
     display: block;
@@ -454,8 +491,14 @@
     min-width: 32px;
     padding-top: 2px;
 
-    .mini-avatar  { width: 32px; height: 32px; }
-    .reply-avatar { width: 26px; height: 26px; }
+    .mini-avatar {
+      width: 32px;
+      height: 32px;
+    }
+    .reply-avatar {
+      width: 26px;
+      height: 26px;
+    }
   }
 
   .content-column {
@@ -478,9 +521,17 @@
     gap: 4px;
     margin-bottom: 4px;
 
-    .author-name   { font-size: 13px; font-weight: 700; }
-    .dot-separator { display: none; }
-    .timestamp     { font-size: 11px; color: #818384; }
+    .author-name {
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .dot-separator {
+      display: none;
+    }
+    .timestamp {
+      font-size: 11px;
+      color: #818384;
+    }
   }
 
   .comment-body {

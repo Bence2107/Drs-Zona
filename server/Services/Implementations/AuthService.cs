@@ -14,7 +14,7 @@ using Services.Types;
 namespace Services.Implementations;
 
 public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> jwtSettings, IUserImageService userImageService
-) : IAuthService 
+) : IAuthService
 {
     private readonly JwtSettings _jwtSettings = jwtSettings.Value;
 
@@ -27,7 +27,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
                 message: "Ez a felhasználónév foglalt."
             );
         }
-        
+
         if (await authRepository.UserExistsByEmail(request.Email))
         {
             return ResponseResult<AuthResponse>.Failure(
@@ -67,7 +67,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
     public async Task<ResponseResult<AuthResponse>> Login(LoginRequest request)
     {
         var user = await authRepository.GetUserByEmail(request.Email);
-        
+
         if (user is null)
         {
             return ResponseResult<AuthResponse>.Failure(
@@ -75,7 +75,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
                 message: "Email nem található."
             );
         }
-        
+
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
             return ResponseResult<AuthResponse>.Failure(
@@ -89,7 +89,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
             user.LastLogin = DateTime.UtcNow;
             user.LastActive = DateTime.UtcNow;
             user.IsLoggedIn = true;
-            
+
             await authRepository.Update(user);
 
             var authResponse = await GenerateAuthResponse(user);
@@ -106,7 +106,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
     public async Task<ResponseResult<bool>> UpdateUserInfo(Guid userId, UpdateUserRequest request)
     {
         var user = await authRepository.GetUserById(userId);
-        
+
         if (user is null)
         {
             return ResponseResult<bool>.Failure(
@@ -138,7 +138,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
                 );
             }
         }
-        
+
         try
         {
             user.Email = request.Email;
@@ -159,7 +159,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
     public async Task<ResponseResult<bool>> ChangePassword(Guid userId, ChangePasswordRequest request)
     {
         var user = await authRepository.GetUserById(userId);
-        
+
         if (user is null)
         {
             return ResponseResult<bool>.Failure(
@@ -201,7 +201,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
 
     public async Task<ResponseResult<UserProfileResponse>> GetUserById(Guid userId)
     {
-        
+
         var user = await authRepository.GetUserById(userId);
 
         if (user is null)
@@ -223,7 +223,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
     public async Task<ResponseResult<bool>> Logout(Guid userId)
     {
         var user = await authRepository.GetUserById(userId);
-        
+
         if (user is null)
         {
             return ResponseResult<bool>.Failure(
@@ -236,7 +236,7 @@ public class AuthService(IAuthRepository authRepository, IOptions<JwtSettings> j
             user.LastActive = DateTime.UtcNow;
             user.IsLoggedIn = false;
             user.CurrentSessionId = null;
-            
+
             await authRepository.Update(user);
             return ResponseResult<bool>.Success(true);
         }

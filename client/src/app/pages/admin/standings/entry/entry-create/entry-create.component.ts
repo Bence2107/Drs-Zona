@@ -1,5 +1,5 @@
-import {Component, computed, effect, OnInit, signal} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, computed, effect, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   AbstractControl,
   FormArray,
@@ -7,34 +7,37 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators
+  Validators,
 } from '@angular/forms';
-import {StandingsService} from '../../../../../services/api/standings.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {GrandPrixChampionshipContextDto} from '../../../../../api/models/grand-prix-championship-context-dto';
-import {BatchResultCreateDto} from '../../../../../api/models/batch-result-create-dto';
-import {MatButton, MatIconButton} from '@angular/material/button';
-import {MatIcon} from '@angular/material/icon';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {LoadingStateComponent} from '../../../../../components/loading-state/loading-state.component';
-import {MatTooltip} from '@angular/material/tooltip';
+import { StandingsService } from '../../../../../services/api/standings.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { GrandPrixChampionshipContextDto } from '../../../../../api/models/grand-prix-championship-context-dto';
+import { BatchResultCreateDto } from '../../../../../api/models/batch-result-create-dto';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { LoadingStateComponent } from '../../../../../components/loading-state/loading-state.component';
+import { MatTooltip } from '@angular/material/tooltip';
 import {
   MatCell,
   MatCellDef,
   MatColumnDef,
   MatHeaderCell,
   MatHeaderCellDef,
-  MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
 } from '@angular/material/table';
-import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {MatOption} from '@angular/material/core';
-import {MatSelect} from '@angular/material/select';
-import {DriverLookUpDto} from '../../../../../api/models/driver-look-up-dto';
-import {ConstructorLookUpDto} from '../../../../../api/models/constructor-look-up-dto';
-import {CustomSnackbarComponent} from '../../../../../components/custom-snackbar/custom-snackbar.component';
-import {MatCheckbox} from '@angular/material/checkbox';
-import {ChampionshipService} from '../../../../../services/api/championship.service';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { DriverLookUpDto } from '../../../../../api/models/driver-look-up-dto';
+import { ConstructorLookUpDto } from '../../../../../api/models/constructor-look-up-dto';
+import { CustomSnackbarComponent } from '../../../../../components/custom-snackbar/custom-snackbar.component';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { ChampionshipService } from '../../../../../services/api/championship.service';
 
 @Component({
   selector: 'app-entry-create',
@@ -62,12 +65,12 @@ import {ChampionshipService} from '../../../../../services/api/championship.serv
     MatHeaderRowDef,
     MatLabel,
     FormsModule,
-    MatCheckbox
+    MatCheckbox,
   ],
   templateUrl: './entry-create.component.html',
   styleUrl: './entry-create.component.scss',
 })
-export class EntryCreateComponent implements OnInit{
+export class EntryCreateComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -104,33 +107,54 @@ export class EntryCreateComponent implements OnInit{
 
     const isF1Qualy = ctx?.pointSystem === 'F1' && session?.includes('Időmérő');
     if (isF1Qualy) {
-      return ['rowNum', 'finishPosition', 'driver', 'constructor', 'q1', 'q2', 'q3', 'lapsCompleted', 'status', 'pole', 'actions'];
+      return [
+        'rowNum',
+        'finishPosition',
+        'driver',
+        'constructor',
+        'q1',
+        'q2',
+        'q3',
+        'lapsCompleted',
+        'status',
+        'pole',
+        'actions',
+      ];
     }
-    return ['rowNum', 'finishPosition','driver', 'constructor','raceTime', 'lapsCompleted', 'status', 'pole', 'fastestLap', 'actions'];
+    return [
+      'rowNum',
+      'finishPosition',
+      'driver',
+      'constructor',
+      'raceTime',
+      'lapsCompleted',
+      'status',
+      'pole',
+      'fastestLap',
+      'actions',
+    ];
   });
 
   get rows(): FormArray {
     return this.form.get('rows') as FormArray;
   }
 
-
   ngOnInit() {
     this.gpId.set(this.route.snapshot.paramMap.get('gpId') ?? '');
     this.form = this.fb.group({ rows: this.fb.array([]) });
     this.loadContext();
-
   }
 
   loadContext() {
     this.isLoadingContext.set(true);
     this.standingsService.getGrandPrixContext(this.gpId()).subscribe({
-      next: ctx => {
+      next: (ctx) => {
         this.context.set(ctx);
         if (ctx.availableSessions) {
           this.selectedSession.set(ctx.availableSessions[0] ?? '');
         }
         if (ctx.driversChampId != null && ctx.consChampId != null) {
-            this.loadLookups(ctx.driversChampId, ctx.consChampId);
+          this.loadLookups(ctx.driversChampId, ctx.consChampId);
         }
         this.isLoadingContext.set(false);
       },
@@ -141,34 +165,37 @@ export class EntryCreateComponent implements OnInit{
           duration: 3000,
           horizontalPosition: 'center',
         });
-      }
+      },
     });
   }
 
   addRow() {
     const group = this.fb.group({
-      driverId:      ['', Validators.required],
+      driverId: ['', Validators.required],
       constructorId: ['', Validators.required],
-      finishPosition:[this.rows.length + 1, [Validators.required, Validators.min(1), Validators.max(99)]],
-      raceTime:      [''],
+      finishPosition: [
+        this.rows.length + 1,
+        [Validators.required, Validators.min(1), Validators.max(99)],
+      ],
+      raceTime: [''],
       lapsCompleted: ['', [Validators.required, Validators.min(0)]],
-      status:        ['Finished', Validators.required],
-      isPole:        [false],
-      isFastestLap:  [false],
+      status: ['Finished', Validators.required],
+      isPole: [false],
+      isFastestLap: [false],
       q1: [null],
       q2: [null],
-      q3: [null]
+      q3: [null],
     });
 
-    group.get('status')!.valueChanges.subscribe(status => {
-      if (typeof status === "string") {
+    group.get('status')!.valueChanges.subscribe((status) => {
+      if (typeof status === 'string') {
         this.onStatusChange(group, status);
       }
     });
 
-    group.get('driverId')!.valueChanges.subscribe(selectedDriverId => {
+    group.get('driverId')!.valueChanges.subscribe((selectedDriverId) => {
       if (selectedDriverId) {
-        const driverData = this.drivers().find(d => d.id === selectedDriverId);
+        const driverData = this.drivers().find((d) => d.id === selectedDriverId);
 
         if (driverData && driverData.constructorId) {
           group.get('constructorId')!.setValue(driverData.constructorId);
@@ -197,26 +224,26 @@ export class EntryCreateComponent implements OnInit{
 
     this.isSaving.set(true);
     const dto: BatchResultCreateDto = {
-      grandPrixId:    this.gpId(),
+      grandPrixId: this.gpId(),
       driversChampId: ctx.driversChampId,
-      consChampId:    ctx.consChampId,
-      session:        this.selectedSession(),
-      results: this.rows.controls.map(c => {
+      consChampId: ctx.consChampId,
+      session: this.selectedSession(),
+      results: this.rows.controls.map((c) => {
         const raw = (c as FormGroup).getRawValue();
         return {
-          driverId:      raw.driverId,
+          driverId: raw.driverId,
           constructorId: raw.constructorId,
-          finishPosition:raw.finishPosition,
-          raceTime:      raw.raceTime,
+          finishPosition: raw.finishPosition,
+          raceTime: raw.raceTime,
           lapsCompleted: raw.lapsCompleted,
-          status:        raw.status,
-          isPole:        raw.isPole,
-          isFastestLap:  raw.isFastestLap,
-          q1:             raw.q1,
-          q2:             raw.q2,
-          q3:             raw.q3
+          status: raw.status,
+          isPole: raw.isPole,
+          isFastestLap: raw.isFastestLap,
+          q1: raw.q1,
+          q2: raw.q2,
+          q3: raw.q3,
         };
-      })
+      }),
     };
 
     this.standingsService.insertResults(dto).subscribe({
@@ -236,7 +263,7 @@ export class EntryCreateComponent implements OnInit{
           duration: 3000,
           horizontalPosition: 'center',
         });
-      }
+      },
     });
   }
 
@@ -250,16 +277,22 @@ export class EntryCreateComponent implements OnInit{
   }
 
   loadLookups(driverChampId: string, consChampId: string) {
-    this.championshipService.getDriversByDriversChampionship(driverChampId).subscribe(list => this.drivers.set(list));
-    this.championshipService.getConstructorsByConstChampionship(consChampId).subscribe(list => this.constructors.set(list));
+    this.championshipService
+      .getDriversByDriversChampionship(driverChampId)
+      .subscribe((list) => this.drivers.set(list));
+    this.championshipService
+      .getConstructorsByConstChampionship(consChampId)
+      .subscribe((list) => this.constructors.set(list));
 
-    this.championshipService.getDriversByDriversChampionship(driverChampId).subscribe(driverList => {
-      this.drivers.set(driverList);
+    this.championshipService
+      .getDriversByDriversChampionship(driverChampId)
+      .subscribe((driverList) => {
+        this.drivers.set(driverList);
 
-      driverList.forEach(() => {
-        this.addRow();
+        driverList.forEach(() => {
+          this.addRow();
+        });
       });
-    });
   }
 
   isDriverSelected(driverId: string, currentIndex: number): boolean {
@@ -272,7 +305,7 @@ export class EntryCreateComponent implements OnInit{
     const ctx = this.context();
     const isF1Qualy = ctx?.pointSystem === 'F1' && session.includes('Időmérő');
 
-    this.rows.controls.forEach(control => {
+    this.rows.controls.forEach((control) => {
       const group = control as FormGroup;
 
       if (isF1Qualy) {

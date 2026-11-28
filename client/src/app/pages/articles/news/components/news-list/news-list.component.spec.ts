@@ -14,7 +14,7 @@ describe('NewsListComponent', () => {
 
   beforeEach(async () => {
     mockArticleService = {
-      getAllArticles: jasmine.createSpy('getAllArticles').and.returnValue(of([]))
+      getAllArticles: vi.fn().mockReturnValue(of({ items: [], totalCount: 0 })),
     };
 
     await TestBed.configureTestingModule({
@@ -23,8 +23,8 @@ describe('NewsListComponent', () => {
         { provide: ArticleService, useValue: mockArticleService },
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
-      ]
+        provideRouter([]),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NewsListComponent);
@@ -40,25 +40,27 @@ describe('NewsListComponent', () => {
     fixture.detectChanges();
 
     const progressBar = fixture.debugElement.query(By.css('mat-progress-bar'));
-    expect(progressBar).withContext('Progress bar should be visible during loading').toBeTruthy();
+    expect(progressBar, 'Progress bar should be visible during loading').toBeTruthy();
   });
 
   it('US-01 AC2: Should show error component when server fails', () => {
-    mockArticleService.getAllArticles.and.returnValue(throwError(() => new Error('Server error')));
+    mockArticleService.getAllArticles.mockReturnValue(throwError(() => new Error('Server error')));
 
     component.fetchArticles();
     fixture.detectChanges();
 
     const errorDisplay = fixture.debugElement.query(By.css('app-error-display'));
-    expect(errorDisplay).withContext('Error display component should appear').toBeTruthy();
-    expect(component.errorOccurred).toBeTrue();
+    expect(errorDisplay, 'Error display component should appear').toBeTruthy();
+    expect(component.errorOccurred).toBe(true);
   });
 
-  it('US-02 AC1: Should display cards if articles are loaded', () => {
+  it('US-02 AC1: Should display cards if articles are loaded', async () => {
     const mockData = [{ id: '1', title: 'News 1', lead: 'Lead', datePublished: new Date() }];
-    mockArticleService.getAllArticles.and.returnValue(of(mockData));
+    mockArticleService.getAllArticles.mockReturnValue(of({ items: mockData, totalCount: 1 }));
 
     component.fetchArticles();
+    // Articles render only after their images are preloaded
+    await fixture.whenStable();
     fixture.detectChanges();
 
     const cards = fixture.debugElement.queryAll(By.css('.new-item'));

@@ -11,17 +11,17 @@
       [ngModel]="selectedSeriesId()"
       (ngModelChange)="onSeriesChange($event)"
       hideSingleSelectionIndicator="true"
-      class="series-toggle">
+      class="series-toggle"
+    >
       @for (series of seriesList(); track series.id) {
         <mat-button-toggle [value]="series.id">{{ series.name }}</mat-button-toggle>
       }
     </mat-button-toggle-group>
   </div>
 
-
   <mat-form-field appearance="outline" class="series-select">
     <mat-label>Széria</mat-label>
-    <mat-select [ngModel]="selectedSeriesId()"  (ngModelChange)="onSeriesChange($event)">
+    <mat-select [ngModel]="selectedSeriesId()" (ngModelChange)="onSeriesChange($event)">
       @for (series of seriesList(); track series.id) {
         <mat-option [value]="series.id">{{ series.name }}</mat-option>
       }
@@ -31,9 +31,7 @@
   <div class="season-section">
     <mat-form-field appearance="outline" class="season-field">
       <mat-label>Szezon</mat-label>
-      <mat-select
-        [ngModel]="selectedYear()"
-        (ngModelChange)="onYearChange($event)">
+      <mat-select [ngModel]="selectedYear()" (ngModelChange)="onYearChange($event)">
         @for (year of years(); track year) {
           <mat-option [value]="year">{{ year }}</mat-option>
         }
@@ -56,7 +54,6 @@
     <div class="gp-grid loading-host">
       @for (gp of grandsPrix(); track gp.id) {
         <mat-card class="gp-card" [class.has-results]="gp.hasResults">
-
           <div class="card-stripe"></div>
 
           <mat-card-header>
@@ -66,13 +63,9 @@
               <mat-card-subtitle>{{ gp.circuitName }} · {{ gp.location }}</mat-card-subtitle>
             </div>
             @if (gp.hasResults) {
-              <div class="status-badge done">
-                <mat-icon>check_circle</mat-icon> Kész
-              </div>
+              <div class="status-badge done"><mat-icon>check_circle</mat-icon> Kész</div>
             } @else {
-              <div class="status-badge pending">
-                <mat-icon>pending</mat-icon> Hiányzik
-              </div>
+              <div class="status-badge pending"><mat-icon>pending</mat-icon> Hiányzik</div>
             }
           </mat-card-header>
 
@@ -80,7 +73,10 @@
             <div class="gp-meta">
               <div class="meta-item">
                 <mat-icon>calendar_today</mat-icon>
-                <span>{{ gp.startTime | date:'yyyy. MMM d.' }} – {{ gp.endtime | date:'MMM d.' }}</span>
+                <span
+                  >{{ gp.startTime | date: 'yyyy. MMM d.' }} –
+                  {{ gp.endtime | date: 'MMM d.' }}</span
+                >
               </div>
               <div class="meta-item">
                 <mat-icon>speed</mat-icon>
@@ -90,13 +86,11 @@
           </mat-card-content>
 
           <mat-card-actions>
-            <button mat-flat-button
-                    [routerLink]="['/admin/results/entry', gp.id]">
+            <button mat-flat-button [routerLink]="['/admin/results/entry', gp.id]">
               <mat-icon>{{ gp.hasResults ? 'edit' : 'add_circle' }}</mat-icon>
               {{ gp.hasResults ? 'Szerkesztés' : 'Eredmény felvitel' }}
             </button>
           </mat-card-actions>
-
         </mat-card>
       }
 
@@ -105,11 +99,14 @@
       }
     </div>
   }
-
 </div>
 
-<button mat-fab color="primary" class="fab-add"
-        (click)="openCreateDialog()"
-        matTooltip="Új nagydíj">
+<button
+  mat-fab
+  color="primary"
+  class="fab-add"
+  (click)="openCreateDialog()"
+  matTooltip="Új nagydíj"
+>
   <mat-icon>add</mat-icon>
 </button>

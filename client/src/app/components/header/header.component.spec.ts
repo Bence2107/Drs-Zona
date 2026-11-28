@@ -3,37 +3,41 @@ import { HeaderComponent } from './header.component';
 import { provideRouter } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('HeaderComponent - US-05: Dark/Light Mode Toggle', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
 
+  const currentTheme = () => document.documentElement.getAttribute('data-theme');
+
   beforeEach(async () => {
+    localStorage.clear();
+
     await TestBed.configureTestingModule({
       imports: [HeaderComponent, BrowserAnimationsModule],
-      providers: [provideRouter([])]
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
-
-    localStorage.clear();
     fixture.detectChanges();
   });
 
-  it('AC1: Should immediately change CSS class on body when toggle is switched', () => {
-    expect(document.body.classList.contains('dark-mode')).toBeTrue();
+  it('AC1: Should immediately switch the theme attribute when toggle is switched', () => {
+    expect(component.isDarkMode).toBe(false);
+    expect(currentTheme()).toBe('light');
 
     component.toggleTheme();
     fixture.detectChanges();
 
-    expect(component.isDarkMode).toBeFalse();
-    expect(document.body.classList.contains('light-mode')).toBeTrue();
-    expect(document.body.classList.contains('dark-mode')).toBeFalse();
+    expect(component.isDarkMode).toBe(true);
+    expect(currentTheme()).toBe('dark');
   });
 
   it('AC1: Clicking the UI element (theme toggle button) triggers theme toggle', () => {
-    spyOn(component, 'toggleTheme').and.callThrough();
+    vi.spyOn(component, 'toggleTheme');
 
     const toggle = fixture.debugElement.query(By.css('.theme-toggle'));
 
@@ -47,17 +51,16 @@ describe('HeaderComponent - US-05: Dark/Light Mode Toggle', () => {
     component.toggleTheme();
     fixture.detectChanges();
 
-    const savedTheme = localStorage.getItem('theme');
-    expect(savedTheme).toBe('light');
+    expect(localStorage.getItem('theme')).toBe('dark');
   });
 
   it('AC2: Should load saved theme from localStorage on initialization (ngOnInit)', () => {
-    localStorage.setItem('theme', 'light');
+    localStorage.setItem('theme', 'dark');
 
     component.ngOnInit();
     fixture.detectChanges();
 
-    expect(component.isDarkMode).toBeFalse();
-    expect(document.body.classList.contains('light-mode')).toBeTrue();
+    expect(component.isDarkMode).toBe(true);
+    expect(currentTheme()).toBe('dark');
   });
 });

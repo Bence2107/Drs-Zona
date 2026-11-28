@@ -1,10 +1,10 @@
-import {Component, input, OnChanges} from '@angular/core';
-import {GrandPrixDetailDto} from '../../../../api/models/grand-prix-detail-dto';
-import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
-import {signal} from '@angular/core';
-import {MatIcon} from '@angular/material/icon';
-import {GrandsPrixService} from '../../../../services/api/grands-prix.service';
-import {ImagePreloadService} from '../../../../services/image-preload.service';
+import { Component, input, OnChanges } from '@angular/core';
+import { GrandPrixDetailDto } from '../../../../api/models/grand-prix-detail-dto';
+import { LoadingStateComponent } from '../../../../components/loading-state/loading-state.component';
+import { signal } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
+import { GrandsPrixService } from '../../../../services/api/grands-prix.service';
+import { ImagePreloadService } from '../../../../services/image-preload.service';
 
 @Component({
   selector: 'app-circuit-info',
@@ -56,6 +56,6 @@ export class CircuitInfoComponent implements OnChanges {
   }
 
   formatDate(dateStr: string): string {
-    return new Date(dateStr).toLocaleDateString('hu-HU', {month: 'short', day: 'numeric'});
+    return new Date(dateStr).toLocaleDateString('hu-HU', { month: 'short', day: 'numeric' });
   }
 }

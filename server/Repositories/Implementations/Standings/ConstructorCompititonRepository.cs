@@ -5,14 +5,14 @@ using Repositories.Interfaces.Standings;
 
 namespace Repositories.Implementations.Standings;
 
-public class ConstructorCompetitionRepository(EfContext context) : IConstructorCompetitionRepository 
+public class ConstructorCompetitionRepository(EfContext context) : IConstructorCompetitionRepository
 {
     private readonly DbSet<ConstructorCompetition> _constructorCompetitions = context.ConstructorCompetitions;
 
-    public async Task<ConstructorCompetition?> GetByConstructorAndChampionship(Guid constructorId, Guid championshipId) => 
+    public async Task<ConstructorCompetition?> GetByConstructorAndChampionship(Guid constructorId, Guid championshipId) =>
         await _constructorCompetitions
             .FirstOrDefaultAsync(cc => cc.ConstructorId == constructorId && cc.ConstChampId == championshipId);
-    
+
     public async Task<List<ConstructorCompetition>> GetByChampionshipId(Guid champId) => await _constructorCompetitions
         .Include(cc => cc.Constructor)
         .Where(cc => cc.ConstChampId == champId)
@@ -33,8 +33,8 @@ public class ConstructorCompetitionRepository(EfContext context) : IConstructorC
     public async Task Delete(Guid constructorId, Guid championshipId)
     {
         var constCompetition = await GetByConstructorAndChampionship(constructorId, championshipId);
-        if(constCompetition == null) return;
-        
+        if (constCompetition == null) return;
+
         _constructorCompetitions.Remove(constCompetition);
         await context.SaveChangesAsync();
     }

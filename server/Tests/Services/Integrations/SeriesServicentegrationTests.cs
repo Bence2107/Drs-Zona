@@ -128,7 +128,7 @@ public class SeriesSeriesIntegrationTests
         var (ctx, svc) = BuildSut();
 
         await ctx.Series.AddRangeAsync(
-            CreateSeries("MotoGP",    "MOTOGP"),
+            CreateSeries("MotoGP", "MOTOGP"),
             CreateSeries(),
             CreateSeries("Formula 2", "F2")
         );
@@ -172,20 +172,20 @@ public class SeriesSeriesIntegrationTests
 
     private static DriversChampionship CreateDriversChamp(Guid seriesId, string season) => new()
     {
-        Id       = Guid.NewGuid(),
+        Id = Guid.NewGuid(),
         SeriesId = seriesId,
-        Season   = season,
-        Name     = $"WDC {season}",
-        Status   = "Finished"
+        Season = season,
+        Name = $"WDC {season}",
+        Status = "Finished"
     };
 
     private static ConstructorsChampionship CreateConstructorsChamp(Guid seriesId, string season) => new()
     {
-        Id       = Guid.NewGuid(),
+        Id = Guid.NewGuid(),
         SeriesId = seriesId,
-        Season   = season,
-        Name     = $"WCC {season}",
-        Status   = "Finished"
+        Season = season,
+        Name = $"WCC {season}",
+        Status = "Finished"
     };
 }
 

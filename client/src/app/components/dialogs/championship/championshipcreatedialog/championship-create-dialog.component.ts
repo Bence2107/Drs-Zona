@@ -1,16 +1,22 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatSelectModule} from '@angular/material/select';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {SeriesLookupDto} from '../../../../api/models/series-lookup-dto';
-import {ChampionshipCreateDto} from '../../../../api/models/championship-create-dto';
-import {FormErrorService} from '../../../../services/form-error.service';
-import {HttpValidationError} from '../../../../services/error-interceptor.service';
-import {ChampionshipService} from '../../../../services/api/championship.service';
+import { Component, inject, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { SeriesLookupDto } from '../../../../api/models/series-lookup-dto';
+import { ChampionshipCreateDto } from '../../../../api/models/championship-create-dto';
+import { FormErrorService } from '../../../../services/form-error.service';
+import { HttpValidationError } from '../../../../services/error-interceptor.service';
+import { ChampionshipService } from '../../../../services/api/championship.service';
 
 @Component({
   selector: 'app-championshipcreatedialog',
@@ -21,7 +27,7 @@ import {ChampionshipService} from '../../../../services/api/championship.service
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './championship-create-dialog.component.html',
   styleUrl: './championship-create-dialog.component.scss',
@@ -29,13 +35,13 @@ import {ChampionshipService} from '../../../../services/api/championship.service
 export class ChampionshipCreateDialogComponent implements OnInit {
   data = inject(MAT_DIALOG_DATA) as { seriesList: SeriesLookupDto[] };
   isSubmitting = false;
-  form: FormGroup
+  form: FormGroup;
 
-  private readonly fieldMap: { [key: string]: string } = {
-    'seriesid': 'seriesId',
-    'season': 'season',
-    'driversname': 'driversName',
-    'constructorsname': 'constructorsName',
+  private readonly fieldMap: Record<string, string> = {
+    seriesid: 'seriesId',
+    season: 'season',
+    driversname: 'driversName',
+    constructorsname: 'constructorsName',
   };
 
   constructor(
@@ -44,10 +50,10 @@ export class ChampionshipCreateDialogComponent implements OnInit {
     private formErrorService: FormErrorService,
     private championshipService: ChampionshipService,
   ) {
-    this.form =  this.fb.group({
-      seriesId:         ['', Validators.required],
-      season:           ['', [Validators.required, Validators.pattern(/^\d{4}$/)]],
-      driversName:      ['', Validators.required],
+    this.form = this.fb.group({
+      seriesId: ['', Validators.required],
+      season: ['', [Validators.required, Validators.pattern(/^\d{4}$/)]],
+      driversName: ['', Validators.required],
       constructorsName: ['', Validators.required],
     });
   }
@@ -57,28 +63,32 @@ export class ChampionshipCreateDialogComponent implements OnInit {
       this.form.patchValue({ seriesId: this.seriesList[0].id });
     }
 
-    this.form.get('season')?.valueChanges.subscribe(year => {
+    this.form.get('season')?.valueChanges.subscribe((year) => {
       if (year?.length === 4) {
-        const seriesName = this.seriesList.find(
-          s => s.id === this.form.get('seriesId')?.value
-        )?.name ?? '';
-        this.form.patchValue({
-          driversName: `${year} ${seriesName} Drivers Championship`,
-          constructorsName: `${year} ${seriesName} Constructors Championship`,
-        }, { emitEvent: false });
+        const seriesName =
+          this.seriesList.find((s) => s.id === this.form.get('seriesId')?.value)?.name ?? '';
+        this.form.patchValue(
+          {
+            driversName: `${year} ${seriesName} Drivers Championship`,
+            constructorsName: `${year} ${seriesName} Constructors Championship`,
+          },
+          { emitEvent: false },
+        );
       }
     });
 
     this.form.get('seriesId')?.valueChanges.subscribe(() => {
       const year = this.form.get('season')?.value;
       if (year?.length === 4) {
-        const seriesName = this.seriesList.find(
-          s => s.id === this.form.get('seriesId')?.value
-        )?.name ?? '';
-        this.form.patchValue({
-          driversName: `${year} ${seriesName} Drivers Championship`,
-          constructorsName: `${year} ${seriesName} Constructors Championship`,
-        }, { emitEvent: false });
+        const seriesName =
+          this.seriesList.find((s) => s.id === this.form.get('seriesId')?.value)?.name ?? '';
+        this.form.patchValue(
+          {
+            driversName: `${year} ${seriesName} Drivers Championship`,
+            constructorsName: `${year} ${seriesName} Constructors Championship`,
+          },
+          { emitEvent: false },
+        );
       }
     });
 
@@ -90,7 +100,9 @@ export class ChampionshipCreateDialogComponent implements OnInit {
     ]);
   }
 
-  get seriesList() { return this.data.seriesList; }
+  get seriesList() {
+    return this.data.seriesList;
+  }
 
   submit() {
     if (this.form.invalid) return;
@@ -100,7 +112,7 @@ export class ChampionshipCreateDialogComponent implements OnInit {
       seriesId: this.form.value.seriesId,
       season: this.form.value.season,
       driversName: this.form.value.driversName,
-      constructorsName: this.form.value.constructorsName
+      constructorsName: this.form.value.constructorsName,
     };
 
     this.championshipService.createChampionship(dto).subscribe({
@@ -111,7 +123,7 @@ export class ChampionshipCreateDialogComponent implements OnInit {
       error: (err: HttpValidationError) => {
         this.isSubmitting = false;
         this.formErrorService.applyServerErrors(this.form, err, this.fieldMap);
-      }
+      },
     });
   }
 

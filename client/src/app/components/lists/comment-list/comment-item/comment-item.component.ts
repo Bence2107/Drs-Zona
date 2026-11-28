@@ -1,18 +1,22 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {UIComment} from '../../../../models/ui-comment';
-import {CommentService} from '../../../../services/api/comment.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { UIComment } from '../../../../models/ui-comment';
+import { CommentService } from '../../../../services/api/comment.service';
 import { DatePipe } from '@angular/common';
-import {MatIconButton} from '@angular/material/button';
-import {MatIcon} from '@angular/material/icon';
-import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
-import {FormsModule} from '@angular/forms';
-import {AuthService} from '../../../../services/api/auth.service';
-import {CommentCreateDto} from '../../../../api/models/comment-create-dto';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {CommentContentUpdateDto} from '../../../../api/models/comment-content-update-dto';
-import {CommentUpdateVoteDto} from '../../../../api/models/comment-update-vote-dto';
-import {RouterLink} from '@angular/router';
-import {HttpValidationError} from '../../../../services/error-interceptor.service';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import {
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle,
+} from '@angular/material/expansion';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../../services/api/auth.service';
+import { CommentCreateDto } from '../../../../api/models/comment-create-dto';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { CommentContentUpdateDto } from '../../../../api/models/comment-content-update-dto';
+import { CommentUpdateVoteDto } from '../../../../api/models/comment-update-vote-dto';
+import { RouterLink } from '@angular/router';
+import { HttpValidationError } from '../../../../services/error-interceptor.service';
 
 @Component({
   selector: 'app-comment-item',
@@ -27,19 +31,19 @@ import {HttpValidationError} from '../../../../services/error-interceptor.servic
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './comment-item.component.html',
-  styleUrl: './comment-item.component.scss'
+  styleUrl: './comment-item.component.scss',
 })
 export class CommentItemComponent {
   @Input() comment!: UIComment;
   @Input() articleId: string | null = null;
 
-  @Input() isReply: boolean = false;
-  @Input() isOnProfileSite: boolean = false;
+  @Input() isReply = false;
+  @Input() isOnProfileSite = false;
 
-  @Input() depth: number = 0;
+  @Input() depth = 0;
 
   @Output() commentDeleted = new EventEmitter<void>();
 
@@ -53,8 +57,10 @@ export class CommentItemComponent {
   editError = '';
   replyError = '';
 
-  constructor(private commentService: CommentService, private authService: AuthService) {}
-
+  constructor(
+    private commentService: CommentService,
+    private authService: AuthService,
+  ) {}
 
   isMyComment(commentUsername: string | null | undefined): boolean {
     return this.authService.currentProfile()?.username === commentUsername;
@@ -71,13 +77,13 @@ export class CommentItemComponent {
         this.comment.loaded = true;
         this.comment.loadingReplies = false;
       },
-      error: () => this.comment.loadingReplies = false
+      error: () => (this.comment.loadingReplies = false),
     });
   }
 
   get avatarUrl(): string | null {
     const url = this.comment.userAvatarUrl;
-    if (url == null) return "img/user/avatars/avatar.jpg";
+    if (url == null) return 'img/user/avatars/avatar.jpg';
     return `${url}`;
   }
 
@@ -86,7 +92,7 @@ export class CommentItemComponent {
     if (profile?.hasAvatar && profile?.avatarUrl) {
       return profile.avatarUrl;
     }
-    return "img/user/avatars/avatar.jpg";
+    return 'img/user/avatars/avatar.jpg';
   }
 
   reloadReplies() {
@@ -104,7 +110,7 @@ export class CommentItemComponent {
         this.comment.loaded = true;
         this.comment.loadingReplies = false;
       },
-      error: () => this.comment.loadingReplies = false
+      error: () => (this.comment.loadingReplies = false),
     });
   }
 
@@ -115,16 +121,15 @@ export class CommentItemComponent {
   }
 
   editComment() {
-    if(this.comment.content) {
+    if (this.comment.content) {
       this.editText = this.comment.content;
       this.isEditing = true;
       this.replyFormVisible = false;
 
-      if(this.isReply) {
+      if (this.isReply) {
         this.isReply = false;
       }
     }
-
   }
 
   cancelEdit() {
@@ -142,7 +147,7 @@ export class CommentItemComponent {
     const dto: CommentContentUpdateDto = {
       articleId: this.articleId!,
       content: this.editText.trim(),
-      id: this.comment.id
+      id: this.comment.id,
     };
 
     this.commentService.updateComment(dto).subscribe({
@@ -159,13 +164,14 @@ export class CommentItemComponent {
               this.comment.replies = replies as UIComment[];
               this.comment.replyCount = replies.length;
               this.comment.loaded = true;
-            }
+            },
           });
         }
       },
       error: (err: HttpValidationError) => {
-        this.editError = err?.fieldErrors?.['content']?.[0] ?? err?.title ?? 'Hiba történt a mentés során';
-      }
+        this.editError =
+          err?.fieldErrors?.['content']?.[0] ?? err?.title ?? 'Hiba történt a mentés során';
+      },
     });
   }
 
@@ -180,20 +186,22 @@ export class CommentItemComponent {
     const targetVote = isUpvote ? 1 : -1;
 
     if (this.comment.currentUserVote === targetVote) {
-      if (isUpvote) this.comment.upVotes!--; else this.comment.downVotes!--;
+      if (isUpvote) this.comment.upVotes!--;
+      else this.comment.downVotes!--;
       this.comment.currentUserVote = 0;
     } else {
       if (this.comment.currentUserVote === 1) this.comment.upVotes!--;
       if (this.comment.currentUserVote === -1) this.comment.downVotes!--;
 
-      if (isUpvote) this.comment.upVotes!++; else this.comment.downVotes!++;
+      if (isUpvote) this.comment.upVotes!++;
+      else this.comment.downVotes!++;
       this.comment.currentUserVote = targetVote;
     }
 
     const dto: CommentUpdateVoteDto = {
       commentId: this.comment.id,
       userId: profile.userId,
-      isUpvote: isUpvote
+      isUpvote: isUpvote,
     };
 
     this.commentService.updateVote(dto).subscribe({
@@ -202,7 +210,7 @@ export class CommentItemComponent {
         this.comment.upVotes = oldUp;
         this.comment.downVotes = oldDown;
         console.error(err);
-      }
+      },
     });
   }
 
@@ -222,7 +230,7 @@ export class CommentItemComponent {
     const dto: CommentCreateDto = {
       articleId: this.articleId!,
       content: this.replyText.trim(),
-      replyToCommentId: this.comment.id
+      replyToCommentId: this.comment.id,
     };
 
     this.commentService.createComment(dto).subscribe({
@@ -239,23 +247,24 @@ export class CommentItemComponent {
               this.comment.replyCount = replies.length;
               this.comment.loaded = true;
               this.repliesVisible = true;
-            }
+            },
           });
         }
       },
       error: (err: HttpValidationError) => {
-        this.replyError = err?.fieldErrors?.['content']?.[0] ?? err?.title ?? 'Hiba történt a válasz küldése során';
-      }
+        this.replyError =
+          err?.fieldErrors?.['content']?.[0] ?? err?.title ?? 'Hiba történt a válasz küldése során';
+      },
     });
   }
 
   deleteComment(id: string) {
-    if(id.length > 0){
+    if (id.length > 0) {
       this.commentService.deleteComment(id).subscribe({
         next: () => {
           this.commentDeleted.emit();
         },
-        error: (err) => console.error(err)
+        error: (err) => console.error(err),
       });
     }
 

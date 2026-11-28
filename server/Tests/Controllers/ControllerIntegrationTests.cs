@@ -501,7 +501,7 @@ public class ConstructorsControllerTests(TestWebAppFactory factory) : Controller
         await AuthenticateAs("Admin");
         var db = GetDb();
         var brand = new Brand
-            { Id = Guid.NewGuid(), Name = "TestBrand", Description = "d", Principal = "p", HeadQuarters = "h" };
+        { Id = Guid.NewGuid(), Name = "TestBrand", Description = "d", Principal = "p", HeadQuarters = "h" };
         db.Brands.Add(brand);
         await db.SaveChangesAsync();
 
@@ -698,8 +698,14 @@ public class SeriesControllerTests(TestWebAppFactory factory) : ControllerTestBa
         var db = GetDb();
         db.Series.Add(new Series
         {
-            Id = Guid.NewGuid(), Name = "UniqueSeriesXYZ", ShortName = "USN", Description = "d", GoverningBody = "FIA",
-            FirstYear = 1950, LastYear = 2025, PointSystem = "FIA"
+            Id = Guid.NewGuid(),
+            Name = "UniqueSeriesXYZ",
+            ShortName = "USN",
+            Description = "d",
+            GoverningBody = "FIA",
+            FirstYear = 1950,
+            LastYear = 2025,
+            PointSystem = "FIA"
         });
         await db.SaveChangesAsync();
 

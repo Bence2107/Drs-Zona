@@ -2,7 +2,7 @@
 
 namespace Repositories.Interfaces.Polls;
 
-public interface IPollsRepository 
+public interface IPollsRepository
 {
     Task<Poll?> GetPollById(Guid id);
     Task<List<Poll>> GetAll(string? tag = null);

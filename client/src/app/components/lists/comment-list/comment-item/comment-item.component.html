@@ -1,15 +1,18 @@
 <div class="comment-layout" [class.is-reply-node]="isReply" [style.--depth]="depth">
   <div class="avatar-column">
-    <img [src]="avatarUrl"
-         [class.mini-avatar]="!isReply"
-         [class.reply-avatar]="isReply" alt="avatar">
+    <img
+      [src]="avatarUrl"
+      [class.mini-avatar]="!isReply"
+      [class.reply-avatar]="isReply"
+      alt="avatar"
+    />
   </div>
   <div class="content-column">
     <div class="comment-bubble">
       <div class="comment-header">
         <span class="author-name">{{ comment.username }}</span>
         <span class="dot-separator">•</span>
-        <span class="timestamp">{{ comment.dateCreated | date:'yyyy.MM.dd HH:mm' }}</span>
+        <span class="timestamp">{{ comment.dateCreated | date: 'yyyy.MM.dd HH:mm' }}</span>
       </div>
       <div class="comment-body">
         @if (!isEditing) {
@@ -23,7 +26,7 @@
                 (input)="autoResize($event); editError = ''"
                 rows="1"
                 placeholder="Módosítsd a hozzászólásod..."
-                autofocus></textarea>
+              ></textarea>
             </div>
             @if (editError) {
               <span class="comment-error">{{ editError }}</span>
@@ -41,37 +44,42 @@
 
     <div class="comment-footer">
       <div class="vote-group">
-        <button mat-icon-button
-                class="vote-btn upvote"
-                [class.active]="comment.currentUserVote === 1"
-                (click)="vote(true)">
+        <button
+          mat-icon-button
+          class="vote-btn upvote"
+          [class.active]="comment.currentUserVote === 1"
+          (click)="vote(true)"
+        >
           <mat-icon>arrow_upward</mat-icon>
         </button>
 
-        <span class="score"
-              [class.positive]="(comment.upVotes || 0) - (comment.downVotes || 0) > 0"
-              [class.negative]="(comment.upVotes || 0) - (comment.downVotes || 0) < 0"
-              [class.none]="(comment.upVotes || 0) - (comment.downVotes || 0) == 0"
+        <span
+          class="score"
+          [class.positive]="(comment.upVotes || 0) - (comment.downVotes || 0) > 0"
+          [class.negative]="(comment.upVotes || 0) - (comment.downVotes || 0) < 0"
+          [class.none]="(comment.upVotes || 0) - (comment.downVotes || 0) == 0"
         >
-              {{ (comment.upVotes || 0) - (comment.downVotes || 0) }}
-      </span>
+          {{ (comment.upVotes || 0) - (comment.downVotes || 0) }}
+        </span>
 
-        <button mat-icon-button
-                class="vote-btn downvote"
-                [class.active]="comment.currentUserVote === -1"
-                (click)="vote(false)">
+        <button
+          mat-icon-button
+          class="vote-btn downvote"
+          [class.active]="comment.currentUserVote === -1"
+          (click)="vote(false)"
+        >
           <mat-icon>arrow_downward</mat-icon>
         </button>
       </div>
 
-      @if(!isOnProfileSite) {
+      @if (!isOnProfileSite) {
         <div class="footer-action" (click)="toggleReplyForm()">
           <mat-icon>chat_bubble_outline</mat-icon>
           <span>Válasz</span>
         </div>
       }
 
-      @if(isMyComment(comment.username)) {
+      @if (isMyComment(comment.username)) {
         <button mat-icon-button [matMenuTriggerFor]="commentMenu" class="mini-menu-btn">
           <mat-icon>more_horiz</mat-icon>
         </button>
@@ -79,8 +87,12 @@
     </div>
 
     <mat-menu #commentMenu="matMenu" class="header-menu comment-menu-panel">
-      @if(isOnProfileSite) {
-        <button mat-menu-item class="header-menu-item" [routerLink]="['/article', comment.articleSlug]">
+      @if (isOnProfileSite) {
+        <button
+          mat-menu-item
+          class="header-menu-item"
+          [routerLink]="['/article', comment.articleSlug]"
+        >
           <span>Ugrás a cikkhez</span>
           <mat-icon>article</mat-icon>
         </button>
@@ -97,16 +109,17 @@
       </button>
     </mat-menu>
 
-    @if(replyFormVisible) {
+    @if (replyFormVisible) {
       <div class="reply-form-container">
-        <img [src]="avatarReplierUrl" class="form-avatar" alt="avatar">
+        <img [src]="avatarReplierUrl" class="form-avatar" alt="avatar" />
         <div class="reply-input-wrapper">
-      <textarea
-        class="reply-textarea"
-        [(ngModel)]="replyText"
-        placeholder="Írj választ..."
-        rows="1"
-        (input)="autoResize($event)"></textarea>
+          <textarea
+            class="reply-textarea"
+            [(ngModel)]="replyText"
+            placeholder="Írj választ..."
+            rows="1"
+            (input)="autoResize($event)"
+          ></textarea>
           @if (replyError) {
             <span class="comment-error">{{ replyError }}</span>
           }
@@ -120,12 +133,15 @@
       </div>
     }
 
-    @if(comment.replyCount) {
-      <mat-expansion-panel (opened)="loadReplies()" class="replies-panel mat-elevation-z0 desktop-only">
+    @if (comment.replyCount) {
+      <mat-expansion-panel
+        (opened)="loadReplies()"
+        class="replies-panel mat-elevation-z0 desktop-only"
+      >
         <mat-expansion-panel-header>
           <mat-panel-title>
             <mat-icon>add_circle_outline</mat-icon>
-            {{comment.replyCount}} válasz megjelenítése
+            {{ comment.replyCount }} válasz megjelenítése
           </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="nested-replies">
@@ -134,7 +150,9 @@
               [comment]="reply"
               [isReply]="true"
               [depth]="(depth || 0) + 1"
-              (commentDeleted)="reloadReplies()"/> }
+              (commentDeleted)="reloadReplies()"
+            />
+          }
         </div>
       </mat-expansion-panel>
 
@@ -144,14 +162,17 @@
           {{ repliesVisible ? 'Válaszok elrejtése' : comment.replyCount + ' válasz' }}
         </button>
 
-        @if(repliesVisible) {
-          <<div class="mobile-reply-list">
+        @if (repliesVisible) {
+          <
+          <div class="mobile-reply-list">
             @for (reply of comment.replies; track reply) {
               <app-comment-item
                 [comment]="reply"
                 [isReply]="true"
                 [depth]="(depth || 0) + 1"
-                (commentDeleted)="loadReplies()" /> }
+                (commentDeleted)="loadReplies()"
+              />
+            }
           </div>
         }
       </div>

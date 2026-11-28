@@ -6,7 +6,6 @@
     <h2 class="page-title">Csapatok szerkesztése</h2>
   </div>
 
-
   @if (isLoading() && constructors().length === 0) {
     <app-loading-state label="Konstruktőrök betöltése..."></app-loading-state>
   }
@@ -42,11 +41,14 @@
       }
     </div>
   }
-
 </div>
 
-<button mat-fab color="primary" class="fab-add"
-        (click)="openCreateDialog()"
-        matTooltip="Új konstruktőr">
+<button
+  mat-fab
+  color="primary"
+  class="fab-add"
+  (click)="openCreateDialog()"
+  matTooltip="Új konstruktőr"
+>
   <mat-icon>add</mat-icon>
 </button>

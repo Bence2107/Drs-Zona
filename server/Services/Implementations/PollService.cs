@@ -14,7 +14,7 @@ public class PollService(
     IPollOptionsRepository pollOptionsRepository,
     IPollVotesRepository pollVoteRepository,
     IAuthRepository userRepository
-) : IPollService 
+) : IPollService
 {
     public async Task<ResponseResult<PollDto>> GetPollById(Guid pollId, Guid? currentUserId = null)
     {
@@ -22,7 +22,7 @@ public class PollService(
         if (poll == null) return ResponseResult<PollDto>.Failure("Szavazás nem található");
 
         var options = await pollOptionsRepository.GetByPollId(pollId);
-        
+
         var totalVotes = 0;
         foreach (var opt in options)
         {
@@ -30,7 +30,7 @@ public class PollService(
         }
 
         var isExpired = DateTime.Now > poll.ExpiresAt;
-        
+
         Guid? userVoteOptionId = null;
         if (currentUserId.HasValue)
         {
@@ -39,7 +39,7 @@ public class PollService(
         }
 
         var pollOptionsDto = new List<PollOptionDto>();
-        foreach(var o in options)
+        foreach (var o in options)
         {
             var voteCount = await pollVoteRepository.GetVoteCount(o.Id);
             var percentage = totalVotes > 0
@@ -90,7 +90,7 @@ public class PollService(
     {
         var allActivePolls = await pollRepository.GetActive(tag);
         var activePools = allActivePolls
-            .Where(p => p.ExpiresAt > DateTime.Now) 
+            .Where(p => p.ExpiresAt > DateTime.Now)
             .ToList();
 
         var dto = activePools.Select(poll => new PollListDto(
@@ -103,7 +103,7 @@ public class PollService(
 
         return ResponseResult<List<PollListDto>>.Success(dto);
     }
-    
+
     public async Task<ResponseResult<bool>> Create(PollCreateDto dto, Guid? currentUserId = null)
     {
         if (currentUserId is not null && !await userRepository.CheckIfIdExists(currentUserId))
@@ -161,11 +161,11 @@ public class PollService(
         {
             return ResponseResult<bool>.Failure("Nem te vagy a szavazás kreátora");
         }
-        
+
         await pollRepository.Delete(id);
         return ResponseResult<bool>.Success(true);
     }
-    
+
     public async Task<ResponseResult<bool>> Vote(Guid pollId, Guid pollOptionId, Guid userId)
     {
         var poll = await pollRepository.GetPollById(pollId);
@@ -194,7 +194,7 @@ public class PollService(
         await pollVoteRepository.Create(vote);
         return ResponseResult<bool>.Success(true);
     }
-    
+
     private async Task<bool> HasUserVoted(Guid pollId, Guid userId)
     {
         var options = await pollOptionsRepository.GetByPollId(pollId);

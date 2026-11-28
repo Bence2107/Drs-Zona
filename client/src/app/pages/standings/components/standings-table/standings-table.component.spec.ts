@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { StandingsStateService } from '../standings-state.service';
 
 import { StandingsTableComponent } from './standings-table.component';
 
@@ -8,9 +11,9 @@ describe('ResultsTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StandingsTableComponent]
-    })
-    .compileComponents();
+      imports: [StandingsTableComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting(), StandingsStateService],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(StandingsTableComponent);
     component = fixture.componentInstance;

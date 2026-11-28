@@ -1,11 +1,10 @@
-import {Directive, HostListener} from '@angular/core';
+import { Directive, HostListener } from '@angular/core';
 
 @Directive({
   selector: '[appPositiveInteger]',
 })
 export class PositiveIntegerDirective {
-
-  constructor() { }
+  constructor() {}
 
   @HostListener('keydown', ['$event'])
   onKeyDown(e: KeyboardEvent) {
@@ -17,5 +16,4 @@ export class PositiveIntegerDirective {
     const input = e.target as HTMLInputElement;
     input.value = input.value.replace(/[^0-9]/g, '');
   }
-
 }

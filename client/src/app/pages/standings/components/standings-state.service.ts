@@ -1,33 +1,33 @@
-import {computed, inject, Injectable, OnInit, signal} from '@angular/core';
-import {StandingsService} from '../../../services/api/standings.service';
-import {ChampionshipService} from '../../../services/api/championship.service';
-import {BreakpointObserver} from '@angular/cdk/layout';
-import {toSignal} from '@angular/core/rxjs-interop';
-import {GrandPrixLookupDto} from '../../../api/models/grand-prix-lookup-dto';
-import {SeasonOverviewDto} from '../../../api/models/season-overview-dto';
-import {YearLookupDto} from '../../../api/models/year-lookup-dto';
-import {GrandRrixResultDto} from '../../../api/models/grand-rrix-result-dto';
-import {DriverStandingsResultDto} from '../../../api/models/driver-standings-result-dto';
-import {ConstructorStandingsResultDto} from '../../../api/models/constructor-standings-result-dto';
-import {DriverLookUpDto} from '../../../api/models/driver-look-up-dto';
-import {ConstructorLookUpDto} from '../../../api/models/constructor-look-up-dto';
-import {DriverSeasonResultDto} from '../../../api/models/driver-season-result-dto';
-import {ConstructorSeasonResultDto} from '../../../api/models/constructor-season-result-dto';
-import {SeriesLookupDto} from '../../../api/models/series-lookup-dto';
-import {map} from 'rxjs/operators';
+import { computed, inject, Injectable, OnInit, signal } from '@angular/core';
+import { StandingsService } from '../../../services/api/standings.service';
+import { ChampionshipService } from '../../../services/api/championship.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { GrandPrixLookupDto } from '../../../api/models/grand-prix-lookup-dto';
+import { SeasonOverviewDto } from '../../../api/models/season-overview-dto';
+import { YearLookupDto } from '../../../api/models/year-lookup-dto';
+import { GrandRrixResultDto } from '../../../api/models/grand-rrix-result-dto';
+import { DriverStandingsResultDto } from '../../../api/models/driver-standings-result-dto';
+import { ConstructorStandingsResultDto } from '../../../api/models/constructor-standings-result-dto';
+import { DriverLookUpDto } from '../../../api/models/driver-look-up-dto';
+import { ConstructorLookUpDto } from '../../../api/models/constructor-look-up-dto';
+import { DriverSeasonResultDto } from '../../../api/models/driver-season-result-dto';
+import { ConstructorSeasonResultDto } from '../../../api/models/constructor-season-result-dto';
+import { SeriesLookupDto } from '../../../api/models/series-lookup-dto';
+import { map } from 'rxjs/operators';
 
 export type ViewMode = 'results' | 'drivers' | 'constructors';
 export const ALL_GP_ID = 'all-season-overview';
 export const AGGREGATED_ID = 'aggregated';
 
 @Injectable()
-export class StandingsStateService implements OnInit{
+export class StandingsStateService implements OnInit {
   private standingsService = inject(StandingsService);
   private championshipService = inject(ChampionshipService);
   private breakpointObserver = inject(BreakpointObserver);
 
   isMobile = toSignal(
-    this.breakpointObserver.observe('(max-width: 768px)').pipe(map(r => r.matches))
+    this.breakpointObserver.observe('(max-width: 768px)').pipe(map((r) => r.matches)),
   );
 
   viewMode = signal<ViewMode>('results');
@@ -64,7 +64,9 @@ export class StandingsStateService implements OnInit{
     const session = this.selectedSession()?.toLowerCase() || '';
     const isQualy = session.includes('időmérő');
 
-    const isF1 = this.seriesList().find(s => s.id === this.selectedSeriesId())?.name?.includes('Formula 1');
+    const isF1 = this.seriesList()
+      .find((s) => s.id === this.selectedSeriesId())
+      ?.name?.includes('Formula 1');
 
     if (isQualy) {
       return isF1
@@ -92,19 +94,19 @@ export class StandingsStateService implements OnInit{
     const coChampId = this.selectedConstructorsChampId();
 
     if (this.viewMode() === 'results' && drChampId) {
-      this.championshipService.getGrandPrixByChampionship(drChampId).subscribe(res => {
+      this.championshipService.getGrandPrixByChampionship(drChampId).subscribe((res) => {
         this.grandsPrix.set(res);
         this.isLoading.set(false);
       });
     } else if (this.viewMode() === 'drivers' && drChampId) {
       this.isLoading.set(true);
-      this.standingsService.getDriverStandings(drChampId).subscribe(res => {
+      this.standingsService.getDriverStandings(drChampId).subscribe((res) => {
         this.driverStandings.set(res.results || []);
         this.isLoading.set(false);
       });
     } else if (this.viewMode() === 'constructors' && coChampId) {
       this.isLoading.set(true);
-      this.standingsService.getConstructorStandings(coChampId).subscribe(res => {
+      this.standingsService.getConstructorStandings(coChampId).subscribe((res) => {
         this.constructorStandings.set(res.results || []);
         this.isLoading.set(false);
       });
@@ -117,8 +119,8 @@ export class StandingsStateService implements OnInit{
 
   loadAllSeries() {
     this.standingsService.getAllSeries().subscribe({
-      next: res => {
-        const filtered = res.filter(s => {
+      next: (res) => {
+        const filtered = res.filter((s) => {
           const name = s.name?.toLowerCase() ?? '';
           return !name.includes('wec') && !name.includes('nascar');
         });
@@ -126,7 +128,7 @@ export class StandingsStateService implements OnInit{
         if (filtered.length > 0) this.onSeriesChange(filtered[0].id!);
         else this.isLoading.set(false);
       },
-      error: () => this.isLoading.set(false)
+      error: () => this.isLoading.set(false),
     });
   }
 
@@ -144,7 +146,7 @@ export class StandingsStateService implements OnInit{
           this.constructorSeasonResults.set(res || []);
           this.isLoading.set(false);
         },
-        error: () => this.isLoading.set(false)
+        error: () => this.isLoading.set(false),
       });
     }
   }
@@ -163,7 +165,7 @@ export class StandingsStateService implements OnInit{
           this.driverSeasonResults.set(res || []);
           this.isLoading.set(false);
         },
-        error: () => this.isLoading.set(false)
+        error: () => this.isLoading.set(false),
       });
     }
   }
@@ -182,8 +184,9 @@ export class StandingsStateService implements OnInit{
       next: (sessions) => {
         this.sessions.set(sessions);
         if (sessions.length > 0) {
-          const preferredSession = sessions.find(s => s === 'Futam') ||
-            sessions.find(s => s === 'Sprint') ||
+          const preferredSession =
+            sessions.find((s) => s === 'Futam') ||
+            sessions.find((s) => s === 'Sprint') ||
             sessions[sessions.length - 1];
 
           this.loadResults(preferredSession);
@@ -191,7 +194,7 @@ export class StandingsStateService implements OnInit{
           this.isLoading.set(false);
         }
       },
-      error: () => this.isLoading.set(false)
+      error: () => this.isLoading.set(false),
     });
   }
 
@@ -210,9 +213,11 @@ export class StandingsStateService implements OnInit{
     if (this.viewMode() === 'results') {
       this.loadSeasonOverview(season.driversChampId!);
 
-      this.championshipService.getGrandPrixByChampionship(season.driversChampId!).subscribe(res => {
-        this.grandsPrix.set(res);
-      });
+      this.championshipService
+        .getGrandPrixByChampionship(season.driversChampId!)
+        .subscribe((res) => {
+          this.grandsPrix.set(res);
+        });
     } else if (this.viewMode() === 'drivers') {
       this.loadDriverList(season.driversChampId!);
       this.refreshData();
@@ -227,7 +232,7 @@ export class StandingsStateService implements OnInit{
   onSeriesChange(seriesId: string) {
     this.selectedSeriesId.set(seriesId);
     this.championshipService.getSeasonsBySeries(seriesId).subscribe({
-      next: res => {
+      next: (res) => {
         this.seasons.set(res);
         if (res.length > 0) {
           const latestSeason = res[0];
@@ -237,7 +242,7 @@ export class StandingsStateService implements OnInit{
           this.isLoading.set(false);
         }
       },
-      error: () => this.isLoading.set(false)
+      error: () => this.isLoading.set(false),
     });
   }
 
@@ -276,7 +281,7 @@ export class StandingsStateService implements OnInit{
         this.seasonOverview.set(res || []);
         this.isLoading.set(false);
       },
-      error: () => this.isLoading.set(false)
+      error: () => this.isLoading.set(false),
     });
   }
 
@@ -291,35 +296,36 @@ export class StandingsStateService implements OnInit{
         this.raceResults.set(res.results || []);
         this.isLoading.set(false);
       },
-      error: () => this.isLoading.set(false)
+      error: () => this.isLoading.set(false),
     });
   }
 
   private loadConstructorList(coChampId: string) {
-    this.championshipService.getConstructorsByConstChampionship(coChampId).subscribe(res => {
+    this.championshipService.getConstructorsByConstChampionship(coChampId).subscribe((res) => {
       this.constructorList.set(res);
     });
   }
 
   private loadDriverList(drChampId: string) {
-    this.championshipService.getDriversByDriversChampionship(drChampId).subscribe(res => {
+    this.championshipService.getDriversByDriversChampionship(drChampId).subscribe((res) => {
       this.driverList.set(res);
     });
   }
 
   private loadLatestGrandPrix(drChampId: string) {
     this.isLoading.set(true);
-    this.championshipService.getGrandPrixByChampionship(drChampId).subscribe(res => {
+    this.championshipService.getGrandPrixByChampionship(drChampId).subscribe((res) => {
       this.grandsPrix.set(res);
       if (res.length > 0) {
         const latestGP = res[res.length - 1];
         this.selectedGrandPrixId.set(latestGP.id!);
 
-        this.standingsService.getSessionsByGrandPrix(latestGP.id!).subscribe(sessions => {
+        this.standingsService.getSessionsByGrandPrix(latestGP.id!).subscribe((sessions) => {
           this.sessions.set(sessions);
           if (sessions.length > 0) {
-            let defaultSession = sessions.find(s => s === 'Futam') ||
-              sessions.find(s => s === 'Sprint') ||
+            const defaultSession =
+              sessions.find((s) => s === 'Futam') ||
+              sessions.find((s) => s === 'Sprint') ||
               sessions[sessions.length - 1];
 
             this.loadResults(defaultSession);

@@ -3,17 +3,19 @@
     <div class="auth-split-container">
       <div class="form-side">
         <div class="form-centering-wrapper">
-
           @if (isServerDown) {
             <app-error-display
               message="A szerver nem elérhető. Kérjük, ellenőrizze a kapcsolatot!"
-              (retry)="checkConnection()">
+              (retry)="checkConnection()"
+            >
             </app-error-display>
           } @else if (isServerLoading) {
-            <app-loading-state variant="bar" label="Kapcsolódás a szerverhez..."></app-loading-state>
+            <app-loading-state
+              variant="bar"
+              label="Kapcsolódás a szerverhez..."
+            ></app-loading-state>
           } @else {
             <mat-tab-group dynamicHeight>
-
               <!-- BEJELENTKEZÉS -->
               <mat-tab label="Bejelentkezés">
                 <div class="auth-content">
@@ -25,7 +27,12 @@
 
                     <mat-form-field appearance="fill" class="form-field">
                       <mat-label>Email</mat-label>
-                      <input matInput type="email" [formControl]="loginEmail" placeholder="pelda@email.com" />
+                      <input
+                        matInput
+                        type="email"
+                        [formControl]="loginEmail"
+                        placeholder="pelda@email.com"
+                      />
                       @if (loginEmail.hasError('required')) {
                         <mat-error>Az email cím megadása kötelező</mat-error>
                       }
@@ -129,15 +136,13 @@
                   </form>
                 </div>
               </mat-tab>
-
             </mat-tab-group>
           }
-
         </div>
       </div>
 
       <div class="visual-side">
-        <img [src]="'img/login/login_page.jpg'" alt="Login page" class="side-image">
+        <img [src]="'img/login/login_page.jpg'" alt="Login page" class="side-image" />
       </div>
     </div>
   </mat-card>

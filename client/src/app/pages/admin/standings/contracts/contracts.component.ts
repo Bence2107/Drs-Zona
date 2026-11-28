@@ -1,29 +1,28 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {ContractListDto} from '../../../../api/models/contract-list-dto';
-import {LoadingStateComponent} from '../../../../components/loading-state/loading-state.component';
-import {MatIcon} from '@angular/material/icon';
-import {MatCard} from '@angular/material/card';
+import { Component, OnInit, signal } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ContractListDto } from '../../../../api/models/contract-list-dto';
+import { LoadingStateComponent } from '../../../../components/loading-state/loading-state.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatCard } from '@angular/material/card';
 import {
   MatCell,
   MatCellDef,
   MatColumnDef,
   MatHeaderCell,
   MatHeaderCellDef,
-  MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
 } from '@angular/material/table';
-import {MatFabButton, MatIconButton} from '@angular/material/button';
-import {MatTooltip} from '@angular/material/tooltip';
-import {
-  ContractCreateDialogComponent
-} from '../../../../components/dialogs/contract/contract-create-dialog/contract-create-dialog.component';
-import {
-  ContractEditDialogComponent
-} from '../../../../components/dialogs/contract/contract-edit-dialog/contract-edit-dialog.component';
-import {ConfirmDialogComponent} from '../../../../components/dialogs/confirmdialog/confirm-dialog.component';
-import {ContractsService} from '../../../../services/api/contracts.service';
-import {Router} from '@angular/router';
+import { MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ContractCreateDialogComponent } from '../../../../components/dialogs/contract/contract-create-dialog/contract-create-dialog.component';
+import { ContractEditDialogComponent } from '../../../../components/dialogs/contract/contract-edit-dialog/contract-edit-dialog.component';
+import { ConfirmDialogComponent } from '../../../../components/dialogs/confirmdialog/confirm-dialog.component';
+import { ContractsService } from '../../../../services/api/contracts.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contracts',
@@ -43,7 +42,7 @@ import {Router} from '@angular/router';
     MatRow,
     MatFabButton,
     MatRowDef,
-    MatHeaderRowDef
+    MatHeaderRowDef,
   ],
   templateUrl: './contracts.component.html',
   styleUrl: './contracts.component.scss',
@@ -57,9 +56,8 @@ export class ContractsComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private router: Router,
-    private contractsService: ContractsService
-  )
-  {}
+    private contractsService: ContractsService,
+  ) {}
 
   ngOnInit() {
     this.loadContracts();
@@ -68,17 +66,17 @@ export class ContractsComponent implements OnInit {
   private loadContracts() {
     this.isLoading.set(true);
     this.contractsService.getAllContracts().subscribe({
-      next: res => {
+      next: (res) => {
         this.contracts.set(res);
         this.isLoading.set(false);
       },
-      error: () => this.isLoading.set(false)
+      error: () => this.isLoading.set(false),
     });
   }
 
   openCreateDialog() {
-    const ref = this.dialog.open(ContractCreateDialogComponent, {width: '480px'});
-    ref.afterClosed().subscribe(result => {
+    const ref = this.dialog.open(ContractCreateDialogComponent, { width: '480px' });
+    ref.afterClosed().subscribe((result) => {
       if (result) this.loadContracts();
     });
   }
@@ -86,9 +84,9 @@ export class ContractsComponent implements OnInit {
   openEditDialog(contract: ContractListDto) {
     const ref = this.dialog.open(ContractEditDialogComponent, {
       width: '480px',
-      data: {contract}
+      data: { contract },
     });
-    ref.afterClosed().subscribe(result => {
+    ref.afterClosed().subscribe((result) => {
       if (result) this.loadContracts();
     });
   }
@@ -99,19 +97,19 @@ export class ContractsComponent implements OnInit {
       data: {
         title: 'Szerződés törlése',
         message: `Biztosan törlöd a(z) ${contract.driverName} — ${contract.teamName} szerződést?`,
-        confirmText: 'Törlés'
-      }
+        confirmText: 'Törlés',
+      },
     });
 
-    ref.afterClosed().subscribe(confirmed => {
+    ref.afterClosed().subscribe((confirmed) => {
       if (!confirmed) return;
       this.contractsService.deleteContract(contract.id!).subscribe({
-        next: () => this.loadContracts()
+        next: () => this.loadContracts(),
       });
     });
   }
 
   protected goBack() {
-    this.router.navigate(["results"]);
+    this.router.navigate(['results']);
   }
 }

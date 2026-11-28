@@ -11,10 +11,10 @@ namespace Tests.Services.Units;
 
 public class PollServiceUnitTests
 {
-    private readonly Mock<IPollsRepository>        _pollRepo    = new();
-    private readonly Mock<IPollOptionsRepository>  _optionRepo  = new();
-    private readonly Mock<IPollVotesRepository>    _voteRepo    = new();
-    private readonly Mock<IAuthRepository>         _userRepo    = new();
+    private readonly Mock<IPollsRepository> _pollRepo = new();
+    private readonly Mock<IPollOptionsRepository> _optionRepo = new();
+    private readonly Mock<IPollVotesRepository> _voteRepo = new();
+    private readonly Mock<IAuthRepository> _userRepo = new();
 
     private readonly PollService _svc;
 
@@ -51,7 +51,7 @@ public class PollServiceUnitTests
     [Fact]
     public async Task GetPollById_ShouldReturnPollDto_WithCorrectFields()
     {
-        var poll    = CreatePoll();
+        var poll = CreatePoll();
         var option1 = CreateOption(poll.Id);
         var option2 = CreateOption(poll.Id);
 
@@ -73,9 +73,9 @@ public class PollServiceUnitTests
     [Fact]
     public async Task GetPollById_ShouldCalculateVotePercentage_Correctly()
     {
-        var poll   = CreatePoll();
-        var opt1   = CreateOption(poll.Id);
-        var opt2   = CreateOption(poll.Id);
+        var poll = CreatePoll();
+        var opt1 = CreateOption(poll.Id);
+        var opt2 = CreateOption(poll.Id);
 
         _pollRepo.Setup(r => r.GetByIdWithAuthor(poll.Id)).ReturnsAsync(poll);
         _optionRepo.Setup(r => r.GetByPollId(poll.Id)).ReturnsAsync(new List<PollOption> { opt1, opt2 });
@@ -94,10 +94,10 @@ public class PollServiceUnitTests
     [Fact]
     public async Task GetPollById_ShouldMarkUserChoice_WhenUserHasVoted()
     {
-        var poll   = CreatePoll();
+        var poll = CreatePoll();
         var option = CreateOption(poll.Id);
         var userId = Guid.NewGuid();
-        var vote   = new PollVote { UserId = userId, PollOptionId = option.Id, PollOption = option };
+        var vote = new PollVote { UserId = userId, PollOptionId = option.Id, PollOption = option };
 
         _pollRepo.Setup(r => r.GetByIdWithAuthor(poll.Id)).ReturnsAsync(poll);
         _optionRepo.Setup(r => r.GetByPollId(poll.Id)).ReturnsAsync(new List<PollOption> { option });
@@ -118,7 +118,7 @@ public class PollServiceUnitTests
     [Fact]
     public async Task GetActivePolls_ShouldReturnOnlyNotExpired()
     {
-        var activeFuture  = CreatePoll(expiresAt: DateTime.Now.AddDays(1));
+        var activeFuture = CreatePoll(expiresAt: DateTime.Now.AddDays(1));
         var activeExpired = CreatePoll(expiresAt: DateTime.Now.AddDays(-1));
 
         _pollRepo.Setup(r => r.GetActive(null))
@@ -151,7 +151,7 @@ public class PollServiceUnitTests
     public async Task GetPollsByCreatorId_ShouldReturnPolls_ForGivenCreator()
     {
         var creatorId = Guid.NewGuid();
-        var polls     = new List<Poll> { CreatePoll(authorId: creatorId), CreatePoll(authorId: creatorId) };
+        var polls = new List<Poll> { CreatePoll(authorId: creatorId), CreatePoll(authorId: creatorId) };
 
         _pollRepo.Setup(r => r.GetByCreatorId(creatorId, null)).ReturnsAsync(polls);
 
@@ -181,7 +181,7 @@ public class PollServiceUnitTests
     public async Task Delete_ShouldFail_WhenUserIsNotAuthor()
     {
         var authorId = Guid.NewGuid();
-        var poll     = CreatePoll(authorId: authorId);
+        var poll = CreatePoll(authorId: authorId);
         _pollRepo.Setup(r => r.GetPollById(poll.Id)).ReturnsAsync(poll);
 
         var result = await _svc.Delete(poll.Id, Guid.NewGuid()); // más user
@@ -194,7 +194,7 @@ public class PollServiceUnitTests
     public async Task Delete_ShouldSucceed_WhenUserIsAuthor()
     {
         var authorId = Guid.NewGuid();
-        var poll     = CreatePoll(authorId: authorId);
+        var poll = CreatePoll(authorId: authorId);
         _pollRepo.Setup(r => r.GetPollById(poll.Id)).ReturnsAsync(poll);
         _pollRepo.Setup(r => r.Delete(poll.Id)).Returns(Task.CompletedTask);
 
@@ -246,7 +246,7 @@ public class PollServiceUnitTests
     [Fact]
     public async Task Vote_ShouldFail_WhenOptionNotFound()
     {
-        var poll     = CreatePoll();
+        var poll = CreatePoll();
         var optionId = Guid.NewGuid();
         _pollRepo.Setup(r => r.GetPollById(poll.Id)).ReturnsAsync(poll);
         _optionRepo.Setup(r => r.GetPollOptionById(optionId)).ReturnsAsync((PollOption?)null);
@@ -260,7 +260,7 @@ public class PollServiceUnitTests
     [Fact]
     public async Task Vote_ShouldFail_WhenOptionBelongsToDifferentPoll()
     {
-        var poll   = CreatePoll();
+        var poll = CreatePoll();
         var option = CreateOption(Guid.NewGuid()); // más poll-hoz tartozik
 
         _pollRepo.Setup(r => r.GetPollById(poll.Id)).ReturnsAsync(poll);
@@ -276,7 +276,7 @@ public class PollServiceUnitTests
     public async Task Vote_ShouldFail_WhenUserAlreadyVoted()
     {
         var userId = Guid.NewGuid();
-        var poll   = CreatePoll();
+        var poll = CreatePoll();
         var option = CreateOption(poll.Id);
 
         _pollRepo.Setup(r => r.GetPollById(poll.Id)).ReturnsAsync(poll);
@@ -297,7 +297,7 @@ public class PollServiceUnitTests
     public async Task Vote_ShouldSucceed_AndCallVoteCreate()
     {
         var userId = Guid.NewGuid();
-        var poll   = CreatePoll();
+        var poll = CreatePoll();
         var option = CreateOption(poll.Id);
 
         _pollRepo.Setup(r => r.GetPollById(poll.Id)).ReturnsAsync(poll);
@@ -310,7 +310,7 @@ public class PollServiceUnitTests
 
         result.IsSuccess.Should().BeTrue();
         _voteRepo.Verify(r => r.Create(It.Is<PollVote>(v =>
-            v.UserId       == userId &&
+            v.UserId == userId &&
             v.PollOptionId == option.Id
         )), Times.Once);
     }
@@ -320,33 +320,33 @@ public class PollServiceUnitTests
     // ─────────────────────────────────────────────
 
     private static Poll CreatePoll(
-        Guid?    authorId  = null,
-        bool     isActive  = true,
+        Guid? authorId = null,
+        bool isActive = true,
         DateTime? expiresAt = null) => new()
-    {
-        Id          = Guid.NewGuid(),
-        AuthorId    = authorId ?? Guid.NewGuid(),
-        Title       = "Test Poll",
-        Tag         = "F1",
-        Description = "Test description",
-        CreatedAt   = DateTime.UtcNow,
-        ExpiresAt   = expiresAt ?? DateTime.Now.AddDays(7),
-        IsActive    = isActive,
-        Author      = new User
         {
-            Id           = authorId ?? Guid.NewGuid(),
-            Username     = "pollauthor",
-            FullName     = "Poll Author",
-            Email        = $"{Guid.NewGuid()}@test.com",
-            PasswordHash = "pwd",
-            Role         = "user"
-        }
-    };
+            Id = Guid.NewGuid(),
+            AuthorId = authorId ?? Guid.NewGuid(),
+            Title = "Test Poll",
+            Tag = "F1",
+            Description = "Test description",
+            CreatedAt = DateTime.UtcNow,
+            ExpiresAt = expiresAt ?? DateTime.Now.AddDays(7),
+            IsActive = isActive,
+            Author = new User
+            {
+                Id = authorId ?? Guid.NewGuid(),
+                Username = "pollauthor",
+                FullName = "Poll Author",
+                Email = $"{Guid.NewGuid()}@test.com",
+                PasswordHash = "pwd",
+                Role = "user"
+            }
+        };
 
     private static PollOption CreateOption(Guid pollId) => new()
     {
-        Id     = Guid.NewGuid(),
+        Id = Guid.NewGuid(),
         PollId = pollId,
-        Text   = "Option text"
+        Text = "Option text"
     };
 }

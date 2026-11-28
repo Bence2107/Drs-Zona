@@ -2,7 +2,7 @@ using Entities.Models.News;
 
 namespace Repositories.Interfaces.News;
 
-public interface ICommentsRepository 
+public interface ICommentsRepository
 {
     Task<Comment?> GetCommentById(Guid id);
     Task<List<Comment>> GetUsersComments(Guid userId);

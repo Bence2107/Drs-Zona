@@ -3,7 +3,7 @@ using Services.Types;
 
 namespace Services.Interfaces;
 
-public interface ISeriesService 
+public interface ISeriesService
 {
     Task<ResponseResult<SeriesDetailDto>> GetSeriesByName(string name);
     Task<ResponseResult<List<SeriesListDto>>> ListSeries();

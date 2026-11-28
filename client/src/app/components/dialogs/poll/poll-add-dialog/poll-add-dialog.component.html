@@ -1,12 +1,11 @@
 <h2 mat-dialog-title>Új szavazás létrehozása</h2>
 
 <mat-dialog-content [formGroup]="pollForm" class="dialog-container">
-
   <mat-form-field appearance="outline" class="narrow-field">
     <mat-label>Kategória / Széria</mat-label>
     <mat-select formControlName="tag">
       @for (s of series; track s.id) {
-        <mat-option [value]="s.shortName">{{s.shortName}}</mat-option>
+        <mat-option [value]="s.shortName">{{ s.shortName }}</mat-option>
       }
     </mat-select>
     @if (pollForm.get('tag')?.invalid && pollForm.get('tag')?.touched) {
@@ -19,11 +18,13 @@
 
   <mat-form-field appearance="outline" class="narrow-field">
     <mat-label>Cím</mat-label>
-    <input matInput formControlName="title" placeholder="Szavazás címe">
+    <input matInput formControlName="title" placeholder="Szavazás címe" />
     @if (pollForm.get('title')?.hasError('required') && pollForm.get('title')?.touched) {
       <mat-error>A cím megadása kötelező</mat-error>
     }
-    @if (pollForm.get('title')?.hasError('minlength') || pollForm.get('title')?.hasError('maxlength')) {
+    @if (
+      pollForm.get('title')?.hasError('minlength') || pollForm.get('title')?.hasError('maxlength')
+    ) {
       <mat-error>A cím 10 és 100 karakter között kell legyen</mat-error>
     }
     @if (pollForm.get('title')?.hasError('serverError')) {
@@ -33,11 +34,21 @@
 
   <mat-form-field appearance="outline" class="narrow-field">
     <mat-label>Leírás</mat-label>
-    <textarea matInput formControlName="description" rows="3" placeholder="Miről szól a szavazás?"></textarea>
-    @if (pollForm.get('description')?.hasError('required') && pollForm.get('description')?.touched) {
+    <textarea
+      matInput
+      formControlName="description"
+      rows="3"
+      placeholder="Miről szól a szavazás?"
+    ></textarea>
+    @if (
+      pollForm.get('description')?.hasError('required') && pollForm.get('description')?.touched
+    ) {
       <mat-error>A leírás megadása kötelező</mat-error>
     }
-    @if (pollForm.get('description')?.hasError('minlength') || pollForm.get('description')?.hasError('maxlength')) {
+    @if (
+      pollForm.get('description')?.hasError('minlength') ||
+      pollForm.get('description')?.hasError('maxlength')
+    ) {
       <mat-error>A leírás 10 és 500 karakter között kell legyen</mat-error>
     }
     @if (pollForm.get('description')?.hasError('serverError')) {
@@ -47,7 +58,14 @@
 
   <mat-form-field appearance="outline" class="narrow-field">
     <mat-label>Lejárat dátuma</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="expiresAt" [min]="minDate" readonly (click)="picker.open()">
+    <input
+      matInput
+      [matDatepicker]="picker"
+      formControlName="expiresAt"
+      [min]="minDate"
+      readonly
+      (click)="picker.open()"
+    />
     <mat-hint>ÉÉÉÉ.HH.NN</mat-hint>
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
@@ -61,8 +79,14 @@
 
   <div formArrayName="options" class="options-box">
     <div class="header">
-      <h3>Válaszlehetőségek ({{options.length}}/10)</h3>
-      <button mat-icon-button color="primary" type="button" (click)="addOption()" [disabled]="options.length >= 10">
+      <h3>Válaszlehetőségek ({{ options.length }}/10)</h3>
+      <button
+        mat-icon-button
+        color="primary"
+        type="button"
+        (click)="addOption()"
+        [disabled]="options.length >= 10"
+      >
         <mat-icon>add_circle</mat-icon>
       </button>
     </div>
@@ -74,8 +98,8 @@
     @for (_ of options.controls; track $index) {
       <div class="option-row">
         <mat-form-field appearance="outline">
-          <mat-label>{{$index + 1}}. opció</mat-label>
-          <input matInput [formControlName]="$index" (input)="optionsError = ''">
+          <mat-label>{{ $index + 1 }}. opció</mat-label>
+          <input matInput [formControlName]="$index" (input)="optionsError = ''" />
           @if (options.at($index).hasError('required') && options.at($index).touched) {
             <mat-error>Az opció nem lehet üres</mat-error>
           }
@@ -83,16 +107,23 @@
             <mat-error>Az opció minimum 2 karakter</mat-error>
           }
         </mat-form-field>
-        <button mat-icon-button color="warn" type="button" (click)="removeOption($index)" [disabled]="options.length <= 2">
+        <button
+          mat-icon-button
+          color="warn"
+          type="button"
+          (click)="removeOption($index)"
+          [disabled]="options.length <= 2"
+        >
           <mat-icon>delete</mat-icon>
         </button>
       </div>
     }
   </div>
-
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>MÉGSE</button>
-  <button mat-flat-button color="primary" (click)="submit()" [disabled]="pollForm.invalid">LÉTREHOZÁS</button>
+  <button mat-flat-button color="primary" (click)="submit()" [disabled]="pollForm.invalid">
+    LÉTREHOZÁS
+  </button>
 </mat-dialog-actions>

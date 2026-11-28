@@ -8,21 +8,21 @@ using Services.Types;
 
 namespace Services.Implementations;
 
-public class GrandPrixService (
+public class GrandPrixService(
     ICircuitsRepository circuitsRepo,
     IGrandsPrixRepository grandsPrixRepo,
     ISeriesRepository seriesRepo,
-    ICircuitImagesService  circuitImagesService
-) : IGrandPrixService 
+    ICircuitImagesService circuitImagesService
+) : IGrandPrixService
 {
     public async Task<ResponseResult<GrandPrixDetailDto>> GetGrandPrixById(Guid id)
     {
         var grandPrix = await grandsPrixRepo.GetWithAll(id);
         if (grandPrix == null) return ResponseResult<GrandPrixDetailDto>.Failure("Grand Prix not found");
-        
+
         var circuit = grandPrix.Circuit;
         if (circuit == null) return ResponseResult<GrandPrixDetailDto>.Failure("Circuit is not found");
-        
+
         var series = grandPrix.Series;
         if (series == null) return ResponseResult<GrandPrixDetailDto>.Failure("Series is not found");
 
@@ -48,7 +48,7 @@ public class GrandPrixService (
             EndTime: grandPrix.EndTime,
             RaceDistance: grandPrix.RaceDistance,
             LapsCompleted: grandPrix.LapsCompleted,
-            CircuitDetail: circuitDto 
+            CircuitDetail: circuitDto
         );
 
         return ResponseResult<GrandPrixDetailDto>.Success(detailDto);
@@ -57,7 +57,7 @@ public class GrandPrixService (
     public async Task<ResponseResult<List<CircuitListDto>>> GetAllCircuits()
     {
         var circuits = await circuitsRepo.GetAllCircuits();
-            
+
         var dtoS = circuits.Select(c => new CircuitListDto(
             c.Id,
             c.Location,
@@ -87,16 +87,16 @@ public class GrandPrixService (
         {
             return ResponseResult<bool>.Failure(nameof(grandPrixCreateDto.CircuitId), "The specified circuit does not exist.");
         }
-        
+
         if (await seriesRepo.GetSeriesById(grandPrixCreateDto.SeriesId) == null)
         {
             return ResponseResult<bool>.Failure(nameof(grandPrixCreateDto.CircuitId), "The specified series does not exist.");
         }
-        
+
         var grandPrix = new GrandPrix
         {
             CircuitId = grandPrixCreateDto.CircuitId,
-            SeriesId = grandPrixCreateDto.SeriesId, 
+            SeriesId = grandPrixCreateDto.SeriesId,
             Name = grandPrixCreateDto.Name,
             ShortName = grandPrixCreateDto.ShortName,
             RoundNumber = grandPrixCreateDto.RoundNumber,

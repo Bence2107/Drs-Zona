@@ -14,10 +14,10 @@ namespace Tests.Services.Units;
 public class GrandPrixServiceUnitTests
 {
 
-    private readonly Mock<ICircuitsRepository>    _circuitsRepo         = new();
-    private readonly Mock<IGrandsPrixRepository>  _grandsPrixRepo       = new();
-    private readonly Mock<ISeriesRepository>      _seriesRepo           = new();
-    private readonly Mock<ICircuitImagesService>  _circuitImagesService = new();
+    private readonly Mock<ICircuitsRepository> _circuitsRepo = new();
+    private readonly Mock<IGrandsPrixRepository> _grandsPrixRepo = new();
+    private readonly Mock<ISeriesRepository> _seriesRepo = new();
+    private readonly Mock<ICircuitImagesService> _circuitImagesService = new();
 
     private readonly GrandPrixService _svc;
 
@@ -205,7 +205,7 @@ public class GrandPrixServiceUnitTests
     public async Task Create_ShouldFail_WhenSeriesNotFound()
     {
         var circuitId = Guid.NewGuid();
-        var seriesId  = Guid.NewGuid();
+        var seriesId = Guid.NewGuid();
 
         _circuitsRepo.Setup(r => r.GetCircuitById(circuitId)).ReturnsAsync(CreateCircuit());
         _seriesRepo.Setup(r => r.GetSeriesById(seriesId)).ReturnsAsync((Series?)null);
@@ -222,7 +222,7 @@ public class GrandPrixServiceUnitTests
     public async Task Create_ShouldSucceed_AndCallRepoCreate()
     {
         var circuitId = Guid.NewGuid();
-        var seriesId  = Guid.NewGuid();
+        var seriesId = Guid.NewGuid();
 
         _circuitsRepo.Setup(r => r.GetCircuitById(circuitId)).ReturnsAsync(CreateCircuit());
         _seriesRepo.Setup(r => r.GetSeriesById(seriesId)).ReturnsAsync(CreateSeries());
@@ -235,8 +235,8 @@ public class GrandPrixServiceUnitTests
         result.IsSuccess.Should().BeTrue();
         _grandsPrixRepo.Verify(r => r.Create(It.Is<GrandPrix>(gp =>
             gp.CircuitId == circuitId &&
-            gp.SeriesId  == seriesId  &&
-            gp.Name      == dto.Name
+            gp.SeriesId == seriesId &&
+            gp.Name == dto.Name
         )), Times.Once);
     }
 
@@ -266,15 +266,15 @@ public class GrandPrixServiceUnitTests
         _grandsPrixRepo.Setup(r => r.Update(It.IsAny<GrandPrix>())).Returns(Task.CompletedTask);
 
         var newStart = DateTime.Now.AddHours(1);
-        var newEnd   = DateTime.Now.AddHours(3);
-        var dto      = new GrandPrixUpdateDto(gp.Id, newStart, newEnd, 60);
+        var newEnd = DateTime.Now.AddHours(3);
+        var dto = new GrandPrixUpdateDto(gp.Id, newStart, newEnd, 60);
 
         var result = await _svc.Update(dto);
 
         result.IsSuccess.Should().BeTrue();
         _grandsPrixRepo.Verify(r => r.Update(It.Is<GrandPrix>(g =>
-            g.StartTime    == newStart &&
-            g.EndTime      == newEnd   &&
+            g.StartTime == newStart &&
+            g.EndTime == newEnd &&
             g.LapsCompleted == 60
         )), Times.Once);
     }
@@ -306,11 +306,11 @@ public class GrandPrixServiceUnitTests
 
     private static Circuit CreateCircuit(string name = "Monza", string location = "Italy") => new()
     {
-        Id         = Guid.NewGuid(),
-        Name       = name,
-        Location   = location,
-        Length     = 5.793,
-        Type       = "Permanent",
+        Id = Guid.NewGuid(),
+        Name = name,
+        Location = location,
+        Length = 5.793,
+        Type = "Permanent",
         FastestLap = "1:21.046"
     };
 
@@ -327,29 +327,29 @@ public class GrandPrixServiceUnitTests
     };
 
     private static GrandPrix CreateGrandPrix(
-        Guid?  seriesId   = null,
-        int    seasonYear = 2024,
-        int    round      = 1) => new()
-    {
-        Id            = Guid.NewGuid(),
-        SeriesId      = seriesId ?? Guid.NewGuid(),
-        Name          = "Italian Grand Prix",
-        ShortName     = "ITA",
-        RoundNumber   = round,
-        SeasonYear    = seasonYear,
-        StartTime     = DateTime.UtcNow,
-        EndTime       = DateTime.UtcNow.AddHours(2),
-        RaceDistance  = 306,
-        LapsCompleted = 53,
-        Circuit       = CreateCircuit(),
-        Series        = CreateSeries()
-    };
+        Guid? seriesId = null,
+        int seasonYear = 2024,
+        int round = 1) => new()
+        {
+            Id = Guid.NewGuid(),
+            SeriesId = seriesId ?? Guid.NewGuid(),
+            Name = "Italian Grand Prix",
+            ShortName = "ITA",
+            RoundNumber = round,
+            SeasonYear = seasonYear,
+            StartTime = DateTime.UtcNow,
+            EndTime = DateTime.UtcNow.AddHours(2),
+            RaceDistance = 306,
+            LapsCompleted = 53,
+            Circuit = CreateCircuit(),
+            Series = CreateSeries()
+        };
 
     private static GrandPrixCreateDto CreateGrandPrixCreateDto(
-        Guid?  circuitId = null,
-        Guid?  seriesId  = null) => new(
+        Guid? circuitId = null,
+        Guid? seriesId = null) => new(
         circuitId ?? Guid.NewGuid(),
-        seriesId  ?? Guid.NewGuid(),
+        seriesId ?? Guid.NewGuid(),
         "Italian Grand Prix",
         "ITA",
         1,

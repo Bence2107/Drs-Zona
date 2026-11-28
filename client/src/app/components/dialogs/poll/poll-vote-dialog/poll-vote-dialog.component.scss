@@ -127,7 +127,9 @@
 
     &:hover {
       color: #f8274f;
-      mat-icon { color: #f8274f; }
+      mat-icon {
+        color: #f8274f;
+      }
     }
   }
 }

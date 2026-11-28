@@ -60,7 +60,8 @@ public record PollDto(
     bool IsExpired,
     int TotalVotes,
     Guid? UserVoteOptionId
-){
+)
+{
     public bool HasVoted => UserVoteOptionId.HasValue;
 }
 

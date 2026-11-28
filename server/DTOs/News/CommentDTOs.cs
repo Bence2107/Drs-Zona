@@ -3,7 +3,7 @@
 namespace DTOs.News;
 
 public record CommentCreateDto(
-    [Required(ErrorMessage = "A cikk azonosítója kötelező")] 
+    [Required(ErrorMessage = "A cikk azonosítója kötelező")]
     Guid ArticleId,
     Guid? ReplyToCommentId,
     [Required(ErrorMessage = "A komment tartalma nem lehet üres")]
@@ -30,9 +30,9 @@ public record CommentContentUpdateDto(
 
 public record CommentUpdateVoteDto(
     [Required(ErrorMessage = "Az felhasználó azonosítója kötelező")]
-    Guid UserId, 
+    Guid UserId,
     [Required(ErrorMessage = "A komment azonosítója kötelező")]
-    Guid CommentId, 
+    Guid CommentId,
     [Required(ErrorMessage = "A szavazat megadása kötelező")]
     bool IsUpvote
 );
@@ -40,12 +40,12 @@ public record CommentUpdateVoteDto(
 public record CommentDetailDto(
     Guid Id,
     Guid UserId,
-    Guid ArticleId, 
+    Guid ArticleId,
     string ArticleSlug,
     Guid? ReplyToCommentId,
     string Username,
     string? UserAvatarUrl,
-    int ReplyCount, 
+    int ReplyCount,
     string Content,
     int UpVotes,
     int DownVotes,

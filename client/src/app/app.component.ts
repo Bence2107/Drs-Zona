@@ -1,31 +1,46 @@
-import {Component, OnInit} from '@angular/core';
-import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
-import {HeaderComponent} from './components/header/header.component';
-import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
-import {MatIcon} from '@angular/material/icon';
-import {BreakpointObserver } from '@angular/cdk/layout';
+import { Component, OnInit } from '@angular/core';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { HeaderComponent } from './components/header/header.component';
+import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
+import { MatIcon } from '@angular/material/icon';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
-import {MatDivider} from '@angular/material/list';
+import { MatDivider } from '@angular/material/list';
 import {
   MatAccordion,
   MatExpansionPanel,
   MatExpansionPanelHeader,
-  MatExpansionPanelTitle
+  MatExpansionPanelTitle,
 } from '@angular/material/expansion';
-import {MatIconButton} from '@angular/material/button';
-import {AuthService} from './services/api/auth.service';
-import {CustomSnackbarComponent} from './components/custom-snackbar/custom-snackbar.component';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {SeriesListDto} from './api/models/series-list-dto';
-import {SeriesService} from './services/api/series.service';
+import { MatIconButton } from '@angular/material/button';
+import { AuthService } from './services/api/auth.service';
+import { CustomSnackbarComponent } from './components/custom-snackbar/custom-snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SeriesListDto } from './api/models/series-list-dto';
+import { SeriesService } from './services/api/series.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, MatSidenavContainer, MatSidenav, RouterLink, RouterLinkActive, MatIcon, MatSidenavContent, MatDivider, MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatIconButton],
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    MatSidenavContainer,
+    MatSidenav,
+    RouterLink,
+    RouterLinkActive,
+    MatIcon,
+    MatSidenavContent,
+    MatDivider,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    MatIconButton,
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'drs-zona';
   isSmallScreen = false;
   isMobileOverlay = false;
@@ -36,25 +51,23 @@ export class AppComponent implements OnInit{
     private breakpointObserver: BreakpointObserver,
     private snackBar: MatSnackBar,
     private authService: AuthService,
-    private seriesService: SeriesService) {
-     this.authService.loadProfile();
+    private seriesService: SeriesService,
+  ) {
+    this.authService.loadProfile();
   }
 
   ngOnInit() {
-    this.breakpointObserver.observe(['(max-width: 1280px)'])
-      .subscribe(result => {
-        this.isSmallScreen = result.matches;
-      });
+    this.breakpointObserver.observe(['(max-width: 1280px)']).subscribe((result) => {
+      this.isSmallScreen = result.matches;
+    });
 
-    this.breakpointObserver.observe(['(max-width: 990px)'])
-      .subscribe(result => {
-        this.isMobileOverlay = result.matches;
-      });
+    this.breakpointObserver.observe(['(max-width: 990px)']).subscribe((result) => {
+      this.isMobileOverlay = result.matches;
+    });
 
-    this.seriesService.getSeriesList().subscribe(data => {
+    this.seriesService.getSeriesList().subscribe((data) => {
       this.seriesList = data;
-    })
-
+    });
   }
 
   get username(): string | null {

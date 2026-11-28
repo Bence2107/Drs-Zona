@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {ApiConfiguration} from '../../api/api-configuration';
-import {Observable} from 'rxjs';
-import {SeriesListDto} from '../../api/models/series-list-dto';
-import {apiSeriesGetAllSeriesGet$Json, apiSeriesNameNameGet$Json} from '../../api/functions';
-import {map} from 'rxjs/operators';
-import {SeriesDetailDto} from '../../api/models/series-detail-dto';
+import { HttpClient } from '@angular/common/http';
+import { ApiConfiguration } from '../../api/api-configuration';
+import { Observable } from 'rxjs';
+import { SeriesListDto } from '../../api/models/series-list-dto';
+import { apiSeriesGetAllSeriesGet$Json, apiSeriesNameNameGet$Json } from '../../api/functions';
+import { map } from 'rxjs/operators';
+import { SeriesDetailDto } from '../../api/models/series-detail-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -13,22 +13,22 @@ import {SeriesDetailDto} from '../../api/models/series-detail-dto';
 export class SeriesService {
   constructor(
     protected http: HttpClient,
-    protected apiConfig: ApiConfiguration
-  ) { }
+    protected apiConfig: ApiConfiguration,
+  ) {}
 
   getByName(name: string): Observable<SeriesDetailDto> {
-    return apiSeriesNameNameGet$Json(this.http, this.apiConfig.rootUrl, {name: name}).pipe(
-      map(response => {
+    return apiSeriesNameNameGet$Json(this.http, this.apiConfig.rootUrl, { name: name }).pipe(
+      map((response) => {
         return response.body as SeriesDetailDto;
-      })
-    )
+      }),
+    );
   }
 
   getSeriesList(): Observable<SeriesListDto[]> {
     return apiSeriesGetAllSeriesGet$Json(this.http, this.apiConfig.rootUrl).pipe(
-      map(response => {
+      map((response) => {
         return response.body as SeriesListDto[];
-      })
-    )
+      }),
+    );
   }
 }

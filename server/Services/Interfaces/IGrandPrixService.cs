@@ -3,7 +3,7 @@ using Services.Types;
 
 namespace Services.Interfaces;
 
-public interface IGrandPrixService 
+public interface IGrandPrixService
 {
     Task<ResponseResult<GrandPrixDetailDto>> GetGrandPrixById(Guid id);
     Task<ResponseResult<List<CircuitListDto>>> GetAllCircuits();

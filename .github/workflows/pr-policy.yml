@@ -1,0 +1,45 @@
+name: PR policy
+
+# Separate from CI: "edited" re-runs this check when the title changes, without re-running tests and builds
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+concurrency:
+  group: pr-policy-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+# Only reads the event payload, so no repository access is needed
+permissions: {}
+
+jobs:
+  policy:
+    name: Branch name and PR title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch name
+        env:
+          # Passed via env, never interpolated into the script, so a crafted name cannot inject commands
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          pattern='^(feature|fix|chore|docs|style|refactor|perf|test|build|ci)/drs-[0-9]+-[a-z0-9]+(-[a-z0-9]+)*$'
+          if [[ "$BRANCH" =~ $pattern ]]; then
+            echo "Branch name OK: $BRANCH"
+          else
+            echo "::error title=Invalid branch name::'$BRANCH' does not match <type>/drs-<number>-<short-name>, e.g. feature/drs-42-poll-results. See CONTRIBUTING.md."
+            exit 1
+          fi
+
+      - name: Check PR title
+        # Also runs when the branch check failed, so both problems are reported at once
+        if: ${{ !cancelled() }}
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          pattern='^(feat|fix|chore|docs|style|refactor|perf|test|build|ci|revert)(\([a-z0-9-]+\))?!?: [^ ].* \(DRS-[0-9]+\)$'
+          if [[ "$TITLE" =~ $pattern ]]; then
+            echo "PR title OK: $TITLE"
+          else
+            echo "::error title=Invalid PR title::'$TITLE' does not match <type>(<scope>): <subject> (DRS-<number>), e.g. feat(polls): Show live results (DRS-42). See CONTRIBUTING.md."
+            exit 1
+          fi

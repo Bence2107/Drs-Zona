@@ -104,8 +104,12 @@
   border-bottom: 1px solid var(--border-color);
   transition: background 0.15s;
 
-  &:last-child { border-bottom: none; }
-  &:hover { background: var(--hover-bg); }
+  &:last-child {
+    border-bottom: none;
+  }
+  &:hover {
+    background: var(--hover-bg);
+  }
 
   .participant-icon {
     font-size: 18px;
@@ -169,7 +173,12 @@
   gap: 12px;
   color: var(--text-secondary);
 
-  mat-icon { font-size: 48px; width: 48px; height: 48px; opacity: 0.4; }
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.4;
+  }
 }
 
 .fab-add {
@@ -180,12 +189,20 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0.3; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0.3;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 600px) {
-  .series-section { display: none; }
+  .series-section {
+    display: none;
+  }
 
   .series-select {
     display: flex;

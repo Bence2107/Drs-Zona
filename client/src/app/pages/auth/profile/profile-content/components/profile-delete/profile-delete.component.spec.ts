@@ -8,9 +8,8 @@ describe('ProfileDeleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProfileDeleteComponent]
-    })
-    .compileComponents();
+      imports: [ProfileDeleteComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ProfileDeleteComponent);
     component = fixture.componentInstance;

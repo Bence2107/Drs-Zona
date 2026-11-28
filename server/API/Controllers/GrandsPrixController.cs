@@ -7,7 +7,7 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class GrandPrixController (IGrandPrixService grandPrixService): ControllerBase 
+public class GrandPrixController(IGrandPrixService grandPrixService) : ControllerBase
 {
     [HttpGet("get/{grandPrixId:guid}")]
     public async Task<ActionResult<GrandPrixDetailDto>> GetGrandPrixById([FromRoute] Guid grandPrixId)
@@ -17,11 +17,11 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
 
@@ -34,14 +34,14 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
-    
+
     [HttpGet("getSeasonGrandsPrix/{seriesId:guid}/{year:int}")]
     public async Task<ActionResult<GrandPrixDetailDto>> GetSeasonGrandsPrix([FromRoute] Guid seriesId, [FromRoute] int year)
     {
@@ -50,17 +50,17 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
-    
+
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("create")]
-    public async Task<ActionResult> Create([FromBody]GrandPrixCreateDto dto)
+    public async Task<ActionResult> Create([FromBody] GrandPrixCreateDto dto)
     {
         var result = await grandPrixService.Create(dto);
 
@@ -68,28 +68,28 @@ public class GrandPrixController (IGrandPrixService grandPrixService): Controlle
         {
             return BadRequest(new
             {
-                result.ErrorField, 
+                result.ErrorField,
                 result.Message
             });
         }
 
         return Ok(result.Value);
     }
-    
+
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("update")]
-    public async Task<ActionResult> Update([FromBody]GrandPrixUpdateDto dto)
+    public async Task<ActionResult> Update([FromBody] GrandPrixUpdateDto dto)
     {
         var result = await grandPrixService.Update(dto);
         if (!result.IsSuccess)
         {
             return BadRequest(new
             {
-                result.ErrorField, 
+                result.ErrorField,
                 result.Message
             });
         }
-        
+
         return Ok(result.Value);
     }
 }

@@ -2,7 +2,7 @@ using Entities.Models.RaceTracks;
 
 namespace Repositories.Interfaces.RaceTracks;
 
-public interface IGrandsPrixRepository 
+public interface IGrandsPrixRepository
 {
     Task<GrandPrix?> GetGrandPrixById(Guid id);
     Task<GrandPrix?> GetWithAll(Guid id);
@@ -10,5 +10,5 @@ public interface IGrandsPrixRepository
     Task Create(GrandPrix grandPrix);
     Task Update(GrandPrix grandPrix);
     Task Delete(Guid id);
-    Task<bool> CheckIfIdExists(Guid id);   
+    Task<bool> CheckIfIdExists(Guid id);
 }

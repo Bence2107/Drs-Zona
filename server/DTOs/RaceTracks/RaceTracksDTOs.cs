@@ -20,30 +20,30 @@ public record CircuitListDto(
 );
 
 public record GrandPrixCreateDto(
-    [Required(ErrorMessage = "A pálya kiválasztása kötelező")] 
+    [Required(ErrorMessage = "A pálya kiválasztása kötelező")]
     Guid CircuitId,
-    [Required(ErrorMessage = "A sorozat kiválasztása kötelező")] 
+    [Required(ErrorMessage = "A sorozat kiválasztása kötelező")]
     Guid SeriesId,
-    [Required(ErrorMessage = "A név megadása kötelező")] 
-    [StringLength(100, ErrorMessage = "A név maximum 100 karakter lehet")] 
+    [Required(ErrorMessage = "A név megadása kötelező")]
+    [StringLength(100, ErrorMessage = "A név maximum 100 karakter lehet")]
     string Name,
-    [Required(ErrorMessage = "A rövidebb név megadása kötelező")] 
-    [StringLength(100, ErrorMessage = "A név maximum 100 karakter lehet")] 
+    [Required(ErrorMessage = "A rövidebb név megadása kötelező")]
+    [StringLength(100, ErrorMessage = "A név maximum 100 karakter lehet")]
     string ShortName,
-    [Required(ErrorMessage = "A forduló száma kötelező")] 
-    [Range(1, 30, ErrorMessage = "A forduló 1 és 30 között kell legyen")] 
+    [Required(ErrorMessage = "A forduló száma kötelező")]
+    [Range(1, 30, ErrorMessage = "A forduló 1 és 30 között kell legyen")]
     int RoundNumber,
-    [Required(ErrorMessage = "A szezon éve kötelező")] 
-    [Range(1906, 2100, ErrorMessage = "Érvénytelen évszám")] 
+    [Required(ErrorMessage = "A szezon éve kötelező")]
+    [Range(1906, 2100, ErrorMessage = "Érvénytelen évszám")]
     int SeasonYear,
-    [Required(ErrorMessage = "A kezdési idő kötelező")] 
+    [Required(ErrorMessage = "A kezdési idő kötelező")]
     DateTime StartTime,
-    [Required(ErrorMessage = "A befejezési idő kötelező")] 
+    [Required(ErrorMessage = "A befejezési idő kötelező")]
     DateTime EndTime,
-    [Required(ErrorMessage = "A versenytáv kötelező")] 
-    [Range(1, 1000, ErrorMessage = "A versenytáv 1 és 1000 km között lehet")] 
+    [Required(ErrorMessage = "A versenytáv kötelező")]
+    [Range(1, 1000, ErrorMessage = "A versenytáv 1 és 1000 km között lehet")]
     int RaceDistance,
-    [Range(0, 100, ErrorMessage = "A körök száma 0 és 100 között lehet")] 
+    [Range(0, 100, ErrorMessage = "A körök száma 0 és 100 között lehet")]
     int LapsCompleted
 ) : IValidatableObject
 {
@@ -61,7 +61,7 @@ public record GrandPrixUpdateDto(
     DateTime StartTime,
     [Required(ErrorMessage = "A befejezési idő kötelező")]
     DateTime EndTime,
-    [Range(0, 100, ErrorMessage = "A körök száma 0 és 100 között lehet")] 
+    [Range(0, 100, ErrorMessage = "A körök száma 0 és 100 között lehet")]
     int LapsCompleted
 ) : IValidatableObject
 {

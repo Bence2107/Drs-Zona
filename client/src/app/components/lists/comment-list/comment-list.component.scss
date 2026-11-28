@@ -23,7 +23,6 @@
   }
 }
 
-
 .offline-state-container {
   display: flex;
   flex-direction: column;
@@ -203,8 +202,14 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0.3; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0.3;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 478px) {

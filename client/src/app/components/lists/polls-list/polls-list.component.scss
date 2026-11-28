@@ -24,8 +24,12 @@
   .nav-btn {
     position: absolute;
     z-index: 10;
-    &.prev { left: -20px; }
-    &.next { right: -20px; }
+    &.prev {
+      left: -20px;
+    }
+    &.next {
+      right: -20px;
+    }
   }
 }
 

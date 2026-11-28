@@ -16,7 +16,7 @@ public class AuthServiceUnitTests
 {
     private readonly ITestOutputHelper _output;
 
-    private readonly Mock<IAuthRepository>   _authRepo         = new();
+    private readonly Mock<IAuthRepository> _authRepo = new();
     private readonly Mock<IUserImageService> _userImageService = new();
 
     private readonly AuthService _svc;
@@ -31,9 +31,9 @@ public class AuthServiceUnitTests
 
         var jwtSettings = Options.Create(new JwtSettings
         {
-            Secret            = "test-secret-key-minimum-16-chars!",
-            Issuer            = "test-issuer",
-            Audience          = "test-audience",
+            Secret = "test-secret-key-minimum-16-chars!",
+            Issuer = "test-issuer",
+            Audience = "test-audience",
             ExpirationMinutes = 60
         });
 
@@ -62,7 +62,7 @@ public class AuthServiceUnitTests
         _authRepo.Setup(r => r.UserExistsByUsername(It.IsAny<string>())).ReturnsAsync(false);
         _authRepo.Setup(r => r.UserExistsByEmail("taken@test.com")).ReturnsAsync(true);
 
-        var result = await _svc.Register(new RegisterRequest("newuser", "Test User","taken@test.com", "Password1!"));
+        var result = await _svc.Register(new RegisterRequest("newuser", "Test User", "taken@test.com", "Password1!"));
 
         result.IsSuccess.Should().BeFalse();
         result.ErrorField.Should().Be("email");
@@ -213,7 +213,7 @@ public class AuthServiceUnitTests
         result.IsSuccess.Should().BeTrue();
         _authRepo.Verify(r => r.Update(It.Is<User>(u =>
             u.Username == "newname" &&
-            u.Email    == "new@test.com"
+            u.Email == "new@test.com"
         )), Times.Once);
     }
 
@@ -370,14 +370,14 @@ public class AuthServiceUnitTests
 
     private static User CreateUser(string password = "DefaultPass1!") => new()
     {
-        Id           = Guid.NewGuid(),
-        Username     = "testuser",
-        FullName     = "Teszt Elek",
-        Email        = "test@test.com",
+        Id = Guid.NewGuid(),
+        Username = "testuser",
+        FullName = "Teszt Elek",
+        Email = "test@test.com",
         PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
-        Role         = "user",
-        Created      = DateTime.UtcNow,
-        HasAvatar    = false,
-        IsLoggedIn   = false
+        Role = "user",
+        Created = DateTime.UtcNow,
+        HasAvatar = false,
+        IsLoggedIn = false
     };
 }

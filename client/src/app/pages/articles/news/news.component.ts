@@ -1,14 +1,10 @@
 import { Component } from '@angular/core';
-import {NewsListComponent} from './components/news-list/news-list.component';
+import { NewsListComponent } from './components/news-list/news-list.component';
 
 @Component({
   selector: 'app-news',
-  imports: [
-    NewsListComponent
-  ],
+  imports: [NewsListComponent],
   templateUrl: './news.component.html',
-  styleUrl: './news.component.scss'
+  styleUrl: './news.component.scss',
 })
-export class NewsComponent {
-
-}
+export class NewsComponent {}

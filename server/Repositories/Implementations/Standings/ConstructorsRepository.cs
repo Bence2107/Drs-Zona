@@ -5,19 +5,19 @@ using Repositories.Interfaces.Standings;
 
 namespace Repositories.Implementations.Standings;
 
-public class ConstructorsRepository(EfContext context) : IConstructorsRepository 
+public class ConstructorsRepository(EfContext context) : IConstructorsRepository
 {
     private readonly DbSet<Constructor> _constructors = context.Constructors;
-    
+
     public async Task<Constructor?> GetConstructorById(Guid id) => await _constructors
         .FirstOrDefaultAsync(c => c.Id == id);
 
     public async Task<List<Constructor>> GetAllConstructor() => await _constructors.ToListAsync();
-    
+
     public async Task<Constructor?> GetByIdWithBrand(Guid id) => await _constructors
         .Include(c => c.Brand)
         .FirstOrDefaultAsync(c => c.Id == id);
-    
+
     public async Task<Constructor?> GetByName(string name) => await _constructors.FirstOrDefaultAsync(c => c.Name == name);
 
     public async Task Create(Constructor constructor)

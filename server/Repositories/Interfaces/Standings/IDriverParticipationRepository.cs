@@ -2,7 +2,7 @@ using Entities.Models.Standings;
 
 namespace Repositories.Interfaces.Standings;
 
-public interface IDriverParticipationRepository 
+public interface IDriverParticipationRepository
 {
     Task<DriverParticipation?> GetByDriverAndChampionship(Guid driverId, Guid championshipId);
     Task<List<DriverParticipation>> GetByChampionshipId(Guid champId);

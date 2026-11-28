@@ -7,25 +7,25 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DriversController(IDriverService driverService): ControllerBase 
+public class DriversController(IDriverService driverService) : ControllerBase
 {
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpGet("get/{id:guid}")]
-    public async Task<ActionResult<DriverDetailDto>> Get([FromRoute]Guid id)
+    public async Task<ActionResult<DriverDetailDto>> Get([FromRoute] Guid id)
     {
         var response = await driverService.GetDriverById(id);
         if (!response.IsSuccess)
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
-    
+
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpGet("getAllDrivers")]
     public async Task<ActionResult<List<DriverListDto>>> GetAllDrivers()
@@ -46,28 +46,28 @@ public class DriversController(IDriverService driverService): ControllerBase
         {
             return BadRequest(new
             {
-                result.ErrorField, 
+                result.ErrorField,
                 result.Message
             });
         }
 
         return Ok(result.Value);
     }
-    
+
     [Authorize(Policy = "EditorOrAdmin")]
     [HttpPost("update")]
-    public async Task<ActionResult> Update([FromBody]DriverUpdateDto dto)
+    public async Task<ActionResult> Update([FromBody] DriverUpdateDto dto)
     {
         var result = await driverService.Update(dto);
         if (!result.IsSuccess)
         {
             return BadRequest(new
             {
-                result.ErrorField, 
+                result.ErrorField,
                 result.Message
             });
         }
-        
+
         return Ok(result.Value);
     }
 }

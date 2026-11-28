@@ -3,7 +3,9 @@
   "version": 1,
   "newProjectRoot": "projects",
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "packageManager": "pnpm",
+    "schematicCollections": ["angular-eslint"]
   },
   "projects": {
     "drs-zona": {
@@ -23,9 +25,7 @@
             "outputPath": "dist/drs-zona",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -89,37 +89,36 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "proxyConfig" : "proxy-conf.json",
-            "allowedHosts": [
-              "drs-zona.hu",
-              "www.drs-zona.hu",
-              "localhost"
-            ]
+            "proxyConfig": "proxy.conf.mjs",
+            "allowedHosts": ["drs-zona.hu", "www.drs-zona.hu", "localhost"]
           }
         },
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "runner": "vitest",
+            "buildTarget": "::development",
+            "watch": false,
             "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+            "reporters": [
+              "default",
+              [
+                "junit",
+                {
+                  "outputFile": "reports/junit.xml"
+                }
+              ]
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": [],
-            "karmaConfig": "karma.conf.js"
+            "coverageReporters": ["html", "cobertura", "text-summary"]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }

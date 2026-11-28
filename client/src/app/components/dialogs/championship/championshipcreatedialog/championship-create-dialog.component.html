@@ -2,7 +2,6 @@
 
 <mat-dialog-content>
   <form [formGroup]="form" class="dialog-form">
-
     <mat-form-field appearance="outline">
       <mat-label>Széria</mat-label>
       <mat-select formControlName="seriesId">
@@ -20,7 +19,7 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Szezon (év)</mat-label>
-      <input matInput formControlName="season" placeholder="pl. 2025 vagy 2024/2025">
+      <input matInput formControlName="season" placeholder="pl. 2025 vagy 2024/2025" />
       @if (form.get('season')?.hasError('required') && form.get('season')?.touched) {
         <mat-error>A szezon megadása kötelező</mat-error>
       }
@@ -34,11 +33,14 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Egyéni bajnokság neve</mat-label>
-      <input matInput formControlName="driversName">
+      <input matInput formControlName="driversName" />
       @if (form.get('driversName')?.hasError('required') && form.get('driversName')?.touched) {
         <mat-error>A név megadása kötelező</mat-error>
       }
-      @if (form.get('driversName')?.hasError('minlength') || form.get('driversName')?.hasError('maxlength')) {
+      @if (
+        form.get('driversName')?.hasError('minlength') ||
+        form.get('driversName')?.hasError('maxlength')
+      ) {
         <mat-error>A név hossza 3 és 100 karakter között lehet</mat-error>
       }
       @if (form.get('driversName')?.hasError('serverError')) {
@@ -48,18 +50,22 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Konstruktőri bajnokság neve</mat-label>
-      <input matInput formControlName="constructorsName">
-      @if (form.get('constructorsName')?.hasError('required') && form.get('constructorsName')?.touched) {
+      <input matInput formControlName="constructorsName" />
+      @if (
+        form.get('constructorsName')?.hasError('required') && form.get('constructorsName')?.touched
+      ) {
         <mat-error>A név megadása kötelező</mat-error>
       }
-      @if (form.get('constructorsName')?.hasError('minlength') || form.get('constructorsName')?.hasError('maxlength')) {
+      @if (
+        form.get('constructorsName')?.hasError('minlength') ||
+        form.get('constructorsName')?.hasError('maxlength')
+      ) {
         <mat-error>A név hossza 3 és 100 karakter között lehet</mat-error>
       }
       @if (form.get('constructorsName')?.hasError('serverError')) {
         <mat-error>{{ form.get('constructorsName')?.getError('serverError') }}</mat-error>
       }
     </mat-form-field>
-
   </form>
 </mat-dialog-content>
 

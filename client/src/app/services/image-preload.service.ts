@@ -1,8 +1,7 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class ImagePreloadService {
-
   preload(urls: (string | null | undefined)[], timeoutMs = 5000): Promise<void> {
     const valid = urls.filter((url): url is string => !!url);
 
@@ -10,14 +9,14 @@ export class ImagePreloadService {
       return Promise.resolve();
     }
 
-    const all = Promise.allSettled(valid.map(url => this.loadOne(url))).then(() => void 0);
-    const timeout = new Promise<void>(resolve => setTimeout(resolve, timeoutMs));
+    const all = Promise.allSettled(valid.map((url) => this.loadOne(url))).then(() => void 0);
+    const timeout = new Promise<void>((resolve) => setTimeout(resolve, timeoutMs));
 
     return Promise.race([all, timeout]);
   }
 
   private loadOne(url: string): Promise<void> {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve) => {
       const img = new Image();
 
       const done = () => resolve();

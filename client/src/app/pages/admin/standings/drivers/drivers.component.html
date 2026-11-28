@@ -6,7 +6,6 @@
     <h2 class="page-title">Pilóták szerkesztése</h2>
   </div>
 
-
   @if (isLoading() && drivers().length === 0) {
     <app-loading-state label="Pilóták betöltése..."></app-loading-state>
   }
@@ -51,11 +50,14 @@
       }
     </div>
   }
-
 </div>
 
-<button mat-fab color="primary" class="fab-add"
-        (click)="openCreateDialog()"
-        matTooltip="Új versenyző">
+<button
+  mat-fab
+  color="primary"
+  class="fab-add"
+  (click)="openCreateDialog()"
+  matTooltip="Új versenyző"
+>
   <mat-icon>person_add</mat-icon>
 </button>

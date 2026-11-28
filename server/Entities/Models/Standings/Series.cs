@@ -9,31 +9,31 @@ public class Series
     [Key]
     [Column("id")]
     public Guid Id { get; set; }
-    
+
     [Required]
     [Column("name")]
     public required string Name { get; set; }
-    
+
     [Required]
     [Column("short_name")]
     public required string ShortName { get; set; }
-    
+
     [Required]
     [Column("description")]
     public required string Description { get; set; }
-    
+
     [Required]
     [Column("governing_body")]
     public required string GoverningBody { get; set; }
-    
+
     [Required]
     [Column("first_year")]
-    public int FirstYear {get; set;}
-    
+    public int FirstYear { get; set; }
+
     [Required]
     [Column("last_year")]
-    public int LastYear {get; set;}
-    
+    public int LastYear { get; set; }
+
     [Required]
     [Column("point_system")]
     public required string PointSystem { get; set; }

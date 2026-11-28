@@ -1,22 +1,22 @@
-import {Component, ViewChild, ElementRef, Input, EventEmitter, Output} from '@angular/core';
+import { Component, ViewChild, ElementRef, Input, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PollService } from '../../../services/api/poll.service';
 import { PollListDto } from '../../../api/models/poll-list-dto';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PollItemComponent } from './poll-item/poll-item.component';
-import {PollVoteDialogComponent} from '../../dialogs/poll/poll-vote-dialog/poll-vote-dialog.component';
-import {MatDialog} from '@angular/material/dialog';
-import {AuthService} from '../../../services/api/auth.service';
-import {UserProfileResponse} from '../../../api/models/user-profile-response';
-import {PollAddDialogComponent} from '../../dialogs/poll/poll-add-dialog/poll-add-dialog.component';
+import { PollVoteDialogComponent } from '../../dialogs/poll/poll-vote-dialog/poll-vote-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { AuthService } from '../../../services/api/auth.service';
+import { UserProfileResponse } from '../../../api/models/user-profile-response';
+import { PollAddDialogComponent } from '../../dialogs/poll/poll-add-dialog/poll-add-dialog.component';
 
 @Component({
   selector: 'app-poll-list',
   standalone: true,
   imports: [CommonModule, PollItemComponent, MatButtonModule, MatIconModule],
   templateUrl: './polls-list.component.html',
-  styleUrl: './polls-list.component.scss'
+  styleUrl: './polls-list.component.scss',
 })
 export class PollListComponent {
   @ViewChild('carousel', { static: false }) carousel!: ElementRef;
@@ -24,7 +24,11 @@ export class PollListComponent {
   @Input() polls: PollListDto[] = [];
   @Input() currentSeriesShortName?: string;
   @Output() pollChanged = new EventEmitter<void>();
-  constructor(private pollService: PollService, private dialog: MatDialog, private authService: AuthService) {}
+  constructor(
+    private pollService: PollService,
+    private dialog: MatDialog,
+    private authService: AuthService,
+  ) {}
 
   get userId(): string | null {
     return this.authService.currentProfile()?.userId ?? null;
@@ -44,29 +48,29 @@ export class PollListComponent {
       next: (pollData) => {
         const dialogRef = this.dialog.open(PollVoteDialogComponent, {
           width: '700px',
-          data: { poll: pollData, userId: this.userId }
+          data: { poll: pollData, userId: this.userId },
         });
 
         dialogRef.afterClosed().subscribe((updatedPoll) => {
           if (updatedPoll) {
-            this.polls = this.polls.filter(p => p.id !== pollId);
+            this.polls = this.polls.filter((p) => p.id !== pollId);
           }
         });
-      }
+      },
     });
   }
 
   protected openCreatePollDialog() {
-      const dialogRef = this.dialog.open(PollAddDialogComponent, {
-        width: '1000px',
-        disableClose: true,
-        data: { selectedShortName: this.currentSeriesShortName }
-      });
+    const dialogRef = this.dialog.open(PollAddDialogComponent, {
+      width: '1000px',
+      disableClose: true,
+      data: { selectedShortName: this.currentSeriesShortName },
+    });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.pollChanged.emit();
-        }
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.pollChanged.emit();
+      }
+    });
   }
 }

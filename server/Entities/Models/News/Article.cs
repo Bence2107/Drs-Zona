@@ -11,53 +11,53 @@ public class Article
     [Key]
     [Column("id")]
     public Guid Id { get; set; }
-    
+
     [Column("author_id")]
     public Guid AuthorId { get; set; }
     [JsonIgnore]
     public virtual User? Author { get; set; }
-    
+
     [Required]
     [Column("title")]
     public required string Title { get; set; }
-    
+
     [Required]
     [Column("lead")]
     public required string Lead { get; set; }
-    
+
     [Required]
     [Column("is_summary")]
     public bool IsSummary { get; set; }
-    
+
     [Required]
     [Column("slug")]
     public required string Slug { get; set; }
-    
+
     [Required]
     [Column("tag")]
     public required string Tag { get; set; }
-    
+
     [Required]
     [Column("first_section")]
     public required string FirstSection { get; set; }
-    
+
     [Column("second_section")]
-    public string? SecondSection { get; set; }    
-    
+    public string? SecondSection { get; set; }
+
     [Column("third_section")]
-    public string? ThirdSection { get; set; }    
-    
+    public string? ThirdSection { get; set; }
+
     [Column("fourth_section")]
-    public string? FourthSection { get; set; } 
-    
+    public string? FourthSection { get; set; }
+
     [Required]
     [Column("last_section")]
     public required string LastSection { get; set; }
-    
+
     [Required]
     [Column("published_at")]
     public DateTime DatePublished { get; set; }
-    
+
     [Required]
     [Column("updated_at")]
     public DateTime DateUpdated { get; set; }

@@ -245,21 +245,21 @@ public class ConstructorsIntegrationTests
         Guid? brandId = null,
         Brand? brand = null,
         string name = "Red Bull Racing") => new()
-    {
-        Id = Guid.NewGuid(),
-        BrandId = brandId ?? Guid.NewGuid(),
-        Brand = brand,
-        Name = name,
-        Nickname = "RBR",
-        FoundedYear = 2005,
-        HeadQuarters = "Milton Keynes",
-        TeamChief = "Christian Horner",
-        TechnicalChief = "Adrian Newey",
-        Championships = 6,
-        Wins = 112,
-        Podiums = 240,
-        Seasons = 19
-    };
+        {
+            Id = Guid.NewGuid(),
+            BrandId = brandId ?? Guid.NewGuid(),
+            Brand = brand,
+            Name = name,
+            Nickname = "RBR",
+            FoundedYear = 2005,
+            HeadQuarters = "Milton Keynes",
+            TeamChief = "Christian Horner",
+            TechnicalChief = "Adrian Newey",
+            Championships = 6,
+            Wins = 112,
+            Podiums = 240,
+            Seasons = 19
+        };
 
     private static Driver CreateDriver() => new()
     {

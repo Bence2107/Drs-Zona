@@ -4,78 +4,78 @@ using System.Text.RegularExpressions;
 namespace DTOs.Standings;
 
 public record BrandListDto(
-    Guid Id, 
+    Guid Id,
     string? Name
 );
 
 public record ConstructorCreateDto(
-    [Required(ErrorMessage = "A márka azonosítója kötelező")] 
+    [Required(ErrorMessage = "A márka azonosítója kötelező")]
     Guid BrandId,
-    [Required(ErrorMessage = "A név megadása kötelező")] 
-    [StringLength(100, ErrorMessage = "A név max 100 karakter")] 
+    [Required(ErrorMessage = "A név megadása kötelező")]
+    [StringLength(100, ErrorMessage = "A név max 100 karakter")]
     string Name,
-    [Required(ErrorMessage = "A név megadása kötelező")] 
-    [StringLength(100, ErrorMessage = "A név max 100 karakter")] 
+    [Required(ErrorMessage = "A név megadása kötelező")]
+    [StringLength(100, ErrorMessage = "A név max 100 karakter")]
     string Nickname,
-    [Required(ErrorMessage = "Az alapítás éve kötelező")] 
-    [Range(1900, 2100, ErrorMessage = "Az alapítás éve 1900 és 2100 között kell legyen")] 
+    [Required(ErrorMessage = "Az alapítás éve kötelező")]
+    [Range(1900, 2100, ErrorMessage = "Az alapítás éve 1900 és 2100 között kell legyen")]
     int FoundedYear,
-    [Required(ErrorMessage = "A központ megadása kötelező")] 
+    [Required(ErrorMessage = "A központ megadása kötelező")]
     [StringLength(100)] string HeadQuarters,
-    [Required(ErrorMessage = "Csapatfőnök megadása kötelező")] 
+    [Required(ErrorMessage = "Csapatfőnök megadása kötelező")]
     [StringLength(100)] string TeamChief,
-    [Required(ErrorMessage = "Technikai vezető megadása kötelező")] 
+    [Required(ErrorMessage = "Technikai vezető megadása kötelező")]
     [StringLength(100)] string TechnicalChief,
-    [Required(ErrorMessage = "A bajnoki címek száma kötelező")] 
-    [Range(0, 300, ErrorMessage = "Érvénytelen bajnoki cím szám (0-300)")] 
+    [Required(ErrorMessage = "A bajnoki címek száma kötelező")]
+    [Range(0, 300, ErrorMessage = "Érvénytelen bajnoki cím szám (0-300)")]
     int Championships,
-    [Required(ErrorMessage = "A győzelmek száma kötelező")] 
-    [Range(0, 500, ErrorMessage = "Érvénytelen győzelem szám (0-500)")] 
+    [Required(ErrorMessage = "A győzelmek száma kötelező")]
+    [Range(0, 500, ErrorMessage = "Érvénytelen győzelem szám (0-500)")]
     int Wins,
-    [Required(ErrorMessage = "A dobogók száma kötelező")] 
-    [Range(0, 1000, ErrorMessage = "Érvénytelen dobogó szám (0-1000)")] 
+    [Required(ErrorMessage = "A dobogók száma kötelező")]
+    [Range(0, 1000, ErrorMessage = "Érvénytelen dobogó szám (0-1000)")]
     int Podiums,
-    [Required(ErrorMessage = "A szezonok száma kötelező")] 
-    [Range(1, 99, ErrorMessage = "A szezonok száma 1-99 lehet")] 
+    [Required(ErrorMessage = "A szezonok száma kötelező")]
+    [Range(1, 99, ErrorMessage = "A szezonok száma 1-99 lehet")]
     int Seasons
 );
 
 public record ConstructorUpdateDto(
-    [Required(ErrorMessage = "A csapat azonosítója kötelező")] 
+    [Required(ErrorMessage = "A csapat azonosítója kötelező")]
     Guid Id,
-    [Required(ErrorMessage = "A márka azonosítója kötelező")] 
+    [Required(ErrorMessage = "A márka azonosítója kötelező")]
     Guid BrandId,
-    [Required(ErrorMessage = "A név megadása kötelező")] 
-    [StringLength(100, ErrorMessage = "A név max 100 karakter")] 
+    [Required(ErrorMessage = "A név megadása kötelező")]
+    [StringLength(100, ErrorMessage = "A név max 100 karakter")]
     string Name,
-    [Required(ErrorMessage = "A név megadása kötelező")] 
-    [StringLength(100, ErrorMessage = "A név max 100 karakter")] 
+    [Required(ErrorMessage = "A név megadása kötelező")]
+    [StringLength(100, ErrorMessage = "A név max 100 karakter")]
     string Nickname,
-    [Required(ErrorMessage = "Az alapítás éve kötelező")] 
-    [Range(1900, 2100, ErrorMessage = "Az alapítás éve 1900 és 2100 között kell legyen")] 
+    [Required(ErrorMessage = "Az alapítás éve kötelező")]
+    [Range(1900, 2100, ErrorMessage = "Az alapítás éve 1900 és 2100 között kell legyen")]
     int FoundedYear,
-    [Required(ErrorMessage = "A központ megadása kötelező")] 
+    [Required(ErrorMessage = "A központ megadása kötelező")]
     [StringLength(100)] string HeadQuarters,
-    [Required(ErrorMessage = "Csapatfőnök megadása kötelező")] 
+    [Required(ErrorMessage = "Csapatfőnök megadása kötelező")]
     [StringLength(100)] string TeamChief,
-    [Required(ErrorMessage = "Technikai vezető megadása kötelező")] 
+    [Required(ErrorMessage = "Technikai vezető megadása kötelező")]
     [StringLength(100)] string TechnicalChief,
-    [Required(ErrorMessage = "A bajnoki címek száma kötelező")] 
-    [Range(0, 300, ErrorMessage = "Érvénytelen bajnoki cím szám (0-300)")] 
+    [Required(ErrorMessage = "A bajnoki címek száma kötelező")]
+    [Range(0, 300, ErrorMessage = "Érvénytelen bajnoki cím szám (0-300)")]
     int Championships,
-    [Required(ErrorMessage = "A győzelmek száma kötelező")] 
-    [Range(0, 500, ErrorMessage = "Érvénytelen győzelem szám (0-500)")] 
+    [Required(ErrorMessage = "A győzelmek száma kötelező")]
+    [Range(0, 500, ErrorMessage = "Érvénytelen győzelem szám (0-500)")]
     int Wins,
-    [Required(ErrorMessage = "A dobogók száma kötelező")] 
-    [Range(0, 1000, ErrorMessage = "Érvénytelen dobogó szám (0-1000)")] 
+    [Required(ErrorMessage = "A dobogók száma kötelező")]
+    [Range(0, 1000, ErrorMessage = "Érvénytelen dobogó szám (0-1000)")]
     int Podiums,
-    [Required(ErrorMessage = "A szezonok száma kötelező")] 
-    [Range(1, 99, ErrorMessage = "A szezonok száma 1-99 lehet")] 
+    [Required(ErrorMessage = "A szezonok száma kötelező")]
+    [Range(1, 99, ErrorMessage = "A szezonok száma 1-99 lehet")]
     int Seasons
 );
 
 public record ConstructorListDto(
-    Guid Id, 
+    Guid Id,
     string Name
 );
 
@@ -89,7 +89,7 @@ public record ConstructorDetailDto(
     int FoundedYear,
     string? HeadQuarters,
     string? TeamChief,
-    string? TechnicalChief,  
+    string? TechnicalChief,
     List<DriverNameRecord>? DriverNames,
     int TotalWins,
     int TotalPodiums,
@@ -98,30 +98,30 @@ public record ConstructorDetailDto(
 );
 
 public record DriverCreateDto(
-    [Required(ErrorMessage = "A név megadása kötelező")] 
-    [StringLength(100, MinimumLength = 2, ErrorMessage = "A név hossza 2 és 100 karakter között lehet")] 
+    [Required(ErrorMessage = "A név megadása kötelező")]
+    [StringLength(100, MinimumLength = 2, ErrorMessage = "A név hossza 2 és 100 karakter között lehet")]
     string Name,
-    [Required(ErrorMessage = "A nemzetiség megadása kötelező")] 
+    [Required(ErrorMessage = "A nemzetiség megadása kötelező")]
     [StringLength(50)] string Nationality,
-    [Required(ErrorMessage = "A születési dátum kötelező")] 
+    [Required(ErrorMessage = "A születési dátum kötelező")]
     DateTime BirthDate,
-    [Required(ErrorMessage = "Az összes verseny száma kötelező")] 
-    [Range(0, 500, ErrorMessage = "Az összes verseny száma 0 és 500 között lehet")] 
+    [Required(ErrorMessage = "Az összes verseny száma kötelező")]
+    [Range(0, 500, ErrorMessage = "Az összes verseny száma 0 és 500 között lehet")]
     int TotalRaces,
-    [Required(ErrorMessage = "A győzelmek száma kötelező")] 
-    [Range(0, 500, ErrorMessage = "A győzelmek száma 0 és 500 között lehet")] 
+    [Required(ErrorMessage = "A győzelmek száma kötelező")]
+    [Range(0, 500, ErrorMessage = "A győzelmek száma 0 és 500 között lehet")]
     int TotalWins,
-    [Required(ErrorMessage = "A dobogók száma kötelező")] 
-    [Range(0, 1000, ErrorMessage = "A dobogók száma 0 és 1000 között lehet")] 
+    [Required(ErrorMessage = "A dobogók száma kötelező")]
+    [Range(0, 1000, ErrorMessage = "A dobogók száma 0 és 1000 között lehet")]
     int TotalPodiums,
-    [Required(ErrorMessage = "A bajnoki címek száma kötelező")] 
-    [Range(0, 99, ErrorMessage = "A bajnoki címek száma 0 és 99 között lehet")] 
+    [Required(ErrorMessage = "A bajnoki címek száma kötelező")]
+    [Range(0, 99, ErrorMessage = "A bajnoki címek száma 0 és 99 között lehet")]
     int Championships,
-    [Required(ErrorMessage = "A pole pozíciók száma kötelező")] 
-    [Range(0, 200, ErrorMessage = "A pole pozíciók száma 0 és 200 között lehet")] 
+    [Required(ErrorMessage = "A pole pozíciók száma kötelező")]
+    [Range(0, 200, ErrorMessage = "A pole pozíciók száma 0 és 200 között lehet")]
     int PolePositions,
-    [Required(ErrorMessage = "A szezonok száma kötelező")] 
-    [Range(1, 30, ErrorMessage = "A szezonok száma 1 és 30 között lehet")] 
+    [Required(ErrorMessage = "A szezonok száma kötelező")]
+    [Range(1, 30, ErrorMessage = "A szezonok száma 1 és 30 között lehet")]
     int Seasons
 ) : IValidatableObject
 {
@@ -149,32 +149,32 @@ public record DriverCreateDto(
 
 
 public record DriverUpdateDto(
-    [Required(ErrorMessage = "Az azonosító megadása kötelező")] 
+    [Required(ErrorMessage = "Az azonosító megadása kötelező")]
     Guid Id,
-    [Required(ErrorMessage = "A név megadása kötelező")] 
-    [StringLength(100, MinimumLength = 2, ErrorMessage = "A név hossza 2 és 100 karakter között lehet")] 
+    [Required(ErrorMessage = "A név megadása kötelező")]
+    [StringLength(100, MinimumLength = 2, ErrorMessage = "A név hossza 2 és 100 karakter között lehet")]
     string Name,
-    [Required(ErrorMessage = "A nemzetiség megadása kötelező")] 
+    [Required(ErrorMessage = "A nemzetiség megadása kötelező")]
     [StringLength(50)] string Nationality,
-    [Required(ErrorMessage = "A születési dátum kötelező")] 
+    [Required(ErrorMessage = "A születési dátum kötelező")]
     DateTime BirthDate,
-    [Required(ErrorMessage = "Az összes verseny száma kötelező")] 
-    [Range(0, 500, ErrorMessage = "Az összes verseny száma 0 és 500 között lehet")] 
+    [Required(ErrorMessage = "Az összes verseny száma kötelező")]
+    [Range(0, 500, ErrorMessage = "Az összes verseny száma 0 és 500 között lehet")]
     int TotalRaces,
-    [Required(ErrorMessage = "A győzelmek száma kötelező")] 
-    [Range(0, 500, ErrorMessage = "A győzelmek száma 0 és 500 között lehet")] 
+    [Required(ErrorMessage = "A győzelmek száma kötelező")]
+    [Range(0, 500, ErrorMessage = "A győzelmek száma 0 és 500 között lehet")]
     int TotalWins,
-    [Required(ErrorMessage = "A dobogók száma kötelező")] 
-    [Range(0, 1000, ErrorMessage = "A dobogók száma 0 és 1000 között lehet")] 
+    [Required(ErrorMessage = "A dobogók száma kötelező")]
+    [Range(0, 1000, ErrorMessage = "A dobogók száma 0 és 1000 között lehet")]
     int TotalPodiums,
-    [Required(ErrorMessage = "A bajnoki címek száma kötelező")] 
-    [Range(0, 99, ErrorMessage = "A bajnoki címek száma 0 és 99 között lehet")] 
+    [Required(ErrorMessage = "A bajnoki címek száma kötelező")]
+    [Range(0, 99, ErrorMessage = "A bajnoki címek száma 0 és 99 között lehet")]
     int Championships,
-    [Required(ErrorMessage = "A pole pozíciók száma kötelező")] 
-    [Range(0, 200, ErrorMessage = "A pole pozíciók száma 0 és 200 között lehet")] 
+    [Required(ErrorMessage = "A pole pozíciók száma kötelező")]
+    [Range(0, 200, ErrorMessage = "A pole pozíciók száma 0 és 200 között lehet")]
     int PolePositions,
-    [Required(ErrorMessage = "A szezonok száma kötelező")] 
-    [Range(1, 30, ErrorMessage = "A szezonok száma 1 és 30 között lehet")] 
+    [Required(ErrorMessage = "A szezonok száma kötelező")]
+    [Range(1, 30, ErrorMessage = "A szezonok száma 1 és 30 között lehet")]
     int Seasons
 ) : IValidatableObject
 {
@@ -303,14 +303,14 @@ public record SingleResultCreateDto(
     int FinishPosition,
     [Required(ErrorMessage = "Idő megadása megadása kötelező")]
     [RaceTime]
-    string RaceTime, 
-    [Required(ErrorMessage = "Körök számának megadása kötelező")] 
+    string RaceTime,
+    [Required(ErrorMessage = "Körök számának megadása kötelező")]
     [Range(0, 600)] int LapsCompleted,
     [Required(ErrorMessage = "Státusz megadása kötelező")]
     [ValidStatus]
     string Status,
     bool Pole = false,
-    bool IsFastestLap = false, 
+    bool IsFastestLap = false,
     int StartPosition = 0,
     string? Q1 = null,
     string? Q2 = null,
@@ -328,13 +328,13 @@ public record ResultEditDto(
     int FinishPosition,
     [Required(ErrorMessage = "Idő megadása megadása kötelező")]
     [RaceTime]
-    string RaceTime, 
-    [Required(ErrorMessage = "Körök számának megadása kötelező")] 
+    string RaceTime,
+    [Required(ErrorMessage = "Körök számának megadása kötelező")]
     [Range(0, 600)] int LapsCompleted,
     [Required(ErrorMessage = "Státusz megadása kötelező")]
     [ValidStatus]
     string Status,
-    bool IsFastestLap, 
+    bool IsFastestLap,
     bool IsPole,
     string? Q1 = null,
     string? Q2 = null,
@@ -356,8 +356,8 @@ public record SingleResultUpdateDto(
     int FinishPosition,
     [Required(ErrorMessage = "Idő megadása megadása kötelező")]
     [RaceTime]
-    string RaceTime, 
-    [Required(ErrorMessage = "Körök számának megadása kötelező")] 
+    string RaceTime,
+    [Required(ErrorMessage = "Körök számának megadása kötelező")]
     [Range(0, 600)] int LapsCompleted,
     [Required(ErrorMessage = "Státusz megadása kötelező")]
     [ValidStatus]
@@ -430,30 +430,30 @@ public record ConstructorStandingsResultDto(
 );
 
 public record SeriesLookupDto(
-    Guid Id, 
+    Guid Id,
     string Name
 );
 
 public record YearLookupDto(
-    string Season, 
-    Guid DriversChampId, 
+    string Season,
+    Guid DriversChampId,
     Guid ConstructorsChampId
 );
 
 public record DriverLookUpDto(
-    Guid Id, 
-    string Name, 
+    Guid Id,
+    string Name,
     Guid? ConstructorId = null
 );
 
 public record ConstructorLookUpDto(
-    Guid Id, 
-    string Name, 
+    Guid Id,
+    string Name,
     string ShortName
 );
 
 public record GrandPrixLookupDto(
-    Guid Id, 
+    Guid Id,
     string Name,
     bool HasResults,
     string CircuitName,
@@ -466,25 +466,25 @@ public record GrandPrixLookupDto(
 );
 
 public record DriverSeasonResultDto(
-    string GrandPrixName, 
-    string GrandPrixShortName, 
-    DateTime Date, 
-    string TeamName, 
-    int Position, 
+    string GrandPrixName,
+    string GrandPrixShortName,
+    DateTime Date,
+    string TeamName,
+    int Position,
     double Points
 );
 public record ConstructorSeasonResultDto(
-    string GrandPrixName, 
-    string GrandPrixShortName,  
-    DateTime Date, 
+    string GrandPrixName,
+    string GrandPrixShortName,
+    DateTime Date,
     double Points
 );
 public record SeasonOverviewDto(
-    string GrandPrixName, 
-    string GrandPrixShortName, 
-    DateTime Date, 
-    string WinnerName, 
-    string TeamName, 
-    int Laps, 
+    string GrandPrixName,
+    string GrandPrixShortName,
+    DateTime Date,
+    string WinnerName,
+    string TeamName,
+    int Laps,
     string Time
 );

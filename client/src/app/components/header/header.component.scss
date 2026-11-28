@@ -1,21 +1,21 @@
 @use '@angular/material' as mat;
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 
-li, a, button {
+li,
+a,
+button {
   font-family: 'Kanit', cursive;
   font-weight: 500;
   font-size: 24px;
   color: rgb(0, 0, 0);
   text-decoration: none;
 }
-
 
 header {
   display: flex;
@@ -41,7 +41,6 @@ header {
     color: var(--text-main);
   }
 }
-
 
 .nav_links {
   display: flex;
@@ -98,7 +97,6 @@ header {
   color: #f8274f !important;
   font-weight: bold;
 }
-
 
 .auth-container {
   display: flex;

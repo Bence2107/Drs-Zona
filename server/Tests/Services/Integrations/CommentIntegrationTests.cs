@@ -3,14 +3,13 @@ using DTOs.News;
 using Entities.Models;
 using Entities.Models.News;
 using FluentAssertions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using Repositories.Implementations;
 using Repositories.Implementations.News;
 using Services.Implementations;
 using Services.Implementations.images;
 using Services.Interfaces;
+using Services.Types;
 using Xunit;
 
 namespace Tests.Services.Integrations;
@@ -23,10 +22,8 @@ public class CommentIntegrationTests
     public CommentIntegrationTests()
     {
         _context = InMemoryDbFactory.CreateContext();
-    
-      var mockEnv = new Mock<IWebHostEnvironment>();
-      mockEnv.Setup(e => e.ContentRootPath).Returns("wwwroot");
-        var imageService = new UserImageService(mockEnv.Object);
+
+        var imageService = new UserImageService(new UploadSettings(Path.Combine("wwwroot", "uploads")));
 
         _service = new CommentService(
             new ArticlesRepository(_context),
@@ -119,7 +116,7 @@ public class CommentIntegrationTests
         await _context.Articles.AddAsync(article);
         await _context.Comments.AddAsync(comment);
         await _context.SaveChangesAsync();
-        
+
         var result = await _service.GetUsersComments(user.Id);
 
         result.IsSuccess.Should().BeTrue();
@@ -145,7 +142,7 @@ public class CommentIntegrationTests
         _context.Articles.Add(article);
         _context.Comments.Add(parentComment);
         await _context.SaveChangesAsync();
-        
+
         var articleExists = await _context.Articles.AnyAsync(a => a.Id == article.Id);
         articleExists.Should().BeTrue("article should be saved");
 
@@ -205,7 +202,7 @@ public class CommentIntegrationTests
         result.IsSuccess.Should().BeTrue();
         _context.Comments.Should().BeEmpty();
     }
-    
+
     [Fact]
     public async Task UpdateCommentsVote_ShouldFail_WhenArticleNotFound()
     {
@@ -225,23 +222,23 @@ public class CommentIntegrationTests
         var articleId = Guid.NewGuid();
         var userId = Guid.NewGuid();
 
-        var parent = new Comment 
-        { 
-            Id = parentId, 
-            Content = "Parent", 
-            ArticleId = articleId, 
+        var parent = new Comment
+        {
+            Id = parentId,
+            Content = "Parent",
+            ArticleId = articleId,
             UserId = userId,
-            DateCreated = DateTime.UtcNow 
+            DateCreated = DateTime.UtcNow
         };
-    
-        var reply = new Comment 
-        { 
-            Id = Guid.NewGuid(), 
-            Content = "Reply", 
-            ReplyToCommentId = parentId, 
-            ArticleId = articleId, 
+
+        var reply = new Comment
+        {
+            Id = Guid.NewGuid(),
+            Content = "Reply",
+            ReplyToCommentId = parentId,
+            ArticleId = articleId,
             UserId = userId,
-            DateCreated = DateTime.UtcNow 
+            DateCreated = DateTime.UtcNow
         };
 
         _context.Comments.AddRange(parent, reply);
@@ -263,7 +260,7 @@ public class CommentIntegrationTests
         Id = Guid.NewGuid(),
         Title = "Article",
         Slug = "article",
-        Lead = "Lead",            
+        Lead = "Lead",
         Tag = "F1",
         FirstSection = "First",
         LastSection = "Last",

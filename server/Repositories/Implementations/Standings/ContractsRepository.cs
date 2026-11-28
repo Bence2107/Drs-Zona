@@ -8,9 +8,9 @@ namespace Repositories.Implementations.Standings;
 public class ContractsRepository(EfContext context) : IContractsRepository
 {
     private readonly DbSet<Contract> _contracts = context.Contracts;
-    
+
     public async Task<Contract?> GetContractById(Guid id) => await _contracts.FirstOrDefaultAsync(c => c.Id == id);
-    
+
     public async Task<List<Contract>> GetAllWithAll() => await _contracts
         .Include(c => c.Driver)
         .Include(c => c.Constructor)
@@ -25,7 +25,7 @@ public class ContractsRepository(EfContext context) : IContractsRepository
         .Include(c => c.Driver)
         .Where(c => c.ConstructorId == teamId)
         .ToListAsync();
-    
+
     public async Task Create(Contract contract)
     {
         await _contracts.AddAsync(contract);
@@ -41,8 +41,8 @@ public class ContractsRepository(EfContext context) : IContractsRepository
     public async Task Delete(Guid id)
     {
         var contract = await GetContractById(id);
-        if(contract == null) return;
-        
+        if (contract == null) return;
+
         _contracts.Remove(contract);
         await context.SaveChangesAsync();
     }

@@ -62,7 +62,7 @@ public class DriverServiceIntegrationTests
     {
         var (ctx, svc) = BuildSut();
 
-        var driver      = CreateDriver();
+        var driver = CreateDriver();
         var constructor = CreateConstructor();
         await ctx.Drivers.AddAsync(driver);
         await ctx.Constructors.AddAsync(constructor);
@@ -85,7 +85,7 @@ public class DriverServiceIntegrationTests
         var (ctx, svc) = BuildSut();
 
         var birthDate = DateTime.Today.AddYears(-25);
-        var driver    = CreateDriver(birthDate: birthDate);
+        var driver = CreateDriver(birthDate: birthDate);
         await ctx.Drivers.AddAsync(driver);
         await ctx.SaveChangesAsync();
 
@@ -130,7 +130,7 @@ public class DriverServiceIntegrationTests
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().BeEmpty();
     }
-    
+
 
     // ─────────────────────────────────────────────
     // Create
@@ -267,21 +267,21 @@ public class DriverServiceIntegrationTests
     // ─────────────────────────────────────────────
 
     private static Driver CreateDriver(
-        string    name      = "Max Verstappen",
-        string    nat       = "Dutch",
+        string name = "Max Verstappen",
+        string nat = "Dutch",
         DateTime? birthDate = null) => new()
-    {
-        Id            = Guid.NewGuid(),
-        Name          = name,
-        Nationality   = nat,
-        BirthDate     = birthDate ?? new DateTime(1997, 9, 30),
-        TotalRaces    = 180,
-        Wins          = 55,
-        Podiums       = 95,
-        Championships = 3,
-        PolePositions = 30,
-        Seasons       = 10
-    };
+        {
+            Id = Guid.NewGuid(),
+            Name = name,
+            Nationality = nat,
+            BirthDate = birthDate ?? new DateTime(1997, 9, 30),
+            TotalRaces = 180,
+            Wins = 55,
+            Podiums = 95,
+            Championships = 3,
+            PolePositions = 30,
+            Seasons = 10
+        };
 
     private static Constructor CreateConstructor(string name = "Red Bull") => new()
     {

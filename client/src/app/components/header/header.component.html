@@ -1,16 +1,19 @@
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <header>
-  <button
-    mat-icon-button  class="header-menu-toggle" (click)="toggleSidebar()">
+  <button mat-icon-button class="header-menu-toggle" (click)="toggleSidebar()">
     <mat-icon>menu</mat-icon>
   </button>
 
-  <img [src]="!isDarkMode ? 'img/header/logo-light.png' : 'img/header/logo-dark.png'" alt="Drs Zone" class="logo">
+  <img
+    [src]="!isDarkMode ? 'img/header/logo-light.png' : 'img/header/logo-dark.png'"
+    alt="Drs Zone"
+    class="logo"
+  />
   @if (!isScreenSmall) {
     <nav>
       <ul class="nav_links">
         <li routerLinkActive="activeLink" [routerLink]="'home'">
-          <a routerLinkActive="activeLink" >Főoldal</a>
+          <a routerLinkActive="activeLink">Főoldal</a>
           <mat-icon routerLinkActive="activeLink">home</mat-icon>
         </li>
         <li routerLinkActive="activeLink" [routerLink]="'news'">
@@ -37,13 +40,19 @@
       }
 
       @if (canShowUserMenu() && hasProfileData) {
-        <button mat-icon-button [matMenuTriggerFor]="userMenu" class="account-button"
-                [style.display]="isAvatarLoading ? 'none' : 'flex'">
-          <img [src]="avatarUrl"
-               alt="avatar"
-               class="account-icon"
-               (load)="onAvatarLoad()"
-               (error)="onAvatarError()">
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="userMenu"
+          class="account-button"
+          [style.display]="isAvatarLoading ? 'none' : 'flex'"
+        >
+          <img
+            [src]="avatarUrl"
+            alt="avatar"
+            class="account-icon"
+            (load)="onAvatarLoad()"
+            (error)="onAvatarError()"
+          />
         </button>
 
         <mat-menu #userMenu="matMenu" class="header-menu">
@@ -66,18 +75,20 @@
             <span>Kijelentkezés</span>
           </button>
         </mat-menu>
-      }
-      @else if (!isAuthLoading && !isAvatarLoading) {
+      } @else if (!isAuthLoading && !isAvatarLoading) {
         <button matTooltip="Jelentkezz be!" class="login-button" routerLink="/auth" mat-flat-button>
           Bejelentkezés
         </button>
       }
     </div>
   }
-  <button mat-icon-button class="theme-toggle"
-          (click)="toggleTheme()"
-          [matTooltip]="isDarkMode ? 'Világos mód' : 'Sötét mód'"
-          [attr.aria-label]="isDarkMode ? 'Váltás világos módra' : 'Váltás sötét módra'">
+  <button
+    mat-icon-button
+    class="theme-toggle"
+    (click)="toggleTheme()"
+    [matTooltip]="isDarkMode ? 'Világos mód' : 'Sötét mód'"
+    [attr.aria-label]="isDarkMode ? 'Váltás világos módra' : 'Váltás sötét módra'"
+  >
     <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
   </button>
 </header>

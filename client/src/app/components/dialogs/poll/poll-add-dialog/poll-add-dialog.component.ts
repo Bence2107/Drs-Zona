@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -6,30 +6,34 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators
+  Validators,
 } from '@angular/forms';
-import {PollService} from '../../../../services/api/poll.service';
+import { PollService } from '../../../../services/api/poll.service';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
   MatDialogRef,
-  MatDialogTitle
-} from "@angular/material/dialog";
-import {MatError, MatFormField, MatHint, MatInput, MatLabel} from '@angular/material/input';
-import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
-import {MatButton, MatIconButton} from '@angular/material/button';
-import {MatIcon} from '@angular/material/icon';
-import {PollCreateDto} from '../../../../api/models/poll-create-dto';
-import {AuthService} from '../../../../services/api/auth.service';
-import {SeriesListDto} from '../../../../api/models/series-list-dto';
-import {SeriesService} from '../../../../services/api/series.service';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {CustomSnackbarComponent} from '../../../custom-snackbar/custom-snackbar.component';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {FormErrorService} from '../../../../services/form-error.service';
-import {HttpValidationError} from '../../../../services/error-interceptor.service';
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { MatError, MatFormField, MatHint, MatInput, MatLabel } from '@angular/material/input';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { PollCreateDto } from '../../../../api/models/poll-create-dto';
+import { AuthService } from '../../../../services/api/auth.service';
+import { SeriesListDto } from '../../../../api/models/series-list-dto';
+import { SeriesService } from '../../../../services/api/series.service';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { CustomSnackbarComponent } from '../../../custom-snackbar/custom-snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormErrorService } from '../../../../services/form-error.service';
+import { HttpValidationError } from '../../../../services/error-interceptor.service';
 
 @Component({
   selector: 'app-poll-add-dialog',
@@ -52,7 +56,7 @@ import {HttpValidationError} from '../../../../services/error-interceptor.servic
     ReactiveFormsModule,
     MatHint,
     MatSelect,
-    MatOption
+    MatOption,
   ],
   templateUrl: './poll-add-dialog.component.html',
   styleUrl: './poll-add-dialog.component.scss',
@@ -63,11 +67,11 @@ export class PollAddDialogComponent implements OnInit {
   optionsError = '';
   minDate = new Date();
 
-  private readonly pollFieldMap: { [key: string]: string } = {
-    'title': 'title',
-    'tag': 'tag',
-    'description': 'description',
-    'expiresat': 'expiresAt',
+  private readonly pollFieldMap: Record<string, string> = {
+    title: 'title',
+    tag: 'tag',
+    description: 'description',
+    expiresat: 'expiresAt',
   };
 
   constructor(
@@ -87,14 +91,14 @@ export class PollAddDialogComponent implements OnInit {
       expiresAt: [null, [Validators.required]],
       options: this.fb.array([
         this.fb.control('', [Validators.required, Validators.minLength(2)]),
-        this.fb.control('', [Validators.required, Validators.minLength(2)])
-      ])
+        this.fb.control('', [Validators.required, Validators.minLength(2)]),
+      ]),
     });
   }
 
   ngOnInit(): void {
-    this.seriesService.getSeriesList().subscribe(data => {
-      this.series = data
+    this.seriesService.getSeriesList().subscribe((data) => {
+      this.series = data;
 
       if (this.data?.selectedShortName) {
         this.pollForm.get('tag')?.setValue(this.data.selectedShortName);
@@ -107,7 +111,6 @@ export class PollAddDialogComponent implements OnInit {
       this.pollForm.get('description') as FormControl,
       this.pollForm.get('expiresAt') as FormControl,
     ]);
-
   }
 
   get options() {
@@ -140,7 +143,7 @@ export class PollAddDialogComponent implements OnInit {
       tag: this.pollForm.value.tag,
       description: this.pollForm.value.description,
       expiresAt: new Date(this.pollForm.value.expiresAt).toISOString(),
-      options: this.pollForm.value.options
+      options: this.pollForm.value.options,
     };
 
     this.pollService.createPoll(pollDto).subscribe({
@@ -160,11 +163,11 @@ export class PollAddDialogComponent implements OnInit {
         const rootErrors: HttpValidationError = {
           title: err.title,
           fieldErrors: Object.fromEntries(
-            Object.entries(err.fieldErrors ?? {}).filter(([k]) => k !== 'options')
-          )
+            Object.entries(err.fieldErrors ?? {}).filter(([k]) => k !== 'options'),
+          ),
         };
         this.formErrorService.applyServerErrors(this.pollForm, rootErrors, this.pollFieldMap);
-      }
+      },
     });
   }
 }

@@ -20,13 +20,18 @@
   overflow: hidden;
   background-color: var(--primary-bg);
   cursor: pointer;
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+  transition:
+    transform 0.2s ease-out,
+    box-shadow 0.2s ease-out,
+    border-color 0.2s ease-out;
 
   &:hover {
     transform: scale(1.01);
     border-color: #ed2449;
     box-shadow: 0 5px 15px rgba(237, 36, 73, 0.4);
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transition:
+      transform 0.3s ease-in-out,
+      opacity 0.3s ease-in-out;
   }
 
   img {
@@ -76,9 +81,15 @@
   width: fit-content;
   letter-spacing: 0.5px;
 
-  &.tag-f1 { background-color: #ed2449; }
-  &.tag-f2 { background-color: #00bfff; }
-  &.tag-wec { background-color: #003399; }
+  &.tag-f1 {
+    background-color: #ed2449;
+  }
+  &.tag-f2 {
+    background-color: #00bfff;
+  }
+  &.tag-wec {
+    background-color: #003399;
+  }
   &.tag-nascar {
     background-color: #ffcc00;
     color: #1a1a1a;

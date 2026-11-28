@@ -3,7 +3,7 @@ using Entities.Models.Standings;
 
 namespace Repositories.Interfaces.Standings;
 
-public interface IResultsRepository 
+public interface IResultsRepository
 {
     Task<Result?> GetResultById(Guid id);
     Task<List<Result>> GetByGrandPrixId(Guid grandPrixId);

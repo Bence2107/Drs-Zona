@@ -8,31 +8,31 @@ namespace Drs_Zona.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ArticleController(IArticleService articleService): ControllerBase 
+public class ArticleController(IArticleService articleService) : ControllerBase
 {
     [HttpGet("get/{slug}")]
-    public async Task<ActionResult<ArticleDetailDto>> GetBySlug([FromRoute]string slug)
+    public async Task<ActionResult<ArticleDetailDto>> GetBySlug([FromRoute] string slug)
     {
         var response = await articleService.GetArticleBySlug(slug);
         if (!response.IsSuccess)
         {
             return BadRequest(new
             {
-                response.ErrorField, 
+                response.ErrorField,
                 response.Message
             });
         }
-        
+
         return Ok(response.Value);
     }
-    
+
     [HttpGet("getAllArticles")]
     public async Task<ActionResult<PagedResult<ArticleListDto>>> GetAllArticles(int page, int pageSize, string? tag)
     {
         var response = await articleService.ListArticles(page, pageSize, tag);
         return Ok(response);
     }
-    
+
     [HttpGet("getAllSummary")]
     public async Task<ActionResult<PagedResult<ArticleListDto>>> GetAllSummary(int page, int pageSize, string? tag)
     {
@@ -41,15 +41,15 @@ public class ArticleController(IArticleService articleService): ControllerBase
     }
 
     [HttpGet("getRecent/{number:int}")]
-    public async Task<ActionResult<List<ArticleListDto>>> GetRecent([FromRoute]int number, [FromQuery] string? tag)
+    public async Task<ActionResult<List<ArticleListDto>>> GetRecent([FromRoute] int number, [FromQuery] string? tag)
     {
-        var response  = await articleService.GetRecentArticles(number, tag);
+        var response = await articleService.GetRecentArticles(number, tag);
         return Ok(response);
     }
-    
+
     [Authorize(Policy = "AuthorOrAdmin")]
     [HttpPost("create")]
-    public async Task<ActionResult> Create([FromBody]ArticleCreateDto dto)
+    public async Task<ActionResult> Create([FromBody] ArticleCreateDto dto)
     {
         var result = await articleService.Create(dto);
 
@@ -57,7 +57,7 @@ public class ArticleController(IArticleService articleService): ControllerBase
         {
             return BadRequest(new
             {
-                result.ErrorField, 
+                result.ErrorField,
                 result.Message
             });
         }
@@ -67,40 +67,40 @@ public class ArticleController(IArticleService articleService): ControllerBase
 
     [Authorize(Policy = "AuthorOrAdmin")]
     [HttpPost("update")]
-    public async Task<ActionResult> Update([FromBody]ArticleUpdateDto dto)
+    public async Task<ActionResult> Update([FromBody] ArticleUpdateDto dto)
     {
         var result = await articleService.Update(dto);
         if (!result.IsSuccess)
         {
             return BadRequest(new
             {
-                result.ErrorField, 
+                result.ErrorField,
                 result.Message
             });
         }
-        
+
         return Ok(result.Value);
     }
     [Authorize(Policy = "AuthorOrAdmin")]
     [HttpDelete("delete/{id:guid}")]
-    public async Task<ActionResult> Delete([FromRoute]Guid id)
+    public async Task<ActionResult> Delete([FromRoute] Guid id)
     {
         var articleResponse = await articleService.GetArticleById(id);
         if (!articleResponse.IsSuccess)
         {
             return BadRequest(new
             {
-                articleResponse.ErrorField, 
+                articleResponse.ErrorField,
                 articleResponse.Message
             });
         }
-        
+
         var result = await articleService.Delete(id);
         if (!result.IsSuccess)
         {
             return BadRequest(new
             {
-                result.ErrorField, 
+                result.ErrorField,
                 result.Message
             });
         }
